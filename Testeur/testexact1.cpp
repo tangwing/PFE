@@ -57,12 +57,13 @@ void main(void)
    if (DEBUG)
    {
 	   printf("[DEBUG] The instance is generated: press a key to continue\n");
-	   //getch();
+	   getch();
    }
+   //continue;
    printf("The IP model is running...\n");
 
    spawnl(P_WAIT,"SCPTimInd.exe","SCPTimInd.exe",NULL);
-
+   printf("line:%d",__LINE__);
    fichier=fopen("SCPres.txt","rt");
    fscanf(fichier,"%ld\n",&isFeas);
    fscanf(fichier,"%ld\n",&isOpt);
@@ -71,10 +72,11 @@ void main(void)
    fscanf(fichier,"%ld\n",&iNbNodes);
    fscanf(fichier,"%lf\n",&dNbMach);
    fclose(fichier);
-
+   printf("line:%d",__LINE__);
    fichier=fopen("ScpTraces.txt","at");
    fprintf(fichier,"Sc%d %d %d %d %lf %lf\n",i+1,isFeas,isOpt,iNbNodes,dTime,dNbMach);
    fclose(fichier);
+   printf("line:%d",__LINE__);
 
    if (DEBUG)
    {

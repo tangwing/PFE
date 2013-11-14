@@ -207,7 +207,7 @@
 			>
 		</File>
 		<File
-			RelativePath="testexact1.c"
+			RelativePath=".\testexact1.cpp"
 			>
 			<FileConfiguration
 				Name="Release|Win32"

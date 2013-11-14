@@ -2,7 +2,7 @@
 #define DATA
 
 #define MAXVALUE 1000000000.0
-#define MaxTasks 500
+#define MaxTasks 50
 #define MaxMachines 10
 #define MaxEdges 1024
 #define MaxTimeHorizon 30

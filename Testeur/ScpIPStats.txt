@@ -1,0 +1,8 @@
+Results of the IP model on the Amazon-like instances
+----------------------------------------------------
+
+Number of instances for each scenario: 20
+
+Scenario #InFeas #InstSolved #MemLim #TimLim #Nodes_min #Nodes_moy #Nodes_max Time_min Time_moy Time_max #NbMach_min #NbMach_moy #NbMach_max
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sc1 2 18 0 0 0 4.142857 56 1.00 1.00 1.00 1.00 1.88 2.00

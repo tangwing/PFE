@@ -9,7 +9,7 @@
 #include <process.h>
 #include "Data.h"
 
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -917,7 +917,7 @@ int main(int argc)
   double dNbMach;
 
 	GetData();
-	//if (DEBUG) DisplayData();
+	if (DEBUG) DisplayData();
 
 	time(&temp1);
 
@@ -926,10 +926,10 @@ int main(int argc)
 		InitializeIPModel();
 
 		IloCplex cplex(model);
-
+printf("line:%d\n",__LINE__);
 		if (DEBUG)
 			cplex.exportModel("SCP.lp");
-
+printf("line:%d\n",__LINE__);
 		if(CONFIG)
 		{
 			//cplex.setParam(IloCplex::SimDisplay,0);
@@ -942,10 +942,10 @@ int main(int argc)
 			//cplex.setParam(IloCplex::NodeFileInd,2);
 			cplex.setParam(IloCplex::TreLim,MemLimit);// We limit the size of the search tree
 			cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
-			cplex.setParam(IloCplex::Threads,3);
+			//cplex.setParam(IloCplex::Threads,3);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
-	
+printf("line:%d\n",__LINE__);	
 	try 
 	{
 		dNbMach=-1.0;
