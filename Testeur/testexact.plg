@@ -1,0 +1,34 @@
+--------------------Configuration: testexact - Win32 Release--------------------
+Begining build with project "D:\Tkindt\F2Csum\TestsStrategy\Test\testexact.dsp", at root.
+Active configuration is Win32 (x86) Console Application (based on Win32 (x86) Console Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/testexact.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c "
+			"Win32 Resource Compiler" with flags "/l 0x40c /d "NDEBUG" "
+			"Browser Database Maker" with flags "/nologo /o"Release/testexact.bsc" "
+			"COFF Linker for 80x86" with flags "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/testexact.pdb" /machine:I386 /out:"Release/testexact.exe" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\TEMP\RSPE.tmp" with contents </nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/testexact.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c"
+>
+Creating command line "cl.exe @C:\TEMP\RSPE.tmp" 
+Creating temp file "C:\TEMP\RSPF.tmp" with contents <kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/testexact.pdb" /machine:I386 /out:"Release/testexact.exe" 
+.\Release\testexact1.obj>
+Creating command line "link.exe @C:\TEMP\RSPF.tmp" 
+Compiling...
+testexact1.c
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(31) : warning C4244: '=' : conversion from 'float ' to 'long ', possible loss of data
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(32) : warning C4244: '=' : conversion from 'float ' to 'long ', possible loss of data
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(94) : warning C4018: '<' : signed/unsigned mismatch
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(196) : warning C4101: 't' : unreferenced local variable
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(196) : warning C4101: 'lbchu' : unreferenced local variable
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(196) : warning C4101: 'tpschu' : unreferenced local variable
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(196) : warning C4101: 'optchu' : unreferenced local variable
+D:\Tkindt\F2Csum\TestsStrategy\Test\testexact1.c(196) : warning C4101: 'k' : unreferenced local variable
+Linking...
+
+
+
+testexact.exe - 0 error(s), 8 warning(s)
