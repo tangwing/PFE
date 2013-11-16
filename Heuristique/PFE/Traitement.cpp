@@ -158,7 +158,7 @@ float CalculCoutAffectation(unsigned int i,unsigned int j){
 }
 
 bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
-	int iEdge,iTime;
+	int iEdge,iTime, iSwap;
 	for (iEdge=0;iEdge<NbEdges();iEdge++)
 	{
 		for (iTime=Traitement.ListOfIntervalles[indice].BorneInf;iTime<=Traitement.ListOfIntervalles[indice].BorneSup;iTime++)
@@ -166,10 +166,10 @@ bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,un
 			int iBdw=0, iLoop;
 			for (iLoop=0;iLoop<NbMachEdge(iEdge);iLoop++)
 			{
-				unsigned int iSwap;
+				/// Get the iLoop'th couple of machine for the iEdge'th edge
 				CoupleMachines(iEdge,iLoop,machinei,machinej);
 				if (machinei>machinej){ 
-					iSwap=machinei; 
+					iSwap=machinei;
 					machinei=machinej; 
 					machinej=iSwap;
 				}
@@ -1001,6 +1001,7 @@ void Ordonnancement(unsigned int indice){
 			RAM = Data.ListOfMachines[indiceS].QtyRAM;
 			HDD = Data.ListOfMachines[indiceS].QtyHDD;*/
 
+			///La ListofServeurbis contient les caracs actuelles
 			for(int temps = Traitement.ListOfIntervalles[indice].BorneInf;temps<=Traitement.ListOfIntervalles[indice].BorneSup;temps++){
 				Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
 				Traitement.ListOfServeurbis[temps][indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
@@ -1019,19 +1020,19 @@ void Ordonnancement(unsigned int indice){
 			}		
 		}
 
-				if((Traitement.NbHDDRAMGPUPr != 0)||(Traitement.NbRAMHDDGPUPr != 0)){
-					//OrdoGPUPr(indice,indiceS);
-					OrdoTachePreSurServeurOn(indice);
-				}
 
-				if((Traitement.NbHDDRAMCPUPr != 0)||(Traitement.NbRAMHDDCPUPr != 0)){
-					OrdoTachePreSurServeurOn(indice);
-				}
-			/*Data.ListOfMachines[indiceS].QtyCPU = CPU;
-			Data.ListOfMachines[indiceS].QtyGPU = GPU;
-			Data.ListOfMachines[indiceS].QtyRAM = RAM;
-			Data.ListOfMachines[indiceS].QtyHDD = HDD;*/
+		if((Traitement.NbHDDRAMGPUPr != 0)||(Traitement.NbRAMHDDGPUPr != 0)){
+			//OrdoGPUPr(indice,indiceS);
+			OrdoTachePreSurServeurOn(indice);
+		}
 
+		if((Traitement.NbHDDRAMCPUPr != 0)||(Traitement.NbRAMHDDCPUPr != 0)){
+			OrdoTachePreSurServeurOn(indice);
+		}
+		/*Data.ListOfMachines[indiceS].QtyCPU = CPU;
+		Data.ListOfMachines[indiceS].QtyGPU = GPU;
+		Data.ListOfMachines[indiceS].QtyRAM = RAM;
+		Data.ListOfMachines[indiceS].QtyHDD = HDD;*/
 }
 
 /************************************************************************************/
@@ -1050,19 +1051,24 @@ void OrdoGPU(unsigned int indice,unsigned int indiceServeur){
 						if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU>=nc(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM)){
 							if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD>=nh(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM)){
 								if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM>=nr(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM)){
-									//if(CalculFesabiliteResau(iboucle1,indiceServeur) == true){
+									
+									///Gestion réseau pour deux VMs qui possèdent une affinité
 									for(int indiceVM = 0;indiceVM<N();indiceVM++){
 										if(a(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM,indiceVM)==1){
+											///Si l'autre VM est affecté pour cet intervalle et pas sur une autre machine
 											if((Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter==1)&&(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine != indiceServeur)){
-												if(CalculFesabiliteResau(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM,indiceVM,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].IndiceMachine,indiceServeur,indice)==0){
-													//printf("Le reseau le permet pas\n");
+												if(CalculFesabiliteResau(Traitement.ListOfTasks1GPU[iboucle1].IndiceVM,indiceVM, ///tâche i et j
+													indiceServeur,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][indiceVM].IndiceMachine,indice)==0)///Machine i et j et intervalle
+												{
+													///???Pas compris
 													for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
 														Traitement.ListOfOrdo[i][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].IndiceMachine = -3;
 														Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = -1;
 														Traitement.ListOfOrdo[i][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
 													}
 												}
-												MaJReseau(indiceVM,Traitement.ListOfTasks1GPU[iboucle1].IndiceVM, Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine,indiceServeur,indice);
+												else
+													MaJReseau(indiceVM,Traitement.ListOfTasks1GPU[iboucle1].IndiceVM, Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine,indiceServeur,indice);
 											}
 										}
 									}

@@ -74,7 +74,7 @@ short int NbMachEdge(unsigned int e) // Returns the number of couples of machine
 { return  Data.Network.NbMachinesByEdge[e];}
 void CoupleMachines(unsigned int e, unsigned int pos, unsigned int &Mach1, unsigned int &Mach2) // Mach1 and Mach2 are the machines in position pos in the list of couples usinge the edge e
 {
-	Mach1=Data.Network.ListOfMachinesByEdge[e][pos][0]-1;	
+	Mach1=Data.Network.ListOfMachinesByEdge[e][pos][0]-1;	///The first machine of the pos'th couple who use the e'th edge
 	Mach2=Data.Network.ListOfMachinesByEdge[e][pos][1]-1;
 }
 
