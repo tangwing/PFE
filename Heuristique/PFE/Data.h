@@ -38,6 +38,7 @@ typedef struct{ // Data structure associated to the network
 				short int MaxBandwidth; // The maximum bandwidth of any link (b)
 				short int ComBandwidth[MaxTasks][MaxTasks]; // data bij 
 				short int NbMachinesByEdge[MaxEdges]; // The number of couples of machines (j,j') usigne the links in the network
+				///The second dim = max number of machine pairs
 				short int ListOfMachinesByEdge[MaxEdges][MaxMachines*MaxMachines][2]; // The Pll'
 }SDEFNetwork;
 

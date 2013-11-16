@@ -303,6 +303,7 @@ void ConstructionListesTacheNonPr(unsigned int indice){
 	printf("\n");*/
 }
 
+///Construction des 4 listes des tâches préemptables
 void ConstructionListesTachePr(unsigned int indice){
 
 	int j=0;
@@ -333,7 +334,7 @@ void ConstructionListesTachePr(unsigned int indice){
 					Traitement.NbRAMHDDGPUPr++;
 				}
 			}
-			//Construction des listes VM non préemtable avec des besoins en CPU uniquement
+			///Construction des listes VM préemtable avec des besoins en CPU uniquement
 			else if((Data.ListOfTasks[i].LIsToBeProcessed[temps]==1)&&(R(i)==1)){
 				//Construction de la liste HDD > RAM
 				if(nh(i)>nr(i))
@@ -450,7 +451,7 @@ void ConstructionListesTachePrbis(unsigned int indice){
 
 }
 
-//# Construire une seule liste pour toutes les tâches préemptables. Cette liste est utilisée dans la fonction AllumerMachine
+///! Construire une seule liste pour toutes les tâches préemptables. Cette liste est utilisée dans la fonction AllumerMachine
 void ConstructionListeTachePr(unsigned int indice){
 
 	int j=0;
@@ -494,313 +495,207 @@ void ConstructionListeTachePr(unsigned int indice){
 	printf("\n");*/
 }
 
+///Pour un intervalle et un serveur donnés, calculer la prio des tâches qui peuvent être affectées sur cette machine
 void CalculPrioGPU(unsigned int indiceServeur,unsigned int indice){
 	int IB = 0;
 	int WG = 0;
-	int MachineRecevoir;
+	int MachineRecevoir = 0;
+	int duree; //La durée d'exécution de la tâche, c'est pour simplifier la notion.
 	//Calcule de la prioriét?pour la liste contenant les VM ayant besoin de GPU et tel que besoins HDD > besoins RAM
-	for(int iboucle = 0; iboucle<Traitement.NbHDDRAMGPU;iboucle++){
+	for(int iboucle = 0; iboucle<Traitement.NbHDDRAMGPU;iboucle++){ ///Pour chaque tâche
 		Traitement.ListOfTasks1GPU[iboucle].prio = 0;
+		IB = 0;
+		WG = 0;
 		MachineRecevoir = 0;
+		duree = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].dureeExe;
+
+		///Si la tâche n'est pas encore affectée
 		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].affecter == 0){
-			if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-					IB = M();
-					Traitement.ListOfTasks1GPU[iboucle].prio = Traitement.ListOfTasks1GPU[iboucle].prio + IB;
-			}
-			else{
-				IB = 0;
-				Traitement.ListOfTasks1GPU[iboucle].prio = Traitement.ListOfTasks1GPU[iboucle].prio + IB;
-			}
-			if(indice!=0){
-				if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].dureeExe < mt(Traitement.ListOfTasks1GPU[iboucle].IndiceVM)){
-					if(u(Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indice-1].BorneSup)==0){
-						int indiceInterval = indice-1;
-						while(u(Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0){
-							indiceInterval--;
-						}
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
-					}
-					else{
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -2*M();
-						}
-					}
+			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
+			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){IB = M();}
+
+			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
+			if( duree!=0 && duree < mt(Traitement.ListOfTasks1GPU[iboucle].IndiceVM)){
+				///On cherche l'intervalle où elle a exécuté.
+				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
+				int indiceInterval = indice-1;
+				while(indiceInterval>=0 && u(Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0)
+					indiceInterval--;
+					
+				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
+					WG = indiceServeur;
 				}
 				else{
-					for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks1GPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-					}
-					WG = M() -  MachineRecevoir;
-				//printf("Valeur de WG : %d \n",WG);
+					WG = -M(); ///ça veut dire no way
 				}
 			}
-			else{
+			else{///dureeExe > mt ou duree==0
 				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks1GPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-							//printf("Machine Recevoir %d\n",MachineRecevoir);
-						}
+					if(Data.ListOfTasks[Traitement.ListOfTasks1GPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
+						MachineRecevoir++;
 					}
-					WG = M() -  MachineRecevoir;
+				}
+				///Moins de récepteur, plus de prio
+				WG = M() -  MachineRecevoir;
+				//printf("Valeur de WG : %d \n",WG);
 			}
-			//printf("Valeur de WG : %d \n",WG);
-			//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfTasks1GPU[iboucle].prio);
-			Traitement.ListOfTasks1GPU[iboucle].prio = Traitement.ListOfTasks1GPU[iboucle].prio + WG;
+			Traitement.ListOfTasks1GPU[iboucle].prio = IB + WG;
 			//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfTasks1GPU[iboucle].prio);	
-			
 		}
 	}
-	for(int iboucle=1;iboucle<Traitement.NbHDDRAMGPU;iboucle++){
-		if(Traitement.ListOfTasks1GPU[iboucle].prio > Traitement.ListOfTasks1GPU[iboucle-1].prio){
-				HDDRAM memoire = Traitement.ListOfTasks1GPU[iboucle-1];
-				Traitement.ListOfTasks1GPU[iboucle-1]=Traitement.ListOfTasks1GPU[iboucle];
-				Traitement.ListOfTasks1GPU[iboucle]=memoire;
-		}
-	}
+	///Trier les tâches en priorité décroissant
+	SortByPrio(Traitement.ListOfTasks1GPU, Traitement.NbHDDRAMGPU);
+
 
 	//Calcule de la prioriét?pour la liste contenant les VM ayant besoin de GPU et tel que besoins RAM > besoins HDD
-	for(int iboucle = 0; iboucle<Traitement.NbRAMHDDGPU;iboucle++){
+	for(int iboucle = 0; iboucle<Traitement.NbRAMHDDGPU;iboucle++){ ///Pour chaque tâche
 		Traitement.ListOfTasks2GPU[iboucle].prio = 0;
+		IB = 0;
+		WG = 0;
 		MachineRecevoir = 0;
+		duree = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1GPU[iboucle].IndiceVM].dureeExe;
+
+		///Si la tâche n'est pas encore affectée
 		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].affecter == 0){
-			if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-				IB = M();
-				Traitement.ListOfTasks2GPU[iboucle].prio = Traitement.ListOfTasks2GPU[iboucle].prio + IB;
-			}
-			else{
-				IB = 0;
-				Traitement.ListOfTasks2GPU[iboucle].prio = Traitement.ListOfTasks2GPU[iboucle].prio + IB;
-			}
-			if(indice!=0){
-				if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].dureeExe < mt(Traitement.ListOfTasks2GPU[iboucle].IndiceVM)){
-					if(u(Traitement.ListOfTasks2GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indice-1].BorneSup)==0){
-						int indiceInterval = indice-1;
-						while(u(Traitement.ListOfTasks2GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0){
-							indiceInterval--;
-						}
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
-					}
-					else{
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -2*M();
-						}
-					}
+			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
+			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){IB = M();}
+
+			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
+			if( duree !=0 && duree < mt(Traitement.ListOfTasks2GPU[iboucle].IndiceVM)){
+				///On cherche l'intervalle où elle a exécuté.
+				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
+				int indiceInterval = indice-1;
+				while(indiceInterval>=0 && u(Traitement.ListOfTasks2GPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0)
+					indiceInterval--;
+					
+				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks2GPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
+					WG = indiceServeur;
 				}
 				else{
-					for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[iboucle].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-					}
-					WG = M() -  MachineRecevoir;
-				//printf("Valeur de WG : %d \n",WG);
+					WG = -M(); ///ça veut dire no way
 				}
 			}
-			else{
-				for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[iboucle].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
+			else{///dureeExe > mt ou duree==0
+				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
+					if(Data.ListOfTasks[Traitement.ListOfTasks2GPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
+						MachineRecevoir++;
 					}
-					WG = M() -  MachineRecevoir;
+				}
+				///Moins de récepteur, plus de prio
+				WG = M() -  MachineRecevoir;
+				//printf("Valeur de WG : %d \n",WG);
 			}
-			Traitement.ListOfTasks2GPU[iboucle].prio = Traitement.ListOfTasks2GPU[iboucle].prio + WG;	
-		//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks2GPU[iboucle].IndiceVM,Traitement.ListOfTasks2GPU[iboucle].prio);	
-	
+			Traitement.ListOfTasks2GPU[iboucle].prio = IB + WG;
+			//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks2GPU[iboucle].IndiceVM,Traitement.ListOfTasks2GPU[iboucle].prio);	
 		}
 	}
-	for(int iboucle=1;iboucle<Traitement.NbRAMHDDGPU;iboucle++){
-		if(Traitement.ListOfTasks2GPU[iboucle].prio < Traitement.ListOfTasks2GPU[iboucle-1].prio){
-				RAMHDD memoire = Traitement.ListOfTasks2GPU[iboucle-1];
-				Traitement.ListOfTasks2GPU[iboucle-1]=Traitement.ListOfTasks2GPU[iboucle];
-				Traitement.ListOfTasks2GPU[iboucle]=memoire;
-		}
-	}
+	///Trier les tâches en priorité décroissant
+	SortByPrio(Traitement.ListOfTasks2GPU, Traitement.NbRAMHDDGPU);
 	//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1GPU[iboucle].IndiceVM,Traitement.ListOfTasks1GPU[iboucle].prio);
 	//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1GPU[0].IndiceVM,Traitement.ListOfTasks1GPU[0].prio);
 }
 
 void CalculPrioCPU(unsigned int indiceServeur,unsigned int indice){
-	int IB,WG;
-	IB = 0;
-	WG = 0;
-	int MachineRecevoir;
-	//Calcule de la prioriét?pour la liste contenant les VM ayant uniquement besoin de CPU et tel que besoins HDD > besoins RAM
-	for(int iboucle = 0; iboucle<Traitement.NbHDDRAMCPU;iboucle++){
+		int IB = 0;
+	int WG = 0;
+	int MachineRecevoir = 0;
+	int duree; //La durée d'exécution de la tâche, c'est pour simplifier la notion.
+	//Calcule de la prioriét?pour la liste contenant les VM ayant besoin de CPU et tel que besoins HDD > besoins RAM
+	for(int iboucle = 0; iboucle<Traitement.NbHDDRAMCPU;iboucle++){ ///Pour chaque tâche
 		Traitement.ListOfTasks1CPU[iboucle].prio = 0;
+		IB = 0;
+		WG = 0;
 		MachineRecevoir = 0;
-		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].affecter == 0){
-			if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-				IB = M();
-				Traitement.ListOfTasks1CPU[iboucle].prio = Traitement.ListOfTasks1CPU[iboucle].prio + IB;
-			}
-			else{
-				IB = 0;
-				Traitement.ListOfTasks1CPU[iboucle].prio = Traitement.ListOfTasks1CPU[iboucle].prio + IB;
-			}
-			if(indice!=0){
-				if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].dureeExe < mt(Traitement.ListOfTasks1CPU[iboucle].IndiceVM)){
-					if((u(Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indice-1].BorneSup)==0)&&(Traitement.ListOfIntervalles[indice-1].BorneInf!=0)){
-						int indiceInterval = indice-1;
-						while(u(Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0){
-							indiceInterval--;
-						}
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
-					}
-					else if (Traitement.ListOfIntervalles[indice-1].BorneInf==0){
-						for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-							if(Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-								MachineRecevoir++;
-							}
-						}
-						WG = M() -  MachineRecevoir;
-					}
-					else{
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
-					}
+		duree = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].dureeExe;
+
+		///Si la tâche n'est pas encore affectée
+		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].affecter == 0){
+			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
+			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){IB = M();}
+
+			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
+			if( duree!=0 && duree < mt(Traitement.ListOfTasks1CPU[iboucle].IndiceVM)){
+				///On cherche l'intervalle où elle a exécuté.
+				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
+				int indiceInterval = indice-1;
+				while(indiceInterval>=0 && u(Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0)
+					indiceInterval--;
+					
+				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
+					WG = indiceServeur;
 				}
 				else{
-					for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-					}
-					WG = M() -  MachineRecevoir;
-					//printf("Valeur de WG : %d \n",WG);
+					WG = -M(); ///ça veut dire no way
 				}
 			}
-			else{
-				for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-					}
-					WG = M() -  MachineRecevoir;
-					//printf("Valeur de WG : %d \n",WG);
-			}
-			Traitement.ListOfTasks1CPU[iboucle].prio = Traitement.ListOfTasks1CPU[iboucle].prio + WG;
-		}
-	//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfTasks1CPU[iboucle].prio);	
-	}
-	for(int iboucle=2;iboucle<Traitement.NbHDDRAMCPU;iboucle++){
-		if(Traitement.ListOfTasks1CPU[iboucle].prio > Traitement.ListOfTasks1CPU[iboucle-1].prio){
-				HDDRAM memoire = Traitement.ListOfTasks1CPU[iboucle-1];
-				Traitement.ListOfTasks1CPU[iboucle-1]=Traitement.ListOfTasks1CPU[iboucle];
-				Traitement.ListOfTasks1CPU[iboucle]=memoire;
-		}
-	}
-
-	/*for(int test=0;test<Traitement.NbHDDRAMCPUMachinej;test++){
-		printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1CPUMachinej[test].IndiceVM,Traitement.ListOfTasks1CPUMachinej[test].prio);
-
-	}*/
-
-	//Calcule de la prioriét?pour la liste contenant les VM ayant uniquement besoin de CPU et tel que besoins RAM > besoins HDD
-	for(int iboucle = 0; iboucle<Traitement.NbRAMHDDCPU;iboucle++){
-		Traitement.ListOfTasks2CPU[iboucle].prio = 0;
-		MachineRecevoir = 0;
-		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].affecter == 0){
-			if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-				IB = M();
-				Traitement.ListOfTasks2CPU[iboucle].prio = Traitement.ListOfTasks2CPU[iboucle].prio + IB;
-			}
-			else{
-				IB = 0;
-				Traitement.ListOfTasks2CPU[iboucle].prio = Traitement.ListOfTasks2CPU[iboucle].prio + IB;
-			}
-			if(indice!=0){
-				if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].dureeExe < mt(Traitement.ListOfTasks2CPU[iboucle].IndiceVM)){
-					if((u(Traitement.ListOfTasks2CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indice-1].BorneSup)==0)&&(Traitement.ListOfIntervalles[indice-1].BorneInf!=0)){
-						int indiceInterval = indice-1;
-						while(u(Traitement.ListOfTasks2CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0){
-							indiceInterval--;
-						}
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
-					}
-					else if (Traitement.ListOfIntervalles[indice-1].BorneInf==0){
-						for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-							if(Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-								MachineRecevoir++;
-							}
-						}
-						WG = M() -  MachineRecevoir;
-					}
-					else{
-						if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){
-							WG = indiceServeur;
-						}
-						else{
-						WG = -M();
-						}
+			else{///dureeExe > mt ou duree==0
+				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
+					if(Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
+						MachineRecevoir++;
 					}
 				}
-				else{
-					for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-					}
-					WG = M() -  MachineRecevoir;
-					//printf("Valeur de WG : %d \n",WG);
-				}
-			}
-			else{
-				for(int iboucle2 = 0; iboucle2<M()-1; iboucle2++){
-						if(Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
-							MachineRecevoir++;
-						}
-				}
+				///Moins de récepteur, plus de prio
 				WG = M() -  MachineRecevoir;
 				//printf("Valeur de WG : %d \n",WG);
 			}
-			Traitement.ListOfTasks2CPU[iboucle].prio = Traitement.ListOfTasks2CPU[iboucle].prio + WG;
+			Traitement.ListOfTasks1CPU[iboucle].prio = IB + WG;
+			//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfTasks1CPU[iboucle].prio);	
 		}
-		//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks2CPU[iboucle].IndiceVM,Traitement.ListOfTasks2CPU[iboucle].prio);	
 	}
-	//while(t==false){
-		for(int iboucle=2;iboucle<Traitement.NbRAMHDDCPU;iboucle++){
-			if(Traitement.ListOfTasks2CPU[iboucle].prio > Traitement.ListOfTasks2CPU[iboucle-1].prio){
-				RAMHDD memoire = Traitement.ListOfTasks2CPU[iboucle-1];
-				Traitement.ListOfTasks2CPU[iboucle-1]=Traitement.ListOfTasks2CPU[iboucle];
-				Traitement.ListOfTasks2CPU[iboucle]=memoire;
+	///Trier les tâches en priorité décroissant
+	SortByPrio(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU);
+
+
+	//Calcule de la prioriét?pour la liste contenant les VM ayant besoin de CPU et tel que besoins RAM > besoins HDD
+	for(int iboucle = 0; iboucle<Traitement.NbRAMHDDCPU;iboucle++){ ///Pour chaque tâche
+		Traitement.ListOfTasks2CPU[iboucle].prio = 0;
+		IB = 0;
+		WG = 0;
+		MachineRecevoir = 0;
+		duree = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1CPU[iboucle].IndiceVM].dureeExe;
+
+		///Si la tâche n'est pas encore affectée
+		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].affecter == 0){
+			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
+			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){IB = M();}
+
+			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
+			if( duree !=0 && duree < mt(Traitement.ListOfTasks2CPU[iboucle].IndiceVM)){
+				///On cherche l'intervalle où elle a exécuté.
+				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
+				int indiceInterval = indice-1;
+				while(indiceInterval>=0 && u(Traitement.ListOfTasks2CPU[iboucle].IndiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0)
+					indiceInterval--;
+					
+				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][Traitement.ListOfTasks2CPU[iboucle].IndiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
+					WG = indiceServeur;
+				}
+				else{
+					WG = -M(); ///ça veut dire no way
+				}
 			}
-			//if(Traitement.ListOfTasks2CPU[iboucle-1].prio
+			else{///dureeExe > mt ou duree==0
+				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
+					if(Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
+						MachineRecevoir++;
+					}
+				}
+				///Moins de récepteur, plus de prio
+				WG = M() -  MachineRecevoir;
+				//printf("Valeur de WG : %d \n",WG);
+			}
+			Traitement.ListOfTasks2CPU[iboucle].prio = IB + WG;
+			//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks2CPU[iboucle].IndiceVM,Traitement.ListOfTasks2CPU[iboucle].prio);	
 		}
-	//}
+	}
+	///Trier les tâches en priorité décroissant
+	SortByPrio(Traitement.ListOfTasks2CPU, Traitement.NbRAMHDDCPU);
+	//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1CPU[iboucle].IndiceVM,Traitement.ListOfTasks1CPU[iboucle].prio);
+	//printf("priorite de la tache %d : %d \n",Traitement.ListOfTasks1CPU[0].IndiceVM,Traitement.ListOfTasks1CPU[0].prio);
 }
+
+
+
 void CalculPrioGPUPr(unsigned int indiceServeur,unsigned int indice){
 	int IB,WG;
 	IB = 0;
@@ -810,6 +705,7 @@ void CalculPrioGPUPr(unsigned int indiceServeur,unsigned int indice){
 		Traitement.ListOfTasks1GPUMachinej[iboucle].prio = 0;
 		MachineRecevoir = 0;
 		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1GPUMachinej[iboucle].IndiceVM].affecter == 0){
+			
 			if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1GPUMachinej[iboucle].IndiceVM].IndiceMachine == indiceServeur){
 					IB = M();
 					Traitement.ListOfTasks1GPUMachinej[iboucle].prio = Traitement.ListOfTasks1GPUMachinej[iboucle].prio + IB;
@@ -1094,6 +990,7 @@ void Ordonnancement(unsigned int indice){
 	int iboucleS = 0;
 	int indiceTab = 0;
 	bool tachepre = 0;
+	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, on essaie de la remplir par des tâches
 	for(iboucleS;iboucleS<M();iboucleS++){
 			//printf("Le serveur utilis?est %d \n",Traitement.ListOfServer[iboucleS].IndiceServeur);
 			int indiceS = Traitement.ListOfServer[iboucleS].IndiceServeur;

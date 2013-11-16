@@ -9,10 +9,13 @@
 #include "Data.h"
 #include <algorithm>
 
+#include "Test.h"
 using namespace std;
 
 int main()
 {
+	Test();
+
 	double dOptValue,dOptTime;
 	int NbMach;
 	int isFeasible = 1;
@@ -64,11 +67,12 @@ int main()
 	CalculInterval();
 	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
+		///! On construit les listes de tâche pour chaque intervalle. Pour une tâche donnée, sa valeur de Uit varie selon l'intervalle
 		//printf("\n ****** Taches non preamtable ****** \n");
 		ConstructionListesTacheNonPr(i);
 		//printf("\n ****** Tache preamtable ****** \n");
 		ConstructionListesTachePr(i);
-		ConstructionListeTachePr(i);
+		ConstructionListeTachePr(i); ///! Construire une seule liste des tâches préemptables
 		//printf("\nRemplisage des serveur pour l'intervalle %d \n",i);
 		//printf("\n");
 		Ordonnancement(i);
@@ -80,9 +84,9 @@ int main()
 		}*/
 	}
 	//printf("nombre de machine active : %d  \n",Traitement.NbServeurOn);
-	for(int i=0;i<Traitement.NbServeurOn;i++){
+	//for(int i=0;i<Traitement.NbServeurOn;i++){
 			//printf("La machine %d est allumee \n",Traitement.ListOfServerOn[i].IndiceServeur);
-	}
+	//}
 	//NbMach = Traitement.NbServeurOn;
 	for(int i=0;i<T();i++){
 		for(int j=0;j<N();j++){

@@ -14,20 +14,20 @@ typedef struct{ //Structure de données pour contenir le numéro des machines avec
 
 }Serveur;
 
-typedef struct{ //Structure de données pour contenir le numéro des machines avec leur cout normalis?respectif
+typedef struct{ 
 	int CPU;			
 	int GPU;
 	int HDD;
 	int RAM;
 }CaractServeur;
 
-typedef struct{ //Structure de données pour contenir le numéro des machines avec leur cout normalis?respectif
+typedef struct{ ///Structure de données pour contenir le numéro des machines ON avec leur cout normalis?respectif
 	int IndiceServeur;			
 	float CoutNorm;
 
 }ServeurON;
 
-typedef struct{ //Structure de données pour contenir le numéro des machines avec leur cout normalis?respectif
+typedef struct{ 
 	int Mach1;			
 	int Mach2;
 	int BdePassanteDispo;
@@ -44,7 +44,7 @@ typedef struct{ //Structure de données permettant de stocker les indice des VMs 
 	signed int prio;
 }RAMHDD;
 
-typedef struct{ //Structure de données permettant de stocker les indice des VMs tq besoins en HDD > besoins en RAM 
+typedef struct{ ///Tâche avec priorité
 	short int IndiceVM; 
 	int prio;
 }Pream;
@@ -58,15 +58,14 @@ typedef struct{ //Structure de données permettant de stocker les indices des int
 typedef struct{ //Structure permettant de stocker la valeur de cout d'utilisation d'une VM i sur une machine j allumée
 	short int indiceVM;
 	float cout;
-
 }ctij;
 
 typedef struct{ //Structure permettant de stocker la valeur de cout d'utilisation d'une VM i sur une machine j non allumée
 	short int indicePM;
-	float gain;
+	float gain;///It's rather the cost of executing this job on a newly started machine 
 }gaj;
 
-typedef struct{ //Structure de données permettant de stocker les indices des intervalles ainsi que les bornes supérieur et inférieur pour chaque intervalle
+typedef struct{ 
 	short int IndiceTache;
 	short int IndiceMachine;
 	bool affecter;
@@ -74,7 +73,7 @@ typedef struct{ //Structure de données permettant de stocker les indices des int
 	int dureeSus; //permet de stocker le temps durant lequel la tâche i a ét?suspendu
 }Ordo;
 
-typedef struct{
+typedef struct{///For a given interval, this structure stock the number of running machine
 	int NbServeurOn;
 	int IndiceServeur;
 }NbServeurOn;
@@ -152,4 +151,30 @@ extern void AffectationGPUPre(unsigned int indice,unsigned int indiceServeur);
 extern void AffectationCPUPre(unsigned int indice,unsigned int indiceServeur);
 extern int TotalCost(void);
 
+///swap two elements
+template <typename T> void Swap(T& v1, T& v2)
+{
+	T tmp = v1;
+	v1 = v2;
+	v2 = tmp;
+}
+
+template <typename T> void SortByPrio(T* arr, int size, bool isDecreased=true)
+{
+	if(size<2)return;
+	int mid = arr[size/2].prio;
+	int i=0, j=size-1;
+	while(i<j)
+	{
+		while(arr[i].prio > mid && i<size)i++;
+		while(arr[j].prio < mid && j>0)j--;
+		if(i<=j)
+		{
+			Swap(arr[i], arr[j]);
+			i++; j--;
+		}
+	}
+	if( j > 0 )SortByPrio(arr, j+1);
+	if(i < size)SortByPrio(arr+i, size-i);
+}
 #endif
