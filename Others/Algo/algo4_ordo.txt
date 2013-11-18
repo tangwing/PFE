@@ -1,0 +1,21 @@
+Ordonnancer
+
+Debut
+	TrierTâches(ListeGPU1);
+	TrierTâches(ListeGPU2);
+	TrierTâches(ListeCPU1);
+	TrierTâches(ListeCPU2);
+	OrdoNonPré(ListeGPU1, indice);
+	OrdoNonPré(ListeGPU2, indice);
+	OrdoNonPré(ListeCPU1, indice);
+	OrdoNonPré(ListeCPU2, indice);
+	
+	TrierTâches(ListePrGPU1);
+	TrierTâches(ListePrGPU2);
+	TrierTâches(ListePrCPU1);
+	TrierTâches(ListePrCPU2);
+	OrdoPré(ListePrGPU1, indice);
+	OrdoPré(ListePrGPU2, indice);
+	OrdoPré(ListePrCPU1, indice);
+	OrdoPré(ListePrCPU2, indice);
+Fin

@@ -531,6 +531,7 @@ void CalculPrioGPU(unsigned int indiceServeur,unsigned int indice){
 			}
 			else{///dureeExe > mt ou duree==0
 				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
+					///! Il faut aussi prendre en compte u() !?
 					if(Data.ListOfTasks[Traitement.ListOfTasks1GPU[iboucle].IndiceVM].LPreAssignement[iboucle2]==1){
 						MachineRecevoir++;
 					}

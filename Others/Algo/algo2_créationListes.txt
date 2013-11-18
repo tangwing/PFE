@@ -1,0 +1,45 @@
+
+Algo567 CréerListesTâches
+Entrée
+	indice: l'indice de l'intervalle sur lequel on travaille
+Sortie
+	ListeTachesPr: la liste des tâches préemptable.
+	ListeGPU1,ListeGPU2,ListeCPU1,ListeCPU2,ListePrGPU1,ListePrGPU2,ListePrCPU1,ListePrCPU2: les tâches sont réparties dans ces 8 listes selon leurs besoins en GPU, CPU, HDD, RAM et si la tâche est préemptable.
+	
+Debut
+	pour temps de ListeIntervalle[indice].BorneInf à ListeIntervalle[indice].BorneSup faire
+		pour tâche de 0 à N()-1 faire
+			si(u(tâche, temps)=1) alors //Cette	tâche peut être exécutée en ce moment
+				si(R(tâche==0))	alors	//Cette tâche est non-préemptable
+					si(ng(tâche)>0) alors
+						si(nh(tâche) > nr(tâche)) alors
+							Répartir cette tâche à ListeGPU1 si ça n'est pas fait!!;
+						sinon
+							Répartir cette tâche à ListeGPU2;
+						fin si
+					sinon	//ng(tâche)=0
+						si(nh(tâche) > nr(tâche)) alors
+							Répartir cette tâche à ListeCPU1;
+						sinon
+							Répartir cette tâche à ListeCPU2;
+						fin si
+					fin si
+				sinon	//Cette tâche est préemptable
+					Répartir cette tâche à ListeTâchesPr;
+					si(ng(tâche)>0) alors
+						si(nh(tâche) > nr(tâche)) alors
+							Répartir cette tâche à ListePrGPU1;
+						sinon
+							Répartir cette tâche à ListePrGPU2;
+						fin si
+					sinon	//ng(tâche)=0
+						si(nh(tâche) > nr(tâche)) alors
+							Répartir cette tâche à ListePrCPU1;
+						sinon
+							Répartir cette tâche à ListePrCPU2;
+						fin si
+					fin si
+				fin si
+		fin pour
+	fin pour
+Fin

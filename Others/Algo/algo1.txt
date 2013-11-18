@@ -1,18 +1,25 @@
+//Les algorithmes peuvent être écrits naturellement mais en respectant les règles! Et après on va pouvoir les transformer en LaTeX code.
+
 Algo0 Algorithme Général
+Sortie
+	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
 Variables
-	Entier nbIntervalle;
+	Entier coûtTotal;
 Debut
 	CalculerIntervalle();
 	CréerListeServeurTriée();
-	pour i de 0 à nbIntervalle-1 faire
+	pour i de 0 à T()-1 faire
 		CréerListeTâche(i);
 		Ordonnancer(i);
 	fin pour
-	CalculerCoûtTotal();
+	coûtTotal = CalculerCoûtTotal();
+	retourner coûtTotal;
 Fin
 
-Algo1 CaculerIntervalle
-	Sortie: ListeIntervalle, qui est le tableau des intervalles trouvés
+
+Algo1 CaculerIntervoalle
+Sortie
+	ListeIntervalle: le tableau des intervalles trouvés
 Variables
 	Entier nbIntervalle=0;
 Debut
@@ -33,7 +40,8 @@ Fin
 
 
 Algo2 CréerListeServeurTriée
-	Sortie: ListeServeur, qui est le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
+Sortie
+	ListeServeur: le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
 Variables
 	Réel CoutTotal, SommeCaract;
 Debut
@@ -46,9 +54,3 @@ Debut
 	TrierParCoutNorm(ListeServeur);
 Fin
 
-Algo3 CréerListeTâche
-	Sortie: ListeGPU1, ListeGPU2, ListeCPU1, ListeCPU2, ListePrGPU1, ListePrGPU2, ListePrCPU1, ListePrCPU2. Les tâches sont réparties dans ces 8 listes selon leurs besoins de ressources et leurs préemptabilités. 
-Debut
-	//Pour les tâches non préemptables
-	
-Fin

@@ -1,0 +1,46 @@
+Algo 8 TrierTâches
+Entrée
+	indice: indice de l'intervalle
+	indiceServeur: indice de la machine
+	list: une liste de tâches à trier
+	taille: la taille de la liste
+Sortie
+	list: liste de tâches triée par prio décroissant
+Variables
+	Entier IB;
+	Entier WG;
+	Entier MachineRecevoir;
+	Entier duree;	//La durée d'exécution actuelle de la tâche
+Debut
+	pour iboucle de 0 à taille faire
+		list[iboucle].prio = 0;
+		IB = 0;
+		WG = 0;
+		MachineRecevoir = 0;
+		duree = ListOfOrdo[ListOfIntervalles[indice].BorneInf][list[iboucle].IndiceVM].dureeExe;
+
+		si (la tâche n'est pas encore affectée) alors
+			si (cette tâche était affectée sur cette machine à l'intervalle précédent) alors 
+				IB = M();	//La tâche a plus de priorité
+			fin si
+
+			si (duree!=0 et duree<mt(list[iboucle].IndiceVM)) alors		//Migration pas possible
+				Chercher indiceInterval qui est le dernier intervalle où la tâche était exécutée.
+				si (indiceInterval est trouvé et la machine correspondante est la même) alors
+					WG = indiceServeur;
+				sinon
+					WG = -M(); 	//ça veut dire pas possible
+				fin si
+			sinon
+				pour iboucle2 de 0 à <M() faire
+					si (ListeMachine[iboucle2] peut recevoir la tâche) alors
+						MachineRecevoir++;
+					fin si
+				fin pour
+					WG = M() -  MachineRecevoir;
+			fin si
+			list[iboucle].prio = IB + WG;
+		fin si
+		///Trier les tâches en priorité décroissante
+		SortByPrio(list);
+Fin
