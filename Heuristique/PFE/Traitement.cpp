@@ -982,6 +982,26 @@ void CalculPrioCPUPr(unsigned int indiceServeur,unsigned int indice){
 	}
 }
 
+///(obsolète)Initialiser le champ dureeExe des tâche dans un intervalle donné avec les valeurs de l'intervalle précédent.
+///Attention!!! Seulement les tâches dont u(indice)=1 sont comprises dans les listes. 
+///Donc quand on met à jour le dureeExe pendant l'affection il faut aussi continuer 
+///cette mise à jour de dureeExe pour l'intervalle suivant si dans ce dercier intervalle u()=0. 
+///Sinon on aura des coupes pour la valeur dureeExe.
+//void InitDureeExe(Tache* listeTache, unsigned int nbTache, unsigned int indiceI)
+//{
+//	for(int i=Traitement.ListOfIntervalles[indiceI].BorneInf; i<=Traitement.ListOfIntervalles[indiceI].BorneSup;i++)
+//	{
+//		for(int j=0; j<nbTache; j++)
+//		{
+//			if(i == 0)///Pour le premier instant, traitement spécial
+//				Traitement.ListOfOrdo[i][listeTache[j].IndiceVM].dureeExe = 0;
+//			else Traitement.ListOfOrdo[i][listeTache[j].IndiceVM].dureeExe = Traitement.ListOfOrdo[i-1][listeTache[j].IndiceVM].dureeExe;
+//		}
+//	}
+//}
+
+
+///Ordonnancer les tâches sur l'intervalle [indice]
 void Ordonnancement(unsigned int indice){
 	//Traitement.NbServeurOn = 0;
 	Traitement.ListOfNbServeurOn[indice].NbServeurOn = 0;
@@ -992,7 +1012,20 @@ void Ordonnancement(unsigned int indice){
 	int iboucleS = 0;
 	int indiceTab = 0;
 	bool tachepre = 0;
-	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, on essaie de la remplir par des tâches
+
+
+	///Mais d'abord il faut initialiser 
+	///le champ dureeExe pour toutes les tâches pour cet intervalle avec 
+	///la valeur de l'intervalle précedent, c'est pour
+	///la cohérence de données car on va les utiliser après.
+	/*InitDureeExe(Traitement.ListOfTasks1GPU, Traitement.NbHDDRAMGPU, indice);
+	InitDureeExe(Traitement.ListOfTasks2GPU, Traitement.NbRAMHDDGPU, indice);
+	InitDureeExe(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU, indice);
+	InitDureeExe(Traitement.ListOfTasks2CPU, Traitement.NbRAMHDDCPU, indice);
+	InitDureeExe(Traitement.ListofTasksPr, Traitement.NbPr, indice);*/
+
+	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, 
+	///on essaie de la remplir par des tâches. 
 	for(iboucleS;iboucleS<M();iboucleS++){
 			//printf("Le serveur utilis?est %d \n",Traitement.ListOfServer[iboucleS].IndiceServeur);
 			int indiceS = Traitement.ListOfServer[iboucleS].IndiceServeur;
@@ -1037,27 +1070,25 @@ void Ordonnancement(unsigned int indice){
 		Data.ListOfMachines[indiceS].QtyHDD = HDD;*/
 }
 
-/************************************************************************************/
-// Function OrdoGPU
-// Permet de construire l'ordonnancement des tâches avec des besoins GPU
-// non préamtable 
 
+/************************************************************************************/
+///Ordonnacement des tâches non préamtables
 ///Prendre en compte la gestion réseau et aussi la mise à jour des serveurs et du réseau
 /************************************************************************************/
-void OrdoGPU(unsigned int indice,unsigned int indiceServeur){
-			int iboucle1=0;
-			int iboucle2=0;	
+void OrdoNoPr(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceServeur){
 			int i;
+			int iboucle1=0;
+			int iboucle2=0;
 			int intervalInf = Traitement.ListOfIntervalles[indice].BorneInf;
 			int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
 			int indiceVM, indiceVM2;
 			
 			//affectation des tâches appartenant à la liste des tâches qui ont HDD > RAM
-			for(iboucle1=0;iboucle1<Traitement.NbHDDRAMGPU;iboucle1++){ ///Pour chaque tâche
-				indiceVM = Traitement.ListOfTasks1GPU[iboucle1].IndiceVM;///Pour simplifier la vie
+			for(iboucle1=0;iboucle1<nbTache;iboucle1++){ ///Pour chaque tâche
+				indiceVM = listeTache[iboucle1].IndiceVM;///Pour simplifier la vie
 
 				///Si c'est pas encore affectée ///C'est pas très nécessaire ici car bien sûr c'est pas encore affectée.
-				if ((Traitement.ListOfOrdo[intervalSup][indiceVM].affecter!=1)&&(Traitement.ListOfTasks1GPU[iboucle1].prio>=0)){
+				if ((Traitement.ListOfOrdo[intervalSup][indiceVM].affecter!=1)&&(listeTache[iboucle1].prio>=0)){
 					
 					///Si la machine a assez de ressource pour la recevoir
 					if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)){
@@ -1093,9 +1124,23 @@ void OrdoGPU(unsigned int indice,unsigned int indiceServeur){
 									///Cette affectation est faisable, donc on met à jour le réseau ainsi que les carac de la machine
 									MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
 
+									///Chercher la dureeExe actuelle
+									int duree = 0;
+									i=intervalInf-1;
+									while(i>=0)
+									{
+										if(Traitement.ListOfOrdo[i][indiceVM].dureeExe > 0)
+										{
+												duree = Traitement.ListOfOrdo[i][indiceVM].dureeExe;
+												break;
+										}
+										i--;
+									}
+
+									///Mettre à jour les attributs pour chaque intant de temps de l'intervalle
 									for(i=intervalInf;i<=intervalSup;i++){
-										if(i == 0)///Pour le premier instant, traitement spécial
-											Traitement.ListOfOrdo[i][indiceVM].dureeExe = 1;
+										if(i == intervalInf)///Pour le premier instant, traitement spécial
+											Traitement.ListOfOrdo[i][indiceVM].dureeExe = duree + 1;
 										else Traitement.ListOfOrdo[i][indiceVM].dureeExe = Traitement.ListOfOrdo[i-1][indiceVM].dureeExe+1;
 										
 										if(Traitement.ListOfServer[indiceServeur].ON != 1)
@@ -1107,7 +1152,8 @@ void OrdoGPU(unsigned int indice,unsigned int indiceServeur){
 										}
 
 										Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = indiceServeur;
-										Traitement.ListOfOrdo[i][indiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
+										Traitement.ListOfOrdo[i][indiceVM].affecter=1;
+										///Mettre à jour les ressources de la machine
 										Traitement.ListOfServeurbis[i][indiceServeur].GPU = Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU - ng(indiceVM);
 										Traitement.ListOfServeurbis[i][indiceServeur].CPU = Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU - nc(indiceVM);
 										Traitement.ListOfServeurbis[i][indiceServeur].HDD = Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD - nh(indiceVM);
@@ -1118,218 +1164,7 @@ void OrdoGPU(unsigned int indice,unsigned int indiceServeur){
 						}//else printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
 					}//else printf("Pas possible d'ajouter cette machine, pas assez de GPU \n");*/
 				}//else cette tâche est déjà affectée
-			}
-			
-
-
-
-	//!!!!
-			
-			//affectation des tâches appartenant ?la liste des tâches qui ont RAM > HDD
-			for(iboucle2 = 0;iboucle2<Traitement.NbRAMHDDGPU;iboucle2++){
-				if((Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].affecter!=1)&&(Traitement.ListOfTasks2GPU[iboucle2].prio>=0)){
-					if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].GPU>=ng(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM)){
-						if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU>=nc(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM)){
-							if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM>=nr(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM)){
-								if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD>=nh(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM)){
-									for(int indiceVM = 0;indiceVM<N();indiceVM++){
-										if(a(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM,indiceVM)==1){
-											//printf("test \n");
-											if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter==1){
-												if(CalculFesabiliteResau(Traitement.ListOfTasks2GPU[iboucle1].IndiceVM,indiceVM,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].IndiceMachine,indiceServeur,indice)==0){
-													//printf("Le reseau le permet pas\n");
-													for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].IndiceMachine = -3;
-														Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = -1;
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-													}
-												}
-												MaJReseau(indiceVM,Traitement.ListOfTasks2GPU[iboucle1].IndiceVM, Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine,indiceServeur,indice);
-											}
-										}
-									}
-									if((Data.ListOfTasks[Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indice-1].BorneInf] == 0)){
-										int indiceInt = indice-1;
-										while(Data.ListOfTasks[Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indiceInt].BorneInf] == 0){
-											indiceInt--;
-										}
-										Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].dureeExe = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInt].BorneSup][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].dureeExe;
-
-									}
-									for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].IndiceMachine = indiceServeur;
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks2GPU[iboucle2].IndiceVM].dureeExe=Traitement.ListOfOrdo[i-1][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].dureeExe + 1;
-										Traitement.ListOfServer[indiceServeur].ON = 1;
-										Traitement.ListOfServeurbis[i][indiceServeur].GPU = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].GPU - ng(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].CPU = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU - nc(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].HDD = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD - nh(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].RAM = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM - nr(Traitement.ListOfTasks2GPU[iboucle2].IndiceVM);
-										//printf("Duree execution tache %d : %d\n",Traitement.ListOfTasks1GPU[iboucle1].IndiceVM,Traitement.ListOfOrdo[i][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].dureeExe);
-									}
-										//printf("Duree execution tache %d : %d\n",Traitement.ListOfTasks1GPU[iboucle1].IndiceVM,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1GPU[iboucle1].IndiceVM].dureeExe);
-										/*if((Traitement.ListOfServerOn[Traitement.NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.NbServeurOn == 0)){
-											Traitement.ListOfServerOn[Traitement.NbServeurOn].IndiceServeur = indiceServeur;
-											Traitement.NbServeurOn++;
-										}*/
-									if((Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.ListOfNbServeurOn[indice].NbServeurOn == 0)){
-										Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn].IndiceServeur = indiceServeur;
-										Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
-									}
-									//Traitement.ListOfServerOn[iboucle2].IndiceServeur=indiceServeur;
-									//Traitement.ListOfServerOn[iboucle2].CoutNorm = Traitement.ListOfServer[iboucle2].CoutNorm;
-									//printf("La tache %d est affecter sur la machine %d \n",Traitement.ListOfTasks2GPU[iboucle2].IndiceVM,Traitement.ListOfOrdo[i][iboucle2].IndiceMachine);
-									//printf("Nouvelle valeurs de caract de la machine : %d %d %d %d \n",mg(indiceServeur),mc(indiceServeur),mh(indiceServeur),mr(indiceServeur));
-								}
-								//else
-									//printf("Pas possible d'ajouter cette machine, pas assez de HDD \n");
-							}
-							//else
-								//printf("Pas possible d'ajouter cette machine, pas assez de RAM \n");
-						}
-						//else
-							//printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
-					}
-					//else
-						//printf("Pas possible d'ajouter cette machine, pas assez de GPU \n");
-				}
-			}
-}
-
-/************************************************************************************/
-// Function OrdoCPU
-// Permet de construire l'ordonnancement des tâches avec des besoins CPU
-// non préamtable 
-/************************************************************************************/
-void OrdoCPU(unsigned int indice,unsigned int indiceServeur){
-	int i;
-	int iboucle3=0;
-	int iboucle2=0;
-	//affectation des tâches appartenant ?la liste des tâches qui ont HDD > RAM
-			for(iboucle3;iboucle3<Traitement.NbHDDRAMCPU;iboucle3++){
-				if((Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].affecter!=1)&&(Traitement.ListOfTasks1CPU[iboucle3].prio>=0)){
-						if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU>=nc(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM)){
-							if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD>=nh(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM)){
-								if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM>=nr(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM)){
-									for(int indiceVM = 0;indiceVM<N();indiceVM++){
-										if(a(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM,indiceVM)==1){
-											//printf("test \n");
-											if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter==1){
-												if(CalculFesabiliteResau(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM,indiceVM,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].IndiceMachine,indiceServeur,indice)==0){
-													//printf("Le reseau le permet pas\n");
-													for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].IndiceMachine = -1;
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-													}
-												}
-												MaJReseau(indiceVM,Traitement.ListOfTasks1CPU[iboucle3].IndiceVM, Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine,indiceServeur,indice);
-											}
-										}
-									}
-									if((Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indice-1].BorneInf] == 0)){
-										int indiceInt = indice-1;
-										while(Data.ListOfTasks[Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indiceInt].BorneInf] == 0){
-											indiceInt--;
-										}
-										Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].dureeExe = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInt].BorneSup][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].dureeExe;
-
-									}
-									for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].IndiceMachine = indiceServeur;
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-										Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].dureeExe=Traitement.ListOfOrdo[i-1][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].dureeExe + 1;
-										Traitement.ListOfServer[indiceServeur].ON = 1;
-										Traitement.ListOfServeurbis[i][indiceServeur].CPU = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU - nc(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].HDD = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD - nh(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].RAM = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM - nr(Traitement.ListOfTasks1CPU[iboucle3].IndiceVM);
-
-										//printf("Duree execution tache %d : %d\n",Traitement.ListOfTasks1CPU[iboucle3].IndiceVM,Traitement.ListOfOrdo[i][Traitement.ListOfTasks1CPU[iboucle3].IndiceVM].dureeExe);
-									}
-									/*if((Traitement.ListOfServerOn[Traitement.NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.NbServeurOn == 0)){
-											Traitement.ListOfServerOn[Traitement.NbServeurOn].IndiceServeur = indiceServeur;
-											Traitement.NbServeurOn++;
-									}*/
-									if((Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.ListOfNbServeurOn[indice].NbServeurOn == 0)){
-										Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn].IndiceServeur = indiceServeur;
-										Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
-									}
-									//printf("La tache %d est affecter sur la machine %d \n",Traitement.ListOfTasks1CPU[iboucle3].IndiceVM,indiceServeur);//Traitement.ListOfOrdo[i][Traitement.ListOfTasks1[iboucle1].IndiceVM].IndiceMachine);
-									//printf("Nouvelle valeurs de caract de la machine : %d %d %d %d \n",mg(indiceServeur),mc(indiceServeur),mh(indiceServeur),mr(indiceServeur));
-									}
-									//else
-										//printf("Pas possible d'ajouter cette machine, pas assez de RAM \n");
-								}
-								//else
-									//printf("Pas possible d'ajouter cette machine, pas assez de HDD \n");								
-							}
-							//else
-								//printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
-					}
-
-			}
-			
-			//affectation des tâches appartenant ?la liste des tâches qui ont RAM > HDD
-			for(iboucle2 = 0;iboucle2<Traitement.NbRAMHDDCPU;iboucle2++){
-				if((Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].affecter!=1)&&(Traitement.ListOfTasks2CPU[iboucle2].prio>=0)){
-						if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU>=nc(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM)){
-							if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM>=nr(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM)){
-								if(Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD>=nh(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM)){
-									for(int indiceVM = 0;indiceVM<N();indiceVM++){
-										if(a(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM,indiceVM)==1){
-											//printf("test \n");
-											if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter==1){
-												if(CalculFesabiliteResau(Traitement.ListOfTasks2CPU[iboucle3].IndiceVM,indiceVM,Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneSup][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].IndiceMachine,indiceServeur,indice)==0){
-													//printf("Le reseau le permet pas\n");
-													for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].IndiceMachine = -1;
-														Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-													}
-												}
-												MaJReseau(indiceVM,Traitement.ListOfTasks2CPU[iboucle2].IndiceVM, Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].IndiceMachine,indiceServeur,indice);
-											}
-										}
-									}
-									if((Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indice-1].BorneInf] == 0)){
-										int indiceInt = indice-1;
-										while(Data.ListOfTasks[Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].LIsToBeProcessed[Traitement.ListOfIntervalles[indiceInt].BorneInf] == 0){
-											indiceInt--;
-										}
-										Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].dureeExe = Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInt].BorneSup][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].dureeExe;
-
-									}
-									for(i=Traitement.ListOfIntervalles[indice].BorneInf;i<=Traitement.ListOfIntervalles[indice].BorneSup;i++){
-											Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].IndiceMachine = indiceServeur;
-											Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].affecter=1;//Permet de définir que la tâche est afecter sur une machine
-											Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].dureeExe=Traitement.ListOfOrdo[i-1][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].dureeExe + 1;
-											Traitement.ListOfServer[indiceServeur].ON = 1;
-											Traitement.ListOfServeurbis[i][indiceServeur].CPU = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].CPU - nc(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM);
-											Traitement.ListOfServeurbis[i][indiceServeur].HDD = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].HDD - nh(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM);
-											Traitement.ListOfServeurbis[i][indiceServeur].RAM = Traitement.ListOfServeurbis[Traitement.ListOfIntervalles[indice].BorneInf][indiceServeur].RAM - nr(Traitement.ListOfTasks2CPU[iboucle2].IndiceVM);
-											//printf("Duree execution tache %d : %d\n",Traitement.ListOfTasks2CPU[iboucle2].IndiceVM,Traitement.ListOfOrdo[i][Traitement.ListOfTasks2CPU[iboucle2].IndiceVM].dureeExe);
-										}
-									/*if((Traitement.ListOfServerOn[Traitement.NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.NbServeurOn == 0)){
-											Traitement.ListOfServerOn[Traitement.NbServeurOn].IndiceServeur = indiceServeur;
-											Traitement.NbServeurOn++;
-									}*/
-									if((Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn-1].IndiceServeur != indiceServeur)||(Traitement.ListOfNbServeurOn[indice].NbServeurOn == 0)){
-										Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn].IndiceServeur = indiceServeur;
-										Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
-									}
-									//Traitement.ListOfServerOn[iboucle2].IndiceServeur=indiceServeur;
-									//Traitement.ListOfServerOn[iboucle2].CoutNorm = Traitement.ListOfServer[iboucle2].CoutNorm;
-									//printf("La tache %d est affecter sur la machine %d \n",Traitement.ListOfTasks2CPU[iboucle2].IndiceVM,Traitement.ListOfOrdo[i][iboucle2].IndiceMachine);
-									//printf("Nouvelle valeurs de caract de la machine : %d %d %d %d \n",mg(indiceServeur),mc(indiceServeur),mh(indiceServeur),mr(indiceServeur));
-								}
-								//else
-									//printf("Pas possible d'ajouter cette machine, pas assez de HDD \n");
-							}
-							//else
-								//printf("Pas possible d'ajouter cette machine, pas assez de RAM \n");
-						}
-						//else
-							//printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
-				}
-			}
+			}			
 }
 
 void OrdoTachePreSurServeurOn(unsigned int indice){

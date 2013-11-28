@@ -2,22 +2,22 @@
 
 Algo0 Algorithme Général
 Sortie
-	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
+	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phiSiques.
 Variables
 	Entier coûtTotal;
 Debut
 	CalculerIntervalle();
 	CréerListeServeurTriée();
-	pour i de 0 à T()-1 faire
+	Pour i de 0 à T()-1 Faire
 		CréerListeTâche(i);
 		Ordonnancer(i);
-	fin pour
+	Fin Pour
 	coûtTotal = CalculerCoûtTotal();
 	retourner coûtTotal;
 Fin
 
 
-Algo1 CaculerIntervoalle
+Algo1 CaculerIntervalle
 Sortie
 	ListeIntervalle: le tableau des intervalles trouvés
 Variables
@@ -25,15 +25,15 @@ Variables
 Debut
 	ListeIntervalle[0].BorneInf = 0;
 	ListeIntervalle[0].BorneSup = 0;
-	pour t allant de 0 à T-2 faire
-		pour iTache allant de 0 à N-1 faire
-			si( u(iTache,t)!=u(iTache,t+1)) alors //Intervalle trouvé
+	Pour t allant de 0 à T-2 Faire
+		Pour iTache allant de 0 à N-1 Faire
+			Si( u(iTache,t)!=u(iTache,t+1)) Alors //Intervalle trouvé
 				nbIntervalle = nbIntervalle+1;
 				ListeIntervalle[nbIntervalle-1].BorneSup = t;
 				ListeIntervalle[nbIntervalle].BorneInf = t+1; //Intervalle suivant
-			fin si
-		fin pour
-	fin pour
+			Fin Si
+		Fin Pour
+	Fin Pour
 	nbIntervalle=nbIntervalle+1;
 	ListeIntervalle[nbIntervalle-1].BorneSup = T-1;
 Fin
@@ -45,12 +45,12 @@ Sortie
 Variables
 	Réel CoutTotal, SommeCaract;
 Debut
-	pour i allant de 0 à M-1 faire
+	Pour i allant de 0 à M-1 Faire
 		ListeServeur[i].IndiceServeur=i;
 		CoutTotal=mc(i)*alphac(i) +mg(i)*alphag(i) + mr(i)*alphar(i)+ mh(i)*alphah(i);
 		SommeCaract = mc(i)+mg(i)+mr(i)+mh(i);
 		ListeServeur[i].CoutNorm = CoutTotal / SommeCaract ;
-	fin pour
+	Fin Pour
 	TrierParCoutNorm(ListeServeur);
 Fin
 

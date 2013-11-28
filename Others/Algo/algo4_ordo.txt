@@ -1,21 +1,95 @@
 Ordonnancer
-
 Debut
 	TrierTâches(ListeGPU1);
 	TrierTâches(ListeGPU2);
 	TrierTâches(ListeCPU1);
 	TrierTâches(ListeCPU2);
-	OrdoNonPré(ListeGPU1, indice);
-	OrdoNonPré(ListeGPU2, indice);
-	OrdoNonPré(ListeCPU1, indice);
-	OrdoNonPré(ListeCPU2, indice);
+	OrdoNonPré(ListeGPU1, indiceInter, indiceServeur);
+	OrdoNonPré(ListeGPU2, indiceInter, indiceServeur);
+	OrdoNonPré(ListeCPU1, indiceInter, indiceServeur);
+	OrdoNonPré(ListeCPU2, indiceInter, indiceServeur);
 	
 	TrierTâches(ListePrGPU1);
 	TrierTâches(ListePrGPU2);
 	TrierTâches(ListePrCPU1);
 	TrierTâches(ListePrCPU2);
-	OrdoPré(ListePrGPU1, indice);
-	OrdoPré(ListePrGPU2, indice);
-	OrdoPré(ListePrCPU1, indice);
-	OrdoPré(ListePrCPU2, indice);
+	OrdoPré(ListePrGPU1, indiceInter, indiceServeur);
+	OrdoPré(ListePrGPU2, indiceInter, indiceServeur);
+	OrdoPré(ListePrCPU1, indiceInter, indiceServeur);
+	OrdoPré(ListePrCPU2, indiceInter, indiceServeur);
+Fin
+
+
+OrdoNonPré
+Entrée
+	ListeTâche: La liste des tâches préemptables à ordonnancer.
+	indiceI: L'indice d'intervalle.
+	indiceS: L'indice du serveur.
+Sortie
+	ListeOrdo: L'affectation des tâches est enregistrée dans cette liste qui est aussi la sortie du programme.
+Variables
+	Entier interInf, interSup, indiceVM, indiceVM2;
+	Entier dureeExeActuelle;
+Debut
+	interInf = ListeIntervalle[indiceI].BorneInf;
+	interSup = ListeIntervalle[indiceI].BorneSup;
+	
+	Pour chaque tâche t dans ListTâche Faire
+		Si(t n'est pas encore affectée sur cet intervalle) Alors
+			Si(Le serveur indiceS possède assez de ressource pour t) Alors
+				Pour chaque tâche t2 qui a une affinité avec t et qui a été affectée sur un autre serveur indiceS2 Faire
+					Si( false == CalculFesabiliteReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI) ) Alors
+						Cette tâche t ne peut pas affectée sur ce serveur, car le réseau ne le permet pas.
+						Continuer voir la tâche suivante dans ListTâche.
+					Fin Si
+				Fin Pour
+				
+				//Maintenant on est sûr que la tâche peut être affectée, alors on l'affecte...
+				MaJReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI);
+				Pour chaque instant de temps i Faire
+					Mettre à jour ListeOrdo[i][t.indiceVM];
+					Mettre à jour les caractéristiques de ce serveur(indiceS);
+				Fin Pour
+			Fin Si
+		Fin Si
+	Fin Pour
+Fin
+
+
+
+
+
+OrdoPré
+Entrée
+	ListeTâche: La liste des tâches préemptables à ordonnancer.
+	indiceI: L'indice d'intervalle.
+	indiceS: L'indice du serveur.
+Sortie
+	ListeOrdo: L'affectation des tâches est enregistrée dans cette liste qui est aussi la sortie du programme.
+Variables
+	Entier interInf, interSup, indiceVM, indiceVM2;
+	Entier dureeExeActuelle;
+Debut
+	interInf = ListeIntervalle[indiceI].BorneInf;
+	interSup = ListeIntervalle[indiceI].BorneSup;
+	
+	Pour chaque tâche t dans ListTâche Faire
+		Si(t n'est pas encore affectée sur cet intervalle) Alors
+			Si(Le serveur indiceS possède assez de ressource pour t) Alors
+				Pour chaque tâche t2 qui a une affinité avec t et qui a été affectée sur un autre serveur indiceS2 Faire
+					Si( false == CalculFesabiliteReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI) ) Alors
+						Cette tâche t ne peut pas affectée sur ce serveur, car le réseau ne le permet pas.
+						Continuer voir la tâche suivante dans ListTâche.
+					Fin Si
+				Fin Pour
+				
+				//Maintenant on est sûr que la tâche peut être affectée, alors on l'affecte...
+				MaJReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI);
+				Pour chaque instant de temps i Faire
+					Mettre à jour ListeOrdo[i][t.indiceVM];
+					Mettre à jour les caractéristiques de ce serveur(indiceS);
+				Fin Pour
+			Fin Si
+		Fin Si
+	Fin Pour
 Fin

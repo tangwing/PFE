@@ -34,20 +34,15 @@ typedef struct{
 
 }Reseau;
 
-typedef struct{ //Structure de données permettant de stocker les indice des VMs tq besoins en HDD > besoins en RAM 
+typedef struct{ 
 	short int IndiceVM; 
 	signed int prio;
-}HDDRAM;
+}Tache;
 
-typedef struct{ //Structure de données permettant de stocker les indice des VMs tq besoins en HDD < besoins en RAM 
-	short int IndiceVM;
-	signed int prio;
-}RAMHDD;
-
-typedef struct{ ///Tâche avec priorité
-	short int IndiceVM; 
-	int prio;
-}Pream;
+//Structure de données permettant de stocker les indice des VMs tq besoins en HDD > besoins en RAM 
+typedef Tache HDDRAM;
+typedef Tache RAMHDD;
+typedef Tache Pream;
 
 typedef struct{ //Structure de données permettant de stocker les indices des intervalles ainsi que les bornes supérieur et inférieur pour chaque intervalle
 	short int IndiceInter;

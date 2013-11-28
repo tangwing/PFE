@@ -12,35 +12,35 @@ Variables
 	Entier MachineRecevoir;
 	Entier duree;	//La durée d'exécution actuelle de la tâche
 Debut
-	pour iboucle de 0 à taille faire
+	Pour iboucle de 0 à taille Faire
 		list[iboucle].prio = 0;
 		IB = 0;
 		WG = 0;
 		MachineRecevoir = 0;
 		duree = ListOfOrdo[ListOfIntervalles[indice].BorneInf][list[iboucle].IndiceVM].dureeExe;
 
-		si (la tâche n'est pas encore affectée) alors
-			si (cette tâche était affectée sur cette machine à l'intervalle précédent) alors 
+		Si (la tâche n'est pas encore affectée) Alors
+			Si (cette tâche était affectée sur cette machine à l'intervalle précédent) Alors 
 				IB = M();	//La tâche a plus de priorité
-			fin si
+			Fin Si
 
-			si (duree!=0 et duree<mt(list[iboucle].IndiceVM)) alors		//Migration pas possible
+			Si (duree!=0 et duree<mt(list[iboucle].IndiceVM)) Alors		//Migration pas posSible
 				Chercher indiceInterval qui est le dernier intervalle où la tâche était exécutée.
-				si (indiceInterval est trouvé et la machine correspondante est la même) alors
+				Si (indiceInterval est trouvé et la machine correspondante est la même) Alors
 					WG = indiceServeur;
-				sinon
-					WG = -M(); 	//ça veut dire pas possible
-				fin si
-			sinon
-				pour iboucle2 de 0 à <M() faire
-					si (ListeMachine[iboucle2] peut recevoir la tâche) alors
+				Sinon
+					WG = -M(); 	//ça veut dire pas posSible
+				Fin Si
+			Sinon
+				Pour iboucle2 de 0 à <M() Faire
+					Si (ListeMachine[iboucle2] peut recevoir la tâche) Alors
 						MachineRecevoir++;
-					fin si
-				fin pour
+					Fin Si
+				Fin Pour
 					WG = M() -  MachineRecevoir;
-			fin si
+			Fin Si
 			list[iboucle].prio = IB + WG;
-		fin si
+		Fin Si
 		///Trier les tâches en priorité décroissante
 		SortByPrio(list);
 Fin
