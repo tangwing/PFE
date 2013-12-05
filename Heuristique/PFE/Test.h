@@ -76,7 +76,7 @@ void Test()
 	HDDRAM arr[10];
 	std::for_each(arr, arr+10, InitPrio);
 	PrintArrayPrio(arr, 10);
-	SortByPrio(arr, 10);
+	SortListByPrio(arr, 10);
 	TestOrderByPrio(arr, 10);
 	PrintArrayPrio(arr,10);
 }

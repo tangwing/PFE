@@ -14,7 +14,18 @@ Trait Traitement;
 
 void Init()
 {
+	///Init ListOfOrdo
+	for(int i=0;i<T();i++){
+		for(int j=0;j<N();j++){
+			Traitement.ListOfOrdo[i][j].IndiceMachine=-1;
+			Traitement.ListOfOrdo[i][j].dureeExe=0;
+			if(u(j,i)==0){
+				Traitement.ListOfOrdo[i][j].IndiceMachine=-2;
+			}
+		}
+	}
 
+	///
 	Traitement.NbNoPrAffected = 0;
 	Traitement.NbPrAffected = 0;
 	
@@ -51,50 +62,26 @@ void Init()
 // Calcule les intervalles tel que sur [T,T+1], les u(i,t) sont consants
 /************************************************************************************/
 void CalculInterval(){
-	bool t = 0;
-	int indice=0;
-	int indice2 = 0;
-	int tacheI = 0;
 	Traitement.NbInterval = 0;
-
-	
+	Traitement.ListOfIntervalles[0].BorneInf = 0;
+	Traitement.ListOfIntervalles[0].BorneSup = 0;
 	for(int instant=0;instant<T()-1;instant++){
-		for(tacheI=0;tacheI<N()-1;tacheI++){
-			if(((Data.ListOfTasks[tacheI].LIsToBeProcessed[instant]==Data.ListOfTasks[tacheI].LIsToBeProcessed[instant+1])&&(Data.ListOfTasks[tacheI+1].LIsToBeProcessed[instant]!=Data.ListOfTasks[tacheI+1].LIsToBeProcessed[instant+1]))||((Data.ListOfTasks[tacheI].LIsToBeProcessed[instant]!=Data.ListOfTasks[tacheI].LIsToBeProcessed[instant+1])&&(Data.ListOfTasks[tacheI+1].LIsToBeProcessed[instant]==Data.ListOfTasks[tacheI+1].LIsToBeProcessed[instant+1]))){
-					if(indice==0){
-						Traitement.ListOfIntervalles[indice].BorneInf = 0;
-						Traitement.ListOfIntervalles[indice].BorneSup = instant;
-						indice++;
-						Traitement.NbInterval++;
-					}
-					else{
-						Traitement.ListOfIntervalles[indice].BorneInf = Traitement.ListOfIntervalles[indice-1].BorneSup + 1;
-						Traitement.ListOfIntervalles[indice].BorneSup = instant;
-						if(Traitement.ListOfIntervalles[indice].BorneInf>Traitement.ListOfIntervalles[indice].BorneSup){
-							Traitement.ListOfIntervalles[indice].BorneInf = 0;
-							Traitement.ListOfIntervalles[indice].BorneSup = 0;
-						}
-						else{
-							indice++;
-							Traitement.NbInterval++;
-						}
-					}			
+		for(int tacheI=0;tacheI<N();tacheI++){
+			if(( u(tacheI,instant)!=u(tacheI,instant+1))){///intervalle trouvé
+					Traitement.NbInterval++;
+					Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = instant;
+					Traitement.ListOfIntervalles[Traitement.NbInterval].BorneInf = instant + 1;
+					break;
 			}			
 		}
 	}
-	//permet de vérifier que le dernier intervalles contient le dernier instant de plannification et on l'ajoute si ce n'est pas le cas.
-	if(Traitement.ListOfIntervalles[indice - 1].BorneSup == T()-1){
-		indice--;
-	}
-	else{
-		Traitement.ListOfIntervalles[indice].BorneInf = Traitement.ListOfIntervalles[indice-1].BorneSup + 1;
-		Traitement.ListOfIntervalles[indice].BorneSup = T()-1;
-		Traitement.NbInterval++;
-	}
-
+	///Traiter le dernier instant	
+	Traitement.NbInterval++;
+	Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = T()-1;
+	
 	//Affichage des intervalles calculés
 	printf("Nombre d'interval : %d\n",Traitement.NbInterval);
-	for(int i=0;i<=indice;i++){
+	for(int i=0;i<Traitement.NbInterval;i++){
 		printf("intervalle %d : [%d,%d] \n",i,Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
 	}
 }
@@ -112,27 +99,11 @@ void CalculCoutNorm(){
 	float CoutTotal;
 	float Cout;
 	for(i=0; i<M(); i++){
-
-		Traitement.ListOfServer[j].IndiceServeur = i;
+		Traitement.ListOfServer[i].IndiceServeur = i;
 		CoutTotal = (mc(i)*alphac(i) + mg(i)*alphag(i) + mr(i)*alphar(i) + mh(i)*alphah(i));
-		Cout = CoutTotal/(mc(i)+mg(i)+mr(i)+mh(i));
-		Traitement.ListOfServer[j].CoutNorm = Cout;
-		if(Traitement.ListOfServer[j].CoutNorm < Traitement.ListOfServer[j-1].CoutNorm){
-			Serveur memoire;
-			memoire = Traitement.ListOfServer[j-1];
-			Traitement.ListOfServer[j-1]=Traitement.ListOfServer[j];
-			Traitement.ListOfServer[j]=memoire;
-			if(Traitement.ListOfServer[j-1].CoutNorm<Traitement.ListOfServer[j-2].CoutNorm){
-				Serveur memoire;
-				memoire = Traitement.ListOfServer[j-2];
-				Traitement.ListOfServer[j-2]=Traitement.ListOfServer[j-1];
-				Traitement.ListOfServer[j-1]=memoire;
-			}
-
-		}
-		j++;
-
+		Traitement.ListOfServer[i].CoutNorm = CoutTotal/(mc(i)+mg(i)+mr(i)+mh(i));
 	}
+	SortServerList(Traitement.ListOfServer, M());
 	for (int i=0; i<M(); i++){
 		printf("Cout Normalise de la machine %d : %f \n",Traitement.ListOfServer[i].IndiceServeur,Traitement.ListOfServer[i].CoutNorm);
 	}
@@ -341,7 +312,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 		}
 	}
 	///Trier les tâches en priorité décroissant
-	SortByPrio(listeTache, nbTache);
+	SortListByPrio(listeTache, nbTache);
 }
 
 ///(obsolète)Initialiser le champ dureeExe des tâche dans un intervalle donné avec les valeurs de l'intervalle précédent.
@@ -592,4 +563,46 @@ int AllumageMachine(unsigned indice){
 	///MaJServeur(MachineRallume,indice); //C'est déjà fait dans Ordonnancement
 	if(gainMin < 0) return MachineRallume;
 	else return -1;
+}
+
+
+
+///Trier la liste de serveur selon coutnorm
+void SortServerList(Serveur* arr, int size)
+{
+	if(size<2)return;
+	int mid = arr[size/2].CoutNorm;
+	int i=0, j=size-1;
+	while(i<j)
+	{
+		while(arr[i].CoutNorm < mid && i<size)i++;
+		while(arr[j].CoutNorm > mid && j>0)j--;
+		if(i<=j)
+		{
+			Swap(arr[i], arr[j]);
+			i++; j--;
+		}
+	}
+	if( j > 0 )SortServerList(arr, j+1);
+	if(i < size)SortServerList(arr+i, size-i);
+}
+
+///Quick sort for sorting task list
+void SortListByPrio(Tache* arr, int size)
+{
+	if(size<2)return;
+	int mid = arr[size/2].prio;
+	int i=0, j=size-1;
+	while(i<j)
+	{
+		while(arr[i].prio > mid && i<size)i++;
+		while(arr[j].prio < mid && j>0)j--;
+		if(i<=j)
+		{
+			Swap(arr[i], arr[j]);
+			i++; j--;
+		}
+	}
+	if( j > 0 )SortListByPrio(arr, j+1);
+	if(i < size)SortListByPrio(arr+i, size-i);
 }

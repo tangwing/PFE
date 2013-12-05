@@ -168,22 +168,12 @@ template <typename T> void Swap(T& v1, T& v2)
 	v2 = tmp;
 }
 
-template <typename T> void SortByPrio(T* arr, int size, bool isDecreased=true)
-{
-	if(size<2)return;
-	int mid = arr[size/2].prio;
-	int i=0, j=size-1;
-	while(i<j)
-	{
-		while(arr[i].prio > mid && i<size)i++;
-		while(arr[j].prio < mid && j>0)j--;
-		if(i<=j)
-		{
-			Swap(arr[i], arr[j]);
-			i++; j--;
-		}
-	}
-	if( j > 0 )SortByPrio(arr, j+1);
-	if(i < size)SortByPrio(arr+i, size-i);
-}
+///Trier la liste de serveur selon coutnorm
+void SortServerList(Serveur* arr, int size);
+///Quick sort for sorting task list
+//template <typename T> 
+void SortListByPrio(Tache* arr, int size);
+
+
+
 #endif

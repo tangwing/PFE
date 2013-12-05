@@ -2,23 +2,32 @@
 
 Algo0 Algorithme Général
 Sortie
-	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phiSiques.
+	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
+	IsFeasible: booléan qui indique si on a bien ordonnancé toutes les tâches non-préemptables.
+	coûtTotal: le coûtTotal selon l'ordonnancement effectué.
 Variables
 	Entier coûtTotal;
 Debut
+	IsFeasible = true;
 	CalculerIntervalle();
 	CréerListeServeurTriée();
-	Pour i de 0 à T()-1 Faire
-		CréerListeTâche(i);
-		Ordonnancer(i);
+	Pour chaque intervalle i Faire
+		CréerListesTâche(i);
+		Ordonnancer(ListeOrdo, i);
 	Fin Pour
-//	coûtTotal = CalculerCoûtTotal();
-//	retourner coûtTotal;
+	Pour chaque intervalle i Faire
+		Pour chaque tâche t Faire
+			///Si il existe des tâches non-préemptables qui ne sont pas affectées
+			Si (t n'est pas préemptable ET ListeOrdo[i][t] == -1) Alors
+				IsFeasible = false;
+			Fin Si
+		Fin Pour
+	Fin Pour
 Fin
 
 
-Algo1 CaculerIntervalle
-//L'idée est de déterminer les intervalles pour que dans chaque intervalle les machines sont en états stables pour toutes les tâches.
+Algo1 CaculerIntervalle()
+//L'idée est de déterminer les intervalles pour que chaque instant du même intervalle a le même Ui (état stable).
 Sortie
 	ListeIntervalle: le tableau des intervalles trouvés
 Variables
@@ -32,6 +41,7 @@ Debut
 				nbIntervalle = nbIntervalle+1;
 				ListeIntervalle[nbIntervalle-1].BorneSup = t;
 				ListeIntervalle[nbIntervalle].BorneInf = t+1; //Intervalle suivant
+				break;
 			Fin Si
 		Fin Pour
 	Fin Pour
