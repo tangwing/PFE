@@ -1,5 +1,7 @@
 ///Some functions for test purpose
 ///Author: SHANG Lei - shang.france@gmail.com
+#ifndef TEST_H
+#define TEST_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -9,6 +11,8 @@
 #include <iterator>
 
 #include "Traitement.h"
+
+#define VERBOSE false
 
 template <typename T>
 void PrintArray(T* arr, int size)
@@ -38,6 +42,35 @@ void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
 	}
 }
 
+
+void AfficherListes()
+{
+	if(VERBOSE)
+	{
+		//Affichage des listes
+		printf("\n **** Avec GPU **** \n");
+		printf("\n **** Liste HDDRAM **** \n");
+		for (int i=0; i<Traitement.NbHDDRAMGPU; i++){
+			printf("%d \t",Traitement.ListOfTasks1GPU[i].IndiceVM);
+		}
+		printf("\n **** Liste RAMHDD **** \n");
+		for (int i=0; i<Traitement.NbRAMHDDGPU; i++){
+			printf("%d \t",Traitement.ListOfTasks2GPU[i].IndiceVM);
+		}
+		printf("\n **** Sans GPU **** \n");
+		printf("\n **** Liste HDDRAM **** \n");
+		for (int i=0; i<Traitement.NbHDDRAMCPU; i++){
+			printf("%d \t",Traitement.ListOfTasks1CPU[i].IndiceVM);
+	
+		}
+		printf("\n **** Liste RAMHDD **** \n");
+		for (int i=0; i<Traitement.NbRAMHDDGPU; i++){
+			printf("%d \t",Traitement.ListOfTasks2CPU[i].IndiceVM);
+		}
+		printf("\n");
+	}
+}
+
 void Test()
 {
 	HDDRAM arr[10];
@@ -47,3 +80,5 @@ void Test()
 	TestOrderByPrio(arr, 10);
 	PrintArrayPrio(arr,10);
 }
+
+#endif

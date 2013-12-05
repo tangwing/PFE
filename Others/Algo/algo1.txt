@@ -12,12 +12,13 @@ Debut
 		CréerListeTâche(i);
 		Ordonnancer(i);
 	Fin Pour
-	coûtTotal = CalculerCoûtTotal();
-	retourner coûtTotal;
+//	coûtTotal = CalculerCoûtTotal();
+//	retourner coûtTotal;
 Fin
 
 
 Algo1 CaculerIntervalle
+//L'idée est de déterminer les intervalles pour que dans chaque intervalle les machines sont en états stables pour toutes les tâches.
 Sortie
 	ListeIntervalle: le tableau des intervalles trouvés
 Variables

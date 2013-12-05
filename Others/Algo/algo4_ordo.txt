@@ -1,14 +1,22 @@
 Ordonnancer
+Entrée
+	indiceInter: L'intervalle à traiter.
+Sortie
+	ListeOrdo: Une variable globale qui représente le résultat de l'ordonnancement.
 Debut
-	TrierTâches(ListeGPU1);
-	TrierTâches(ListeGPU2);
-	TrierTâches(ListeCPU1);
-	TrierTâches(ListeCPU2);
-	OrdoNonPré(ListeGPU1, indiceInter, indiceServeur);
-	OrdoNonPré(ListeGPU2, indiceInter, indiceServeur);
-	OrdoNonPré(ListeCPU1, indiceInter, indiceServeur);
-	OrdoNonPré(ListeCPU2, indiceInter, indiceServeur);
+	//Affecter d'abord les tâches non préemptables
+	Pour indiceServeur de 0 à NbServeur Faire
+		TrierTâches(ListeGPU1, indiceServeur);
+		TrierTâches(ListeGPU2, indiceServeur);
+		TrierTâches(ListeCPU1, indiceServeur);
+		TrierTâches(ListeCPU2, indiceServeur);
+		OrdoNonPré(ListeGPU1, indiceInter, indiceServeur);
+		OrdoNonPré(ListeGPU2, indiceInter, indiceServeur);
+		OrdoNonPré(ListeCPU1, indiceInter, indiceServeur);
+		OrdoNonPré(ListeCPU2, indiceInter, indiceServeur);
+	Fin Pour
 	
+	//Ordonnancer les tâches préemptables
 	TrierTâches(ListePrGPU1);
 	TrierTâches(ListePrGPU2);
 	TrierTâches(ListePrCPU1);

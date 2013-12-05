@@ -68,13 +68,7 @@ int main()
 	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
 		///! On construit les listes de tâche pour chaque intervalle. Pour une tâche donnée, sa valeur de Uit varie selon l'intervalle
-		//printf("\n ****** Taches non preamtable ****** \n");
-		ConstructionListesTacheNonPr(i);
-		//printf("\n ****** Tache preamtable ****** \n");
-		ConstructionListesTachePr(i);
-		ConstructionListeTachePr(i); ///! Construire une seule liste des tâches préemptables
-		//printf("\nRemplisage des serveur pour l'intervalle %d \n",i);
-		//printf("\n");
+		ConstructionListesTache(i);
 		Ordonnancement(i);
 		/*for(int serveur=0;serveur<M();serveur++){
 			printf("Le serveur %d est utilise : %d\n",Traitement.ListOfServer[serveur].IndiceServeur,Traitement.ListOfServer[serveur].ON);

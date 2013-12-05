@@ -5,41 +5,41 @@ Entrée
 Sortie
 	ListeTachesPr: la liste des tâches préemptable.
 	ListeGPU1,ListeGPU2,ListeCPU1,ListeCPU2,ListePrGPU1,ListePrGPU2,ListePrCPU1,ListePrCPU2: les tâches sont réparties dans ces 8 listes selon leurs besoins en GPU, CPU, HDD, RAM et si la tâche est préemptable.
-	
+Variables
+	Entier temps;
 Debut
-	Pour temps de ListeIntervalle[indice].BorneInf à ListeIntervalle[indice].BorneSup Faire
-		Pour tâche de 0 à N()-1 Faire
-			Si(u(tâche, temps)=1) Alors //Cette	tâche peut être exécutée en ce moment
-				Si(R(tâche==0))	Alors	//Cette tâche est non-préemptable
-					Si(ng(tâche)>0) Alors
-						Si(nh(tâche) > nr(tâche)) Alors
-							Répartir cette tâche à ListeGPU1 Si ça n'est pas fait!!;
-						Sinon
-							Répartir cette tâche à ListeGPU2;
-						Fin Si
-					Sinon	//ng(tâche)=0
-						Si(nh(tâche) > nr(tâche)) Alors
-							Répartir cette tâche à ListeCPU1;
-						Sinon
-							Répartir cette tâche à ListeCPU2;
-						Fin Si
+	temps = ListeIntervalle[indice].BorneInf;
+	Pour tâche de 0 à N()-1 Faire
+		Si(u(tâche, temps)=1) Alors //Cette	tâche peut être exécutée en ce moment
+			Si(R(tâche==0))	Alors	//Cette tâche est non-préemptable
+				Si(ng(tâche)>0) Alors
+					Si(nh(tâche) > nr(tâche)) Alors
+						Répartir cette tâche à ListeGPU1;
+					Sinon
+						Répartir cette tâche à ListeGPU2;
 					Fin Si
-				Sinon	//Cette tâche est préemptable
-					Répartir cette tâche à ListeTâchesPr;
-					Si(ng(tâche)>0) Alors
-						Si(nh(tâche) > nr(tâche)) Alors
-							Répartir cette tâche à ListePrGPU1;
-						Sinon
-							Répartir cette tâche à ListePrGPU2;
-						Fin Si
-					Sinon	//ng(tâche)=0
-						Si(nh(tâche) > nr(tâche)) Alors
-							Répartir cette tâche à ListePrCPU1;
-						Sinon
-							Répartir cette tâche à ListePrCPU2;
-						Fin Si
+				Sinon	//ng(tâche)=0
+					Si(nh(tâche) > nr(tâche)) Alors
+						Répartir cette tâche à ListeCPU1;
+					Sinon
+						Répartir cette tâche à ListeCPU2;
 					Fin Si
 				Fin Si
-		Fin Pour
+			Sinon	//Cette tâche est préemptable
+				Répartir cette tâche à ListeTâchesPr;
+				Si(ng(tâche)>0) Alors
+					Si(nh(tâche) > nr(tâche)) Alors
+						Répartir cette tâche à ListePrGPU1;
+					Sinon
+						Répartir cette tâche à ListePrGPU2;
+					Fin Si
+				Sinon	//ng(tâche)=0
+					Si(nh(tâche) > nr(tâche)) Alors
+						Répartir cette tâche à ListePrCPU1;
+					Sinon
+						Répartir cette tâche à ListePrCPU2;
+					Fin Si
+				Fin Si
+			Fin Si
 	Fin Pour
 Fin
