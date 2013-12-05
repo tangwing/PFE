@@ -1,4 +1,3 @@
-
 Algo567 CréerListesTâches
 Entrée
 	indice: l'indice de l'intervalle sur lequel on travaille

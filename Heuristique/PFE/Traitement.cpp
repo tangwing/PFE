@@ -29,7 +29,7 @@ void Init()
 	Traitement.NbNoPrAffected = 0;
 	Traitement.NbPrAffected = 0;
 	
-	///La ListofServeurbis contient les caracs actuelles
+	///La ListofServeurbis contient les caracs résiduelles
 	for(int indiceS = 0; indiceS<M(); indiceS++){
 		for(int temps = 0;temps<= T();temps++){
 			Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
@@ -114,7 +114,6 @@ void CalculCoutNorm(){
 // Calcule le cout total de la plannification sur l'ensemble des machine physique
 /************************************************************************************/
 int TotalCost(){
-
 	int TotalCost = 0;
 	int CoutGPU = 0;
 	int CoutCPU = 0;
@@ -126,25 +125,26 @@ int TotalCost(){
 
 	for(int t=0;t<T();t++){
 		for(int n=0;n<N();n++){
-			if((Traitement.ListOfOrdo[t][n].IndiceMachine!=-1) && (Traitement.ListOfOrdo[t][n].IndiceMachine!=-2) && (Traitement.ListOfOrdo[t][n].affecter!=0)){
+			if((Traitement.ListOfOrdo[t][n].IndiceMachine>=0) && (Traitement.ListOfOrdo[t][n].affecter==1)){
 				CoutGPU = CoutGPU + alphag(Traitement.ListOfOrdo[t][n].IndiceMachine)*ng(n);
 				CoutCPU = CoutCPU + alphac(Traitement.ListOfOrdo[t][n].IndiceMachine)*nc(n);
 				CoutRAM = CoutRAM + alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n);
 				CoutHDD = CoutHDD + alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n);
 			}
-			if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1){
+			if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1
+				&& (t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
+				)
+			{
 				penality = penality + rho(n);
 			}
 		}
-		for(int indice = 0;indice<Traitement.ListOfNbServeurOn[indice].NbServeurOn;indice++){
-			//printf("valeur de t : %d \n",t);
-			//printf("nombre de machine allum?%d \n",Traitement.ListOfNbServeurOn[indice].NbServeurOn);
-			//printf("CoutUnitaire total :%d \n",CoutUnitaire);
-			CoutUnitaire = CoutUnitaire + (indice * beta(t));
-
-		}
+		
 	}
-
+	for(int indice = 0;indice< Traitement.NbInterval;indice++){
+		int nbON = Traitement.ListOfNbServeurOn[indice].NbServeurOn;
+		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
+			CoutUnitaire = CoutUnitaire + (nbON * beta(t));
+	}
 	//printf("penalite total : %d \n",penality);
 	//printf("CoutUnitaire total :%d \n",CoutUnitaire);
 	
@@ -267,8 +267,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 	int WG = 0;
 	int indiceVM;
 	int MachineRecevoir = 0;
-	int duree; //La durée d'exécution de la tâche, c'est pour simplifier la notion.
-	//Calcule de la prioriét?pour la liste contenant les VM ayant besoin de CPU et tel que besoins HDD > besoins RAM
+	int duree; ///La durée d'exécution de la tâche, c'est pour simplifier la notion.
 	for(int iboucle = 0; iboucle<nbTache;iboucle++){ ///Pour chaque tâche
 		listeTache[iboucle].prio = 0;
 		IB = 0;
@@ -357,10 +356,10 @@ void Ordonnancement(unsigned int indice){
 		CalculPrioEtTrier(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU,indice, indiceS);
 		CalculPrioEtTrier(Traitement.ListOfTasks2CPU, Traitement.NbRAMHDDCPU,indice, indiceS);
 				
-		OrdoNoPr(Traitement.ListOfTasks1GPU, Traitement.NbHDDRAMGPU,indice, indiceS, Traitement.NbNoPrAffected);
-		OrdoNoPr(Traitement.ListOfTasks2GPU, Traitement.NbRAMHDDGPU,indice, indiceS, Traitement.NbNoPrAffected);
-		OrdoNoPr(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU,indice, indiceS, Traitement.NbNoPrAffected);
-		OrdoNoPr(Traitement.ListOfTasks2CPU, Traitement.NbRAMHDDCPU,indice, indiceS, Traitement.NbNoPrAffected);
+		OrdoListeTache(Traitement.ListOfTasks1GPU, Traitement.NbHDDRAMGPU,indice, indiceS, Traitement.NbNoPrAffected);
+		OrdoListeTache(Traitement.ListOfTasks2GPU, Traitement.NbRAMHDDGPU,indice, indiceS, Traitement.NbNoPrAffected);
+		OrdoListeTache(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU,indice, indiceS, Traitement.NbNoPrAffected);
+		OrdoListeTache(Traitement.ListOfTasks2CPU, Traitement.NbRAMHDDCPU,indice, indiceS, Traitement.NbNoPrAffected);
 		
 		///
 		///Pour les tâches préemptables
@@ -371,10 +370,10 @@ void Ordonnancement(unsigned int indice){
 		CalculPrioEtTrier(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceS);
 		CalculPrioEtTrier(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceS);
 				
-		OrdoNoPr(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceS, Traitement.NbPrAffected, false);
-		OrdoNoPr(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceS, Traitement.NbPrAffected, false);
-		OrdoNoPr(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceS, Traitement.NbPrAffected, false);
-		OrdoNoPr(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceS, Traitement.NbPrAffected, false);
+		OrdoListeTache(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceS, Traitement.NbPrAffected, false);
+		OrdoListeTache(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceS, Traitement.NbPrAffected, false);
+		OrdoListeTache(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceS, Traitement.NbPrAffected, false);
+		OrdoListeTache(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceS, Traitement.NbPrAffected, false);
 
 		///Si toutes les tâche non pré sont déjà affectées alors on doit cesser cette boucle et traiter les tâches pré
 		if(Traitement.NbNoPrAffected == N() - Traitement.NbPr)
@@ -396,20 +395,21 @@ void Ordonnancement(unsigned int indice){
 			CalculPrioEtTrier(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceAllume);
 			CalculPrioEtTrier(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume);
 				
-			OrdoNoPr(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
-			OrdoNoPr(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
-			OrdoNoPr(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
-			OrdoNoPr(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
+			OrdoListeTache(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
+			OrdoListeTache(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
+			OrdoListeTache(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
+			OrdoListeTache(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
 		}
 	}///Fin if affected < nbpr
 }
 
 
 /************************************************************************************/
-///Ordonnacement des tâches non préamtables
+///Ordonnacement d'une liste de tâches. Meme principle pour pré et non-pré.
+///On peut choisir si on a le droit d'allumer la machine en question.
 ///Prendre en compte la gestion réseau et aussi la mise à jour des serveurs et du réseau
 /************************************************************************************/
-void OrdoNoPr(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceServeur, int & compteurAffect, bool canTurnOn){
+void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceServeur, int & compteurAffect, bool canTurnOn){
 			if(canTurnOn == false && Traitement.ListOfServer[indiceServeur].ON != 1)
 				return;
 	
@@ -521,6 +521,7 @@ int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM)
 }
 
 ///Allumer une machine et faire l'affectation au dessus.
+///@param indice indice de l'intervalle
 int AllumageMachine(unsigned indice){
 	int indiceVM = -1;
 	int indiceServeur = -1;

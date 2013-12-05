@@ -30,11 +30,11 @@ typedef struct{ ///Structure de données pour contenir le numéro des machines ON 
 
 }ServeurON;
 
-typedef struct{ 
-	int Mach1;			
-	int Mach2;
-	int BdePassanteDispo;
-}Reseau;
+////typedef struct{ 
+////	int Mach1;			
+////	int Mach2;
+////	int BdePassanteDispo;
+////}Reseau;
 
 typedef struct{ 
 	short int IndiceVM; 
@@ -103,18 +103,18 @@ typedef struct{
 				HDDRAM ListOfTasks1CPUMachinej[MaxTasks];
 				RAMHDD ListOfTasks2CPUPr[MaxTasks];	
 				RAMHDD ListOfTasks2CPUMachinej[MaxTasks];
-				ctij ListeOfctij[MaxTasks][MaxMachines];
-				gaj ListeOfgaj[MaxMachines];
+				///ctij ListeOfctij[MaxTasks][MaxMachines];
+				///gaj ListeOfgaj[MaxMachines];
 				Ordo  ListOfOrdo[MaxTimeHorizon][MaxTasks];
 				int NbPr;
 				int NbNoPrAffected; ///nb des tâches non-pré déjà affectées
 				int NbPrAffected; ///nb des tâches pré déjà affectées
 				int NbHDDRAMGPU;
 				int NbHDDRAMGPUPr;
-				int NbHDDRAMGPUMachinej;
-				int NbRAMHDDGPUMachinej;
-				int NbHDDRAMCPUMachinej;
-				int NbRAMHDDCPUMachinej;
+				///int NbHDDRAMGPUMachinej;
+				///int NbRAMHDDGPUMachinej;
+				///int NbHDDRAMCPUMachinej;
+				///int NbRAMHDDCPUMachinej;
 				int NbHDDRAMCPU;
 				int NbHDDRAMCPUPr;
 				int NbRAMHDDGPU;
@@ -145,7 +145,7 @@ extern void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned 
 ///extern void CalculPrioGPU(unsigned int indiceServeur,unsigned int indice);
 ///extern void CalculPrioCPU(unsigned int indiceServeur,unsigned int indice);
 extern void Ordonnancement(unsigned int indice);
-extern void OrdoNoPr(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur, int & compteurAffect, bool canTurnOn=true);
+extern void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur, int & compteurAffect, bool canTurnOn=true);
 ///extern void OrdoPr(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur, unsigned int compteurAffect);
 extern int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM);
 ///extern void OrdoGPU(unsigned int i,unsigned int indiceServeur);

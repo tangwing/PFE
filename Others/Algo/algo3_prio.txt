@@ -17,8 +17,8 @@ Debut
 		IB = 0;
 		WG = 0;
 		MachineRecevoir = 0;
-		duree = ListOfOrdo[ListOfIntervalles[indice].BorneInf][list[iboucle].IndiceVM].dureeExe;
 
+		duree = GetDureeExeActuelle(indice, list[iboucle].IndiceVM);
 		Si (la tâche n'est pas encore affectée) Alors
 			Si (cette tâche était affectée sur cette machine à l'intervalle précédent) Alors 
 				IB = M();	//La tâche a plus de priorité
@@ -29,7 +29,7 @@ Debut
 				Si (indiceInterval est trouvé et la machine correspondante est la même) Alors
 					WG = indiceServeur;
 				Sinon
-					WG = -M(); 	//ça veut dire pas posSible
+					WG = -M(); 	//ça veut dire pas possible
 				Fin Si
 			Sinon
 				Pour iboucle2 de 0 à <M() Faire
@@ -42,5 +42,5 @@ Debut
 			list[iboucle].prio = IB + WG;
 		Fin Si
 		///Trier les tâches en priorité décroissante
-		SortByPrio(list);
+		SortListByPrio(list);
 Fin
