@@ -9,12 +9,12 @@
 #include "Data.h"
 #include <algorithm>
 
-#include "Test.h"
+//#include "Test.h"
 using namespace std;
 
 int main()
 {
-	Test();
+	//Test();
 
 	double dOptValue,dOptTime;
 	int NbMach;
@@ -31,6 +31,9 @@ int main()
 	}
 	printf("Quantite de bandePassante pour la communication de la VM2 et VM3 : %d \n",b(2,3));
 	*/
+
+	Init();
+
 	printf("\n ****** test ****** \n");
 	for(int i=0;i<T();i++){
 		for(int j=0;j<N();j++){

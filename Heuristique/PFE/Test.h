@@ -25,7 +25,7 @@ void PrintArrayPrio(T* arr, int size)
 {
 	for(int i=0; i<size; i++)std::cout<<arr[i].prio<<", ";
 	//for_each(arr, arr+size, void print(T&ele){std::cout<<ele.prio<<", ";});
-	std::cout<<endl;
+	std::cout<<std::endl;
 }
 
 void InitPrio(HDDRAM &hr){hr.prio = rand()%10;}
