@@ -18,13 +18,30 @@ void Init()
 	Traitement.NbNoPrAffected = 0;
 	Traitement.NbPrAffected = 0;
 	
-		///La ListofServeurbis contient les caracs actuelles
+	///La ListofServeurbis contient les caracs actuelles
 	for(int indiceS = 0; indiceS<M(); indiceS++){
 		for(int temps = 0;temps<= T();temps++){
 			Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
 			Traitement.ListOfServeurbis[temps][indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
 			Traitement.ListOfServeurbis[temps][indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
 			Traitement.ListOfServeurbis[temps][indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
+		}
+	}
+
+	///
+	///--------- Les structures de réseau--------------
+	///
+	unsigned int mi, mj;
+	for (int iEdge=0; iEdge<NbEdges(); iEdge++)
+	{
+		Traitement.EdgeBdeDispo[iEdge] = maxb();
+		for (int iLoop=0; iLoop<NbMachEdge(iEdge); iLoop++)
+		{
+			CoupleMachines(iEdge,iLoop,mi,mj);
+			if (mi>mj)Swap(mi, mj);
+			std::pair<int, int> couple(mi, mj);
+			///update the set of edges
+			Traitement.CoupleEdgeMap.insert( std::pair< std::pair<int, int>, std::set<int>>(couple, std::set<int>()));
 		}
 	}
 }
@@ -177,62 +194,35 @@ float CalculCoutAffectation(unsigned int i,unsigned int j){
 }
 
 bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
-	int iEdge,iTime, iSwap;
-	for (iEdge=0;iEdge<NbEdges();iEdge++)
+	if(a(machinei, machinej) != 1)return true;
+	int iEdge,iTime;
+	std::map< std::pair<int,int>, std::set<int>>::iterator it;
+	if(machinei > machinej) Swap(machinei, machinej);
+	///Get the edge set
+	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
+	std::set<int> edgeSet = it->second;
+	std::set<int>::iterator itEdge;
+	///For each edge passed by i,j, the band width must be enough
+	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
 	{
-		for (iTime=Traitement.ListOfIntervalles[indice].BorneInf;iTime<=Traitement.ListOfIntervalles[indice].BorneSup;iTime++)
-		{
-			int iBdw=0, iLoop;
-			for (iLoop=0;iLoop<NbMachEdge(iEdge);iLoop++)
-			{
-				/// Get the iLoop'th couple of machine for the iEdge'th edge
-				CoupleMachines(iEdge,iLoop,machinei,machinej);
-				if (machinei>machinej){ 
-					iSwap=machinei;
-					machinei=machinej; 
-					machinej=iSwap;
-				}
-				iBdw+=b(tachei,tachej);
-				Traitement.ListOfReseau[iTime][iEdge][iLoop].Mach1 = machinei;
-				Traitement.ListOfReseau[iTime][iEdge][iLoop].Mach2 = machinej;
-				Traitement.ListOfReseau[iTime][iEdge][iLoop].BdePassanteDispo = Traitement.ListOfReseau[iTime][iEdge][iLoop].BdePassanteDispo - iBdw;				
-			}
-			if(Traitement.ListOfReseau[iTime][iEdge][iLoop].BdePassanteDispo > 0){
-				return true;
-			}
-			else
-				return false;
-		}
+		if( Traitement.EdgeBdeDispo[*itEdge]-b(machinei, machinej) < 0)
+			return false;
 	}
-
-
+	return true;
 }
 
 void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned int indice){
+	if(a(machinei, machinej) != 1)return;
 	int iEdge,iTime;
-	for (iEdge=0;iEdge<NbEdges();iEdge++)
-	{
-		for (iTime=Traitement.ListOfIntervalles[indice].BorneInf;iTime<=Traitement.ListOfIntervalles[indice].BorneSup;iTime++)
-		{
-			int iBdw=0, iLoop;
-			for (iLoop=0;iLoop<NbMachEdge(iEdge);iLoop++)
-			{
-			unsigned int iSwap;
-			CoupleMachines(iEdge,iLoop,machinei,machinej);
-			if (machinei>machinej){ 
-				iSwap=machinei; 
-				machinei=machinej; 
-				machinej=iSwap;
-			}
-			iBdw+=b(tachei,tachej);
-			Traitement.ListOfReseau[iTime][iEdge][iLoop].Mach1 = machinei;
-			Traitement.ListOfReseau[iTime][iEdge][iLoop].Mach2 = machinej;
-			Traitement.ListOfReseau[iTime][iEdge][iLoop].BdePassanteDispo = Traitement.ListOfReseau[iTime][iEdge][iLoop].BdePassanteDispo - iBdw;				
-			}
-
-		}
-	}
-
+	std::map< std::pair<int,int>, std::set<int>>::iterator it;
+	if(machinei > machinej) Swap(machinei, machinej);
+	///Get the edge set
+	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
+	std::set<int> edgeSet = it->second;
+	std::set<int>::iterator itEdge;
+	///For each edge passed by i,j, update the band width
+	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
+		Traitement.EdgeBdeDispo[*itEdge] -= b(machinei, machinej);
 }
 
 /************************************************************************************/

@@ -45,18 +45,18 @@ int main()
 		}
 	}
 
-	for(int temps = 0;temps<T();temps++){
-		for(int Arc = 0;Arc<NbEdges();Arc++){
-			for(int Couple = 0;Couple < NbMachEdge(Arc);Couple++){
-				unsigned int Machine1;//(Traitement.ListOfReseau[temps][Arc][Couple].Mach1);
-				unsigned int Machine2;//(Traitement.ListOfReseau[temps][Arc][Couple].Mach2);
-				CoupleMachines(Arc, Couple, Machine1,Machine2);
-				Traitement.ListOfReseau[temps][Arc][Couple].Mach1 = Machine1;
-				Traitement.ListOfReseau[temps][Arc][Couple].Mach2 = Machine2;
-				Traitement.ListOfReseau[temps][Arc][Couple].BdePassanteDispo = maxb();
-			}
-		}
-	}
+	//for(int temps = 0;temps<T();temps++){
+	//	for(int Arc = 0;Arc<NbEdges();Arc++){
+	//		for(int Couple = 0;Couple < NbMachEdge(Arc);Couple++){
+	//			unsigned int Machine1;//(Traitement.ListOfReseau[temps][Arc][Couple].Mach1);
+	//			unsigned int Machine2;//(Traitement.ListOfReseau[temps][Arc][Couple].Mach2);
+	//			CoupleMachines(Arc, Couple, Machine1,Machine2);
+	//			Traitement.ListOfReseau[temps][Arc][Couple].Mach1 = Machine1;
+	//			Traitement.ListOfReseau[temps][Arc][Couple].Mach2 = Machine2;
+	//			Traitement.ListOfReseau[temps][Arc][Couple].BdePassanteDispo = maxb();
+	//		}
+	//	}
+	//}
 
 	/*or(int temps = 0;temps<T();temps++){
 		for(int Arc = 0;Arc<NbEdges();Arc++){
