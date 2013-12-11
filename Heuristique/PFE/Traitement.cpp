@@ -17,6 +17,8 @@ void Init()
 	///Init ListOfOrdo
 	for(int i=0;i<T();i++){
 		for(int j=0;j<N();j++){
+			Traitement.ListOfOrdo[i][j].affecter = 0;
+			Traitement.ListOfOrdo[i][j].isMigrated = false;
 			Traitement.ListOfOrdo[i][j].IndiceMachine=-1;
 			Traitement.ListOfOrdo[i][j].dureeExe=0;
 			if(u(j,i)==0){
@@ -115,6 +117,7 @@ void CalculCoutNorm(){
 /************************************************************************************/
 int TotalCost(){
 	int TotalCost = 0;
+	int CoutMigration = 0;
 	int CoutGPU = 0;
 	int CoutCPU = 0;
 	int CoutRAM = 0;
@@ -130,9 +133,11 @@ int TotalCost(){
 				CoutCPU = CoutCPU + alphac(Traitement.ListOfOrdo[t][n].IndiceMachine)*nc(n);
 				CoutRAM = CoutRAM + alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n);
 				CoutHDD = CoutHDD + alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n);
+				if(Traitement.ListOfOrdo[t][n].isMigrated)
+					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
 			}
 			else if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1
-				&& u(n,t)==1//(t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
+				&& u(n,t)==1 && R(n)==1//(t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
 				)
 			{
 				penality = penality + rho(n);
@@ -148,7 +153,7 @@ int TotalCost(){
 	//printf("penalite total : %d \n",penality);
 	//printf("CoutUnitaire total :%d \n",CoutUnitaire);
 	
-	TotalCost = CoutGPU + CoutCPU + CoutRAM + CoutHDD + CoutUnitaire + penality;
+	TotalCost = CoutGPU + CoutCPU + CoutRAM + CoutHDD + CoutUnitaire + penality + CoutMigration;
 	printf("Cout total : %d \n",TotalCost);
 	return TotalCost;
 }
@@ -286,7 +291,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 				///On cherche l'intervalle où elle a exécuté.
 				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
 				int indiceInterval = indice-1;
-				while(indiceInterval>=0 && u(indiceVM,Traitement.ListOfIntervalles[indiceInterval].BorneSup)==0)
+				while(indiceInterval>=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].affecter!=1)
 					indiceInterval--;
 					
 				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
@@ -465,6 +470,14 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 									
 									///Cette affectation est faisable, donc on met à jour le réseau ainsi que les carac de la machine
 									MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
+
+									///Voir s'il s'agit une migration. On en a besoin pour calculer le coût total.
+									int indiceInterval = indice-1;
+									while(indiceInterval>=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].affecter!=1)
+										indiceInterval--;
+									if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].IndiceMachine != indiceServeur){
+										Traitement.ListOfOrdo[intervalInf][indiceVM].isMigrated = true;
+									}
 
 									///Chercher la dureeExe actuelle
 									int duree = GetDureeExeActuelle(indice, indiceVM);

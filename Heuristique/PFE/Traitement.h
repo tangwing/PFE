@@ -66,6 +66,7 @@ typedef struct{
 	short int IndiceTache;
 	short int IndiceMachine;
 	bool affecter;
+	bool isMigrated;
 	///On défini que la duree d'un instant T suppose que cet instant est fini.
 	int dureeExe; //permet de stocker le temps d'execution réel de la tache IndiceVM afin de respecter la contrainte de mti
 	int dureeSus; //permet de stocker le temps durant lequel la tâche i a ét?suspendu
