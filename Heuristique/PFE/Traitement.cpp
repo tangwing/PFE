@@ -131,8 +131,8 @@ int TotalCost(){
 				CoutRAM = CoutRAM + alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n);
 				CoutHDD = CoutHDD + alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n);
 			}
-			if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1
-				&& (t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
+			else if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1
+				&& u(n,t)==1//(t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
 				)
 			{
 				penality = penality + rho(n);
