@@ -203,7 +203,15 @@
 			>
 		</File>
 		<File
+			RelativePath=".\data.h"
+			>
+		</File>
+		<File
 			RelativePath=".\RandGeneration.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RandGeneration.h"
 			>
 		</File>
 		<File
@@ -225,6 +233,14 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\TestHeuristic.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\TestHeuristic.h"
+			>
 		</File>
 	</Files>
 	<Globals>

@@ -64,8 +64,8 @@ int main()
 	dOptTime=difftime(temp2,temp1);
 	
 	fic=fopen("Heuristic.txt","wt");
-	fprintf(fic,"%d\n%d\n%lf\n",isFeasible,(int)dOptValue,dOptTime);
+	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	fclose(fic);
-	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n",isFeasible,(int)dOptValue,dOptTime);
+	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	getchar();
 }

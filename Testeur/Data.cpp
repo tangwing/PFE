@@ -265,8 +265,8 @@ void WriteData(void)
  int num,ri_temp,pi_temp,j,i;
  FILE *file;
  int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
- char filename[20]="donnees5_20.dat";
- sprintf(filename, "donnees%d_%d.dat", idScenario, idInstance++);
+ ///char filename[20]="donnees5_20.dat";
+ ///sprintf(filename, "donnees%d_%d.dat", idScenario, idInstance++);
  //file=fopen(filename, "wt");
  file=fopen("donnees.dat","wt");
  // We write the length of the Time Horizon

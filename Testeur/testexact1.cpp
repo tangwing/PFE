@@ -72,11 +72,23 @@ void main(void)
    fscanf(fichier,"%ld\n",&iNbNodes);
    fscanf(fichier,"%lf\n",&dNbMach);
    fclose(fichier);
-   printf("line:%d",__LINE__);
    fichier=fopen("ScpTraces.txt","at");
-   fprintf(fichier,"Sc%d %d %d %d %lf %lf\n",i+1,isFeas,isOpt,iNbNodes,dTime,dNbMach);
+   fprintf(fichier,"Sc%d %d %d %d %lf %lf %ld\n",i+1,isFeas,isOpt,iNbNodes,dTime,dNbMach, iOptValue);
    fclose(fichier);
-   printf("line:%d",__LINE__);
+
+   //************************************
+   //Use the same data to test heuristic program
+	   spawnl(P_WAIT,"SCPHeuristic.exe","SCPHeuristic.exe",NULL);
+	   fichier=fopen("Heuristic.txt","rt");
+	   fscanf(fichier,"%ld\n",&isFeas);
+	   fscanf(fichier,"%ld\n",&iOptValue);
+	   fscanf(fichier,"%lf\n",&dTime);
+	   fscanf(fichier,"%lf\n",&dNbMach);
+	   fclose(fichier);
+	   fichier=fopen("ScpTraces.txt","at");
+	   fprintf(fichier,"Sc%d %d * * %lf %lf %ld\n",i+1,isFeas,dTime,dNbMach, iOptValue);
+	   fclose(fichier);
+   //************************************
 
    if (DEBUG)
    {

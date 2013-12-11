@@ -350,7 +350,7 @@ void Ordonnancement(unsigned int indice){
 	///Tâches non pré d'abord
 	for(iboucleS=0;iboucleS<M();iboucleS++){
 		int indiceS = Traitement.ListOfServer[iboucleS].IndiceServeur;
-				
+		Traitement.ListOfServer[iboucleS].ON = 0;	///Pour calculer le NbServeurOn il faut d'abord éteindre la machine	
 		CalculPrioEtTrier(Traitement.ListOfTasks1GPU, Traitement.NbHDDRAMGPU,indice, indiceS);
 		CalculPrioEtTrier(Traitement.ListOfTasks2GPU, Traitement.NbRAMHDDGPU,indice, indiceS);
 		CalculPrioEtTrier(Traitement.ListOfTasks1CPU, Traitement.NbHDDRAMCPU,indice, indiceS);
@@ -386,7 +386,7 @@ void Ordonnancement(unsigned int indice){
 	while(Traitement.NbPrAffected < Traitement.NbPr){
 		///Rallumer les machines si besoin
 		indiceAllume = AllumageMachine(indice);
-		if( indiceAllume== -1) return; ///Aucunne machine peut être allumée
+		if( indiceAllume== -1) break; ///Aucunne machine peut être allumée
 		else ///Affectation sur la machine allumée
 		{
 			///ConstructionListesTachePrMachineJ(indice, indiceAllume); c'est déjà fait.
@@ -401,6 +401,9 @@ void Ordonnancement(unsigned int indice){
 			OrdoListeTache(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume, Traitement.NbPrAffected, true);
 		}
 	}///Fin if affected < nbpr
+
+	///Calcul nb total de serveur on.
+	Traitement.NbServeurOn += Traitement.ListOfNbServeurOn[indice].NbServeurOn;
 }
 
 
