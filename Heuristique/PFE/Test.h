@@ -12,7 +12,7 @@
 
 #include "Traitement.h"
 
-#define VERBOSE false
+#define VERBOSE true
 
 template <typename T>
 void PrintArray(T* arr, int size)
@@ -43,30 +43,50 @@ void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
 }
 
 
-void AfficherListes()
+void AfficherListes(int indice)
 {
 	if(VERBOSE)
 	{
 		//Affichage des listes
-		printf("\n **** Avec GPU **** \n");
-		printf("\n **** Liste HDDRAM **** \n");
+		printf("\n *Indice: %d. Listes des taches:\n", indice);
+		printf("\n ** Liste HDDRAMGPU: ");
 		for (int i=0; i<Traitement.NbHDDRAMGPU; i++){
 			printf("%d \t",Traitement.ListOfTasks1GPU[i].IndiceVM);
 		}
-		printf("\n **** Liste RAMHDD **** \n");
+		printf("\n ** Liste RAMHDDGPU: ");
 		for (int i=0; i<Traitement.NbRAMHDDGPU; i++){
 			printf("%d \t",Traitement.ListOfTasks2GPU[i].IndiceVM);
 		}
-		printf("\n **** Sans GPU **** \n");
-		printf("\n **** Liste HDDRAM **** \n");
+		printf("\n ** Liste HDDRAMCPU: ");
 		for (int i=0; i<Traitement.NbHDDRAMCPU; i++){
 			printf("%d \t",Traitement.ListOfTasks1CPU[i].IndiceVM);
-	
 		}
-		printf("\n **** Liste RAMHDD **** \n");
-		for (int i=0; i<Traitement.NbRAMHDDGPU; i++){
+		printf("\n ** Liste RAMHDDCPU: ");
+		for (int i=0; i<Traitement.NbRAMHDDCPU; i++){
 			printf("%d \t",Traitement.ListOfTasks2CPU[i].IndiceVM);
 		}
+		///Listes pré
+		printf("\n ** Liste HDDRAMGPUPr: ");
+		for (int i=0; i<Traitement.NbHDDRAMGPUPr; i++){
+			printf("%d \t",Traitement.ListOfTasks1GPUPr[i].IndiceVM);
+		}
+		printf("\n ** Liste RAMHDDGPUPr: ");
+		for (int i=0; i<Traitement.NbRAMHDDGPUPr; i++){
+			printf("%d \t",Traitement.ListOfTasks2GPUPr[i].IndiceVM);
+		}
+		printf("\n ** Liste HDDRAMCPUPr: ");
+		for (int i=0; i<Traitement.NbHDDRAMCPUPr; i++){
+			printf("%d \t",Traitement.ListOfTasks1CPUPr[i].IndiceVM);
+		}
+		printf("\n ** Liste RAMHDDCPUPr: ");
+		for (int i=0; i<Traitement.NbRAMHDDCPUPr; i++){
+			printf("%d \t",Traitement.ListOfTasks2CPUPr[i].IndiceVM);
+		}
+
+
+
+
+
 		printf("\n");
 	}
 }
