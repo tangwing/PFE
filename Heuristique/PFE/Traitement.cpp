@@ -20,7 +20,9 @@ void Init()
 			Traitement.ListOfOrdo[i][j].affecter = 0;
 			Traitement.ListOfOrdo[i][j].isMigrated = false;
 			Traitement.ListOfOrdo[i][j].IndiceMachine=-1;
+			Traitement.ListOfOrdo[i][j].IndiceTache=j;
 			Traitement.ListOfOrdo[i][j].dureeExe=0;
+			Traitement.ListOfOrdo[i][j].dureeSus=0;
 			if(u(j,i)==0){
 				Traitement.ListOfOrdo[i][j].IndiceMachine=-2;
 			}
@@ -33,28 +35,33 @@ void Init()
 	
 	///La ListofServeurbis contient les caracs résiduelles
 	for(int indiceS = 0; indiceS<M(); indiceS++){
-		for(int temps = 0;temps<= T();temps++){
-			Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
-			Traitement.ListOfServeurbis[temps][indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
-			Traitement.ListOfServeurbis[temps][indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
-			Traitement.ListOfServeurbis[temps][indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
-		}
+			Traitement.ListOfServeurbis[indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
+			Traitement.ListOfServeurbis[indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
+			Traitement.ListOfServeurbis[indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
+			Traitement.ListOfServeurbis[indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
 	}
 
 	///
 	///--------- Les structures de réseau--------------
 	///
 	unsigned int mi, mj;
+	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	for (int iEdge=0; iEdge<NbEdges(); iEdge++)
 	{
 		Traitement.EdgeBdeDispo[iEdge] = maxb();
 		for (int iLoop=0; iLoop<NbMachEdge(iEdge); iLoop++)
 		{
 			CoupleMachines(iEdge,iLoop,mi,mj);
-			if (mi>mj)Swap(mi, mj);
+			if (mi>mj) Swap(mi, mj);
 			std::pair<int, int> couple(mi, mj);
-			///update the set of edges
-			Traitement.CoupleEdgeMap.insert( std::pair< std::pair<int, int>, std::set<int>>(couple, std::set<int>()));
+			///update the set of edges in the map. 
+			///The key of the map is the machine couple, and the value is a set of edges.
+			///First of all get the corresponding set
+			it = Traitement.CoupleEdgeMap.insert( std::pair< 
+				std::pair<int, int>, std::set<int>>(
+				couple,              std::set<int>())).first;
+			///Then update the set
+			(it->second).insert(iEdge);
 		}
 	}
 }
@@ -93,7 +100,7 @@ void CalculInterval(){
 // Calcule le cout normalis?des serveurs et classe la liste des serveurs par
 // ordre croissant de leur cout normalis?
 /************************************************************************************/
-void CalculCoutNorm(){
+void CreerListeMachineTriee(){
 
 	int i;
 	int j=0;
@@ -170,35 +177,41 @@ float CalculCoutAffectation(unsigned int i,unsigned int j){
 }
 
 bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
-	if(a(machinei, machinej) != 1)return true;
+	if(a(tachei, tachej) != 1)return true;
 	int iEdge,iTime;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	if(machinei > machinej) Swap(machinei, machinej);
 	///Get the edge set
 	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
+	///Ces 2 machines ne sont pas connectées.
+	if(it==Traitement.CoupleEdgeMap.end())
+		return false;
 	std::set<int> edgeSet = it->second;
 	std::set<int>::iterator itEdge;
 	///For each edge passed by i,j, the band width must be enough
 	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
 	{
-		if( Traitement.EdgeBdeDispo[*itEdge]-b(machinei, machinej) < 0)
+		if( Traitement.EdgeBdeDispo[*itEdge]-b(tachei, tachej) < 0)
 			return false;
 	}
 	return true;
 }
 
 void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned int indice){
-	if(a(machinei, machinej) != 1)return;
+	if(a(tachei, tachej) != 1)return;
 	int iEdge,iTime;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	if(machinei > machinej) Swap(machinei, machinej);
 	///Get the edge set
 	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
+	assert(it != Traitement.CoupleEdgeMap.end());
 	std::set<int> edgeSet = it->second;
 	std::set<int>::iterator itEdge;
+	///int s = edgeSet.size();
+	///printf("%d,", s);
 	///For each edge passed by i,j, update the band width
 	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
-		Traitement.EdgeBdeDispo[*itEdge] -= b(machinei, machinej);
+		Traitement.EdgeBdeDispo[*itEdge] -= b(tachei, tachej);
 }
 
 /************************************************************************************/
@@ -220,7 +233,7 @@ void ConstructionListesTache(unsigned int indice){
 		int temps=Traitement.ListOfIntervalles[indice].BorneInf;
 		for (int i=0; i<N();i++){
 			//Construction des listes tâches non préemtable avec des besoins en GPU et CPU 
-			if((Data.ListOfTasks[i].LIsToBeProcessed[temps]==1)){
+			if((u(i,temps)==1)){
 				if(R(i) == 0) ///Pour les tâches non-pré
 				{
 					if(Data.ListOfTasks[i].QtyGPU>0)
@@ -438,10 +451,10 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 					(listeTache[iboucle1].prio>=0)){
 					
 					///Si la machine a assez de ressource pour la recevoir
-					if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)){
-						if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM)){
-							if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM)){
-								if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM)){
+					if(Traitement.ListOfServeurbis[indiceServeur].GPU>=ng(indiceVM)){
+						if(Traitement.ListOfServeurbis[indiceServeur].CPU>=nc(indiceVM)){
+							if(Traitement.ListOfServeurbis[indiceServeur].HDD>=nh(indiceVM)){
+								if(Traitement.ListOfServeurbis[indiceServeur].RAM>=nr(indiceVM)){
 									
 									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
@@ -454,7 +467,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 											{
 												///Si le réseau ne permet pas cette affectation
 												if(CalculFesabiliteResau(indiceVM,indiceVM2, ///tâche i et j
-													indiceServeur,Traitement.ListOfOrdo[intervalSup][indiceVM2].IndiceMachine,indice)==0)///Machine i et j et intervalle
+													indiceServeur,Traitement.ListOfOrdo[intervalSup][indiceVM2].IndiceMachine,indice)==false)///Machine i et j et intervalle
 												{
 													///Cette tâche ne peut pas être affectée sur cette machine. Mais on doit voir autres machine.
 													Traitement.ListOfOrdo[intervalSup][indiceVM].affecter = 0;///Pour indiquer que c'est pas affectée.
@@ -469,7 +482,14 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 									if(indiceVM2 == -1)continue; ///La tâche actuelle n'est pas permite par le réseau, donc on continue sur la tâche suivante.
 									
 									///Cette affectation est faisable, donc on met à jour le réseau ainsi que les carac de la machine
-									MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
+									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++)
+									{
+										///Si on trouve une VM qui a une affinité de celle qu'on est en train de traiter
+										if(a(indiceVM,indiceVM2)==1 
+											&& Traitement.ListOfOrdo[intervalInf][indiceVM2].affecter==1
+											&& Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine != indiceServeur)
+											MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
+									}
 
 									///Voir s'il s'agit une migration. On en a besoin pour calculer le coût total.
 									int indiceInterval = indice-1;
@@ -499,10 +519,10 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 										Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = indiceServeur;
 										Traitement.ListOfOrdo[i][indiceVM].affecter=1;
 										///Mettre à jour les ressources de la machine
-										Traitement.ListOfServeurbis[i][indiceServeur].GPU = Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU - ng(indiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].CPU = Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU - nc(indiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].HDD = Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD - nh(indiceVM);
-										Traitement.ListOfServeurbis[i][indiceServeur].RAM = Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM - nr(indiceVM);
+										Traitement.ListOfServeurbis[indiceServeur].GPU -=  ng(indiceVM);
+										Traitement.ListOfServeurbis[indiceServeur].CPU -=  nc(indiceVM);
+										Traitement.ListOfServeurbis[indiceServeur].HDD -=  nh(indiceVM);
+										Traitement.ListOfServeurbis[indiceServeur].RAM -=  nr(indiceVM);
 									}
 									///Mettre à jour le compteur
 									compteurAffect++ ;
@@ -559,10 +579,10 @@ int AllumageMachine(unsigned indice){
 				///Voir si la tâche et la machine sont compatibles
 				if(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter!=1
 					&&(q(indiceVM,indiceServeur)==1) 
-					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)) ///Ici est pour être sûr que si la machine être allumée, elle peut au moins recevoir une tâche
-					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM))
-					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM))
-					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM))
+					&&(Traitement.ListOfServeurbis[indiceServeur].GPU>=ng(indiceVM)) ///Ici est pour être sûr que si la machine être allumée, elle peut au moins recevoir une tâche
+					&&(Traitement.ListOfServeurbis[indiceServeur].CPU>=nc(indiceVM))
+					&&(Traitement.ListOfServeurbis[indiceServeur].HDD>=nh(indiceVM))
+					&&(Traitement.ListOfServeurbis[indiceServeur].RAM>=nr(indiceVM))
 				)
 				{
 					///le coût d'affection - le coût de suspension

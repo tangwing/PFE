@@ -6,7 +6,6 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
-#include "Data.h"
 #include <algorithm>
 
 //#include "Test.h"
@@ -24,11 +23,11 @@ int main()
     GetData();
 	DisplayData();
 	time(&temp1);
-	
+
 	Init();
 
 	CalculInterval();
-	CalculCoutNorm();///Trier les serveurs
+	CreerListeMachineTriee();///Trier les serveurs
 	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
 		///! On construit les listes de tâche pour chaque intervalle. Pour une tâche donnée, sa valeur de Uit varie selon l'intervalle
@@ -62,7 +61,7 @@ int main()
 	dOptValue = TotalCost();
 	time(&temp2);
 	dOptTime=difftime(temp2,temp1);
-	
+
 	fic=fopen("Heuristic.txt","wt");
 	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	fclose(fic);

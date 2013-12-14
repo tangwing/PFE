@@ -5,6 +5,7 @@
 #*.suo
 #*.user
 *.sln.docstates
+CodeBlocks/
 
 # Build results
 [Dd]ebug/

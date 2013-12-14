@@ -1,12 +1,10 @@
 //Les algorithmes peuvent être écrits naturellement mais en respectant les règles! Et après on va pouvoir les transformer en LaTeX code.
 
 Algo0 Algorithme Général
-Sortie
+Entrée/Sortie
 	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
 	IsFeasible: booléan qui indique si on a bien ordonnancé toutes les tâches non-préemptables.
 	coûtTotal: le coûtTotal selon l'ordonnancement effectué.
-Variables
-	Entier coûtTotal;
 Debut
 	IsFeasible = true;
 	CalculerIntervalle();
@@ -15,11 +13,16 @@ Debut
 		CréerListesTâche(i);
 		Ordonnancer(ListeOrdo, i);
 	Fin Pour
+	
+	//Maintenant on a fini l'ordonnancement des tâches et on peut déjà calculer le coût total.
+	coûtTotal = CalculerCoûtTotal();
+	
+	//Voir si la solution est feasable
 	Pour chaque intervalle i Faire
 		Pour chaque tâche t Faire
-			///Si il existe des tâches non-préemptables qui ne sont pas affectées
 			Si (t n'est pas préemptable ET ListeOrdo[i][t] == -1) Alors
 				IsFeasible = false;
+				retourne;
 			Fin Si
 		Fin Pour
 	Fin Pour

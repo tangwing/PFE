@@ -79,7 +79,7 @@ typedef struct{///For a given interval, this structure stock the number of runni
 
 typedef struct{
 				Serveur ListOfServer[MaxMachines];
-				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes
+				CaractServeur ListOfServeurbis[MaxMachines]; ///Les ressources restantes
 				///Reseau ListOfReseau[MaxTimeHorizon][MaxEdges][MaxMachines];				
 				unsigned int EdgeBdeDispo[MaxEdges]; ///should be inited by maxB
 				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
@@ -131,7 +131,7 @@ extern Trait Traitement;
 
 extern void Init();///Initialisation
 extern void CalculInterval(void);
-extern void CalculCoutNorm(void);
+extern void CreerListeMachineTriee(void);
 extern void CalculCoutAffectation();
 extern void MaJReseau(unsigned int indiceServeur1, unsigned int indiceServeur2, unsigned int indice);
 ///extern void MaJServeur(unsigned int IndiceServeur, unsigned int indice);

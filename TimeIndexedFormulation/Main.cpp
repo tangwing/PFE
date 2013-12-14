@@ -926,10 +926,8 @@ int main(int argc)
 		InitializeIPModel();
 
 		IloCplex cplex(model);
-printf("line:%d\n",__LINE__);
 		if (DEBUG)
 			cplex.exportModel("SCP.lp");
-printf("line:%d\n",__LINE__);
 		if(CONFIG)
 		{
 			//cplex.setParam(IloCplex::SimDisplay,0);
@@ -945,7 +943,6 @@ printf("line:%d\n",__LINE__);
 			//cplex.setParam(IloCplex::Threads,3);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
-printf("line:%d\n",__LINE__);	
 	try 
 	{
 		dNbMach=-1.0;

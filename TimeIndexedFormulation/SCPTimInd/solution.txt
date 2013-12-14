@@ -1,102 +1,75 @@
 Optimal solution computed by CPLEX for an instance with:
-	 11 tasks
-	 3 machines
+	 8 tasks
+	 2 machines
 	 Time horizon of 12
 
-Optimal solution value: 456331.000000
-Solution time: 2.000000
+Optimal solution value: 689347.000000
+Solution time: 0.000000
 
 Schedule per machine and for each time unit
 Machine 1 (CPU=12 / GPU=0 / RAM=160 / HDD=164):
-	 Tasks: | 3 5 | | 3 5 | | 3 5 | | 3 5 | | 3 5 | | 3 5 | 
-	 CPU:   0 | 6 | 0 | 6 | 0 | 6 | 0 | 6 | 0 | 6 | 0 | 6 | 
+	 Tasks: 5 | 1 | 1 3 5 | 1 | 3 5 | 1 | 1 3 5 | 1 | 1 3 5 | 1 | 3 5 | 1 | 
+	 CPU:   2 | 2 | 6 | 2 | 4 | 2 | 6 | 2 | 6 | 2 | 4 | 2 | 
 	 GPU:   0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 
-	 RAM:   0 | 112 | 0 | 112 | 0 | 112 | 0 | 112 | 0 | 112 | 0 | 112 | 
-	 HDD:   0 | 126 | 0 | 126 | 0 | 126 | 0 | 126 | 0 | 126 | 0 | 126 | 
-Machine 2 (CPU=12 / GPU=0 / RAM=160 / HDD=164):
-	 Tasks: 1 4 6 | 2 4 6 | 1 2 4 6 | 2 4 6 | 1 2 6 | 2 4 6 | 1 2 4 6 | 2 4 6 | 1 2 4 6 | 2 4 6 | 1 4 6 | 2 6 | 
-	 CPU:   7 | 7 | 8 | 7 | 6 | 7 | 8 | 7 | 8 | 7 | 7 | 5 | 
+	 RAM:   37 | 37 | 111 | 37 | 74 | 37 | 111 | 37 | 111 | 37 | 74 | 37 | 
+	 HDD:   41 | 41 | 123 | 41 | 82 | 41 | 123 | 41 | 123 | 41 | 82 | 41 | 
+Machine 2 (CPU=147 / GPU=0 / RAM=1280 / HDD=491):
+	 Tasks: 4 7 8 | 4 7 8 | 4 7 8 | 4 7 8 | 4 6 8 | 4 8 | 4 7 8 | 4 7 8 | 4 7 8 | 4 7 8 | 4 7 8 | 4 7 8 | 
+	 CPU:   47 | 47 | 47 | 47 | 47 | 34 | 47 | 47 | 47 | 47 | 47 | 47 | 
 	 GPU:   0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 
-	 RAM:   129 | 129 | 146 | 129 | 109 | 129 | 146 | 129 | 146 | 129 | 129 | 92 | 
-	 HDD:   142 | 142 | 158 | 142 | 117 | 142 | 158 | 142 | 158 | 142 | 142 | 101 | 
-Machine 3 (CPU=147 / GPU=0 / RAM=1280 / HDD=491):
-	 Tasks: 8 10 11 | 8 | 8 10 11 | 8 | 8 10 11 | 7 | 8 10 11 | 7 8 | 8 11 | 7 8 | 11 | 7 8 | 
-	 CPU:   33 | 7 | 33 | 7 | 33 | 7 | 33 | 14 | 20 | 14 | 13 | 14 | 
-	 GPU:   0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 
-	 RAM:   855 | 171 | 855 | 171 | 855 | 171 | 855 | 342 | 513 | 342 | 342 | 342 | 
-	 HDD:   212 | 42 | 212 | 42 | 212 | 42 | 212 | 84 | 127 | 84 | 85 | 84 | 
+	 RAM:   1176 | 1176 | 1176 | 1176 | 1176 | 834 | 1176 | 1176 | 1176 | 1176 | 1176 | 1176 | 
+	 HDD:   477 | 477 | 477 | 477 | 477 | 392 | 477 | 477 | 477 | 477 | 477 | 477 | 
 
  Schedule per task and for each time unit
-Task 1 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
-	 is Processed at times (machine): 1 (2) | | 3 (2) | | 5 (2) | | 7 (2) | | 9 (2) | | 11 (2) | | 
-	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 
-Task 2 (isPreemptable=0 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
-	 is Processed at times (machine): | 2 (2) | 3 (2) | 4 (2) | 5 (2) | 6 (2) | 7 (2) | 8 (2) | 9 (2) | 10 (2) | | 12 (2) | 
-	 is likely to be proc?: 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 
+Task 1 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): | 2 (1) | 3 (1) | 4 (1) | | 6 (1) | 7 (1) | 8 (1) | 9 (1) | 10 (1) | | 12 (1) | 
+	 is likely to be proc?: 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 
+Task 2 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): | | | | | | | | | | | | 
+	 is likely to be proc?: 1 | 0 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 
 Task 3 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
-	 is Processed at times (machine): | 2 (1) | | 4 (1) | | 6 (1) | | 8 (1) | | 10 (1) | | 12 (1) | 
-	 is likely to be proc?: 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): | | 3 (1) | | 5 (1) | | 7 (1) | | 9 (1) | | 11 (1) | | 
+	 is likely to be proc?: 0 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 
 Task 4 (isPreemptable=0 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
-	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | 4 (2) | | 6 (2) | 7 (2) | 8 (2) | 9 (2) | 10 (2) | 11 (2) | | 
-	 is likely to be proc?: 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 
-Task 5 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
-	 is Processed at times (machine): | 2 (1) | | 4 (1) | | 6 (1) | | 8 (1) | | 10 (1) | | 12 (1) | 
-	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 
-Task 6 (isPreemptable=0 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 1 2 3 
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
 	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | 4 (2) | 5 (2) | 6 (2) | 7 (2) | 8 (2) | 9 (2) | 10 (2) | 11 (2) | 12 (2) | 
 	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
-Task 7 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 3 
-	 is Processed at times (machine): | | | | | 6 (3) | | 8 (3) | | 10 (3) | | 12 (3) | 
-	 is likely to be proc?: 1 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
+Task 5 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): 1 (1) | | 3 (1) | | 5 (1) | | 7 (1) | | 9 (1) | | 11 (1) | | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 
+Task 6 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): | | | | 5 (2) | | | | | | | | 
+	 is likely to be proc?: 0 | 1 | 1 | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 
+Task 7 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | 4 (2) | | | 7 (2) | 8 (2) | 9 (2) | 10 (2) | 11 (2) | 12 (2) | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 
 Task 8 (isPreemptable=0 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 3 
-	 is Processed at times (machine): 1 (3) | 2 (3) | 3 (3) | 4 (3) | 5 (3) | | 7 (3) | 8 (3) | 9 (3) | 10 (3) | | 12 (3) | 
-	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 0 | 1 | 
-Task 9 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 3 
-	 is Processed at times (machine): | | | | | | | | | | | | 
-	 is likely to be proc?: 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
-Task 10 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 3 
-	 is Processed at times (machine): 1 (3) | | 3 (3) | | 5 (3) | | 7 (3) | | | | | | 
-	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 1 | 
-Task 11 (isPreemptable=1 / migration time=1):
-  Resuming time per machine: 1 1 1 
-  Can be assigned only to machines: 3 
-	 is Processed at times (machine): 1 (3) | | 3 (3) | | 5 (3) | | 7 (3) | | 9 (3) | | 11 (3) | | 
-	 is likely to be proc?: 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | 4 (2) | 5 (2) | 6 (2) | 7 (2) | 8 (2) | 9 (2) | 10 (2) | 11 (2) | 12 (2) | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
 
  Network usage by links
  Maximum Bandwith for each edge : 30000
 Edge  1:
 	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
-	 Bdw used: 6000 | 12000 | 18000 | 21000 | 15000 | 24000 | 18000 | 18000 | 15000 | 21000 | 9000 | 18000 | 
+	 Bdw used: 0 | 3000 | 9000 | 3000 | 6000 | 6000 | 9000 | 3000 | 9000 | 3000 | 6000 | 12000 | 
 Edge  2:
 	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
-	 Bdw used: 6000 | 12000 | 18000 | 21000 | 15000 | 24000 | 18000 | 18000 | 15000 | 21000 | 9000 | 18000 | 
+	 Bdw used: 0 | 3000 | 9000 | 3000 | 6000 | 6000 | 9000 | 3000 | 9000 | 3000 | 6000 | 12000 | 
 Edge  3:
 	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
-	 Bdw used: 12000 | 15000 | 24000 | 27000 | 18000 | 24000 | 24000 | 24000 | 21000 | 27000 | 9000 | 21000 | 
-Edge  4:
-	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
-	 Bdw used: 18000 | 9000 | 24000 | 30000 | 21000 | 30000 | 30000 | 24000 | 24000 | 30000 | 18000 | 27000 | 
-Edge  5:
-	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
-	 Bdw used: 18000 | 9000 | 24000 | 30000 | 21000 | 30000 | 30000 | 24000 | 24000 | 30000 | 18000 | 27000 | 
+	 Bdw used: 0 | 3000 | 9000 | 3000 | 6000 | 6000 | 9000 | 3000 | 9000 | 3000 | 6000 | 12000 | 
