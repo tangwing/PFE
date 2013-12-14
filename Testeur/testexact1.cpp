@@ -219,13 +219,13 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 	{
 		printHeader = false;
 		//fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
-		fprintf(fichier,"Scenario(N/M);Infeas  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;AffinityLim(H) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
+		fprintf(fichier,"Scenario(N/M);Infeasable  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
 	}
-	fprintf(fichier,"Sc%d(%d/%d)      ;%d   ;%d/%d   ;%d    ;%d    ;%d    ;%3.2lf/%3.2lf ;%3.2lf/%3.2lf  ;%3.2lf/%3.2lf ;",
-		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, NbAffinityLimitH, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
+	fprintf(fichier,"Sc%d(%d/%d)      ;%d         ;%d/%d         ;%d          ;%d      ;%3.2lf/%3.2lf   ;%3.2lf/%3.2lf     ;%3.2lf/%3.2lf ;",
+		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
 	if(NbResH != 0)
-		fprintf(fichier, "%3.2lf\t ;%3.2lf\t ;%3.2lf\n", DevMin, DevTotal/NbIter, DevMax);
-	else fprintf(fichier, "*;*;*\n");
+		fprintf(fichier, "     %3.2lf\t  ;%3.2lf\t  ;%3.2lf\n", DevMin, DevTotal/NbIter, DevMax);
+	else fprintf(fichier, "      *      ;*      ;*\n");
 	fclose(fichier);
 
 }

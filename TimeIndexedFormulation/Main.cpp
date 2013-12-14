@@ -9,7 +9,7 @@
 #include <process.h>
 #include "Data.h"
 
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -926,7 +926,10 @@ int main(int argc)
 		//InitializeLPModel();
 		InitializeIPModel();
 
-		IloCplex cplex(model);
+	IloCplex cplex;
+	try
+    {
+        cplex = IloCplex(model);		
 		if (DEBUG)
 			cplex.exportModel("SCP.lp");
 		if(CONFIG)
@@ -944,8 +947,8 @@ int main(int argc)
 			//cplex.setParam(IloCplex::Threads,3);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
-	try 
-	{
+	//try 
+	//{
 		dNbMach=-1.0;
 		if (!cplex.solve())
 		{ // cplex fails to solve the problem
@@ -982,7 +985,7 @@ int main(int argc)
 		cerr << "Concert exception caught: " << e.getMessage() << endl;
 		dOptValue=9999999.0;
 		isOptimal=0;
-				 isFeasible=0;
+		isFeasible=0;
 		//getch();
 	}
 	

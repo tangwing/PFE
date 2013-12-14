@@ -4,7 +4,7 @@ Optimal solution computed by CPLEX for an instance with:
 	 Time horizon of 12
 
 Optimal solution value: 196254.000000
-Solution time: 1.000000
+Solution time: 0.000000
 
 Schedule per machine and for each time unit
 Machine 1 (CPU=12 / GPU=0 / RAM=160 / HDD=164):

@@ -1,0 +1,205 @@
+Display of the instance:
+	 Time Horizon T: 12
+	 Number of Tasks N: 8
+	 Number of Machines M: 2
+	 Characteristics of each task:
+		 Task 0 : QtyCPU=4, QtyGPU=0, QtyRAM=75, QtyHDD=85, isPreemp=0, CostPreemp=0.
+		 Task 1 : QtyCPU=2, QtyGPU=0, QtyRAM=37, QtyHDD=41, isPreemp=0, CostPreemp=0.
+		 Task 2 : QtyCPU=1, QtyGPU=0, QtyRAM=17, QtyHDD=16, isPreemp=0, CostPreemp=0.
+		 Task 3 : QtyCPU=4, QtyGPU=0, QtyRAM=75, QtyHDD=85, isPreemp=1, CostPreemp=11665.
+		 Task 4 : QtyCPU=4, QtyGPU=0, QtyRAM=75, QtyHDD=85, isPreemp=1, CostPreemp=1560.
+		 Task 5 : QtyCPU=13, QtyGPU=0, QtyRAM=342, QtyHDD=85, isPreemp=0, CostPreemp=0.
+		 Task 6 : QtyCPU=7, QtyGPU=0, QtyRAM=171, QtyHDD=42, isPreemp=0, CostPreemp=0.
+		 Task 7 : QtyCPU=13, QtyGPU=0, QtyRAM=342, QtyHDD=85, isPreemp=0, CostPreemp=0.
+Tried aggregator 3 times.
+MIP Presolve eliminated 2719 rows and 450 columns.
+MIP Presolve modified 1415 coefficients.
+Aggregator did 107 substitutions.
+Reduced MIP has 155 rows, 45 columns, and 551 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Probing time =    0.00 sec.
+Tried aggregator 1 time.
+MIP Presolve modified 177 coefficients.
+Reduced MIP has 155 rows, 45 columns, and 374 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.05 sec.
+Found feasible solution after 0.05 sec.  Objective = 284065.0000
+Probing time =    0.00 sec.
+Clique table members: 146.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: opportunistic, using up to 2 threads.
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                       284065.0000                     31     --- 
+*     0+    0                       176848.0000                     31     --- 
+*     0     0      integral     0   149514.0000   149514.0000       31    0.00%
+Elapsed real time =   0.05 sec. (tree size =  0.00 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.00
+Parallel b&c, 2 threads:
+  Real time             =    0.00
+  Sync time (average)   =    0.00
+  Wait time (average)   =    0.00
+                          -------
+Total (root+branch&cut) =    0.00 sec.
+Cplex status: 1
+
+ Valeur de la fonction objectif : 149514.000000
+
+
+=======================================
+============== New Instance ===========
+=======================================
+Tried aggregator 3 times.
+MIP Presolve eliminated 2719 rows and 450 columns.
+MIP Presolve modified 1415 coefficients.
+Aggregator did 107 substitutions.
+Reduced MIP has 155 rows, 45 columns, and 551 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Probing time =    0.00 sec.
+Tried aggregator 1 time.
+MIP Presolve modified 177 coefficients.
+Reduced MIP has 155 rows, 45 columns, and 374 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.05 sec.
+Found feasible solution after 0.05 sec.  Objective = 284065.0000
+Probing time =    0.00 sec.
+Clique table members: 146.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: opportunistic, using up to 2 threads.
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                       284065.0000                     31     --- 
+*     0+    0                       176848.0000                     31     --- 
+*     0     0      integral     0   149514.0000   149514.0000       31    0.00%
+Elapsed real time =   0.05 sec. (tree size =  0.00 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.00
+Parallel b&c, 2 threads:
+  Real time             =    0.00
+  Sync time (average)   =    0.00
+  Wait time (average)   =    0.00
+                          -------
+Total (root+branch&cut) =    0.00 sec.
+Cplex status: 1
+
+Valeur de la fonction objectif : 149514.000000
+isFeasible:1
+isOptimal:1
+dOptValue:149514
+dOptCPUTime:0.062400
+dOptWallTime:0.000000
+iNbNodesIP:0
+dNbMach:2.000000
+
+
+=======================================
+============== New Instance ===========
+=======================================
+Tried aggregator 3 times.
+MIP Presolve eliminated 2719 rows and 450 columns.
+MIP Presolve modified 1415 coefficients.
+Aggregator did 107 substitutions.
+Reduced MIP has 155 rows, 45 columns, and 551 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Probing time =    0.00 sec.
+Tried aggregator 1 time.
+MIP Presolve modified 177 coefficients.
+Reduced MIP has 155 rows, 45 columns, and 374 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.03 sec.
+Found feasible solution after 0.03 sec.  Objective = 284065.0000
+Probing time =    0.01 sec.
+Clique table members: 146.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: opportunistic, using up to 2 threads.
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                       284065.0000                     31     --- 
+*     0+    0                       176848.0000                     31     --- 
+*     0     0      integral     0   149514.0000   149514.0000       31    0.00%
+Elapsed real time =   0.05 sec. (tree size =  0.00 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.01
+Parallel b&c, 2 threads:
+  Real time             =    0.00
+  Sync time (average)   =    0.00
+  Wait time (average)   =    0.00
+                          -------
+Total (root+branch&cut) =    0.01 sec.
+Cplex status: 1
+
+Valeur de la fonction objectif : 149514.000000
+isFeasible:1
+isOptimal:1
+dOptValue:149514
+dOptCPUTime:0.093601
+dOptWallTime:0.000000
+iNbNodesIP:0
+dNbMach:2.000000
+
+
+=======================================
+============== New Instance ===========
+=======================================
+Tried aggregator 3 times.
+MIP Presolve eliminated 2719 rows and 450 columns.
+MIP Presolve modified 1415 coefficients.
+Aggregator did 107 substitutions.
+Reduced MIP has 155 rows, 45 columns, and 551 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Probing time =    0.00 sec.
+Tried aggregator 1 time.
+MIP Presolve modified 177 coefficients.
+Reduced MIP has 155 rows, 45 columns, and 374 nonzeros.
+Reduced MIP has 45 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0.08 sec.
+Found feasible solution after 0.08 sec.  Objective = 284065.0000
+Probing time =    0.00 sec.
+Clique table members: 146.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: opportunistic, using up to 2 threads.
+Root relaxation solution time =    0.00 sec.
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
+
+*     0+    0                       284065.0000                     31     --- 
+*     0+    0                       176848.0000                     31     --- 
+*     0     0      integral     0   149514.0000   149514.0000       31    0.00%
+Elapsed real time =   0.08 sec. (tree size =  0.00 MB, solutions = 3)
+
+Root node processing (before b&c):
+  Real time             =    0.00
+Parallel b&c, 2 threads:
+  Real time             =    0.00
+  Sync time (average)   =    0.00
+  Wait time (average)   =    0.00
+                          -------
+Total (root+branch&cut) =    0.00 sec.
+Cplex status: 1
+
+Valeur de la fonction objectif : 149514.000000
+isFeasible:1
+isOptimal:1
+dOptValue:149514
+dOptCPUTime:0.046800
+dOptWallTime:0.000000
+iNbNodesIP:0
+dNbMach:2.000000
