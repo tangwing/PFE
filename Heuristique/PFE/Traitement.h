@@ -133,7 +133,7 @@ extern Trait Traitement;
 extern void Init();///Initialisation
 extern void CalculInterval(void);
 extern void CreerListeMachineTriee(void);
-extern void CalculCoutAffectation();
+extern float CalculCoutAffectation(unsigned int i,unsigned int j);
 extern void MaJReseau(unsigned int indiceServeur1, unsigned int indiceServeur2, unsigned int indice);
 ///extern void MaJServeur(unsigned int IndiceServeur, unsigned int indice);
 extern bool CalculFesabiliteResau(unsigned tachei,unsigned machinej,unsigned int tacheaffectee);

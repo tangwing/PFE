@@ -123,42 +123,40 @@ void CreerListeMachineTriee(){
 int TotalCost(){
 	int TotalCost = 0;
 	int CoutMigration = 0;
-	int CoutGPU = 0;
-	int CoutCPU = 0;
-	int CoutRAM = 0;
-	int CoutHDD = 0;
+	int CoutAffect = 0;
 	int CoutUnitaire = 0;
 	int penality = 0;
 	int temps = 0;
-
+	//LoadOrdo();
+	AfficherListeOrdo();
 	for(int t=0;t<T();t++){
+		printf("\nT = %d:\n",t);
 		for(int n=0;n<N();n++){
-			if((Traitement.ListOfOrdo[t][n].IndiceMachine>=0) && (Traitement.ListOfOrdo[t][n].affecter==1)){
-				CoutGPU = CoutGPU + alphag(Traitement.ListOfOrdo[t][n].IndiceMachine)*ng(n);
-				CoutCPU = CoutCPU + alphac(Traitement.ListOfOrdo[t][n].IndiceMachine)*nc(n);
-				CoutRAM = CoutRAM + alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n);
-				CoutHDD = CoutHDD + alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n);
-				if(Traitement.ListOfOrdo[t][n].isMigrated)
-					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
+			if(Traitement.ListOfOrdo[t][n].affecter==1){
+				printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
+				CoutAffect += CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
+				/*if(Traitement.ListOfOrdo[t][n].isMigrated)
+					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));*/
 			}
-			else if(Traitement.ListOfOrdo[t][n].IndiceMachine==-1
-				&& u(n,t)==1 && R(n)==1//(t==0 || Traitement.ListOfOrdo[t-1][n].IndiceMachine!=-1)
-				)
+			else if(u(n,t)==1&& R(n)==1)
 			{
-				penality = penality + rho(n);
+				printf("#\t");
+				penality += rho(n);
 			}
+			else printf("*\t");
 		}
-		
 	}
 	for(int indice = 0;indice< Traitement.NbInterval;indice++){
 		int nbON = Traitement.ListOfNbServeurOn[indice].NbServeurOn;
+		//nbON = 1.8;
 		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
-			CoutUnitaire = CoutUnitaire + (nbON * beta(t));
+			CoutUnitaire += (nbON * beta(t));
 	}
 	//printf("penalite total : %d \n",penality);
-	//printf("CoutUnitaire total :%d \n",CoutUnitaire);
+	printf("CoutUnitaire total :%d \n",CoutUnitaire);
 	
-	TotalCost = CoutGPU + CoutCPU + CoutRAM + CoutHDD + CoutUnitaire + penality + CoutMigration;
+
+	TotalCost = CoutAffect + CoutUnitaire + penality + CoutMigration;
 	printf("Cout total : %d \n",TotalCost);
 	return TotalCost;
 }
@@ -171,7 +169,6 @@ float CalculCoutAffectation(unsigned int i,unsigned int j){
 	float cout;
 	cout = (alphac(j)*nc(i)+alphag(j)*ng(i)+alphar(j)*nr(i)+alphah(j)*nh(i));
 	return cout;
-
 }
 
 bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
