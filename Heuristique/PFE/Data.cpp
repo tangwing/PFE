@@ -29,11 +29,11 @@ short int nh(unsigned int i) // Returns the required harddrive of task i
 short int u(unsigned int i, unsigned int t) // Returns if task i is likely to be processed at time t
 { return Data.ListOfTasks[i].LIsToBeProcessed[t] ;}
 short int a(unsigned int i, unsigned int k) // Returns 1 if tasks i and k have an affinity; 0 otherwise
-{ return Data.ListOfTasks[i].LAffinities[k] ;}
+{ return Data.ListOfTasks[i].LAffinities[k];}
 short int q(unsigned int i, unsigned int j) // Returns 1 if task i can be assigned to machine j; 0 otherwise
 { return Data.ListOfTasks[i].LPreAssignement[j] ;}
 short int b(unsigned int i, unsigned int j) // Returns the bandwidth required by tasks i and j to communicate over the network
-{ return Data.Network.ComBandwidth[i][j] ;}
+{ return i<=j? Data.Network.ComBandwidth[i][j]:Data.Network.ComBandwidth[j][i] ;}
 short int R(unsigned int i) // Returns 1 if task i is preemptable; 0 otherwise
 { return Data.ListOfTasks[i].isPreemptable ;}
 short int rho(unsigned int i) // Returns the unitary penalty induced by preempting taks i
