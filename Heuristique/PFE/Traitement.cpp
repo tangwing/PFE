@@ -49,7 +49,9 @@ void Init()
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	for (int iEdge=0; iEdge<NbEdges(); iEdge++)
 	{
-		Traitement.EdgeBdeDispo[iEdge] = maxb();
+		for(int temps = 0;temps<= T();temps++){
+			Traitement.EdgeBdeDispo[temps][iEdge] = maxb();
+		}
 		for (int iLoop=0; iLoop<NbMachEdge(iEdge); iLoop++)
 		{
 			CoupleMachines(iEdge,iLoop,mi,mj);
@@ -174,6 +176,7 @@ float CalculCoutAffectation(unsigned int i,unsigned int j){
 }
 
 bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
+	if( tachei == tachej && machinei == machinej) return true;
 	if(a(tachei, tachej) != 1)return true;
 	int iEdge,iTime;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
@@ -185,30 +188,51 @@ bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,un
 		return false;
 	std::set<int> edgeSet = it->second;
 	std::set<int>::iterator itEdge;
-	///For each edge passed by i,j, the band width must be enough
-	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
+
+	if( tachei == tachej) ///Case of migration
 	{
-		if( Traitement.EdgeBdeDispo[*itEdge]-b(tachei, tachej) < 0)
-			return false;
+		///For each edge passed by the migration flux, the band width must be enough
+		int interInf = Traitement.ListOfIntervalles[indice].BorneInf;
+		int debutMigration = interInf - mt(tachei);
+		for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
+		{
+			for(int i = interInf-1; i>= debutMigration; i--)
+			{
+				if( Traitement.EdgeBdeDispo[i][*itEdge]-b(tachei, tachei) < 0)
+					return false;
+				else
+					Traitement.EdgeBdeDispo[i][*itEdge] -= b(tachei, tachei);
+			}
+		}
+	}else  ///Case of affinity
+	{
+		///For each edge passed by i,j, the band width must be enough
+		for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
+		{
+			if( Traitement.EdgeBdeDispo[Traitement.ListOfIntervalles[indice].BorneInf][*itEdge]-b(tachei, tachej) < 0)
+				return false;
+			else
+				Traitement.EdgeBdeDispo[Traitement.ListOfIntervalles[indice].BorneInf][*itEdge] -= b(tachei, tachej);
+		}
 	}
 	return true;
 }
 
 void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned int indice){
-	if(a(tachei, tachej) != 1)return;
-	int iEdge,iTime;
-	std::map< std::pair<int,int>, std::set<int>>::iterator it;
-	if(machinei > machinej) Swap(machinei, machinej);
-	///Get the edge set
-	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
-	assert(it != Traitement.CoupleEdgeMap.end());
-	std::set<int> edgeSet = it->second;
-	std::set<int>::iterator itEdge;
-	///int s = edgeSet.size();
-	///printf("%d,", s);
-	///For each edge passed by i,j, update the band width
-	for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
-		Traitement.EdgeBdeDispo[*itEdge] -= b(tachei, tachej);
+	//if(a(tachei, tachej) != 1)return;
+	//int iEdge,iTime;
+	//std::map< std::pair<int,int>, std::set<int>>::iterator it;
+	//if(machinei > machinej) Swap(machinei, machinej);
+	/////Get the edge set
+	//it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
+	//assert(it != Traitement.CoupleEdgeMap.end());
+	//std::set<int> edgeSet = it->second;
+	//std::set<int>::iterator itEdge;
+	/////int s = edgeSet.size();
+	/////printf("%d,", s);
+	/////For each edge passed by i,j, update the band width
+	//for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
+	//	Traitement.EdgeBdeDispo[*itEdge] -= b(tachei, tachej);
 }
 
 /************************************************************************************/
@@ -482,7 +506,9 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 						if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM)){
 							if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM) ){
 								if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM) ){
-									
+									///Backup network state
+									memcpy(Traitement.EdgeBdeDispoBackUp, Traitement.EdgeBdeDispo, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
+
 									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
 										
@@ -499,24 +525,37 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 													///Cette tâche ne peut pas être affectée sur cette machine. Mais on doit voir autres machine.
 													Traitement.ListOfOrdo[intervalSup][indiceVM].affecter = 0;///Pour indiquer que c'est pas affectée.
 													Traitement.ListOfOrdo[intervalInf][indiceVM].affecter = 0;
+													///Rollback
+													memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
 													indiceVM2 = -1; ///On va casser ce passage de boucle, continuer sur la tâche suivante à affecter.
 													break;
 												}
 											}
 										}
 									}///Fin du parcours de tâches
-
 									if(indiceVM2 == -1)continue; ///La tâche actuelle n'est pas permite par le réseau, donc on continue sur la tâche suivante.
-									
+
+									if(needMigration)
+									{
+										if(CalculFesabiliteResau(indiceVM,indiceVM, ///tâche i et j
+											indiceServeur, lastIndiceServeur,indice)==false)///Machine i et j et intervalle
+										{
+											memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
+											continue;
+										}
+									}
+
+									/////////////////////From here we know that we can do the asignment///////////////
+
 									///Cette affectation est faisable, donc on met à jour le réseau ainsi que les carac de la machine
-									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++)
+									/*for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++)
 									{
 										///Si on trouve une VM qui a une affinité de celle qu'on est en train de traiter
 										if(a(indiceVM,indiceVM2)==1 
 											&& Traitement.ListOfOrdo[intervalInf][indiceVM2].affecter==1
 											&& Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine != indiceServeur)
 											MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
-									}
+									}*/
 
 									///Voir s'il s'agit une migration. 
 									if(needMigration) 

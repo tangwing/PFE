@@ -82,7 +82,8 @@ typedef struct{
 				Serveur ListOfServer[MaxMachines];
 				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
 				///Reseau ListOfReseau[MaxTimeHorizon][MaxEdges][MaxMachines];				
-				unsigned int EdgeBdeDispo[MaxEdges]; ///should be inited by maxB
+				unsigned int EdgeBdeDispo[MaxTimeHorizon][MaxEdges]; ///should be inited by maxB
+				unsigned int EdgeBdeDispoBackUp[MaxTimeHorizon][MaxEdges];
 				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
 				std::map<std::pair<int,int>, std::set<int>> CoupleEdgeMap;
 				///ServeurON ListOfServerOn[MaxMachines];
