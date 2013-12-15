@@ -112,7 +112,7 @@ void GetData(void)
  FILE *file;
  int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
 
- file=fopen("Donnees/donnees1_3.dat","rt");
+ file=fopen("Donnees/donnees3_6.dat","rt");
  //file=fopen("donnees.dat","rt");
  // We read the length of the Time Horizon
  fscanf(file,"%d\n",&Data.TimeHorizon);
