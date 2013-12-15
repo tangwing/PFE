@@ -14,6 +14,8 @@ Trait Traitement;
 
 void Init()
 {
+	Traitement.NbServeurOn = 0;
+
 	///Init ListOfOrdo
 	for(int i=0;i<T();i++){
 		for(int j=0;j<N();j++){
@@ -29,12 +31,9 @@ void Init()
 		}
 	}
 
-	///
-	Traitement.NbServeurOn = 0;
-	
 	///La ListofServeurbis contient les caracs résiduelles
-    for(int indiceS = 0; indiceS<M(); indiceS++){
-            for(int temps = 0;temps<= T();temps++){
+    for(int temps = 0;temps< T();temps++){
+    		for(int indiceS = 0; indiceS<M(); indiceS++){
                     Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
                     Traitement.ListOfServeurbis[temps][indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
                     Traitement.ListOfServeurbis[temps][indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
@@ -42,14 +41,12 @@ void Init()
             }
     }
 
-	///
-	///--------- Les structures de réseau--------------
-	///
+	///Les structures de réseau
 	unsigned int mi, mj;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	for (int iEdge=0; iEdge<NbEdges(); iEdge++)
 	{
-		for(int temps = 0;temps<= T();temps++){
+		for(int temps = 0;temps< T();temps++){
 			Traitement.EdgeBdeDispo[temps][iEdge] = maxb();
 		}
 		for (int iLoop=0; iLoop<NbMachEdge(iEdge); iLoop++)
@@ -57,22 +54,22 @@ void Init()
 			CoupleMachines(iEdge,iLoop,mi,mj);
 			if (mi>mj) Swap(mi, mj);
 			std::pair<int, int> couple(mi, mj);
-			///update the set of edges in the map. 
+			///Update the set of edges in the map. 
 			///The key of the map is the machine couple, and the value is a set of edges.
 			///First of all get the corresponding set
 			it = Traitement.CoupleEdgeMap.insert( std::pair< 
 				std::pair<int, int>, std::set<int>>(
 				couple,              std::set<int>())).first;
-			///Then update the set
+			///Then insert new edge to the set
 			(it->second).insert(iEdge);
 		}
 	}
 }
 
-/************************************************************************************/
-// Function CalculInterval
-// Calcule les intervalles tel que sur [T,T+1], les u(i,t) sont consants
-/************************************************************************************/
+///
+/// Function CalculInterval
+/// Calcule les intervalles tel que sur tous les instants d'un même intervalle les u(i,t) sont consants
+///
 void CalculInterval(){
 	Traitement.NbInterval = 0;
 	Traitement.ListOfIntervalles[0].BorneInf = 0;
@@ -91,7 +88,7 @@ void CalculInterval(){
 	Traitement.NbInterval++;
 	Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = T()-1;
 	
-	//Affichage des intervalles calculés
+	///Affichage des intervalles calculés
 	printf("Nombre d'interval : %d\n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
 		printf("intervalle %d : [%d,%d] \n",i,Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
@@ -103,10 +100,7 @@ void CalculInterval(){
 // ordre croissant de leur cout normalis?
 /************************************************************************************/
 void CreerListeMachineTriee(){
-
 	int i;
-	int j=0;
-	bool trier =0;
 	float CoutTotal;
 	float Cout;
 	for(i=0; i<M(); i++){
@@ -129,8 +123,7 @@ int TotalCost(){
 	int CoutMigration = 0;
 	int CoutAffect = 0;
 	int CoutUnitaire = 0;
-	int penality = 0;
-	int temps = 0;
+	int Penalty = 0;
 	//LoadOrdo();
 	AfficherListeOrdo();
 	for(int t=0;t<T();t++){
@@ -145,58 +138,58 @@ int TotalCost(){
 			else if(u(n,t)==1&& R(n)==1)
 			{
 				printf("#\t");
-				penality += rho(n);
+				Penalty += rho(n);
 			}
 			else printf("*\t");
 		}
 	}
 	for(int indice = 0;indice< Traitement.NbInterval;indice++){
 		int nbON = Traitement.ListOfNbServeurOn[indice].NbServeurOn;
-		//nbON = 1.8;
 		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
 			CoutUnitaire += (nbON * beta(t));
 	}
-	//printf("penalite total : %d \n",penality);
-	printf("CoutUnitaire total :%d \n",CoutUnitaire);
-	
+	printf("Penalite total : %d \n",Penalty);
+	printf("\nCoutUnitaire total :%d \n",CoutUnitaire);
 
-	TotalCost = CoutAffect + CoutUnitaire + penality + CoutMigration;
+	TotalCost = CoutAffect + CoutUnitaire + Penalty + CoutMigration;
 	printf("Cout total : %d \n",TotalCost);
 	return TotalCost;
 }
 
-/************************************************************************************/
-// Function CalculCoutAffectation
-// Calcule le cout d'affectation de la tache i sur la machine j
-/************************************************************************************/
+/// Calcule le cout d'affectation de la tache i sur la machine j
 float CalculCoutAffectation(unsigned int i,unsigned int j){
-	float cout;
-	cout = (alphac(j)*nc(i)+alphag(j)*ng(i)+alphar(j)*nr(i)+alphah(j)*nh(i));
-	return cout;
+	return (alphac(j)*nc(i)+alphag(j)*ng(i)+alphar(j)*nr(i)+alphah(j)*nh(i));
 }
 
-bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned indice){
-	if( tachei == tachej && machinei == machinej) return true;
+///Vérifier si le réseau permet la communication entre 2 tâches ou la migration d'une tâche
+bool CalculFesabiliteResau(
+	unsigned tachei,unsigned tachej, 
+	unsigned machinei,unsigned machinej,
+	unsigned indice) ///Indice de l'intervalle
+{
+	if( tachei == tachej && machinei == machinej) return true;	
 	if(a(tachei, tachej) != 1)return true;
+	
 	int iEdge,iTime;
+	int intervalInf = Traitement.ListOfIntervalles[indice].BorneInf;
+	int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
+
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	if(machinei > machinej) Swap(machinei, machinej);
 	///Get the edge set
 	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
-	///Ces 2 machines ne sont pas connectées.
-	if(it==Traitement.CoupleEdgeMap.end())
-		return false;
+	assert(it!=Traitement.CoupleEdgeMap.end());
 	std::set<int> edgeSet = it->second;
 	std::set<int>::iterator itEdge;
-
 	if( tachei == tachej) ///Case of migration
-	{
-		///For each edge passed by the migration flux, the band width must be enough
-		int interInf = Traitement.ListOfIntervalles[indice].BorneInf;
-		int debutMigration = interInf - mt(tachei);
+	{	///For each edge passed by the migration flux, the band width must be enough
+		int lastDuree, lastIndiceInterval, lastIndiceServeur;
+		LastExecution(indice, tachei, lastIndiceInterval, lastIndiceServeur, lastDuree);
+		int lastInterSup = Traitement.ListOfIntervalles[lastIndiceInterval].BorneSup;
+		int debutMigration = lastInterSup - mt(tachei) + 1;
 		for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
 		{
-			for(int i = interInf-1; i>= debutMigration; i--)
+			for(int i = lastInterSup; i>= debutMigration; i--)
 			{
 				if( Traitement.EdgeBdeDispo[i][*itEdge]-b(tachei, tachei) < 0)
 					return false;
@@ -205,19 +198,22 @@ bool CalculFesabiliteResau(unsigned tachei,unsigned tachej, unsigned machinei,un
 			}
 		}
 	}else  ///Case of affinity
-	{
-		///For each edge passed by i,j, the band width must be enough
+	{	///For each edge passed by i,j, the band width must be enough
 		for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
 		{
-			if( Traitement.EdgeBdeDispo[Traitement.ListOfIntervalles[indice].BorneInf][*itEdge]-b(tachei, tachej) < 0)
+			if( Traitement.EdgeBdeDispo[intervalInf][*itEdge]-b(tachei, tachej) < 0)
 				return false;
 			else
-				Traitement.EdgeBdeDispo[Traitement.ListOfIntervalles[indice].BorneInf][*itEdge] -= b(tachei, tachej);
+			{	///! Il faut mettre à jour la valeur pour tout l'intervalle
+				for(int i=intervalInf; i<= intervalSup; i++)
+					Traitement.EdgeBdeDispo[i][*itEdge] -= b(tachei, tachej);
+			}
 		}
 	}
 	return true;
 }
 
+///DEPRECATED
 void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned int indice){
 	//if(a(tachei, tachej) != 1)return;
 	//int iEdge,iTime;
@@ -235,12 +231,10 @@ void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machi
 	//	Traitement.EdgeBdeDispo[*itEdge] -= b(tachei, tachej);
 }
 
-/************************************************************************************/
-// Function ConstructionListesTache
-// Permet de construire les listes des taches
-/************************************************************************************/
+///
+/// Permet de construire les listes des taches
+///
 void ConstructionListesTache(unsigned int indice){
-	
 	Traitement.NbHDDRAMGPU = 0; //nb de tâches avec des besoins en GPU/CPU et besoins HDD > besoins RAM
 	Traitement.NbRAMHDDGPU = 0; //nb de tâches avec des besoins en GPU/CPU et besoins RAM > besoins HDD
 	Traitement.NbHDDRAMCPU = 0;	//nb de tâches sans GPU et besoins HDD > besoins RAM
@@ -249,7 +243,7 @@ void ConstructionListesTache(unsigned int indice){
 	Traitement.NbRAMHDDGPUPr = 0; 
 	Traitement.NbHDDRAMCPUPr = 0;	
 	Traitement.NbRAMHDDCPUPr = 0;
-	Traitement.NbPr = 0; //nb de tâches Préemptables
+	Traitement.NbPr = 0; 		//nb de tâches Préemptables
 
 		int temps=Traitement.ListOfIntervalles[indice].BorneInf;
 		for (int i=0; i<N();i++){
@@ -309,10 +303,6 @@ void Ordonnancement(unsigned int indice){
 	int HDD = 0;
 	int iboucleS = 0;
 	int indiceTab = 0;
-
-	Traitement.ListOfNbServeurOn[indice].NbServeurOn = 0;
-	Traitement.NbNoPrAffected = 0;
-	Traitement.NbPrAffected = 0;
 
 	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, 
 	///on essaie de la remplir par des tâches.

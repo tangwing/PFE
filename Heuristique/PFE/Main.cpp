@@ -7,12 +7,14 @@
 #include <math.h>
 #include <string.h>
 #include <algorithm>
+///#include "easylogging++.h"
 
 //#include "Test.h"
-using namespace std;
 
 int main()
 {
+	using namespace std;
+
 	//Test();
 
 	double dOptValue,dOptTime;
@@ -30,6 +32,11 @@ int main()
 	CreerListeMachineTriee();///Trier les serveurs
 	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
+		
+		Traitement.ListOfNbServeurOn[i].NbServeurOn = 0;
+		Traitement.NbNoPrAffected = 0;
+		Traitement.NbPrAffected = 0;
+
 		///! On construit les listes de tâche pour chaque intervalle. Pour une tâche donnée, sa valeur de Uit varie selon l'intervalle
 		ConstructionListesTache(i);
 		Ordonnancement(i);
