@@ -33,12 +33,14 @@ void Init()
 	Traitement.NbServeurOn = 0;
 	
 	///La ListofServeurbis contient les caracs résiduelles
-	for(int indiceS = 0; indiceS<M(); indiceS++){
-			Traitement.ListOfServeurbis[indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
-			Traitement.ListOfServeurbis[indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
-			Traitement.ListOfServeurbis[indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
-			Traitement.ListOfServeurbis[indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
-	}
+    for(int indiceS = 0; indiceS<M(); indiceS++){
+            for(int temps = 0;temps<= T();temps++){
+                    Traitement.ListOfServeurbis[temps][indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
+                    Traitement.ListOfServeurbis[temps][indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
+                    Traitement.ListOfServeurbis[temps][indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
+                    Traitement.ListOfServeurbis[temps][indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
+            }
+    }
 
 	///
 	///--------- Les structures de réseau--------------
@@ -135,8 +137,8 @@ int TotalCost(){
 			if(Traitement.ListOfOrdo[t][n].affecter==1){
 				printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
 				CoutAffect += CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
-				/*if(Traitement.ListOfOrdo[t][n].isMigrated)
-					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));*/
+				if(Traitement.ListOfOrdo[t][n].isMigrated)
+					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
 			}
 			else if(u(n,t)==1&& R(n)==1)
 			{
@@ -288,14 +290,6 @@ void Ordonnancement(unsigned int indice){
 	Traitement.NbNoPrAffected = 0;
 	Traitement.NbPrAffected = 0;
 
-	///La ListofServeurbis contient les caracs résiduelles pour l'intervalle courant
-    for(int indiceS = 0; indiceS<M(); indiceS++){
-        Traitement.ListOfServeurbis[indiceS].CPU = Data.ListOfMachines[indiceS].QtyCPU;
-        Traitement.ListOfServeurbis[indiceS].GPU = Data.ListOfMachines[indiceS].QtyGPU;
-        Traitement.ListOfServeurbis[indiceS].RAM = Data.ListOfMachines[indiceS].QtyRAM;
-        Traitement.ListOfServeurbis[indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
-    }
-
 	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, 
 	///on essaie de la remplir par des tâches.
 	///Tâches non pré d'abord
@@ -362,15 +356,16 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 	int IB = 0;
 	int WG = 0;
 	int indiceVM;
+	int lastIndiceInterval, lastIndiceServeur, duree;
 	int MachineRecevoir = 0;
-	int duree; ///La durée d'exécution de la tâche, c'est pour simplifier la notion.
 	for(int iboucle = 0; iboucle<nbTache;iboucle++){ ///Pour chaque tâche
 		listeTache[iboucle].prio = 0;
 		IB = 0;
 		WG = 0;
 		MachineRecevoir = 0;
 		indiceVM = listeTache[iboucle].IndiceVM;
-		duree = GetDureeExeActuelle(indice, indiceVM); 
+		//duree = GetDureeExeActuelle(indice, indiceVM); 
+		LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
 
 		///Si la tâche n'est pas encore affectée
 		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter != 1){
@@ -378,21 +373,8 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][indiceVM].IndiceMachine == indiceServeur){IB = M();}
 
 			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
-			if( duree!=0 && duree < mt(indiceVM)){
-				///On cherche l'intervalle où elle a exécuté.
-				///Si sur l'intervalle trouvé la tâche été exécutée sur cette machine, alors un peu de priorité, sinon pas possible de la mettre sur cette machine.
-				int indiceInterval = indice-1;
-				while(indiceInterval>=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].affecter!=1)
-					indiceInterval--;
-					
-				if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].IndiceMachine == indiceServeur){///Elle était là à l'époque...
-					WG = indiceServeur;
-				}
-				else{
-					WG = -M(); ///ça veut dire no way
-				}
-			}
-			else{///dureeExe > mt ou duree==0
+			if(duree==0)
+			{
 				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
 					if(q(indiceVM, iboucle2)==1){
 						MachineRecevoir++;
@@ -400,8 +382,27 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 				}
 				///Moins de récepteur, plus de prio
 				WG = M() -  MachineRecevoir;
-				//printf("Valeur de WG : %d \n",WG);
 			}
+			///Si elle a été executée sur cette machine
+			else if( lastIndiceServeur == indiceServeur)
+			{
+				WG = indiceServeur;
+			}
+			///Migration nécessaire mais pas possible
+			else if(duree < mt(indiceVM))
+				WG = -2*M(); ///On ne va pas affecter les tâches qui a une prio négative
+			else ///Migration possible mais à vérifier nh et nr à l'affectation
+			{
+
+				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
+					if(q(indiceVM, iboucle2)==1){
+						MachineRecevoir++;
+					}
+				}
+				///Moins de récepteur, plus de prio
+				WG = M() -  MachineRecevoir;
+			}
+
 			listeTache[iboucle].prio = IB + WG;
 			//printf("priorite de la tache %d : %d \n",indiceVM,listeTache[iboucle].prio);	
 		}
@@ -443,21 +444,44 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 			int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
 			int indiceVM, indiceVM2;
 			int indiceServeur = Traitement.ListOfServer[indiceTabServeur].IndiceServeur;
+			int lastIndiceInterval, lastIndiceServeur, duree;
+			bool needMigration = false;
+			int bandMigration = 0;
 			
 			//affectation des tâches appartenant à la liste des tâches qui ont HDD > RAM
 			for(iboucle1=0;iboucle1<nbTache;iboucle1++){ ///Pour chaque tâche
 				indiceVM = listeTache[iboucle1].IndiceVM;///Pour simplifier la vie
 
+				LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
+				
+				if( duree>0 && lastIndiceServeur != indiceServeur) 
+				{///Traitement pour migration
+						needMigration = true;
+						bandMigration = b(indiceVM, indiceVM);
+						int debutMigration = intervalInf - mt(indiceVM);
+						assert(debutMigration>=0);
+						bool possible = true;
+						for( int temps = intervalInf; temps >= debutMigration; temps --)
+						{
+							if( Traitement.ListOfServeurbis[ temps][ indiceServeur].HDD < nh(indiceVM)|| Traitement.ListOfServeurbis[ temps][ indiceServeur].RAM < nr(indiceVM))
+							{
+								possible = false;
+								break;
+							}
+						}
+						///Migration pas possible pour  i,j
+						if(possible == false)continue;
+				}
 				///Si c'est pas encore affectée ///C'est pas très nécessaire ici car bien sûr c'est pas encore affectée.
 				if (q(indiceVM, indiceServeur)==1 && 
 					(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter!=1)&&
 					(listeTache[iboucle1].prio>=0)){
 					
 					///Si la machine a assez de ressource pour la recevoir
-					if(Traitement.ListOfServeurbis[indiceServeur].GPU>=ng(indiceVM)){
-						if(Traitement.ListOfServeurbis[indiceServeur].CPU>=nc(indiceVM)){
-							if(Traitement.ListOfServeurbis[indiceServeur].HDD>=nh(indiceVM)){
-								if(Traitement.ListOfServeurbis[indiceServeur].RAM>=nr(indiceVM)){
+					if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)){
+						if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM)){
+							if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM) ){
+								if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM) ){
 									
 									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
@@ -494,40 +518,48 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 											MaJReseau(indiceVM, indiceVM2, indiceServeur, Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine,indice);
 									}
 
-									///Voir s'il s'agit une migration. On en a besoin pour calculer le coût total.
-									int indiceInterval = indice-1;
-									while(indiceInterval>=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].affecter!=1)
-										indiceInterval--;
-									if(indiceInterval != -1 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indiceInterval].BorneSup][indiceVM].IndiceMachine != indiceServeur){
+									///Voir s'il s'agit une migration. 
+									if(needMigration) 
+									{
+										///Pour calculer le cout total
 										Traitement.ListOfOrdo[intervalInf][indiceVM].isMigrated = true;
+										///Mise à jour
+										int debutMigration = intervalInf - mt(indiceVM);
+										for( int temps = intervalInf; temps >= debutMigration; temps --)
+										{
+											Traitement.ListOfServeurbis[ temps][ indiceServeur].HDD -= nh(indiceVM);
+											Traitement.ListOfServeurbis[ temps][ indiceServeur].RAM -= nr(indiceVM);
+										}
 									}
 
 									///Chercher la dureeExe actuelle
-									int duree = GetDureeExeActuelle(indice, indiceVM);
+									///int duree = GetDureeExeActuelle(indice, indiceVM);
 									
+
+									if(Traitement.ListOfServer[indiceTabServeur].ON != true)
+									{
+										Traitement.ListOfServer[indiceTabServeur].ON = true;
+										///Ajouter cette machine à la liste des machines ON
+										//Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn].IndiceServeur = indiceServeur;
+										Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
+									}
+
 									///Mettre à jour les attributs pour chaque intant de temps de l'intervalle
 									for(i=intervalInf;i<=intervalSup;i++){
 										if(i == intervalInf)///Pour le premier instant, traitement spécial
 											Traitement.ListOfOrdo[i][indiceVM].dureeExe = duree + 1;
 										else Traitement.ListOfOrdo[i][indiceVM].dureeExe = Traitement.ListOfOrdo[i-1][indiceVM].dureeExe+1;
 										
-										if(Traitement.ListOfServer[indiceTabServeur].ON != true)
-										{
-											Traitement.ListOfServer[indiceTabServeur].ON = true;
-											///Ajouter cette machine à la liste des machines ON
-											//Traitement.ListOfServerOn[Traitement.ListOfNbServeurOn[indice].NbServeurOn].IndiceServeur = indiceServeur;
-											Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
-										}
-
 										Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = indiceServeur;
 										Traitement.ListOfOrdo[i][indiceVM].affecter=1;
-										compteurAffect ++;
+										
 										///Mettre à jour les ressources de la machine
-										Traitement.ListOfServeurbis[indiceServeur].GPU -=  ng(indiceVM);
-										Traitement.ListOfServeurbis[indiceServeur].CPU -=  nc(indiceVM);
-										Traitement.ListOfServeurbis[indiceServeur].HDD -=  nh(indiceVM);
-										Traitement.ListOfServeurbis[indiceServeur].RAM -=  nr(indiceVM);
+										Traitement.ListOfServeurbis[i][indiceServeur].GPU -=  ng(indiceVM);
+										Traitement.ListOfServeurbis[i][indiceServeur].CPU -=  nc(indiceVM);
+										Traitement.ListOfServeurbis[i][indiceServeur].HDD -=  nh(indiceVM);
+										Traitement.ListOfServeurbis[i][indiceServeur].RAM -=  nr(indiceVM);
 									}
+									compteurAffect ++;
 								}//else printf("Pas possible d'ajouter cette machine, pas assez de RAM \n");
 							}//else printf("Pas possible d'ajouter cette machine, pas assez de HDD \n");								
 						}//else printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
@@ -541,7 +573,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 ///Chercher la duree d'exécution que la tâche a déjà effectué avant l'intervalle [indice].
 ///
 ///-------------------------------------
-int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM)
+int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM, unsigned int & lastIndiceInterval, unsigned int & lastIndiceServeur, int & dureeActuelle)
 {
 	int i= Traitement.ListOfIntervalles[indice].BorneInf-1;
 	while(i>=0)
@@ -551,6 +583,26 @@ int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM)
 		i--;
 	}
 	return 0;
+}
+
+void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceInterval, int & lastIndiceServeur, int & dureeActuelle)
+{
+	lastIndiceServeur = -1;
+	dureeActuelle = 0;
+	lastIndiceInterval = indice - 1;
+	while(lastIndiceInterval >=0 )
+	{
+		for(int i = Traitement.ListOfIntervalles[lastIndiceInterval].BorneSup; i>= Traitement.ListOfIntervalles[lastIndiceInterval].BorneInf; i--)
+		{
+			if(Traitement.ListOfOrdo[i][indiceVM].dureeExe > 0)
+			{
+				lastIndiceServeur = Traitement.ListOfOrdo[i][indiceVM].IndiceMachine;
+				dureeActuelle = Traitement.ListOfOrdo[i][indiceVM].dureeExe;
+				return;
+			}
+		}
+		lastIndiceInterval --;
+	}
 }
 
 ///Allumer une machine et faire l'affectation au dessus.
@@ -581,10 +633,10 @@ int AllumageMachine(unsigned indice){
 				///Voir si la tâche et la machine sont compatibles
 				if(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter!=1
 					&&(q(indiceVM,indiceServeur)==1) 
-					&&(Traitement.ListOfServeurbis[indiceServeur].GPU>=ng(indiceVM)) ///Ici est pour être sûr que si la machine être allumée, elle peut au moins recevoir une tâche
-					&&(Traitement.ListOfServeurbis[indiceServeur].CPU>=nc(indiceVM))
-					&&(Traitement.ListOfServeurbis[indiceServeur].HDD>=nh(indiceVM))
-					&&(Traitement.ListOfServeurbis[indiceServeur].RAM>=nr(indiceVM))
+					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)) ///Ici est pour être sûr que si la machine être allumée, elle peut au moins recevoir une tâche
+					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM))
+					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM))
+					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM))
 				)
 				{
 					///le coût d'affection - le coût de suspension

@@ -80,7 +80,7 @@ typedef struct{///For a given interval, this structure stock the number of runni
 typedef struct{
 				///! Cette liste sera triée, donc id de serveur et indice de serveur dans la liste triée seront 2 choses!!!
 				Serveur ListOfServer[MaxMachines];
-				CaractServeur ListOfServeurbis[MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
+				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
 				///Reseau ListOfReseau[MaxTimeHorizon][MaxEdges][MaxMachines];				
 				unsigned int EdgeBdeDispo[MaxEdges]; ///should be inited by maxB
 				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
@@ -150,6 +150,7 @@ extern void Ordonnancement(unsigned int indice);
 extern void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceTabServeur, int & compteurAffect);
 ///extern void OrdoPr(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur, unsigned int compteurAffect);
 extern int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM);
+extern void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceInterval, int & lastIndiceServeur, int & dureeActuelle);
 ///extern void OrdoGPU(unsigned int i,unsigned int indiceServeur);
 ///extern void OrdoGPUPr(unsigned int indice,unsigned int indiceServeur);
 ///extern void OrdoCPU(unsigned int i,unsigned int indiceServeur);
