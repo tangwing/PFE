@@ -2,6 +2,9 @@
 ///Author: SHANG Lei - shang.france@gmail.com
 #ifndef TEST_H
 #define TEST_H
+///#include "JLib\ConsoleCore.h"
+#include <Windows.h>
+#include <WinNT.h>
 
 #include <assert.h>
 #include <stdlib.h>
@@ -9,11 +12,12 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <iomanip>
 
 #include "Traitement.h"
 
 #define VERBOSE true
-
+HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
 template <typename T>
 void PrintArray(T* arr, int size)
 {
@@ -43,8 +47,138 @@ void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
 }
 
 
-void AfficherListes(int indice)
+void AfficherCaracMachine()
 {
+	if(VERBOSE)
+	{
+		using namespace std;
+		int dataWidth = 4;
+		int unitWidth = dataWidth * 4;
+		int lineWidth = (unitWidth+2) * M();
+		int lineWWithId = lineWidth + 1;
+
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Caract Machine  (CPU/GUP/HDD/RAM) "<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		cout<<setfill(' ');
+		for(int j=0; j<M(); j++)
+		{
+			printf("| M%2d: %d/%d\t%d/%d\t%d/%d\t%d/%d |\n"
+				,j
+				,Data.ListOfMachines[j].QtyCPU
+				,Data.ListOfMachines[j].CostCPU
+				,Data.ListOfMachines[j].QtyGPU
+				,Data.ListOfMachines[j].CostGPU
+				,Data.ListOfMachines[j].QtyHDD
+				,Data.ListOfMachines[j].CostHDD
+				,Data.ListOfMachines[j].QtyRAM
+				,Data.ListOfMachines[j].CostRAM
+				);
+		}
+		cout<<"\n\n";
+	}
+}
+
+void AfficherListeServeurBis()
+{
+	if(VERBOSE)
+	{
+		using namespace std;
+		int idColWidth = 3;
+		int dataWidth = 4;
+		int unitWidth = dataWidth * 4;
+		int lineWidth = (unitWidth+2) * M();
+		int lineWWithId = lineWidth + idColWidth + 1;
+
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Liste Serveur Bis  (CPU/GUP/HDD/RAM) "<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		cout<<setfill(' ');
+		for(int i=0; i< T(); i++)
+		{
+			cout<<"|"<<setw(idColWidth)<<i;
+			for(int j=0; j<M(); j++)
+			{
+				cout<<"| "<<setw(dataWidth)
+					<<Traitement.ListOfServeurbis[i][j].CPU<<setw(dataWidth)
+					<<Traitement.ListOfServeurbis[i][j].GPU<<setw(dataWidth)
+					<<Traitement.ListOfServeurbis[i][j].HDD<<setw(dataWidth)
+					<<Traitement.ListOfServeurbis[i][j].RAM;
+			}
+			cout<<"|\n";
+		}
+		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+	}
+}
+
+
+void AfficherEdgeDispo()
+{
+	if(VERBOSE)
+	{
+		using namespace std;
+		int idColWidth = 3;
+		int unitWidth = 6;
+		int lineWidth = (unitWidth+2) * Data.Network.NbEdges;
+		int lineWWithId = lineWidth + idColWidth + 1;
+
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Reseau edge bande "<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		cout<<setfill(' ');
+		for(int i=0; i< T(); i++)
+		{
+			cout<<"|"<<setw(idColWidth)<<i;
+			for(int j=0; j< Data.Network.NbEdges; j++)
+			{
+				cout<<"| "<<setw(unitWidth)
+					<<Traitement.EdgeBdeDispo[i][j];
+			}
+			cout<<"|\n";
+		}
+		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+	}
+}
+
+void AfficherOrdo()
+{
+	if(VERBOSE)
+	{
+		using namespace std;
+		int idColWidth = 3;
+		int unitWidth = 3;
+		int lineWidth = (unitWidth+2) * N();
+		int lineWWithId = lineWidth + idColWidth + 1;
+
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Ordonnancement (interval*tache)"<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		cout<<setfill(' ');
+		for(int i=0; i< T(); i++)
+		{
+			cout<<"|"<<setw(idColWidth)<<i;
+			for(int j=0; j< N(); j++)
+			{
+				if(Traitement.ListOfOrdo[i][j].affecter == true)
+					cout<<"| "<<setw(unitWidth)
+						<<Traitement.ListOfOrdo[i][j].IndiceMachine;
+				else if(u(j, i)==1)
+					cout<<"| "<<setw(unitWidth)<<"rho";
+				else cout<<"| "<<setw(unitWidth)<<"*";
+			}
+			cout<<"|\n";
+		}
+		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+	}
+}
+void AfficherListesTache(int indice)
+{
+	//SetConsoleTextAttribute(consolehwnd, 0x0007);
+
 	if(VERBOSE)
 	{
 		//Affichage des listes
@@ -82,11 +216,6 @@ void AfficherListes(int indice)
 		for (int i=0; i<Traitement.NbRAMHDDCPUPr; i++){
 			printf("%d \t",Traitement.ListOfTasks2CPUPr[i].IndiceVM);
 		}
-
-
-
-
-
 		printf("\n");
 	}
 }
@@ -144,25 +273,10 @@ void LoadOrdo()
 		for(int j =0; j<t; j++)
 		{
 			if(data[i][j] != -1)
-				Traitement.ListOfOrdo[j][i].affecter = 1;
-			else Traitement.ListOfOrdo[j][i].affecter = 0;
+				Traitement.ListOfOrdo[j][i].affecter = true;
+			else Traitement.ListOfOrdo[j][i].affecter = false;
 			Traitement.ListOfOrdo[j][i].IndiceMachine = data2[i][j];
 		}
-	}
-}
-
-
-void AfficherListeOrdo()
-{
-	printf("\n 께께께께께께�  Liste ordo 께께께께께께\n");
-	for(int i=0;i<T();i++){
-		for(int j=0;j<N();j++){
-			if (u(j,i)==1 && (R(j)==0) && Traitement.ListOfOrdo[i][j].affecter!=1){
-				printf("*");
-			}
-			printf("%d \t",Traitement.ListOfOrdo[i][j].IndiceMachine);
-		}
-		printf("\n");
 	}
 }
 

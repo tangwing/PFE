@@ -19,7 +19,7 @@ void Init()
 	///Init ListOfOrdo
 	for(int i=0;i<T();i++){
 		for(int j=0;j<N();j++){
-			Traitement.ListOfOrdo[i][j].affecter = 0;
+			Traitement.ListOfOrdo[i][j].affecter = false;
 			Traitement.ListOfOrdo[i][j].isMigrated = false;
 			Traitement.ListOfOrdo[i][j].IndiceMachine=-1;
 			Traitement.ListOfOrdo[i][j].IndiceTache=j;
@@ -125,22 +125,25 @@ int TotalCost(){
 	int CoutUnitaire = 0;
 	int Penalty = 0;
 	//LoadOrdo();
-	AfficherListeOrdo();
+	AfficherOrdo();
+	AfficherCaracMachine();
+	AfficherListeServeurBis();
+	AfficherEdgeDispo();
 	for(int t=0;t<T();t++){
-		printf("\nT = %d:\n",t);
+		//printf("\n");
 		for(int n=0;n<N();n++){
-			if(Traitement.ListOfOrdo[t][n].affecter==1){
-				printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
+			if(Traitement.ListOfOrdo[t][n].affecter==true){
+				//printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
 				CoutAffect += CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
 				if(Traitement.ListOfOrdo[t][n].isMigrated)
 					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
 			}
 			else if(u(n,t)==1&& R(n)==1)
 			{
-				printf("#\t");
+				//printf("z\t");
 				Penalty += rho(n);
 			}
-			else printf("*\t");
+			//else printf("*\t");
 		}
 	}
 	for(int indice = 0;indice< Traitement.NbInterval;indice++){
@@ -148,8 +151,9 @@ int TotalCost(){
 		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
 			CoutUnitaire += (nbON * beta(t));
 	}
-	printf("Penalite total : %d \n",Penalty);
+	printf("\nPenalite total : %d \n",Penalty);
 	printf("\nCoutUnitaire total :%d \n",CoutUnitaire);
+	printf("\nCoutMigration :%d \n",CoutMigration);
 
 	TotalCost = CoutAffect + CoutUnitaire + Penalty + CoutMigration;
 	printf("Cout total : %d \n",TotalCost);
@@ -291,7 +295,7 @@ void ConstructionListesTache(unsigned int indice){
 				}/// fin tâches pré
 			}///fin if u=1
 		}
-		AfficherListes(indice);
+		AfficherListesTache(indice);
 }
 
 
@@ -385,7 +389,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 		LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
 
 		///Si la tâche n'est pas encore affectée
-		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter != 1){
+		if(Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice].BorneInf][indiceVM].affecter == false){
 			if(q(indiceVM, indiceServeur)== false)
 			{
 				listeTache[iboucle].prio = -M();
@@ -485,7 +489,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 				
 				///Si c'est pas encore affectée ///C'est pas très nécessaire ici car bien sûr c'est pas encore affectée.
 				if (q(indiceVM, indiceServeur)==1 && 
-					(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter!=1)&&
+					(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter == false)&&
 					(listeTache[iboucle1].prio>=0))
 				{
 					LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
@@ -527,15 +531,15 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 										if(a(indiceVM,indiceVM2)==1)
 										{
 											///Si l'autre VM est affectée pour cet intervalle et pas sur une autre machine
-											if((Traitement.ListOfOrdo[intervalInf][indiceVM2].affecter==1)&&(Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine != indiceServeur))
+											if((Traitement.ListOfOrdo[intervalInf][indiceVM2].affecter==true)&&(Traitement.ListOfOrdo[intervalInf][indiceVM2].IndiceMachine != indiceServeur))
 											{
 												///Si le réseau ne permet pas cette affectation
 												if(CalculFesabiliteResau(indiceVM,indiceVM2, ///tâche i et j
 													indiceServeur,Traitement.ListOfOrdo[intervalSup][indiceVM2].IndiceMachine,indice)==false)///Machine i et j et intervalle
 												{
 													///Cette tâche ne peut pas être affectée sur cette machine. Mais on doit voir autres machine.
-													Traitement.ListOfOrdo[intervalSup][indiceVM].affecter = 0;///Pour indiquer que c'est pas affectée.
-													Traitement.ListOfOrdo[intervalInf][indiceVM].affecter = 0;
+													Traitement.ListOfOrdo[intervalSup][indiceVM].affecter = false;///Pour indiquer que c'est pas affectée.
+													Traitement.ListOfOrdo[intervalInf][indiceVM].affecter = false;
 													///Rollback
 													memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
 													indiceVM2 = -1; ///On va casser ce passage de boucle, continuer sur la tâche suivante à affecter.
@@ -588,7 +592,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 										else Traitement.ListOfOrdo[i][indiceVM].dureeExe = Traitement.ListOfOrdo[i-1][indiceVM].dureeExe+1;
 										
 										Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = indiceServeur;
-										Traitement.ListOfOrdo[i][indiceVM].affecter=1;
+										Traitement.ListOfOrdo[i][indiceVM].affecter = true;
 										
 										///Mettre à jour les ressources de la machine
 										Traitement.ListOfServeurbis[i][indiceServeur].GPU -=  ng(indiceVM);
@@ -675,7 +679,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 			for(int iboucle2 = 0; iboucle2<Traitement.NbPr; iboucle2++){
 				indiceVM = Traitement.ListofTasksPr[iboucle2].IndiceVM;
 				///Voir si la tâche et la machine sont compatibles
-				if(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter!=1
+				if(Traitement.ListOfOrdo[intervalInf][indiceVM].affecter == false
 					&&(q(indiceVM,indiceServeur)==1) 
 					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)) ///Ici est pour être sûr que si la machine être allumée, elle peut au moins recevoir une tâche
 					&&(Traitement.ListOfServeurbis[intervalInf][indiceServeur].CPU>=nc(indiceVM))
