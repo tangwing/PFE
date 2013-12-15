@@ -158,7 +158,7 @@ extern void LastExecution(unsigned int indice, unsigned int indiceVM, int & last
 ///extern void OrdoCPUPr(unsigned int indice,unsigned int indiceServeur);
 ///extern void OrdoTachePreSurServeurOn(unsigned int indice,unsigned int indiceServeur);
 ///extern void OrdoTachePreSurServeurOn(unsigned int indice);
-extern int AllumageMachine(unsigned int indice);
+extern int AllumageMachine(unsigned int indice, int debutIndiceMachine);
 ///extern void OrdoGPUPreamtable(unsigned int indice, unsigned int indiceServeur);
 ///extern void AffectationGPUPre(unsigned int indice,unsigned int indiceServeur);
 ///extern void AffectationCPUPre(unsigned int indice,unsigned int indiceServeur);

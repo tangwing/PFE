@@ -351,9 +351,10 @@ void Ordonnancement(unsigned int indice){
 	///
 	///Pour les tâches restantes préemptables
 	int indiceAllume = -1;
+	int debutIndiceMachine = 0;
 	while(Traitement.NbPrAffected < Traitement.NbPr){
 		///Rallumer les machines si besoin
-		indiceAllume = AllumageMachine(indice);
+		indiceAllume = AllumageMachine(indice, debutIndiceMachine);
 		if( indiceAllume== -1) break; ///Aucunne machine peut être allumée
 		else ///Affectation sur la machine allumée
 		{
@@ -368,6 +369,8 @@ void Ordonnancement(unsigned int indice){
 			OrdoListeTache(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceAllume, Traitement.NbPrAffected);
 			OrdoListeTache(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume, Traitement.NbPrAffected);
 		}
+		if( Traitement.ListOfServer[indiceAllume].ON == false)
+			debutIndiceMachine = indiceAllume;
 	}///Fin if affected < nbpr
 
 	///Calcul nb total de serveur on.
@@ -396,8 +399,8 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
 			if( duree!=0 && Traitement.ListOfOrdo[Traitement.ListOfIntervalles[indice-1].BorneSup][indiceVM].IndiceMachine == indiceServeur){IB = M();}
 
-			///Pour WG. Si le temps d'exécution de la tâche ne permet pas de faire la migration, alors pas de choix...
-			if(duree==0)
+			///Pour WG. 
+			if(duree==0) ///Si la tâche n'a jamais été exécutée
 			{
 				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
 					if(q(indiceVM, iboucle2)==1){
@@ -410,7 +413,11 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 			///Si elle a été executée sur cette machine
 			else if( lastIndiceServeur == indiceServeur)
 			{
-				WG = indiceServeur;
+				int inf = Traitement.ListOfIntervalles[indice].BorneInf;
+				int lastInstant = Traitement.ListOfIntervalles[lastIndiceInterval].BorneSup;
+				if( inf > lastInstant + rt(indiceVM, indiceServeur))
+					WG = indiceServeur;
+				else WG = -2 * M(); ///Pas possible de réveiller
 			}
 			///Migration nécessaire mais pas possible
 			else if(duree < mt(indiceVM))
@@ -472,7 +479,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 			bool needMigration = false;
 			int bandMigration = 0;
 			
-			//affectation des tâches appartenant à la liste des tâches qui ont HDD > RAM
+			//affectation des tâches appartenant à la liste des tâches
 			for(iboucle1=0;iboucle1<nbTache;iboucle1++){ ///Pour chaque tâche
 				indiceVM = listeTache[iboucle1].IndiceVM;///Pour simplifier la vie
 
@@ -646,7 +653,7 @@ void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceI
 
 ///Allumer une machine et faire l'affectation au dessus.
 ///@param indice indice de l'intervalle
-int AllumageMachine(unsigned indice){
+int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	int indiceVM = -1;
 	int indiceServeur = -1;
 	int MachineRallume = -1;
@@ -660,13 +667,20 @@ int AllumageMachine(unsigned indice){
 			coutON += beta(temps);
 	coutON = coutON/(intervalSup-intervalInf+1);
 
+	bool begin = false;
 	///On va chercher une meilleure machine dans la liste triée des machines
 	///Principe: Une machine peut être allumée ssi le coût de l'allumer < le coût de ne pas l'allumer. (coutON+coutAffect < rho)
 	///Et parmi toutes les machines qui peuvent être allumées, on prend la meilleure.
 	for(int iboucle1 = 0; iboucle1<M();iboucle1++){
-		if(Traitement.ListOfServer[iboucle1].ON == 0){
+		if(Traitement.ListOfServer[iboucle1].ON == false){
 			gain = 0;
 			indiceServeur = Traitement.ListOfServer[iboucle1].IndiceServeur;
+			if(indiceServeur==debutIndiceServeur)
+			{
+				begin = true;
+				continue;
+			}
+			if(begin==false)continue;
 			for(int iboucle2 = 0; iboucle2<Traitement.NbPr; iboucle2++){
 				indiceVM = Traitement.ListofTasksPr[iboucle2].IndiceVM;
 				///Voir si la tâche et la machine sont compatibles
