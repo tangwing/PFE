@@ -59,7 +59,7 @@ void AfficherCaracMachine()
 
 		cout.setf(std::ios::left);
 		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Caract Machine  (CPU/GUP/HDD/RAM) "<<"|"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Caract Machine  (CPU/GPU/HDD/RAM) "<<"|"<<endl;
 		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
 		cout<<setfill(' ');
 		for(int j=0; j<M(); j++)
@@ -93,7 +93,7 @@ void AfficherListeServeurBis()
 
 		cout.setf(std::ios::left);
 		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Liste Serveur Bis  (CPU/GUP/HDD/RAM) "<<"|"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Liste Serveur Bis  (CPU/GPU/HDD/RAM) "<<"|"<<endl;
 		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
 		cout<<setfill(' ');
 		for(int i=0; i< T(); i++)
@@ -106,6 +106,36 @@ void AfficherListeServeurBis()
 					<<Traitement.ListOfServeurbis[i][j].GPU<<setw(dataWidth)
 					<<Traitement.ListOfServeurbis[i][j].HDD<<setw(dataWidth)
 					<<Traitement.ListOfServeurbis[i][j].RAM;
+			}
+			cout<<"|\n";
+		}
+		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+	}
+}
+
+
+void AfficherRt()
+{
+	if(VERBOSE)
+	{
+		using namespace std;
+		int idColWidth = 3;
+		int dataWidth = 3;
+		int unitWidth = dataWidth;
+		int lineWidth = (unitWidth+2) * M();
+		int lineWWithId = lineWidth + idColWidth + 1;
+
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|** Rt (tache*M) "<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		cout<<setfill(' ');
+		for(int i=0; i< N(); i++)
+		{
+			cout<<"|"<<setw(idColWidth)<<i;
+			for(int j=0; j<M(); j++)
+			{
+				cout<<"| "<<setw(dataWidth)<< rt(i,j);
 			}
 			cout<<"|\n";
 		}

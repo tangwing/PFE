@@ -125,6 +125,7 @@ int TotalCost(){
 	int CoutUnitaire = 0;
 	int Penalty = 0;
 	//LoadOrdo();
+	AfficherRt();
 	AfficherOrdo();
 	AfficherCaracMachine();
 	AfficherListeServeurBis();
@@ -423,7 +424,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 				else WG = -2 * M(); ///Pas possible de réveiller
 			}
 			///Migration nécessaire
-			else if(lastIndiceServeur != indiceServeur )
+			else if(lastIndiceServeur != indiceServeur && lastIndiceInterval == indice-1)
 			{ 
 				///Migration pas possible
 				if(duree < mt(indiceVM))
@@ -439,6 +440,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 					WG = M() -  MachineRecevoir;
 				}
 			}
+			else WG=0;
 			listeTache[iboucle].prio = IB + WG;
 			//printf("priorite de la tache %d : %d \n",indiceVM,listeTache[iboucle].prio);	
 		}
