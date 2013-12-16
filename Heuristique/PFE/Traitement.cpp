@@ -351,7 +351,7 @@ void Ordonnancement(unsigned int indice){
 
 	///
 	///Pour les tâches restantes préemptables
-	int indiceAllume = -1;
+	int indiceAllume = -1;	///!!C'est l'indice pour ListeServeurTrié
 	int debutIndiceMachine = 0;
 	while(Traitement.NbPrAffected < Traitement.NbPr){
 		///Rallumer les machines si besoin
@@ -359,11 +359,11 @@ void Ordonnancement(unsigned int indice){
 		if( indiceAllume== -1) break; ///Aucunne machine peut être allumée
 		else ///Affectation sur la machine allumée
 		{
-			///ConstructionListesTachePrMachineJ(indice, indiceAllume); c'est déjà fait.
-			CalculPrioEtTrier(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceAllume);
-			CalculPrioEtTrier(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceAllume);
-			CalculPrioEtTrier(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceAllume);
-			CalculPrioEtTrier(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceAllume);
+			int indiceS = Traitement.ListOfServer[indiceAllume].IndiceServeur;
+			CalculPrioEtTrier(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceS);
+			CalculPrioEtTrier(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceS);
+			CalculPrioEtTrier(Traitement.ListOfTasks1CPUPr, Traitement.NbHDDRAMCPUPr,indice, indiceS);
+			CalculPrioEtTrier(Traitement.ListOfTasks2CPUPr, Traitement.NbRAMHDDCPUPr,indice, indiceS);
 				
 			OrdoListeTache(Traitement.ListOfTasks1GPUPr, Traitement.NbHDDRAMGPUPr,indice, indiceAllume, Traitement.NbPrAffected);
 			OrdoListeTache(Traitement.ListOfTasks2GPUPr, Traitement.NbRAMHDDGPUPr,indice, indiceAllume, Traitement.NbPrAffected);
@@ -670,20 +670,13 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 			coutON += beta(temps);
 	coutON = coutON/(intervalSup-intervalInf+1);
 
-	bool begin = false;
 	///On va chercher une meilleure machine dans la liste triée des machines
 	///Principe: Une machine peut être allumée ssi le coût de l'allumer < le coût de ne pas l'allumer. (coutON+coutAffect < rho)
 	///Et parmi toutes les machines qui peuvent être allumées, on prend la meilleure.
-	for(int iboucle1 = 0; iboucle1<M();iboucle1++){
+	for(int iboucle1 = debutIndiceServeur+1; iboucle1<M();iboucle1++){
 		if(Traitement.ListOfServer[iboucle1].ON == false){
 			gain = 0;
 			indiceServeur = Traitement.ListOfServer[iboucle1].IndiceServeur;
-			if(indiceServeur==debutIndiceServeur)
-			{
-				begin = true;
-				continue;
-			}
-			if(begin==false)continue;
 			for(int iboucle2 = 0; iboucle2<Traitement.NbPr; iboucle2++){
 				indiceVM = Traitement.ListofTasksPr[iboucle2].IndiceVM;
 				///Voir si la tâche et la machine sont compatibles
@@ -702,7 +695,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 			if( gain < gainMin)
 			{
 				gainMin = gain;
-				MachineRallume = indiceServeur;
+				MachineRallume = iboucle1;
 			}
 		}///Fin if current server off
 	}///Fin boucle de toutes les machines
