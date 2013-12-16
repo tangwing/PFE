@@ -579,7 +579,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 					 for (iLoop5=0;iLoop5<M();iLoop5++)
 						 for (iLoop6=iLoop+1;iLoop6<iLoop4-1;iLoop6++)
 							 Np+=(iLoop4-iLoop)*x[iLoop2][iLoop5][iLoop6];
-					 con.add(Np>=(iLoop-iLoop4));
+					 ///con.add(Np>=(iLoop-iLoop4));
 					}
  // Constraints defining the duration of the migration operations
  if (DEBUG_MOD) printf("[DEBUG] Declaration of constraints O\n");

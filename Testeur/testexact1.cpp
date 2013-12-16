@@ -7,7 +7,9 @@
 #define DEBUG false
 
 unsigned int iterations=20;
+double ScRes[2][20][5];
 
+void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter);
 //Variables used to compute statistics
 unsigned int uiIntSolv,uiMemLim,uiTimLim, Ndmin,Ndmax,InFeas,Solved;
 double Ndmoy, Timoy,Timin,Timax,dNbMachmin,dNbMachmoy,dNbMachmax;
@@ -18,6 +20,8 @@ void main(void)
  int i,j;
  int isFeas,isOpt,iOptValue,iNbNodes,iTot,iTot2;
  double dTime,dNbMach;
+
+ ///The result for one senario. D1=exact,heuristic; D2=iteration; D3={isFea,isOpt, value, time, nbMache}
 
  fichier=fopen("ScpIPStats.txt","wt");
  fprintf(fichier,"Results of the IP model on the Amazon-like instances\n");
@@ -72,19 +76,34 @@ void main(void)
    fscanf(fichier,"%ld\n",&iNbNodes);
    fscanf(fichier,"%lf\n",&dNbMach);
    fclose(fichier);
+
+   ///Fill the result matrix
+   ScRes[0][j][0] = isFeas;
+   ScRes[0][j][1] = isOpt;
+   ScRes[0][j][2] = iOptValue;
+   ScRes[0][j][3] = dTime;
+   ScRes[0][j][4] = dNbMach;
+
    fichier=fopen("ScpTraces.txt","at");
    fprintf(fichier,"Sc%d %d %d %d %lf %lf %ld\n",i+1,isFeas,isOpt,iNbNodes,dTime,dNbMach, iOptValue);
    fclose(fichier);
 
    //************************************
    //Use the same data to test heuristic program
-	   spawnl(P_WAIT,"SCPHeuristic.exe","SCPHeuristic.exe",NULL);
+	   spawnl(P_WAIT,"PFE.exe","PFE",NULL);
 	   fichier=fopen("Heuristic.txt","rt");
 	   fscanf(fichier,"%ld\n",&isFeas);
 	   fscanf(fichier,"%ld\n",&iOptValue);
 	   fscanf(fichier,"%lf\n",&dTime);
 	   fscanf(fichier,"%lf\n",&dNbMach);
 	   fclose(fichier);
+
+	   ScRes[1][j][0] = isFeas;
+	   ScRes[1][j][1] = (iOptValue==ScRes[0][j][2])? 1: 0;
+	   ScRes[1][j][2] = iOptValue;
+	   ScRes[1][j][3] = dTime;
+	   ScRes[1][j][4] = dNbMach;
+
 	   fichier=fopen("ScpTraces.txt","at");
 	   fprintf(fichier,"Sc%d %d * * %lf %lf %ld\n",i+1,isFeas,dTime,dNbMach, iOptValue);
 	   fclose(fichier);
@@ -119,9 +138,70 @@ void main(void)
 	iTot++;
    }
   }
- 
+ MakeComparationMatrix( i,
+	 ScNM[i][0] + ScNM[i][1] + ScNM[i][2] + ScNM[i][3] + ScNM[i][4], ///N
+	 ScNM[i][5] + ScNM[i][6] + ScNM[i][7] + ScNM[i][8],				 ///M
+	 iterations);
  fichier=fopen("ScpIPStats.txt","at");
  fprintf(fichier,"Sc%d %d %d %d %d %d %lf %d %3.2lf %3.2lf %3.2lf %2.2lf %2.2lf %2.2lf\n",i+1,InFeas,Solved,uiMemLim,uiTimLim,Ndmin,(double)Ndmoy/(double)iTot,Ndmax,Timin,Timoy/(double)(iTot),Timax,dNbMachmin,dNbMachmoy/(double)(iTot2),dNbMachmax);
  fclose(fichier);
  }
+}
+
+
+void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
+{
+	static bool printHeader = true;
+	
+	int NbResE = 0, 
+		NbResH = 0,
+		NbOptE = 0,
+		NbOptH = 0;
+	double TMinE,TMinH, TMaxE, TMaxH,
+		   DevMin, DevMax;
+	double TTotalE = 0,
+		   TTotalH = 0,
+		   DevTotal = 0;
+
+	for(int i=0; i<NbIter; i++)
+	{
+		if(ScRes[0][i][0] == 1) {NbResE++; if(ScRes[0][i][1] == 1) NbOptE++;}
+		if(ScRes[1][i][0] == 1) {NbResH++; if(ScRes[1][i][1] == 1) NbOptH++;}
+
+		if(i==0)
+		{
+			TMinE = TMaxE = TTotalE = ScRes[0][i][3];
+			TMinH = TMaxH = TTotalH = ScRes[1][i][3];
+			DevMin = DevMax = DevTotal = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
+		}else
+		{
+			TTotalE += ScRes[0][i][3];
+			if(ScRes[0][i][3]<TMinE) TMinE = ScRes[0][i][3];
+			else if(ScRes[0][i][3]>TMaxE) TMaxE = ScRes[0][i][3];
+
+			///Heuristic
+			TTotalH += ScRes[1][i][3];
+			if(ScRes[1][i][3]<TMinH) TMinH = ScRes[1][i][3];
+			else  if(ScRes[1][i][3]>TMaxH) TMaxH = ScRes[1][i][3];
+			if(ScRes[0][i][0] && ScRes[1][i][0])
+			{
+				double dev = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
+				DevTotal += dev;
+				if(dev < DevMin) DevMin = dev;
+				else if(dev>DevMax) DevMax = dev;
+			}
+		}
+	}
+
+
+	FILE* fichier=fopen("ComparationMatrix.txt","at");
+	if(printHeader)
+	{
+		printHeader = false;
+		fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
+		fprintf(fichier,"Scenario(N/M)\t Resolved\t NbOpt\t TMin\t TAvg\t TMax\t DevMin\t DevAvg\t DevMax\n");
+	}
+	fprintf(fichier,"Sc%d(%d/%d)\t %d/%d\t %d/%d\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf\t %3.2lf\t %3.2lf\n",
+		IdSce+1, NbTache, NbMach, NbResE, NbResH, NbOptE, NbOptH, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH, DevMin, DevTotal/NbIter, DevMax);
+	fclose(fichier);
 }
