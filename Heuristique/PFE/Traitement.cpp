@@ -101,8 +101,8 @@ void CalculInterval(){
 /************************************************************************************/
 void CreerListeMachineTriee(){
 	int i;
-	float CoutTotal;
-	float Cout;
+	double CoutTotal;
+	double Cout;
 	for(i=0; i<M(); i++){
 		Traitement.ListOfServer[i].IndiceServeur = i;
 		CoutTotal = (mc(i)*alphac(i) + mg(i)*alphag(i) + mr(i)*alphar(i) + mh(i)*alphah(i));
@@ -164,7 +164,7 @@ int TotalCost(){
 }
 
 /// Calcule le cout d'affectation de la tache i sur la machine j
-float CalculCoutAffectation(unsigned int i,unsigned int j){
+double CalculCoutAffectation(unsigned int i,unsigned int j){
 	return (alphac(j)*nc(i)+alphag(j)*ng(i)+alphar(j)*nr(i)+alphah(j)*nh(i));
 }
 

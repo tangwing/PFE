@@ -223,7 +223,7 @@ void AfficherListesTache(int indice)
 void LoadOrdo()
 {
 	int n = 8, t = 12;
-	short int data[8][12] = {
+	int data[8][12] = {
 		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
 		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
 		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
@@ -234,7 +234,7 @@ void LoadOrdo()
 		{-1,-1,-1,-1,-1,1,1, 1, -1, -1, -1, -1}
 	};
 	///solution cplex with only ressource consideration. Checked.136342
-	short int data1[8][12] = { 
+	int data1[8][12] = { 
 		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
 		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
 		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
@@ -246,7 +246,7 @@ void LoadOrdo()
 	};
 
 	///solution cplex with ressource and rho consideration. Checked. 485327
-	short int data2[8][12] = { 
+	int data2[8][12] = { 
 		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
 		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
 		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
@@ -258,7 +258,7 @@ void LoadOrdo()
 	};
 
 	///solution cplex with ressource and rho and beta consideration. Checked. 485635
-	short int data3[8][12] = {  // == data2
+	int data3[8][12] = {  // == data2
 		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
 		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
 		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},

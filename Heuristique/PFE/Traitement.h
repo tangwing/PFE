@@ -12,7 +12,7 @@
 
 typedef struct{ //Structure de données pour contenir le numéro des machines avec leur cout normalis?respectif
 	int IndiceServeur;			
-	float CoutNorm;
+	double CoutNorm;
 	bool ON;
 
 }Serveur;
@@ -26,7 +26,7 @@ typedef struct{
 
 typedef struct{ ///Structure de données pour contenir le numéro des machines ON avec leur cout normalis?respectif
 	int IndiceServeur;			
-	float CoutNorm;
+	double CoutNorm;
 
 }ServeurON;
 
@@ -37,7 +37,7 @@ typedef struct{ ///Structure de données pour contenir le numéro des machines ON 
 ////}Reseau;
 
 typedef struct{ 
-	short int IndiceVM; 
+	int IndiceVM; 
 	signed int prio;
 }Tache;
 
@@ -47,24 +47,24 @@ typedef Tache RAMHDD;
 typedef Tache Pream;
 
 typedef struct{ //Structure de données permettant de stocker les indices des intervalles ainsi que les bornes supérieur et inférieur pour chaque intervalle
-	short int IndiceInter;
-	short int BorneInf;			
-	short int BorneSup;
+	int IndiceInter;
+	int BorneInf;			
+	int BorneSup;
 }Interval;
 
 typedef struct{ //Structure permettant de stocker la valeur de cout d'utilisation d'une VM i sur une machine j allumée
-	short int indiceVM;
-	float cout;
+	int indiceVM;
+	double cout;
 }ctij;
 
 typedef struct{ //Structure permettant de stocker la valeur de cout d'utilisation d'une VM i sur une machine j non allumée
-	short int indicePM;
-	float gain;///It's rather the cost of executing this job on a newly started machine 
+	int indicePM;
+	double gain;///It's rather the cost of executing this job on a newly started machine 
 }gaj;
 
 typedef struct{ 
-	short int IndiceTache;
-	short int IndiceMachine;
+	int IndiceTache;
+	int IndiceMachine;
 	bool affecter;
 	bool isMigrated;
 	///On défini que la duree d'un instant T suppose que cet instant est fini.
@@ -134,7 +134,7 @@ extern Trait Traitement;
 extern void Init();///Initialisation
 extern void CalculInterval(void);
 extern void CreerListeMachineTriee(void);
-extern float CalculCoutAffectation(unsigned int i,unsigned int j);
+extern double CalculCoutAffectation(unsigned int i,unsigned int j);
 extern void MaJReseau(unsigned int indiceServeur1, unsigned int indiceServeur2, unsigned int indice);
 ///extern void MaJServeur(unsigned int IndiceServeur, unsigned int indice);
 extern bool CalculFesabiliteResau(unsigned tachei,unsigned machinej,unsigned int tacheaffectee);
