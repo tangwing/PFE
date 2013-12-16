@@ -91,6 +91,7 @@ void PreByCalCost(int begin, int end, int *head, int nbBool,int UB, IloEnv *penv
 void SolutionToFile(IloCplex & cplex)
 {
  FILE *SolFic;
+ int tmp;
  int iMach,iTask,iTime,iEdge;
  int iCPU[MaxTimeHorizon],iGPU[MaxTimeHorizon],iRAM[MaxTimeHorizon],iHDD[MaxTimeHorizon];
 
@@ -151,7 +152,7 @@ void SolutionToFile(IloCplex & cplex)
 	 for (iTime=0;iTime<T();iTime++)
 	 {
 	  for (iMach=0;iMach<M();iMach++)
-		  if (cplex.getValue(x[iTask][iMach][iTime])>0.999)
+		  if ((tmp=cplex.getValue(x[iTask][iMach][iTime]))>0.999)
 		  { // Task iTask is processed by iMach at time [iTime,iTime+1]
 		   fprintf(SolFic,"%d (%d) ",iTime+1,iMach+1);
 		  }
@@ -184,7 +185,7 @@ void SolutionToFile(IloCplex & cplex)
 		 for (iTask=0;iTask<N();iTask++)
 			 for (iTask2=iTask+1;iTask2<N();iTask2++)
 				 if (a(iTask,iTask2)==1 
-					 && cplex.getValue(y[iTask][iTask2][iMach1][iMach2][iTime])>0.999 )
+					 && (tmp=cplex.getValue(y[iTask][iTask2][iMach1][iMach2][iTime]))>0.999 )
 						iBdw+=b(iTask,iTask2);
 		 for (iTask=0;iTask<N();iTask++)
 				 if (cplex.getValue(y[iTask][iTask][iMach1][iMach2][iTime])>0.999 || cplex.getValue(y[iTask][iTask][iMach2][iMach1][iTime])>0.999)

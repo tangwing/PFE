@@ -50,7 +50,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -66,6 +66,7 @@
 				AdditionalDependencies="wsock32.lib &quot;C:\ILOG\CPLEX122\cplex\lib\x86_.net2005_8.0\stat_mta\cplex122.lib&quot; &quot;C:\ILOG\CPLEX122\cplex\lib\x86_.net2005_8.0\stat_mta\ilocplex.lib&quot; &quot;C:\ILOG\CPLEX122\concert\lib\x86_.net2005_8.0\stat_mta\concert.lib&quot; $(NOINHERIT)"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
+				AssemblyDebug="1"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

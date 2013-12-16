@@ -134,7 +134,8 @@ int TotalCost(){
 		for(int n=0;n<N();n++){
 			if(Traitement.ListOfOrdo[t][n].affecter==true){
 				//printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
-				CoutAffect += CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
+				int iMache = Traitement.ListOfOrdo[t][n].IndiceMachine;
+				CoutAffect = CoutAffect+ (alphac(iMache)*nc(n)+alphag(iMache)*ng(n)+alphar(iMache)*nr(n)+alphah(iMache)*nh(n));//CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
 				if(Traitement.ListOfOrdo[t][n].isMigrated)
 					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
 			}
@@ -146,8 +147,10 @@ int TotalCost(){
 			//else printf("*\t");
 		}
 	}
+	printf("\nNbServeurOn:\t");
 	for(int indice = 0;indice< Traitement.NbInterval;indice++){
 		int nbON = Traitement.ListOfNbServeurOn[indice].NbServeurOn;
+		printf("%d\t", nbON);
 		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
 			CoutUnitaire += (nbON * beta(t));
 	}
