@@ -142,6 +142,27 @@ void AfficherRt()
 		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
 	}
 }
+void AfficherAffinite()
+{
+	if(VERBOSE)
+	{
+		using namespace std;
+		int lineWWithId =24;
+		cout.setf(std::ios::left);
+		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
+		cout<<setfill('*')<<setw(lineWWithId)<<"|***Affinity "<<"|"<<endl;
+		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		for(int i=0; i< N(); i++)
+		{
+			for(int j=0; j<N(); j++)
+			{
+				cout<<"| "<<a(i,j);
+			}
+			cout<<"|\n";
+		}
+		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+	}
+}
 
 
 void AfficherEdgeDispo()
@@ -209,7 +230,7 @@ void AfficherListesTache(int indice)
 {
 	//SetConsoleTextAttribute(consolehwnd, 0x0007);
 
-	if(VERBOSE)
+	if(false)
 	{
 		//Affichage des listes
 		printf("\n *Indice: %d. Listes des taches:\n", indice);
@@ -298,14 +319,26 @@ void LoadOrdo()
 		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
 		{-1,-1,-1,-1,-1,1,1, 1, -1, -1, -1, -1}
 	};
+
+	///solution cplex donnees1_2
+	int data1_2[8][12] = {  // == data2
+		{-1,0,0,0,-1,0,0,0,0,0,-1,0},
+		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
+		{-1,-1,0,-1,0,-1,0, -1, 0,-1, 0, -1},
+		{1,1,1,1,1,1,1,1,1,1,1,1},
+		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
+		{-1,-1,-1,-1,1,-1,-1, -1, -1, -1, -1, -1},
+		{1,1,1,1,-1,-1,1,1,1,1,1,1},
+		{1,1,1,1,1,1,1,1,1,1,1,1}
+	};
 	for(int i =0; i<n; i++)
 	{
 		for(int j =0; j<t; j++)
 		{
-			if(data[i][j] != -1)
+			if(data1_2[i][j] != -1)
 				Traitement.ListOfOrdo[j][i].affecter = true;
 			else Traitement.ListOfOrdo[j][i].affecter = false;
-			Traitement.ListOfOrdo[j][i].IndiceMachine = data2[i][j];
+			Traitement.ListOfOrdo[j][i].IndiceMachine = data1_2[i][j];
 		}
 	}
 }

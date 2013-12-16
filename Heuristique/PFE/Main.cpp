@@ -27,7 +27,7 @@ int main()
 	time(&temp1);
 
 	Init();
-
+	
 	CalculInterval();
 	CreerListeMachineTriee();///Trier les serveurs
 	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
@@ -61,9 +61,9 @@ int main()
 				isFeasible = 0;
 				printf("*");
 			}
-			printf("%d \t",Traitement.ListOfOrdo[i][j].IndiceMachine);
+			//printf("%d \t",Traitement.ListOfOrdo[i][j].IndiceMachine);
 		}
-		printf("\n");
+		//printf("\n");
 	}
 	dOptValue = TotalCost();
 	time(&temp2);

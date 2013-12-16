@@ -6,13 +6,13 @@ Variable x_2_j_t (one line per machine, one column per time)
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 Variable x_3_j_t (one line per machine, one column per time)
-0.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 
+0.0 1.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 Variable x_4_j_t (one line per machine, one column per time)
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
 Variable x_5_j_t (one line per machine, one column per time)
-1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 
+1.0 1.0 1.0 1.0 1.0 1.0 1.0 0.0 1.0 0.0 1.0 1.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 Variable x_6_j_t (one line per machine, one column per time)
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
@@ -60,13 +60,13 @@ Variable y_3_3_j_j'_t (one line per couple of machines, one column per time)
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 Variable y_3_4_j_j'_t (one line per couple of machines, one column per time)
 (1/2) : 
-0.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 1.0 
+0.0 1.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 
 Variable y_3_5_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
 Variable y_3_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
 Variable y_3_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
 Variable y_3_8_j_j'_t (one line per couple of machines, one column per time)
 (1/2) : 
-0.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 1.0 
+0.0 1.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 
 Variable y_4_4_j_j'_t (one line per couple of machines, one column per time)
 (1/2) : 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
