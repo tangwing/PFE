@@ -46,7 +46,16 @@ void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
 	}
 }
 
-
+void AfficherIntervalle()
+{
+	if(VERBOSE)
+	{
+		printf("Nombre d'interval : %d\n",Traitement.NbInterval);
+		for(int i=0;i<Traitement.NbInterval;i++){
+			printf("intervalle %d : [%d,%d] \n",i,Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
+		}
+	}
+}
 void AfficherCaracMachine()
 {
 	if(VERBOSE)

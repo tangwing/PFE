@@ -40,7 +40,7 @@ void Init()
                     Traitement.ListOfServeurbis[temps][indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
             }
     }
-	AfficherListeServeurBis();
+	///AfficherListeServeurBis();
 	///Les structures de réseau
 	unsigned int mi, mj;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
@@ -88,11 +88,8 @@ void CalculInterval(){
 	Traitement.NbInterval++;
 	Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = T()-1;
 	
-	///Affichage des intervalles calculés
-	printf("Nombre d'interval : %d\n",Traitement.NbInterval);
-	for(int i=0;i<Traitement.NbInterval;i++){
-		printf("intervalle %d : [%d,%d] \n",i,Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
-	}
+	///AfficherIntervalle();
+	
 }
 
 /************************************************************************************/
@@ -656,6 +653,7 @@ void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceI
 
 ///Allumer une machine et faire l'affectation au dessus.
 ///@param indice indice de l'intervalle
+///!Attention L'indice retourné est l'indice de la liste triée.
 int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	int indiceVM = -1;
 	int indiceServeur = -1;

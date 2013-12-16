@@ -23,7 +23,7 @@ int main()
 	time_t temp1,temp2,tempPre1,tempPre2;
 	FILE *fic;
     GetData();
-	DisplayData();
+	///DisplayData();
 	time(&temp1);
 
 	Init();
@@ -73,5 +73,5 @@ int main()
 	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	fclose(fic);
 	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
-	getchar();
+	///getchar();
 }
