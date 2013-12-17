@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <process.h>
+#include <limits>
 #include "RandGeneration.h"
 
 #define DEBUG false
@@ -163,33 +164,29 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		   TTotalH = 0,
 		   DevTotal = 0;
 
+	TMinE = TMinH = DevMin = std::numeric_limits<double>::max();
+	TMaxE = TMaxH = DevMax = std::numeric_limits<double>::min();
+	DevTotal = 0;
 	for(int i=0; i<NbIter; i++)
 	{
 		if(ScRes[0][i][0] == 1) {NbResE++; if(ScRes[0][i][1] == 1) NbOptE++;}
 		if(ScRes[1][i][0] == 1) {NbResH++; if(ScRes[1][i][1] == 1) NbOptH++;}
 
-		if(i==0)
-		{
-			TMinE = TMaxE = TTotalE = ScRes[0][i][3];
-			TMinH = TMaxH = TTotalH = ScRes[1][i][3];
-			DevMin = DevMax = DevTotal = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
-		}else
-		{
-			TTotalE += ScRes[0][i][3];
-			if(ScRes[0][i][3]<TMinE) TMinE = ScRes[0][i][3];
-			else if(ScRes[0][i][3]>TMaxE) TMaxE = ScRes[0][i][3];
+		TTotalE += ScRes[0][i][3];
+		if(ScRes[0][i][3]<TMinE) TMinE = ScRes[0][i][3];
+		if(ScRes[0][i][3]>TMaxE) TMaxE = ScRes[0][i][3];
 
-			///Heuristic
-			TTotalH += ScRes[1][i][3];
-			if(ScRes[1][i][3]<TMinH) TMinH = ScRes[1][i][3];
-			else  if(ScRes[1][i][3]>TMaxH) TMaxH = ScRes[1][i][3];
-			if(ScRes[0][i][0] && ScRes[1][i][0])
-			{
-				double dev = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
-				DevTotal += dev;
-				if(dev < DevMin) DevMin = dev;
-				else if(dev>DevMax) DevMax = dev;
-			}
+		///Heuristic
+		TTotalH += ScRes[1][i][3];
+		if(ScRes[1][i][3]<TMinH) TMinH = ScRes[1][i][3];
+		if(ScRes[1][i][3]>TMaxH) TMaxH = ScRes[1][i][3];
+		///We calculate the deviation only if they have both found a solution
+		if(ScRes[0][i][0] && ScRes[1][i][0])
+		{
+			double dev = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
+			DevTotal += dev;
+			if(dev < DevMin) DevMin = dev;
+			if(dev>DevMax) DevMax = dev;
 		}
 	}
 
@@ -201,7 +198,7 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
 		fprintf(fichier,"Scenario(N/M)\t Resolved\t NbOpt\t TMin\t TAvg\t TMax\t DevMin\t DevAvg\t DevMax\n");
 	}
-	fprintf(fichier,"Sc%d(%d/%d)\t %d/%d\t %d/%d\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf\t %3.2lf\t %3.2lf\n",
+	fprintf(fichier,"Sc%d(%d/%d)\t %d/%d\t %d/%d\t\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf\t %3.2lf\t %3.2lf\n",
 		IdSce+1, NbTache, NbMach, NbResE, NbResH, NbOptE, NbOptH, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH, DevMin, DevTotal/NbIter, DevMax);
 	fclose(fichier);
 }
