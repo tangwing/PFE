@@ -295,7 +295,7 @@ void InitializeIPModel()
  // Variables dit
  if (DEBUG_MOD)  printf("Creation of variables d\n");
  for (iLoop=0;iLoop<N();iLoop++)
-	 d.add(IloIntVarArray(env,T(),0,1));
+	 d.add(IloIntVarArray(env,T(),0,IloInfinity));
  // Variable RE is created while its declaration
 
 
