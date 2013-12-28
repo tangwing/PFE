@@ -11,7 +11,7 @@
 
 Trait Traitement;
 
-
+///@brief Initialisation des structures de données
 void Init()
 {
 	Traitement.NbServeurOn = 0;
@@ -40,8 +40,8 @@ void Init()
                     Traitement.ListOfServeurbis[temps][indiceS].HDD = Data.ListOfMachines[indiceS].QtyHDD;
             }
     }
-	///AfficherListeServeurBis();
-	///Les structures de réseau
+
+	///Les structures de réseau. Ici on va adapter un peu les données: CoupleEdgeMap nous permettra d'obtenir facilement tous les arcs utilisés par une couple de machines
 	unsigned int mi, mj;
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	for (int iEdge=0; iEdge<NbEdges(); iEdge++)
@@ -67,8 +67,7 @@ void Init()
 }
 
 ///
-/// Function CalculInterval
-/// Calcule les intervalles tel que sur tous les instants d'un même intervalle les u(i,t) sont consants
+///@brief Calcule les intervalles tel que sur tous les instants d'un même intervalle les u(i,t) sont consants
 ///
 void CalculInterval(){
 	Traitement.NbInterval = 0;
@@ -91,10 +90,9 @@ void CalculInterval(){
 	AfficherIntervalle();
 }
 
-/************************************************************************************/
-// Calcule le cout normalis?des serveurs et classe la liste des serveurs par
-// ordre croissant de leur cout normalis?
-/************************************************************************************/
+///
+///@brief Trier la liste des machines en ordre croissante selon leurs couts normalisés
+///
 void CreerListeMachineTriee(){
 	int i;
 	double CoutTotal;
@@ -110,29 +108,27 @@ void CreerListeMachineTriee(){
 	}
 }
 
-/************************************************************************************/
-// Function CalculTotalCost
-// Calcule le cout total de la plannification sur l'ensemble des machine physique
-/************************************************************************************/
+///
+///@brief Calcule le cout total de l'ordonnancement trouvé
+///
 int TotalCost(){
 	int TotalCost = 0;
 	int CoutMigration = 0;
 	int CoutAffect = 0;
 	int CoutUnitaire = 0;
 	int Penalty = 0;
+
 	AfficherOrdo();
 	//LoadOrdo();
-	AfficherAffinite();
-	AfficherRt();
-	AfficherCaracMachine();
+	//AfficherAffinite();
+	//AfficherRt();
+	//AfficherCaracMachine();
 	AfficherListeServeurBis();
 	AfficherEdgeDispo();
-	//printf("\n²²²²²²²² CPLEX ²²²²²²²");
+
 	for(int t=0;t<T();t++){
-		//printf("\n");
 		for(int n=0;n<N();n++){
 			if(Traitement.ListOfOrdo[t][n].affecter==true){
-				//printf("%d\t", Traitement.ListOfOrdo[t][n].IndiceMachine);
 				int iMache = Traitement.ListOfOrdo[t][n].IndiceMachine;
 				CoutAffect = CoutAffect+ (alphac(iMache)*nc(n)+alphag(iMache)*ng(n)+alphar(iMache)*nr(n)+alphah(iMache)*nh(n));//CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
 				if(Traitement.ListOfOrdo[t][n].isMigrated)
@@ -160,12 +156,12 @@ int TotalCost(){
 	return TotalCost;
 }
 
-/// Calcule le cout d'affectation de la tache i sur la machine j
+///@brief Calcule le cout d'affectation de la tache i sur la machine j
 double CalculCoutAffectation(unsigned int i,unsigned int j){
 	return (alphac(j)*nc(i)+alphag(j)*ng(i)+alphar(j)*nr(i)+alphah(j)*nh(i));
 }
 
-///Vérifier si le réseau permet la communication entre 2 tâches ou la migration d'une tâche
+///@brief Vérifier si le réseau permet la communication entre 2 tâches ou la migration d'une tâche
 bool CalculFesabiliteResau(
 	unsigned tachei,unsigned tachej, 
 	unsigned machinei,unsigned machinej,
@@ -180,6 +176,7 @@ bool CalculFesabiliteResau(
 
 	std::map< std::pair<int,int>, std::set<int>>::iterator it;
 	if(machinei > machinej) Swap(machinei, machinej);
+
 	///Get the edge set
 	it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
 	assert(it!=Traitement.CoupleEdgeMap.end());
@@ -217,26 +214,8 @@ bool CalculFesabiliteResau(
 	return true;
 }
 
-///DEPRECATED
-void MaJReseau(unsigned tachei,unsigned tachej, unsigned machinei,unsigned machinej,unsigned int indice){
-	//if(a(tachei, tachej) != 1)return;
-	//int iEdge,iTime;
-	//std::map< std::pair<int,int>, std::set<int>>::iterator it;
-	//if(machinei > machinej) Swap(machinei, machinej);
-	/////Get the edge set
-	//it = Traitement.CoupleEdgeMap.find( std::pair<int, int>(machinei, machinej));
-	//assert(it != Traitement.CoupleEdgeMap.end());
-	//std::set<int> edgeSet = it->second;
-	//std::set<int>::iterator itEdge;
-	/////int s = edgeSet.size();
-	/////printf("%d,", s);
-	/////For each edge passed by i,j, update the band width
-	//for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
-	//	Traitement.EdgeBdeDispo[*itEdge] -= b(tachei, tachej);
-}
-
 ///
-/// Permet de construire les listes des taches
+///@brief Permet de construire les listes des taches
 ///
 void ConstructionListesTache(unsigned int indice){
 	Traitement.NbHDDRAMGPU = 0; //nb de tâches avec des besoins en GPU/CPU et besoins HDD > besoins RAM
@@ -299,7 +278,7 @@ void ConstructionListesTache(unsigned int indice){
 }
 
 
-///Ordonnancer les tâches sur l'intervalle [indice]
+///@brief Ordonnancer les tâches sur l'intervalle [indice]
 void Ordonnancement(unsigned int indice){
 	int CPU = 0;
 	int GPU = 0;
@@ -372,7 +351,7 @@ void Ordonnancement(unsigned int indice){
 }
 
 
-///Pour un intervalle et un serveur donnés, calculer la prio des tâches qui peuvent être affectées sur cette machine
+///@brief Pour un intervalle et un serveur donnés, calculer la prio des tâches qui peuvent être affectées sur cette machine
 void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceServeur){
 	int IB = 0;
 	int WG = 0;
@@ -445,30 +424,11 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 	SortListByPrio(listeTache, nbTache);
 }
 
-///(obsolète)Initialiser le champ dureeExe des tâche dans un intervalle donné avec les valeurs de l'intervalle précédent.
-///Attention!!! Seulement les tâches dont u(indice)=1 sont comprises dans les listes. 
-///Donc quand on met à jour le dureeExe pendant l'affection il faut aussi continuer 
-///cette mise à jour de dureeExe pour l'intervalle suivant si dans ce dercier intervalle u()=0. 
-///Sinon on aura des coupes pour la valeur dureeExe.
-//void InitDureeExe(Tache* listeTache, unsigned int nbTache, unsigned int indiceI)
-//{
-//	for(int i=Traitement.ListOfIntervalles[indiceI].BorneInf; i<=Traitement.ListOfIntervalles[indiceI].BorneSup;i++)
-//	{
-//		for(int j=0; j<nbTache; j++)
-//		{
-//			if(i == 0)///Pour le premier instant, traitement spécial
-//				Traitement.ListOfOrdo[i][listeTache[j].IndiceVM].dureeExe = 0;
-//			else Traitement.ListOfOrdo[i][listeTache[j].IndiceVM].dureeExe = Traitement.ListOfOrdo[i-1][listeTache[j].IndiceVM].dureeExe;
-//		}
-//	}
-//}
-
-
-/************************************************************************************/
-///Ordonnacement d'une liste de tâches. Meme principle pour pré et non-pré.
-///On peut choisir si on a le droit d'allumer la machine en question.
+///
+///@brief Ordonnacement d'une liste de tâches. Meme principle pour pré et non-pré.
+///@detail On peut choisir si on a le droit d'allumer la machine en question.
 ///Prendre en compte la gestion réseau et aussi la mise à jour des serveurs et du réseau
-/************************************************************************************/
+///
 void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceTabServeur, int & compteurAffect)
 {
 			int i;
@@ -515,7 +475,6 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 							if(possible == false)continue;
 							///La vérification de Bii sera faite dans la partie CalculFeasiblilitéRéseau
 					}
-
 					
 					///Si la machine a assez de ressource pour la recevoir
 					if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].GPU>=ng(indiceVM)){
@@ -611,22 +570,13 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 }
 
 
-///-------------------------------------
-///Chercher la duree d'exécution que la tâche a déjà effectué avant l'intervalle [indice].
 ///
-///-------------------------------------
-int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM, unsigned int & lastIndiceInterval, unsigned int & lastIndiceServeur, int & dureeActuelle)
-{
-	int i= Traitement.ListOfIntervalles[indice].BorneInf-1;
-	while(i>=0)
-	{
-		if(Traitement.ListOfOrdo[i][indiceVM].dureeExe > 0)
-				return Traitement.ListOfOrdo[i][indiceVM].dureeExe;
-		i--;
-	}
-	return 0;
-}
-
+///@brief Chercher les informations de l'exécution précédente.
+///@param indice L'indice d'intervalle courant
+///@param indiceVM L'indice de la tâche en question
+///@param lastIndiceInterval Sortie. L'indice d'intervalle de l'exécution précédente
+///@param lastIndiceServeur Sortie. L'indice de la machine de l'exécution précédente
+///@param dureeActuelle Sortie. La durée d'exécution précédente
 void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceInterval, int & lastIndiceServeur, int & dureeActuelle)
 {
 	lastIndiceServeur = -1;
@@ -647,7 +597,7 @@ void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceI
 	}
 }
 
-///Allumer une machine et faire l'affectation au dessus.
+///@brief Allumer une machine et faire l'affectation au dessus.
 ///@param indice indice de l'intervalle
 ///!Attention L'indice retourné est l'indice de la liste triée.
 int AllumageMachine(unsigned indice, int debutIndiceServeur){
@@ -699,8 +649,9 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 }
 
 
+//------------------------ Des fonctions utilitaires ------------------------
 
-///Trier la liste de serveur selon coutnorm
+///@brief Trier la liste de serveur selon coutnorm
 void SortServerList(Serveur* arr, int size)
 {
 	if(size<2)return;
@@ -720,7 +671,7 @@ void SortServerList(Serveur* arr, int size)
 	if(i < size)SortServerList(arr+i, size-i);
 }
 
-///Quick sort for sorting task list
+///@brief Quick sort for sorting task list
 void SortListByPrio(Tache* arr, int size)
 {
 	if(size<2)return;

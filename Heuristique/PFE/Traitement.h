@@ -75,12 +75,10 @@ typedef struct{
 				///! Cette liste sera triée, donc id de serveur est PAS indice de serveur dans la liste triée!
 				Serveur ListOfServer[MaxMachines];
 				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
-				///Reseau ListOfReseau[MaxTimeHorizon][MaxEdges][MaxMachines];				
 				unsigned int EdgeBdeDispo[MaxTimeHorizon][MaxEdges]; ///should be inited by maxB
 				unsigned int EdgeBdeDispoBackUp[MaxTimeHorizon][MaxEdges];
 				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
 				std::map<std::pair<int,int>, std::set<int>> CoupleEdgeMap;
-				///ServeurON ListOfServerOn[MaxMachines];
 				NbServeurOn ListOfNbServeurOn[MaxTimeHorizon];
 				Interval ListOfIntervalles[MaxTimeHorizon];
 				Pream ListofTasksPr[MaxTasks];
@@ -100,18 +98,12 @@ typedef struct{
 				HDDRAM ListOfTasks1CPUMachinej[MaxTasks];
 				RAMHDD ListOfTasks2CPUPr[MaxTasks];	
 				RAMHDD ListOfTasks2CPUMachinej[MaxTasks];
-				///ctij ListeOfctij[MaxTasks][MaxMachines];
-				///gaj ListeOfgaj[MaxMachines];
 				Ordo  ListOfOrdo[MaxTimeHorizon][MaxTasks];
 				int NbPr;
 				int NbNoPrAffected; ///nb des tâches non-pré déjà affectées
 				int NbPrAffected; ///nb des tâches pré déjà affectées
 				int NbHDDRAMGPU;
 				int NbHDDRAMGPUPr;
-				///int NbHDDRAMGPUMachinej;
-				///int NbRAMHDDGPUMachinej;
-				///int NbHDDRAMCPUMachinej;
-				///int NbRAMHDDCPUMachinej;
 				int NbHDDRAMCPU;
 				int NbHDDRAMCPUPr;
 				int NbRAMHDDGPU;
@@ -128,34 +120,15 @@ extern Trait Traitement;
 extern void Init();///Initialisation
 extern void CalculInterval(void);
 extern void CreerListeMachineTriee(void);
-extern double CalculCoutAffectation(unsigned int i,unsigned int j);
-extern void MaJReseau(unsigned int indiceServeur1, unsigned int indiceServeur2, unsigned int indice);
-///extern void MaJServeur(unsigned int IndiceServeur, unsigned int indice);
-extern bool CalculFesabiliteResau(unsigned tachei,unsigned machinej,unsigned int tacheaffectee);
-extern void ConstructionListesTache(unsigned int indice);
-///extern void ConstructionListesTacheNonPr(unsigned int indice);
-///extern void ConstructionListesTachePr(unsigned int indice);
-///extern void ConstructionListesTachePrbis(unsigned int indice);
-///extern void ConstructionListeTachePr(unsigned int indice);
-//extern void ConstructionListesTachePrMachineJ(unsigned int indice,unsigned int indiceServeur);
 extern void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur);
-///extern void CalculPrioGPU(unsigned int indiceServeur,unsigned int indice);
-///extern void CalculPrioCPU(unsigned int indiceServeur,unsigned int indice);
+extern void ConstructionListesTache(unsigned int indice);
 extern void Ordonnancement(unsigned int indice);
 extern void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceTabServeur, int & compteurAffect);
-///extern void OrdoPr(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur, unsigned int compteurAffect);
+extern bool CalculFesabiliteResau(unsigned tachei,unsigned machinej,unsigned int tacheaffectee);
 extern int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM);
 extern void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceInterval, int & lastIndiceServeur, int & dureeActuelle);
-///extern void OrdoGPU(unsigned int i,unsigned int indiceServeur);
-///extern void OrdoGPUPr(unsigned int indice,unsigned int indiceServeur);
-///extern void OrdoCPU(unsigned int i,unsigned int indiceServeur);
-///extern void OrdoCPUPr(unsigned int indice,unsigned int indiceServeur);
-///extern void OrdoTachePreSurServeurOn(unsigned int indice,unsigned int indiceServeur);
-///extern void OrdoTachePreSurServeurOn(unsigned int indice);
 extern int AllumageMachine(unsigned int indice, int debutIndiceMachine);
-///extern void OrdoGPUPreamtable(unsigned int indice, unsigned int indiceServeur);
-///extern void AffectationGPUPre(unsigned int indice,unsigned int indiceServeur);
-///extern void AffectationCPUPre(unsigned int indice,unsigned int indiceServeur);
+extern double CalculCoutAffectation(unsigned int i,unsigned int j);
 extern int TotalCost(void);
 
 ///swap two elements
