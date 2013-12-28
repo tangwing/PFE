@@ -3,6 +3,7 @@
 #include<conio.h>
 #include<math.h>
 #include "Data.h"
+#include "ConsoleTable.h"
 
 SDEFData Data;
 
@@ -92,20 +93,28 @@ void DisplayData(void)
 	printf("\t Time Horizon T: %ld\n",T());
 	printf("\t Number of Tasks N: %ld\n",N());
 	printf("\t Number of Machines M: %ld\n",M());
-	printf("\t Characteristics of each task:\n");
-	
-	for (iTask=0;iTask<N();iTask++)
-		printf("\t\t Task %d : QtyCPU=%ld, QtyGPU=%ld, QtyRAM=%ld, QtyHDD=%ld, isPreemp=%ld, CostPreemp=%ld.\n",iTask,nc(iTask),ng(iTask),nr(iTask),nh(iTask),R(iTask),rho(iTask));
-
-	getch();
-
+	ConsoleTable ct("Tasks", N(), 6);
+	ct.SetColHeader(0, "QtyCPU")
+		.SetColHeader(1, "QtyGPU")
+		.SetColHeader(2, "QtyRAM")
+		.SetColHeader(3, "QtyHDD")
+		.SetColHeader(4, "IsPreemp")
+		.SetColHeader(5, "CostPreemp");
+	for (iTask=0;iTask<N();iTask++) 
+	{
+		ct.Print(nc(iTask));
+		ct.Print(ng(iTask));
+		ct.Print(nr(iTask));
+		ct.Print(nh(iTask));
+		ct.Print(R(iTask));
+		ct.Print(rho(iTask));
+	}
 }
 
 /****************************************************************************/
 // Function GetData
-// Read the instance in a file  name donnees.dat
+// Read the instance from donnees.dat
 /****************************************************************************/
-
 void GetData(void)
 {
  int num,ri_temp,pi_temp,j,i;
@@ -114,11 +123,8 @@ void GetData(void)
 
  //file=fopen("Donnees/donnees1_2.dat","rt");
  file=fopen("donnees.dat","rt");
- // We read the length of the Time Horizon
  fscanf(file,"%d\n",&Data.TimeHorizon);
- // We read the number of tasks
  fscanf(file,"%d\n",&Data.NbTasks);
- // We read the number of machines
  fscanf(file,"%d\n",&Data.NbMachines);
 
  // Reading of the information related to the tasks
@@ -180,8 +186,6 @@ void GetData(void)
 		  fscanf(file,"%hd %hd ",&Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][0],&Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][1]);
 	  fscanf(file,"\n");
   }
- fclose(file);
-
- 
+ fclose(file); 
 }
 

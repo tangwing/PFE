@@ -30,12 +30,6 @@ typedef struct{ ///Structure de données pour contenir le numéro des machines ON 
 
 }ServeurON;
 
-////typedef struct{ 
-////	int Mach1;			
-////	int Mach2;
-////	int BdePassanteDispo;
-////}Reseau;
-
 typedef struct{ 
 	int IndiceVM; 
 	signed int prio;
@@ -78,7 +72,7 @@ typedef struct{///For a given interval, this structure stock the number of runni
 }NbServeurOn;
 
 typedef struct{
-				///! Cette liste sera triée, donc id de serveur et indice de serveur dans la liste triée seront 2 choses!!!
+				///! Cette liste sera triée, donc id de serveur est PAS indice de serveur dans la liste triée!
 				Serveur ListOfServer[MaxMachines];
 				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
 				///Reseau ListOfReseau[MaxTimeHorizon][MaxEdges][MaxMachines];				
@@ -172,12 +166,10 @@ template <typename T> void Swap(T& v1, T& v2)
 	v2 = tmp;
 }
 
-///Trier la liste de serveur selon coutnorm
+///Trier la liste de serveur selon cout norm
 void SortServerList(Serveur* arr, int size);
 ///Quick sort for sorting task list
 //template <typename T> 
 void SortListByPrio(Tache* arr, int size);
-
-
 
 #endif

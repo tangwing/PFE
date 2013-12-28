@@ -5,241 +5,158 @@
 ///#include "JLib\ConsoleCore.h"
 #include <Windows.h>
 #include <WinNT.h>
-
 #include <assert.h>
 #include <stdlib.h>
-
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <iterator>
 #include <iomanip>
-
 #include "Traitement.h"
+#include "ConsoleTable.h"
 
-#define VERBOSE true
+#define CACHER_TOUT false
+#define AFFICHER_AFFINITE true
+#define AFFICHER_MACHINE true
+#define AFFICHER_ARC_DISPO true
+#define AFFICHER_INTERVALLE true
+#define AFFICHER_SERVEUR_BIS true
+#define AFFICHER_LISTS_TACHES true
+#define AFFICHER_ORDO true
+#define AFFICHER_RT true
+
 HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
-template <typename T>
-void PrintArray(T* arr, int size)
-{
-	//copy(arr, arr+size, std::ostream_iterator<T>(std::cout, ", ");
-}
 
-template <typename T>
-void PrintArrayPrio(T* arr, int size)
-{
-	for(int i=0; i<size; i++)std::cout<<arr[i].prio<<", ";
-	//for_each(arr, arr+size, void print(T&ele){std::cout<<ele.prio<<", ";});
-	std::cout<<std::endl;
-}
-
-void InitPrio(HDDRAM &hr){hr.prio = rand()%10;}
-
-template <typename T>
-void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
-{
-	for(int i=0; i<size-1; i++)
-	{
-		if(isDecreased) 
-			assert(arr[i].prio>=arr[i+1].prio);
-		else 
-			assert(arr[i].prio<=arr[i+1].prio);
-	}
-}
-
+//================= Fonctions pour l'affichage ====================
 void AfficherIntervalle()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_INTERVALLE)
 	{
-		printf("Nombre d'interval : %d\n",Traitement.NbInterval);
-		for(int i=0;i<Traitement.NbInterval;i++){
-			printf("intervalle %d : [%d,%d] \n",i,Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
+		char title[50];
+		sprintf(title, "Intervalles");
+		ConsoleTable ct (title, T(), 1);
+		ct.SetColWidth(10);
+		for(int i=0;i<T();i++){
+			sprintf(title, " [%d,%d] ",Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
+			ct.Print(title);
 		}
 	}
 }
+
 void AfficherCaracMachine()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_MACHINE)
 	{
-		using namespace std;
-		int dataWidth = 4;
-		int unitWidth = dataWidth * 4;
-		int lineWidth = (unitWidth+2) * M();
-		int lineWWithId = lineWidth + 1;
-
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Caract Machine  (CPU/GPU/HDD/RAM) "<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
-		cout<<setfill(' ');
+		ConsoleTable ct(" Machines  ", M(), 4);
+		ct.SetColHeader(0, "QtyCPU(cost)")
+			.SetColHeader(1, "QtyGPU(cost)")
+			.SetColHeader(2, "QtyRAM(cost)")
+			.SetColHeader(3, "QtyHDD(cost)");
+		
+		ostringstream EleBuilder;
 		for(int j=0; j<M(); j++)
 		{
-			printf("| M%2d: %d/%d\t%d/%d\t%d/%d\t%d/%d |\n"
-				,j
-				,Data.ListOfMachines[j].QtyCPU
-				,Data.ListOfMachines[j].CostCPU
-				,Data.ListOfMachines[j].QtyGPU
-				,Data.ListOfMachines[j].CostGPU
-				,Data.ListOfMachines[j].QtyHDD
-				,Data.ListOfMachines[j].CostHDD
-				,Data.ListOfMachines[j].QtyRAM
-				,Data.ListOfMachines[j].CostRAM
-				);
+			EleBuilder.str("");
+			EleBuilder<< Data.ListOfMachines[j].QtyCPU<< "(" << Data.ListOfMachines[j].CostCPU << ")";
+			ct.Print(EleBuilder.str());
+			EleBuilder.str("");
+			EleBuilder<< Data.ListOfMachines[j].QtyGPU<< "(" << Data.ListOfMachines[j].CostGPU << ")";
+			ct.Print(EleBuilder.str());
+			EleBuilder.str("");
+			EleBuilder<< Data.ListOfMachines[j].QtyRAM<< "(" << Data.ListOfMachines[j].CostRAM << ")";
+			ct.Print(EleBuilder.str());
+			EleBuilder.str("");
+			EleBuilder<< Data.ListOfMachines[j].QtyHDD<< "(" << Data.ListOfMachines[j].CostHDD << ")";
+			ct.Print(EleBuilder.str());
 		}
-		cout<<"\n\n";
 	}
 }
 
 void AfficherListeServeurBis()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_SERVEUR_BIS)
 	{
-		using namespace std;
-		int idColWidth = 3;
-		int dataWidth = 4;
-		int unitWidth = dataWidth * 4;
-		int lineWidth = (unitWidth+2) * M();
-		int lineWWithId = lineWidth + idColWidth + 1;
-
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Liste Serveur Bis  (CPU/GPU/HDD/RAM) "<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
-		cout<<setfill(' ');
+		ConsoleTable ct("Liste Serveur Bis  (CPU/GPU/HDD/RAM)", T(), M());
+		ct.SetColWidth(15);
+		ostringstream EleBuilder;
 		for(int i=0; i< T(); i++)
 		{
-			cout<<"|"<<setw(idColWidth)<<i;
 			for(int j=0; j<M(); j++)
 			{
-				cout<<"| "<<setw(dataWidth)
-					<<Traitement.ListOfServeurbis[i][j].CPU<<setw(dataWidth)
-					<<Traitement.ListOfServeurbis[i][j].GPU<<setw(dataWidth)
-					<<Traitement.ListOfServeurbis[i][j].HDD<<setw(dataWidth)
+				EleBuilder.str("");
+				EleBuilder<<Traitement.ListOfServeurbis[i][j].CPU<<"/"
+					<<Traitement.ListOfServeurbis[i][j].GPU<<"/"
+					<<Traitement.ListOfServeurbis[i][j].HDD<<"/"
 					<<Traitement.ListOfServeurbis[i][j].RAM;
+				ct.Print(EleBuilder.str());
 			}
-			cout<<"|\n";
 		}
-		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
 	}
 }
 
 
 void AfficherRt()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_RT)
 	{
-		using namespace std;
-		int idColWidth = 3;
-		int dataWidth = 3;
-		int unitWidth = dataWidth;
-		int lineWidth = (unitWidth+2) * M();
-		int lineWWithId = lineWidth + idColWidth + 1;
-
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|** Rt (tache*M) "<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
-		cout<<setfill(' ');
+		ConsoleTable ct("Resuming time(N*M)", N(), M());
+		ct.SetColWidth(3);
 		for(int i=0; i< N(); i++)
-		{
-			cout<<"|"<<setw(idColWidth)<<i;
 			for(int j=0; j<M(); j++)
-			{
-				cout<<"| "<<setw(dataWidth)<< rt(i,j);
-			}
-			cout<<"|\n";
-		}
-		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+				ct.Print(rt(i,j));
 	}
 }
+
 void AfficherAffinite()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_AFFINITE)
 	{
-		using namespace std;
-		int lineWWithId =24;
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***Affinity "<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
+		ConsoleTable ct("Affinity (N*N)", N(), N());
+		ct.SetColWidth(3);
 		for(int i=0; i< N(); i++)
-		{
 			for(int j=0; j<N(); j++)
-			{
-				cout<<"| "<<a(i,j);
-			}
-			cout<<"|\n";
-		}
-		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+				ct.Print(a(i,j));
 	}
 }
 
 
 void AfficherEdgeDispo()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_ARC_DISPO)
 	{
-		using namespace std;
-		int idColWidth = 3;
-		int unitWidth = 6;
-		int lineWidth = (unitWidth+2) * Data.Network.NbEdges;
-		int lineWWithId = lineWidth + idColWidth + 1;
-
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Reseau edge bande "<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
-		cout<<setfill(' ');
+		ConsoleTable ct("Arc dispo (T*NbEdge)", T(), Data.Network.NbEdges);
+		ct.SetColWidth(8); 
 		for(int i=0; i< T(); i++)
-		{
-			cout<<"|"<<setw(idColWidth)<<i;
 			for(int j=0; j< Data.Network.NbEdges; j++)
-			{
-				cout<<"| "<<setw(unitWidth)
-					<<Traitement.EdgeBdeDispo[i][j];
-			}
-			cout<<"|\n";
-		}
-		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
+				ct.Print(Traitement.EdgeBdeDispo[i][j]);
 	}
 }
 
 void AfficherOrdo()
 {
-	if(VERBOSE)
+	if(!CACHER_TOUT && AFFICHER_ORDO)
 	{
-		using namespace std;
-		int idColWidth = 3;
-		int unitWidth = 3;
-		int lineWidth = (unitWidth+2) * N();
-		int lineWWithId = lineWidth + idColWidth + 1;
-
-		cout.setf(std::ios::left);
-		cout<<setfill('-')<<setw(lineWWithId)<<"\n-"<<endl;
-		cout<<setfill('*')<<setw(lineWWithId)<<"|***** Ordonnancement (interval*tache)"<<"|"<<endl;
-		cout<<setfill('-')<<setw(lineWWithId)<<"|-"<<"|"<<endl;
-		cout<<setfill(' ');
+		ConsoleTable ct("Ordonnancement (T*N)", T(), N());
+		ct.SetColWidth(4);
 		for(int i=0; i< T(); i++)
 		{
-			cout<<"|"<<setw(idColWidth)<<i;
 			for(int j=0; j< N(); j++)
 			{
 				if(Traitement.ListOfOrdo[i][j].affecter == true)
-					cout<<"| "<<setw(unitWidth)
-						<<Traitement.ListOfOrdo[i][j].IndiceMachine;
+					ct.Print(Traitement.ListOfOrdo[i][j].IndiceMachine);
 				else if(u(j, i)==1)
-					cout<<"| "<<setw(unitWidth)<<"rho";
-				else cout<<"| "<<setw(unitWidth)<<"*";
+					ct.Print("sus");
+				else ct.Print("-");
 			}
-			cout<<"|\n";
 		}
-		cout<<setfill('-')<<setw(lineWWithId)<<"-"<<endl<<endl;
 	}
 }
+
+
 void AfficherListesTache(int indice)
 {
 	//SetConsoleTextAttribute(consolehwnd, 0x0007);
-
-	if(false)
+	if(!CACHER_TOUT && AFFICHER_LISTS_TACHES)
 	{
 		//Affichage des listes
 		printf("\n *Indice: %d. Listes des taches:\n", indice);
@@ -280,78 +197,28 @@ void AfficherListesTache(int indice)
 	}
 }
 
-void LoadOrdo()
+
+//===================== Fonctions pour tests ===================
+template <typename T>
+void PrintArrayPrio(T* arr, int size)
 {
-	int n = 8, t = 12;
-	int data[8][12] = {
-		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
-		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
-		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
-		{1,1,1,1,1,1,1,-1,1,1,1,1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, 1, 1, -1, -1},
-		{1,1,1,1, 1, 1,1,1,-1, -1, 1, 1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{-1,-1,-1,-1,-1,1,1, 1, -1, -1, -1, -1}
-	};
-	///solution cplex with only ressource consideration. Checked.136342
-	int data1[8][12] = { 
-		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
-		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{1,1,1,1,1,1,1,-1,1,1,1,1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{1,1,1,1, 1, 1,1,1,-1, -1, 1, 1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1}
-	};
-
-	///solution cplex with ressource and rho consideration. Checked. 485327
-	int data2[8][12] = { 
-		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
-		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
-		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
-		{1,1,1,1,1,1,1,-1,1,1,1,1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, 1, 1, -1, -1},
-		{1,1,1,1, 1, 1,1,1,-1, -1, 1, 1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{-1,-1,-1,-1,-1,1,1, 1, -1, -1, -1, -1}
-	};
-
-	///solution cplex with ressource and rho and beta consideration. Checked. 485635
-	int data3[8][12] = {  // == data2
-		{1,1,1,1,-1,-1,-1, 1, 1, -1, 1, 1},
-		{0,-1,0,-1,0,0,0, 0, 0, 0, -1, 0},
-		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
-		{1,1,1,1,1,1,1,-1,1,1,1,1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, 1, 1, -1, -1},
-		{1,1,1,1, 1, 1,1,1,-1, -1, 1, 1},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{-1,-1,-1,-1,-1,1,1, 1, -1, -1, -1, -1}
-	};
-
-	///solution cplex donnees1_2
-	int data1_2[8][12] = {  // == data2
-		{-1,0,0,0,-1,0,0,0,0,0,-1,0},
-		{-1,-1,-1,-1,-1,-1,-1, -1, -1, -1, -1, -1},
-		{-1,-1,0,-1,0,-1,0, -1, 0,-1, 0, -1},
-		{1,1,1,1,1,1,1,1,1,1,1,1},
-		{0,-1,0,-1,0,-1,0, -1, 0, -1, 0, -1},
-		{-1,-1,-1,-1,1,-1,-1, -1, -1, -1, -1, -1},
-		{1,1,1,1,-1,-1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1,1,1}
-	};
-	for(int i =0; i<n; i++)
-	{
-		for(int j =0; j<t; j++)
-		{
-			if(data1_2[i][j] != -1)
-				Traitement.ListOfOrdo[j][i].affecter = true;
-			else Traitement.ListOfOrdo[j][i].affecter = false;
-			Traitement.ListOfOrdo[j][i].IndiceMachine = data1_2[i][j];
-		}
-	}
+	for(int i=0; i<size; i++)std::cout<<arr[i].prio<<", ";
+	std::cout<<std::endl;
 }
 
+void InitPrio(HDDRAM &hr){hr.prio = rand()%10;}
+
+template <typename T>
+void TestOrderByPrio(T* arr, int size, bool isDecreased = true)
+{
+	for(int i=0; i<size-1; i++)
+	{
+		if(isDecreased) 
+			assert(arr[i].prio>=arr[i+1].prio);
+		else 
+			assert(arr[i].prio<=arr[i+1].prio);
+	}
+}
 void Test()
 {
 	HDDRAM arr[10];

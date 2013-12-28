@@ -88,8 +88,7 @@ void CalculInterval(){
 	Traitement.NbInterval++;
 	Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = T()-1;
 	
-	///AfficherIntervalle();
-	
+	AfficherIntervalle();
 }
 
 /************************************************************************************/
@@ -123,11 +122,11 @@ int TotalCost(){
 	int Penalty = 0;
 	AfficherOrdo();
 	//LoadOrdo();
-	//AfficherAffinite();
-	//AfficherRt();
-	//AfficherCaracMachine();
-	//AfficherListeServeurBis();
-	//AfficherEdgeDispo();
+	AfficherAffinite();
+	AfficherRt();
+	AfficherCaracMachine();
+	AfficherListeServeurBis();
+	AfficherEdgeDispo();
 	//printf("\n²²²²²²²² CPLEX ²²²²²²²");
 	for(int t=0;t<T();t++){
 		//printf("\n");
@@ -141,23 +140,20 @@ int TotalCost(){
 			}
 			else if(u(n,t)==1&& R(n)==1)
 			{
-				//printf("z\t");
 				Penalty += rho(n);
 			}
-			//else printf("*\t");
 		}
 	}
-	printf("\nNbServeurOn:\t");
+	//printf("\nNbServeurOn:\t");
 	for(int indice = 0;indice< Traitement.NbInterval;indice++){
 		int nbON = Traitement.ListOfNbServeurOn[indice].NbServeurOn;
-		//nbON =2;
-		printf("%d\t", nbON);
+		//printf("%d\t", nbON);
 		for(int t=Traitement.ListOfIntervalles[indice].BorneInf; t<=Traitement.ListOfIntervalles[indice].BorneSup; t++)
 			CoutUnitaire += (nbON * beta(t));
 	}
-	printf("\nPenalite total : %d \n",Penalty);
-	printf("\nCoutUnitaire total :%d \n",CoutUnitaire);
-	printf("\nCoutMigration :%d \n",CoutMigration);
+	printf("\nPenalite totale : %d \n",Penalty);
+	printf("CoutUnitaire total :%d \n",CoutUnitaire);
+	printf("CoutMigration :%d \n",CoutMigration);
 
 	TotalCost = CoutAffect + CoutUnitaire + Penalty + CoutMigration;
 	printf("Cout total : %d \n",TotalCost);
@@ -199,7 +195,7 @@ bool CalculFesabiliteResau(
 		{
 			for(int i = lastInterSup; i>= debutMigration; i--)
 			{
-				if( Traitement.EdgeBdeDispo[i][*itEdge]-b(tachei, tachei) < 0)
+				if( Traitement.EdgeBdeDispo[i][*itEdge]<b(tachei, tachei))
 					return false;
 				else
 					Traitement.EdgeBdeDispo[i][*itEdge] -= b(tachei, tachei);
@@ -209,7 +205,7 @@ bool CalculFesabiliteResau(
 	{	///For each edge passed by i,j, the band width must be enough
 		for(itEdge=edgeSet.begin(); itEdge != edgeSet.end(); itEdge++)
 		{
-			if( Traitement.EdgeBdeDispo[intervalInf][*itEdge]-b(tachei, tachej) < 0)
+			if( Traitement.EdgeBdeDispo[intervalInf][*itEdge]<b(tachei, tachej) )
 				return false;
 			else
 			{	///! Il faut mettre à jour la valeur pour tout l'intervalle

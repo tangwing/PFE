@@ -7,30 +7,25 @@
 #include <math.h>
 #include <string.h>
 #include <algorithm>
+#include "ConsoleTable.h"
 ///#include "easylogging++.h"
-
 //#include "Test.h"
 
 int main()
 {
 	using namespace std;
-
-	//Test();
-
 	double dOptValue,dOptTime;
 	int NbMach;
 	int isFeasible = 1;
 	time_t temp1,temp2,tempPre1,tempPre2;
 	FILE *fic;
     GetData();
-	///DisplayData();
-	time(&temp1);
-
+	//DisplayData();
 	Init();
-	
+
+	time(&temp1);	
 	CalculInterval();
 	CreerListeMachineTriee();///Trier les serveurs
-	printf("Nombre d'intervale : %d \n",Traitement.NbInterval);
 	for(int i=0;i<Traitement.NbInterval;i++){
 		
 		Traitement.ListOfNbServeurOn[i].NbServeurOn = 0;
@@ -73,5 +68,5 @@ int main()
 	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	fclose(fic);
 	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
-	///getchar();
+	getchar();
 }
