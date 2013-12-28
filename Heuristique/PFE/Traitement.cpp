@@ -362,7 +362,6 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 		WG = 0;
 		MachineRecevoir = 0;
 		indiceVM = listeTache[iboucle].IndiceVM;
-		//duree = GetDureeExeActuelle(indice, indiceVM); 
 		LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
 
 		///Si la tâche n'est pas encore affectée
@@ -397,7 +396,7 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 				else WG = -2 * M(); ///Pas possible de réveiller
 			}
 			///Migration nécessaire
-			else if(lastIndiceServeur != indiceServeur && lastIndiceInterval == indice-1)
+			else if(lastIndiceServeur != indiceServeur )//&& lastIndiceInterval == indice-1)
 			{ 
 				///Migration pas possible
 				if(duree < mt(indiceVM))

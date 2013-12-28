@@ -52,7 +52,7 @@ int main()
 					isFeasible = 0;
 			}
 		dOptValue = TotalCost();
-	}else printf("Les affinites n'ont pas été satisfaites\n");
+	}else printf("Les affinites n'ont pas ete satisfaites\n");
 	time(&temp2);
 	 
 	dOptTime=difftime(temp2,temp1);
