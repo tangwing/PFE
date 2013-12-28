@@ -117,9 +117,8 @@ void DisplayData(void)
 /****************************************************************************/
 void GetData(void)
 {
- int num,ri_temp,pi_temp,j,i;
  FILE *file;
- int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
+ int iLoop,iLoop2;
 
  //file=fopen("Donnees/donnees1_2.dat","rt");
  file=fopen("donnees.dat","rt");

@@ -63,7 +63,7 @@ public:
 	///@param colIndice The 0-based indice of the column to set, -1 as default standing for all columns
 	ConsoleTable & SetColWidth(unsigned int width, int colIndice = -1)
 	{
-		if(colIndice > -1 && ColWidths.size() > colIndice)
+		if(colIndice > -1 && ColWidths.size() > (unsigned)colIndice)
 		{
 			ColWidths[colIndice] = width;
 		}else if(colIndice == -1) //Same width for all columns
