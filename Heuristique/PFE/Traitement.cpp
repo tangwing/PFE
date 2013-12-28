@@ -96,7 +96,6 @@ void CalculInterval(){
 void CreerListeMachineTriee(){
 	int i;
 	double CoutTotal;
-	double Cout;
 	for(i=0; i<M(); i++){
 		Traitement.ListOfServer[i].IndiceServeur = i;
 		CoutTotal = (mc(i)*alphac(i) + mg(i)*alphag(i) + mr(i)*alphar(i) + mh(i)*alphah(i));
@@ -170,7 +169,6 @@ bool CalculFesabiliteResau(
 	if( tachei == tachej && machinei == machinej) return true;	
 	if(a(tachei, tachej) != 1)return true;
 	
-	int iEdge,iTime;
 	int intervalInf = Traitement.ListOfIntervalles[indice].BorneInf;
 	int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
 
@@ -279,7 +277,7 @@ void ConstructionListesTache(unsigned int indice){
 
 
 ///@brief Ordonnancer les tâches sur l'intervalle [indice]
-void Ordonnancement(unsigned int indice){
+void Ordonnancement(int indice){
 	int CPU = 0;
 	int GPU = 0;
 	int RAM = 0;
@@ -349,10 +347,10 @@ void Ordonnancement(unsigned int indice){
 	///Calcul nb total de serveur on.
 	Traitement.NbServeurOn += Traitement.ListOfNbServeurOn[indice].NbServeurOn;
 }
-
+ 
 
 ///@brief Pour un intervalle et un serveur donnés, calculer la prio des tâches qui peuvent être affectées sur cette machine
-void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceServeur){
+void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServeur){
 	int IB = 0;
 	int WG = 0;
 	int indiceVM;
@@ -429,7 +427,7 @@ void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int ind
 ///@detail On peut choisir si on a le droit d'allumer la machine en question.
 ///Prendre en compte la gestion réseau et aussi la mise à jour des serveurs et du réseau
 ///
-void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice,unsigned int indiceTabServeur, int & compteurAffect)
+void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabServeur, int & compteurAffect)
 {
 			int i;
 			int iboucle1=0;
@@ -482,7 +480,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 							if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].HDD>=nh(indiceVM) ){
 								if(Traitement.ListOfServeurbis[intervalInf][indiceServeur].RAM>=nr(indiceVM) ){
 									///Backup network state
-									memcpy(Traitement.EdgeBdeDispoBackUp, Traitement.EdgeBdeDispo, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
+									memcpy(Traitement.EdgeBdeDispoBackUp, Traitement.EdgeBdeDispo, MaxTimeHorizon* MaxEdges* sizeof(int));
 
 									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
@@ -501,7 +499,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 													Traitement.ListOfOrdo[intervalSup][indiceVM].affecter = false;///Pour indiquer que c'est pas affectée.
 													Traitement.ListOfOrdo[intervalInf][indiceVM].affecter = false;
 													///Rollback
-													memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
+													memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof( int));
 													indiceVM2 = -1; ///On va casser ce passage de boucle, continuer sur la tâche suivante à affecter.
 													break;
 												}
@@ -516,7 +514,7 @@ void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indice
 											indiceServeur, lastIndiceServeur,indice)==false)///Machine i et j et intervalle
 										{
 											///RollBack
-											memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof(unsigned int));
+											memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof( int));
 											continue;
 										}else ///C'est feasable. Alors mise à jour ressouces par rapport à la migration
 										{
@@ -606,7 +604,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	int MachineRallume = -1;
 	 
 	///C'est plutôt la différence entre le coût de rallumer la machine et le coût de ne pas la rallumer. Plus c'est moins, mieux c'est
-	int gain = 0, gainMin = 0;
+	double gain = 0, gainMin = 0;
 	int intervalInf = Traitement.ListOfIntervalles[indice].BorneInf;
 	int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
 	double coutON = 0; //Coût unitaire d'être ON
@@ -648,6 +646,20 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	else return -1;
 }
 
+///
+///@brief Vérifier qu'à l'intervalle donné, est-ce que l'ordonnancement effectué assure bien les affinités entre les tâches
+///
+bool VerifierAffinite(int indiceInterval)
+{
+	for(int i=0; i<N(); i++)
+		for(int j=i+1; j<N(); j++)
+		{
+			if(a(i,j) == 1)
+				if(Traitement.ListOfOrdo[indiceInterval][i].affecter != Traitement.ListOfOrdo[indiceInterval][j].affecter)
+					return false;
+		}
+	return true;
+}
 
 //------------------------ Des fonctions utilitaires ------------------------
 
@@ -655,7 +667,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 void SortServerList(Serveur* arr, int size)
 {
 	if(size<2)return;
-	int mid = arr[size/2].CoutNorm;
+	int mid = (int)(arr[size/2].CoutNorm);
 	int i=0, j=size-1;
 	while(i<j)
 	{

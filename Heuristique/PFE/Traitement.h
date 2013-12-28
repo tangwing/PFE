@@ -75,8 +75,8 @@ typedef struct{
 				///! Cette liste sera triée, donc id de serveur est PAS indice de serveur dans la liste triée!
 				Serveur ListOfServer[MaxMachines];
 				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
-				unsigned int EdgeBdeDispo[MaxTimeHorizon][MaxEdges]; ///should be inited by maxB
-				unsigned int EdgeBdeDispoBackUp[MaxTimeHorizon][MaxEdges];
+				int EdgeBdeDispo[MaxTimeHorizon][MaxEdges]; ///should be inited by maxB
+				int EdgeBdeDispoBackUp[MaxTimeHorizon][MaxEdges];
 				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
 				std::map<std::pair<int,int>, std::set<int>> CoupleEdgeMap;
 				NbServeurOn ListOfNbServeurOn[MaxTimeHorizon];
@@ -120,16 +120,17 @@ extern Trait Traitement;
 extern void Init();///Initialisation
 extern void CalculInterval(void);
 extern void CreerListeMachineTriee(void);
-extern void CalculPrioEtTrier(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceServeur);
+extern void CalculPrioEtTrier(Tache* listeTache,  int nbTache,  int indiceIntervalle, int indiceServeur);
 extern void ConstructionListesTache(unsigned int indice);
-extern void Ordonnancement(unsigned int indice);
-extern void OrdoListeTache(Tache* listeTache, unsigned int nbTache, unsigned int indiceIntervalle,unsigned int indiceTabServeur, int & compteurAffect);
+extern void Ordonnancement( int indice);
+extern void OrdoListeTache(Tache* listeTache,  int nbTache,  int indiceIntervalle, int indiceTabServeur, int & compteurAffect);
 extern bool CalculFesabiliteResau(unsigned tachei,unsigned machinej,unsigned int tacheaffectee);
 extern int GetDureeExeActuelle(unsigned int indice, unsigned int indiceVM);
 extern void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceInterval, int & lastIndiceServeur, int & dureeActuelle);
 extern int AllumageMachine(unsigned int indice, int debutIndiceMachine);
 extern double CalculCoutAffectation(unsigned int i,unsigned int j);
 extern int TotalCost(void);
+extern bool VerifierAffinite(int indiceInterval);
 
 ///swap two elements
 template <typename T> void Swap(T& v1, T& v2)

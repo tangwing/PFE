@@ -24,7 +24,7 @@
 #define AFFICHER_LISTS_TACHES false
 #define AFFICHER_ORDO true
 #define AFFICHER_RT true
-
+ 
 //HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
 
 //================= Fonctions pour l'affichage ====================

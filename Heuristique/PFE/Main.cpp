@@ -13,10 +13,9 @@
 int main()
 {
 	using namespace std;
-	double dOptValue,dOptTime;
-	int NbMach;
-	int isFeasible = 1;
-	time_t temp1,temp2,tempPre1,tempPre2;
+	double dOptValue=-1,dOptTime=-1;
+	bool isFeasible = true;
+	time_t temp1,temp2;
 	FILE *fic;
     GetData();
 	//DisplayData();
@@ -35,19 +34,27 @@ int main()
 		///! On construit les listes de tâche pour chaque intervalle. Pour une tâche donnée, sa valeur de Uit varie selon l'intervalle
 		ConstructionListesTache(i);
 		Ordonnancement(i);
+		if(false == VerifierAffinite(i)) 
+		{
+			isFeasible = false;
+			break;
+		}
 	}
 
-	///Tester si les taches non-pré sont toutes affectées. Sinon alors on a pas trouvé la solution.
-	///Afficher la matrice d'ordo
-	for(int i=0;i<T();i++)
-		for(int j=0;j<N();j++)
-		{
-			if ((Traitement.ListOfOrdo[i][j].IndiceMachine == -1)&&(R(j)==0))
-				isFeasible = 0;
-		}
-	dOptValue = TotalCost();
+	if(isFeasible)
+	{
+		///Tester si les taches non-pré sont toutes affectées. Sinon alors on a pas trouvé la solution.
+		///Afficher la matrice d'ordo
+		for(int i=0;i<T();i++)
+			for(int j=0;j<N();j++)
+			{
+				if ((Traitement.ListOfOrdo[i][j].IndiceMachine == -1)&&(R(j)==0))
+					isFeasible = 0;
+			}
+		dOptValue = TotalCost();
+	}else printf("Les affinites n'ont pas été satisfaites\n");
 	time(&temp2);
-
+	 
 	dOptTime=difftime(temp2,temp1);
 	fic=fopen("Heuristic.txt","wt");
 	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
