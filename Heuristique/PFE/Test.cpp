@@ -94,6 +94,18 @@ void AfficherAffinite()
 	}
 }
 
+void AfficherUit()
+{
+	if(!CACHER_TOUT && AFFICHER_UIT)
+	{
+		ConsoleTable ct("U(i,t) (N*T)", N(), T());
+		ct.SetColWidth(3);
+		for(int i=0; i< N(); i++)
+			for(int j=0; j<T(); j++)
+				ct.Print(u(i,j));
+	}
+}
+
 
 void AfficherEdgeDispo()
 {

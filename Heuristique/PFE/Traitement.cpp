@@ -652,10 +652,11 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 bool VerifierAffinite(int indiceInterval)
 {
 	for(int i=0; i<N(); i++)
+	{
+		for(int j=i+1; j<N(); j++)
 		{
 			if(a(i,j) == 1)
-			{for(int j=i+1; j<N(); j++)
-		
+			{
 				if(Traitement.ListOfOrdo[indiceInterval][i].affecter != Traitement.ListOfOrdo[indiceInterval][j].affecter)
 				{
 					printf("Intervalle %d, Affinite non satisfaite: %d, %d\n",indiceInterval, i, j);
@@ -664,26 +665,35 @@ bool VerifierAffinite(int indiceInterval)
 				}
 			}
 		}
+	}
 	return true;
 }
 
 //------------------------ Des fonctions utilitaires ------------------------
 
 ///@brief Prétraitement des données. Pour le moment, le comportement est de garantir la compatibilité entre a() et u().
-//void Pretraiter()
-//{
-//	bool repete = false;
-//	for(int i=0; i<N(); i++)
-//	{
-//		for(int j=i+1; j<N(); j++)
-//		{
-//			if(a(i,j) == 1)
-//			{//Vérifier u(i,t) et u(j,t)
-//				for(int t=0; t<
-//			}
-//		}
-//	}
-//}
+void Pretraiter()
+{
+	bool repete = false;
+	for(int i=0; i<N(); i++)
+	{
+		for(int j=i+1; j<N(); j++)
+		{
+			if(a(i,j) == 1)
+			{//Vérifier u(i,t) et u(j,t)
+				for(int t=0; t<T(); t++)
+				{
+					if(u(i,t) != u(j,t))
+					{
+						Data.ListOfTasks[i].LIsToBeProcessed[t] = Data.ListOfTasks[j].LIsToBeProcessed[t] = 0;
+						repete = true;
+					}
+				}
+			}
+		}
+	}
+	if(repete)Pretraiter();
+}
 
 
 ///@brief Trier la liste de serveur selon coutnorm

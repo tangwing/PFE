@@ -117,6 +117,7 @@ typedef struct{
 
 extern Trait Traitement;
 
+extern void Pretraiter();
 extern void Init();///Initialisation
 extern void CalculInterval(void);
 extern void CreerListeMachineTriee(void);

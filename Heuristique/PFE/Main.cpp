@@ -19,11 +19,15 @@ int main()
 	FILE *fic;
     GetData();
 
+	AfficherUit();
+	AfficherAffinite();
+	
 	///Ajouter ici un prétraitement pour garantir la compatibilité des u(i,t) et a(i,j)
 	///Si 2 taches (i,j) ont une affinité, alors il faut que u(i,t)==u(j,t) pour tous les t
-	//Pretraiter();
+	Pretraiter();
 
 	//DisplayData();
+	AfficherUit();
 	AfficherAffinite();
 	Init();
 

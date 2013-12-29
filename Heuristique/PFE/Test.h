@@ -17,13 +17,15 @@
 
 #define CACHER_TOUT false
 #define AFFICHER_AFFINITE true
+#define AFFICHER_RT false
+#define AFFICHER_UIT true
 #define AFFICHER_MACHINE false
 #define AFFICHER_ARC_DISPO true
 #define AFFICHER_INTERVALLE false
 #define AFFICHER_SERVEUR_BIS true
 #define AFFICHER_LISTS_TACHES false
 #define AFFICHER_ORDO true
-#define AFFICHER_RT false
+
  
 //HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -33,6 +35,7 @@ extern void AfficherCaracMachine();
 extern void AfficherListeServeurBis();
 extern void AfficherRt();
 extern void AfficherAffinite();
+extern void AfficherUit();
 extern void AfficherEdgeDispo();
 extern void AfficherOrdo();
 extern void AfficherListesTache(int indice);
