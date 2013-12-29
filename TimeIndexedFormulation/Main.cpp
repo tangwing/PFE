@@ -9,7 +9,7 @@
 #include <process.h>
 #include "Data.h"
 
-#define DEBUG true
+#define DEBUG false
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -295,7 +295,7 @@ void InitializeIPModel()
  // Variables dit
  if (DEBUG_MOD)  printf("Creation of variables d\n");
  for (iLoop=0;iLoop<N();iLoop++)
-	 d.add(IloIntVarArray(env,T(),0,IloInfinity));
+	 d.add(IloIntVarArray(env,T(),0,9999999));
  // Variable RE is created while its declaration
 
 
@@ -579,7 +579,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 					 for (iLoop5=0;iLoop5<M();iLoop5++)
 						 for (iLoop6=iLoop+1;iLoop6<iLoop4-1;iLoop6++)
 							 Np+=(iLoop4-iLoop)*x[iLoop2][iLoop5][iLoop6];
-					 ///con.add(Np>=(iLoop-iLoop4));
+					 con.add(Np>=(iLoop-iLoop4));
 					}
  // Constraints defining the duration of the migration operations
  if (DEBUG_MOD) printf("[DEBUG] Declaration of constraints O\n");
@@ -602,7 +602,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 	 for (iLoop2=0;iLoop2<N();iLoop2++)
 		 ExprRE+=d[iLoop2][iLoop];
  ExprRE-=RE;
- con.add(ExprRE==0);
+ //con.add(ExprRE==0);
  // e-constraint on RE
  //con.add(RE<=50000);
 
