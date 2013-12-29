@@ -63,12 +63,13 @@ void main(void)
 
   for (j=0;j<iterations;j++)
   {
-   printf("Data set n°%ld\n",j+1);
+   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);
    
    GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 
    if (DEBUG)
    {
+	   //DisplayData();
 	   printf("[DEBUG] The instance is generated: press a key to continue\n");
 	   getch();
    }
@@ -76,7 +77,7 @@ void main(void)
    printf("The IP model is running...\n");
 
    spawnl(P_WAIT,"SCPTimInd.exe","SCPTimInd.exe",NULL);
-   printf("line:%d",__LINE__);
+   //printf("line:%d",__LINE__);
    fichier=fopen("SCPres.txt","rt");
    fscanf(fichier,"%ld\n",&isFeas);
    fscanf(fichier,"%ld\n",&isOpt);
@@ -150,8 +151,6 @@ void main(void)
 	   fichier=fopen("ScpTraces.txt","at");
 	   fprintf(fichier,"Sc%d %d * * %lf %lf %ld\n",i+1,isFeas,dTime,dNbMach, iOptValue);
 	   fclose(fichier);
-   //************************************
-
    
   }
 
@@ -219,11 +218,14 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 	if(printHeader)
 	{
 		printHeader = false;
-		fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
-		fprintf(fichier,"Scenario(N/M)  Infeas  Solved(E/H) MemLim(E) TimeLim(E) AffinityLim(H) TMin(E/H)     TAvg(E/H)     TMax(E/H)     DevMin  DevAvg  DevMax\n");
+		//fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
+		fprintf(fichier,"Scenario(N/M);Infeas  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;AffinityLim(H) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
 	}
-	fprintf(fichier,"Sc%d(%d/%d)      %d   %d/%d   %d    %d    %d    %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf/%3.2lf\t %3.2lf\t %3.2lf\t %3.2lf\n",
-		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, NbAffinityLimitH, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH, DevMin, DevTotal/NbIter, DevMax);
+	fprintf(fichier,"Sc%d(%d/%d)      ;%d   ;%d/%d   ;%d    ;%d    ;%d    ;%3.2lf/%3.2lf ;%3.2lf/%3.2lf  ;%3.2lf/%3.2lf ;",
+		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, NbAffinityLimitH, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
+	if(NbResH != 0)
+		fprintf(fichier, "%3.2lf\t ;%3.2lf\t ;%3.2lf\n", DevMin, DevTotal/NbIter, DevMax);
+	else fprintf(fichier, "*;*;*\n");
 	fclose(fichier);
 
 }
