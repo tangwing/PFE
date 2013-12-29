@@ -344,8 +344,9 @@ void Ordonnancement(int indice){
 			debutIndiceMachine = indiceAllume;
 	}///Fin if affected < nbpr
 
-	///Calcul nb total de serveur on.
-	Traitement.NbServeurOn += Traitement.ListOfNbServeurOn[indice].NbServeurOn;
+	///Calcul nb total de serveur on au niveau des intants de temps.
+	int nbInstant = (Traitement.ListOfIntervalles[indice].BorneSup - Traitement.ListOfIntervalles[indice].BorneInf + 1);
+	Traitement.NbServeurOn += (Traitement.ListOfNbServeurOn[indice].NbServeurOn	*  nbInstant);
 }
  
 
@@ -651,16 +652,39 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 bool VerifierAffinite(int indiceInterval)
 {
 	for(int i=0; i<N(); i++)
-		for(int j=i+1; j<N(); j++)
 		{
 			if(a(i,j) == 1)
+			{for(int j=i+1; j<N(); j++)
+		
 				if(Traitement.ListOfOrdo[indiceInterval][i].affecter != Traitement.ListOfOrdo[indiceInterval][j].affecter)
+				{
+					printf("Intervalle %d, Affinite non satisfaite: %d, %d\n",indiceInterval, i, j);
+					AfficherOrdo();
 					return false;
+				}
+			}
 		}
 	return true;
 }
 
 //------------------------ Des fonctions utilitaires ------------------------
+
+///@brief Prétraitement des données. Pour le moment, le comportement est de garantir la compatibilité entre a() et u().
+//void Pretraiter()
+//{
+//	bool repete = false;
+//	for(int i=0; i<N(); i++)
+//	{
+//		for(int j=i+1; j<N(); j++)
+//		{
+//			if(a(i,j) == 1)
+//			{//Vérifier u(i,t) et u(j,t)
+//				for(int t=0; t<
+//			}
+//		}
+//	}
+//}
+
 
 ///@brief Trier la liste de serveur selon coutnorm
 void SortServerList(Serveur* arr, int size)

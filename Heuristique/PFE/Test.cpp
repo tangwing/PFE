@@ -9,9 +9,9 @@ void AfficherIntervalle()
 	{
 		char title[50];
 		sprintf(title, "Intervalles");
-		ConsoleTable ct (title, T(), 1);
+		ConsoleTable ct (title, Traitement.NbInterval, 1);
 		ct.SetColWidth(10);
-		for(int i=0;i<T();i++){
+		for(int i=0;i< Traitement.NbInterval;i++){
 			sprintf(title, " [%d,%d] ",Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
 			ct.Print(title);
 		}

@@ -15,15 +15,15 @@
 #include "Traitement.h"
 #include "ConsoleTable.h"
 
-#define CACHER_TOUT true
+#define CACHER_TOUT false
 #define AFFICHER_AFFINITE true
-#define AFFICHER_MACHINE true
+#define AFFICHER_MACHINE false
 #define AFFICHER_ARC_DISPO true
-#define AFFICHER_INTERVALLE true
+#define AFFICHER_INTERVALLE false
 #define AFFICHER_SERVEUR_BIS true
 #define AFFICHER_LISTS_TACHES false
 #define AFFICHER_ORDO true
-#define AFFICHER_RT true
+#define AFFICHER_RT false
  
 //HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
 

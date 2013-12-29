@@ -18,10 +18,16 @@ int main()
 	time_t temp1,temp2;
 	FILE *fic;
     GetData();
+
+	///Ajouter ici un prétraitement pour garantir la compatibilité des u(i,t) et a(i,j)
+	///Si 2 taches (i,j) ont une affinité, alors il faut que u(i,t)==u(j,t) pour tous les t
+	//Pretraiter();
+
 	//DisplayData();
 	AfficherAffinite();
 	Init();
 
+	printf("The heuristic program is running...\n");
 	time(&temp1);	
 	CalculInterval();
 	CreerListeMachineTriee();///Trier les serveurs
@@ -45,7 +51,7 @@ int main()
 	{
 		///Tester si les taches non-pré sont toutes affectées. Sinon alors on a pas trouvé la solution.
 		///Afficher la matrice d'ordo
-		for(int i=0;i<T();i++)
+		for(int i=0;i<Traitement.NbInterval;i++)
 			for(int j=0;j<N();j++)
 			{
 				if ((Traitement.ListOfOrdo[i][j].IndiceMachine == -1)&&(R(j)==0))
