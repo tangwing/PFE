@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="C:\ILOG\CPLEX122\concert\include;C:\ILOG\CPLEX122\cplex\include"
+				AdditionalIncludeDirectories="&quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include&quot;;&quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include&quot;"
 				PreprocessorDefinitions="IL_STD"
 				MinimalRebuild="false"
 				ExceptionHandling="0"
@@ -63,8 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib &quot;C:\ILOG\CPLEX122\cplex\lib\x86_.net2005_8.0\stat_mta\cplex122.lib&quot; &quot;C:\ILOG\CPLEX122\cplex\lib\x86_.net2005_8.0\stat_mta\ilocplex.lib&quot; &quot;C:\ILOG\CPLEX122\concert\lib\x86_.net2005_8.0\stat_mta\concert.lib&quot; $(NOINHERIT)"
+				AdditionalDependencies="wsock32.lib &quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\cplex1260.lib&quot; &quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\ilocplex.lib&quot; &quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\lib\x86_windows_vs2010\stat_mta\concert.lib&quot; $(NOINHERIT)"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta&quot;;&quot;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\lib\x86_windows_vs2010\stat_mta&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="1"

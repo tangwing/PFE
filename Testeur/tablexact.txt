@@ -1,8 +1,0 @@
-B&B algorithms
------------------------------------------------------
-
-These tests are done on a PC Pentium III 700 Mhz
-Number of iterations for a fixed value of n : 30
-
-Algo  n   Time_min  Time_moy  Time_max   Node_min  Node_moy  Node_max VarFix_min()  VarFix_moy()  VarFix_max()
---------------------------------------------------------------------------------------------------------------------

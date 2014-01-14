@@ -1,8 +1,0 @@
-Number of cuts per BB
------------------------------------------------------
-
-These tests are done on a PC Pentium II 400 Mhz
-Number of iterations for a fixed value of n : 30
-
-Algo  n  Active_min(%) Active_moy(%) Active_max(%)  Done_min(%) Done_moy(%) Done_max(%)
--------------------------------------------------------------------------------------------------
