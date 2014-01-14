@@ -147,4 +147,6 @@ void SortServerList(Serveur* arr, int size);
 //template <typename T> 
 void SortListByPrio(Tache* arr, int size);
 
+double GetCpuTime();
+
 #endif

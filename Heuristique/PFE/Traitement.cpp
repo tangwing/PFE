@@ -646,7 +646,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	else return -1;
 }
 
-///
+///(Obsolete)
 ///@brief Vérifier qu'à l'intervalle donné, est-ce que l'ordonnancement effectué assure bien les affinités entre les tâches
 ///
 bool VerifierAffinite(int indiceInterval)
@@ -672,6 +672,7 @@ bool VerifierAffinite(int indiceInterval)
 //------------------------ Des fonctions utilitaires ------------------------
 
 ///@brief Prétraitement des données. Pour le moment, le comportement est de garantir la compatibilité entre a() et u().
+///@obselete
 void Pretraiter()
 {
 	bool repete = false;
@@ -734,4 +735,21 @@ void SortListByPrio(Tache* arr, int size)
 	}
 	if( j > 0 )SortListByPrio(arr, j+1);
 	if(i < size)SortListByPrio(arr+i, size-i);
+}
+
+///@brief GetCpuTime of current process
+double GetCpuTime(){
+    FILETIME a,b,c,d;
+    if (GetProcessTimes(GetCurrentProcess(),&a,&b,&c,&d) != 0){
+        //  Returns total user time.
+        //  Can be tweaked to include kernel times as well.
+        return
+            (double)(d.dwLowDateTime |
+            ((unsigned long long)d.dwHighDateTime << 32)) * 0.0000001;
+    }else{
+        //  Handle error
+		cerr<< "GetCpuTime(): Error when getting cpu time.";
+		exit(EXIT_FAILURE);
+        return 0;
+    }
 }
