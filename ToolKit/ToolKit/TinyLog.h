@@ -16,12 +16,11 @@
 #include <fstream>
 #include <string>
 using namespace std;
-
 class TinyLog
 {
 
 public:
-	enum LogLevel{TRACE = 1, DEBUG = 2, INFO = 3, WARNING = 4, ERROR = 5};
+	enum LogLevel{TRACE = 1, DEBUG = 2, INFO = 3, WARNING = 4};
 	
 	TinyLog(LogLevel ll, ostream * const os = NULL)
 	{

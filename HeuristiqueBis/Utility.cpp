@@ -4,10 +4,9 @@
 #include <vector>
 #include <Windows.h>
 #include <intrin.h>
-#include "declaration.h"
-#include "TinyLog.h"
-extern TinyLog debug;
+using namespace std;
 
+///@brief return the cpu info string
 string GetCpuInfo()
 {
     // Get extended ids.
@@ -43,6 +42,7 @@ string GetCpuInfo()
 }
 
 
+///@brief Heuristically determine a time limit for Cplex solver. According to an analyse, this value is 400s for 
 int CalculateTimeLimit()
 {
 	int iTimeLimit = 400; //s
@@ -53,12 +53,12 @@ int CalculateTimeLimit()
 
 	//Get cpu info
 	string sCPUInfo = GetCpuInfo();
-	cout << "Cpu String: " << sCPUInfo<<endl;
+	//cout << "Cpu String: " << sCPUInfo<<endl;
 
 	//Looking for cpu frequency
 	size_t pos = sCPUInfo.find("GHz");
 	if(pos == string::npos) 
-		cerr<<"Can't get cpu info! Set time limit to 400s";
+		cerr<<"CalculateTimeLimit: Can't get cpu info! Set time limit to 400s\n";
 	else{
 		int iPosFre = pos;
 		while(iPosFre >0 && sCPUInfo[iPosFre]!=' ' && sCPUInfo[iPosFre]!='\t') iPosFre --;
@@ -69,10 +69,4 @@ int CalculateTimeLimit()
 	return iTimeLimit;
 }
 
-int main(int argn, char** argvs)
-{
-	using namespace std;
-	//ExtractTimeElapsedGapFromLog("cplex.log","timegap.csv");
-	cout << CalculateTimeLimit();
-	return 0;
-}
+

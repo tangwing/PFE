@@ -9,6 +9,7 @@
 #include <process.h>
 #include "Data.h"
 #include <Windows.h>
+#include "Utility.h"
 
 #define DEBUG false
 #define DEBUG_MOD false
@@ -957,9 +958,12 @@ int main(int argc)
 			//cplex.setParam(IloCplex::WorkDir,"."); 
 			//cplex.setParam(IloCplex::NodeFileInd,2);
 
-			//cplex.setParam(IloCplex::EpGap, 0.05);// We limit the  mipgap tolerance
+			cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
 			cplex.setParam(IloCplex::TreLim,MemLimit);// We limit the size of the search tree
-			cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
+			int iTimeLimit = CalculateTimeLimit();
+			printf("TimeLimit : %d\n", iTimeLimit);
+			cplex.setParam(IloCplex::TiLim, iTimeLimit);
+			//cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
 			//cplex.setParam(IloCplex::Threads,1);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
