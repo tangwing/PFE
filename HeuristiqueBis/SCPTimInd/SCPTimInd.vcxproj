@@ -14,6 +14,7 @@
     <ProjectGuid>{CDC8B047-C373-456C-9A95-3247EE3DB54C}</ProjectGuid>
     <RootNamespace>SCPTimInd</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>H2</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -75,7 +76,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-
       <AdditionalIncludeDirectories>C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -90,7 +90,6 @@
       </DebugInformationFormat>
     </ClCompile>
     <Link>
-      
       <AdditionalDependencies>wsock32.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\cplex1260.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\ilocplex.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\lib\x86_windows_vs2010\stat_mta\concert.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
