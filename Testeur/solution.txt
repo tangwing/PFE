@@ -1,0 +1,75 @@
+Optimal solution computed by CPLEX for an instance with:
+	 8 tasks
+	 2 machines
+	 Time horizon of 12
+
+Optimal solution value: 202776.000000
+Solution time: 0.000000
+
+Schedule per machine and for each time unit
+Machine 1 (CPU=12 / GPU=0 / RAM=160 / HDD=164):
+	 Tasks: 1 2 3 5 | 1 2 3 | 2 5 | 1 2 3 5 | 2 3 5 | 1 2 3 5 | 1 3 5 | 1 2 3 5 | 1 2 | 1 2 | 1 2 3 5 | 1 2 5 | 
+	 CPU:   7 | 5 | 4 | 7 | 6 | 7 | 5 | 7 | 3 | 3 | 7 | 5 | 
+	 GPU:   0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 
+	 RAM:   128 | 91 | 74 | 128 | 111 | 128 | 91 | 128 | 54 | 54 | 128 | 91 | 
+	 HDD:   139 | 98 | 82 | 139 | 123 | 139 | 98 | 139 | 57 | 57 | 139 | 98 | 
+Machine 2 (CPU=147 / GPU=0 / RAM=1280 / HDD=491):
+	 Tasks: 6 7 8 | 6 8 | 6 7 8 | 6 | 8 | 6 7 | 6 7 | 7 8 | 6 7 | 6 7 8 | 7 8 | 6 7 | 
+	 CPU:   46 | 20 | 46 | 7 | 13 | 33 | 33 | 39 | 33 | 46 | 39 | 33 | 
+	 GPU:   0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 
+	 RAM:   1197 | 513 | 1197 | 171 | 342 | 855 | 855 | 1026 | 855 | 1197 | 1026 | 855 | 
+	 HDD:   323 | 127 | 323 | 42 | 85 | 238 | 238 | 281 | 238 | 323 | 281 | 238 | 
+
+ Schedule per task and for each time unit
+Task 1 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): 1 (1) | 2 (1) | | 4 (1) | | 6 (1) | 7 (1) | 8 (1) | 9 (1) | 10 (1) | 11 (1) | 12 (1) | 
+	 is likely to be proc?: 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
+Task 2 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): 1 (1) | 2 (1) | 3 (1) | 4 (1) | 5 (1) | 6 (1) | | 8 (1) | 9 (1) | 10 (1) | 11 (1) | 12 (1) | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 
+Task 3 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): 1 (1) | 2 (1) | | 4 (1) | 5 (1) | 6 (1) | 7 (1) | 8 (1) | | | 11 (1) | | 
+	 is likely to be proc?: 1 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 
+Task 4 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): | | | | | | | | | | | | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 
+Task 5 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 1 2 
+	 is Processed at times (machine): 1 (1) | | 3 (1) | 4 (1) | 5 (1) | 6 (1) | 7 (1) | 8 (1) | | | 11 (1) | 12 (1) | 
+	 is likely to be proc?: 1 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 
+Task 6 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | 4 (2) | | 6 (2) | 7 (2) | | 9 (2) | 10 (2) | | 12 (2) | 
+	 is likely to be proc?: 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 
+Task 7 (isPreemptable=1 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): 1 (2) | | 3 (2) | | | 6 (2) | 7 (2) | 8 (2) | 9 (2) | 10 (2) | 11 (2) | 12 (2) | 
+	 is likely to be proc?: 1 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 
+Task 8 (isPreemptable=0 / migration time=1):
+  Resuming time per machine: 1 1 
+  Can be assigned only to machines: 2 
+	 is Processed at times (machine): 1 (2) | 2 (2) | 3 (2) | | 5 (2) | | | 8 (2) | | 10 (2) | 11 (2) | | 
+	 is likely to be proc?: 1 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 
+
+ Network usage by links
+ Maximum Bandwith for each edge : 30000
+Edge  1:
+	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
+	 Bdw used: 3000 | 6000 | 0 | 3000 | 3000 | 3000 | 0 | 6000 | 3000 | 3000 | 3000 | 0 | 
+Edge  2:
+	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
+	 Bdw used: 3000 | 6000 | 0 | 3000 | 3000 | 3000 | 0 | 6000 | 3000 | 3000 | 3000 | 0 | 
+Edge  3:
+	 Time: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 
+	 Bdw used: 3000 | 6000 | 0 | 3000 | 3000 | 3000 | 0 | 6000 | 3000 | 3000 | 3000 | 0 | 

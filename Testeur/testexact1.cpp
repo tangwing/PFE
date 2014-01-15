@@ -11,8 +11,8 @@ unsigned int iterations=20;
 //Matrix used to stock all result info of one scenario
 //Dim1: 0=ExactMethod, 1=Heuristic
 //Dim2: iteration count
-//Dim3: 0-5: isFea, isOpt, value, time, nbMach. 
-//		  6: nbMemLimit(for ExactMethod), nbAffinityLimit(for Heuristic)
+//Dim3: 1-5: isFea, isOpt, value, time, nbMach. 
+//		  6: nbMemLimit(for ExactMethod)
 //		  7: nbTimeLimit(for ExactMethod). Not used by Heuristic.
 double ScRes[2][20][7];
 
@@ -214,12 +214,14 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		}
 	}
 
+	FILE* fRes = fopen("FullLog.csv","at");
 	FILE* fichier=fopen("ComparationMatrix.csv","at");
 	if(printHeader)
 	{
 		printHeader = false;
 		//fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
-		fprintf(fichier,"Scenario(N/M);Infeasable  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
+		fprintf(fRes,"Scenario(N/M); isFea(E); isFea(H); isOpt(E); isOpt(H); sol(E); sol(H); time(E); time(H); nbMach(E); nbMach(H);  nbMemLimit(E);  nbTimeLimit(E)\n");
+		fprintf(fichier,"Scenario(N/M); Infeasable  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
 	}
 	fprintf(fichier,"Sc%d(%d/%d)      ;%d         ;%d/%d         ;%d          ;%d      ;%3.2lf/%3.2lf   ;%3.2lf/%3.2lf     ;%3.2lf/%3.2lf ;",
 		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
@@ -228,4 +230,24 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 	else fprintf(fichier, "      *      ;*      ;*\n");
 	fclose(fichier);
 
+	//Export all results
+	for(int i = 0; i<NbIter; i++)
+	{
+		fprintf(fRes,"Sc%d(%d/%d)      ;%d     ;%d     ;%d    ;%d      ;%.2lf       ;%.2lf     ;%3.2lf     ;%3.2lf   ;%3.2lf     ;%3.2lf     ;%3.2lf      ;%3.2lf\n",
+		IdSce+1, NbTache, NbMach,         
+		int(ScRes[0][i][0]), 
+		int(ScRes[1][i][0]), 
+		int(ScRes[0][i][1]), 
+		int(ScRes[1][i][1]), 
+		ScRes[0][i][2], 
+		ScRes[1][i][2], 
+		ScRes[0][i][3], 
+		ScRes[1][i][3], 
+		ScRes[0][i][4], 
+		ScRes[1][i][4], 
+		ScRes[0][i][5], 
+		ScRes[0][i][6]
+		);
+	}
+	fclose(fRes);
 }

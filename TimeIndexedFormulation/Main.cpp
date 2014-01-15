@@ -9,7 +9,7 @@
 #include <process.h>
 #include "Data.h"
 
-#define DEBUG true
+#define DEBUG false
 #define DEBUG_MOD false
 #define CONFIG true
 

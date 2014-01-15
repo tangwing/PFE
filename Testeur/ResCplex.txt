@@ -1,0 +1,102 @@
+Variables xijt
+Variable x_1_j_t (one line per machine, one column per time)
+1.0 1.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable x_2_j_t (one line per machine, one column per time)
+1.0 1.0 1.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable x_3_j_t (one line per machine, one column per time)
+1.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 0.0 0.0 1.0 0.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable x_4_j_t (one line per machine, one column per time)
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable x_5_j_t (one line per machine, one column per time)
+1.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 0.0 0.0 1.0 1.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable x_6_j_t (one line per machine, one column per time)
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+1.0 1.0 1.0 1.0 0.0 1.0 1.0 0.0 1.0 1.0 0.0 1.0 
+Variable x_7_j_t (one line per machine, one column per time)
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+1.0 0.0 1.0 0.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+Variable x_8_j_t (one line per machine, one column per time)
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+1.0 1.0 1.0 0.0 1.0 0.0 0.0 1.0 0.0 1.0 1.0 0.0 
+Variables yiijjt
+Variable y_1_1_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_1_2_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_1_3_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_1_4_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0 
+Variable y_1_5_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_1_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_1_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_1_8_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_2_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_2_3_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_4_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_5_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_2_8_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_3_3_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_3_4_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_3_5_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_3_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_3_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_3_8_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+1.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 
+Variable y_4_4_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_4_5_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_4_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_4_7_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_4_8_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_5_5_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_5_6_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_5_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_5_8_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_6_6_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_6_7_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_6_8_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_7_7_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+Variable y_7_8_j_j'_t has been removed by CPLEX since there is no affinity between these tasks
+Variable y_8_8_j_j'_t (one line per couple of machines, one column per time)
+(1/2) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+(2/1) : 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
