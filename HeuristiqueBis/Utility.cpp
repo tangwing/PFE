@@ -64,7 +64,7 @@ int CalculateTimeLimit()
 		while(iPosFre >0 && sCPUInfo[iPosFre]!=' ' && sCPUInfo[iPosFre]!='\t') iPosFre --;
 		double iFre = strtod(sCPUInfo.c_str() + iPosFre, NULL);
 		//The default value 400s is for 2cores * 1.6GHz
-		iTimeLimit = 400 * iNumCPU * iFre / 3.2;
+		iTimeLimit = 400 * 3.2 / (iNumCPU * iFre);
 	}
 	return iTimeLimit;
 }
