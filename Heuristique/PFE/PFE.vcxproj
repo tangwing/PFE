@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="ConsoleTable.h" />
     <ClInclude Include="Data.h" />
+    <ClInclude Include="H1Result.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="Traitement.h" />

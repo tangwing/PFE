@@ -9,6 +9,7 @@
 #include <Windows.h>
 #include "Preprocessing.h"
 #include "Data.h"
+#include "Utility.h"
 #include "CplexResult.h"
 
 #define DEBUG false
@@ -948,17 +949,11 @@ int main(int argc)
 			cplex.exportModel("SCP.lp");
 		if(CONFIG)
 		{
-			//cplex.setParam(IloCplex::SimDisplay,0);
-			//cplex.setParam(IloCplex::RootAlg,IloCplex::Primal);
-			//cplex.setParam(IloCplex::AdvInd,1);
-			//cplex.setParam(IloCplex::MemoryEmphasis,1);
-			//cplex.setParam(IloCplex::WorkMem,1500);
-			//cplex.setVectors(val,0,var,0,0,0);
-			//cplex.setParam(IloCplex::WorkDir,"."); 
-			//cplex.setParam(IloCplex::NodeFileInd,2);
+			cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
 			cplex.setParam(IloCplex::TreLim,MemLimit);// We limit the size of the search tree
-			cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
-			//cplex.setParam(IloCplex::Threads,3);
+			int iTimeLimit = CalculateTimeLimit();
+			printf("TimeLimit : %d\n", iTimeLimit);
+			cplex.setParam(IloCplex::TiLim, iTimeLimit);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
 	//try 
@@ -1033,7 +1028,7 @@ int main(int argc)
 		,dOptTime
 		,dOptTimeCpu);
 
-	res.ExportToFile("SCPres.txt");
+	res.ExportToFile("H2.txt");
 	//fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,,dOptTimeCpu);
 
 	if (DEBUG && dOptValue!=9999999.0)

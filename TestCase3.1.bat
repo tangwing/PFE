@@ -22,4 +22,4 @@ for /l %%x in (1, 1, 100) do (
    timeout 1
    python -c "print '\7'"
 )
-
+exit

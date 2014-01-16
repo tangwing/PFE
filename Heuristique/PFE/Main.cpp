@@ -9,7 +9,7 @@
 #include "Traitement.h"
 #include "ConsoleTable.h"
 #include "Test.h"
-//#include "timer.h"
+#include "H1Result.h"
 
 int main()
 {
@@ -59,9 +59,9 @@ int main()
 	dTime1 = GetCpuTime();
 	 
 	double dOptTimeCpu= dTime1 - dTime0;
-	fic=fopen("Heuristic.txt","wt");
-	fprintf(fic,"%d\n%d\n%lf\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T(), dOptTimeCpu);
-	fclose(fic);
+	H1Result res(isFeasible, (double)Traitement.NbServeurOn/T(),dOptValue,dOptTime, dOptTimeCpu);
+	res.ExportToFile("Heuristic.txt");
+
 	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n TempsCPU:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime,dOptTimeCpu, (double)Traitement.NbServeurOn/T());
 	//getchar();
 }

@@ -21,6 +21,9 @@
     <ClCompile Include="CplexReportAnalyser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="declaration.h">
@@ -28,6 +31,15 @@
     </ClInclude>
     <ClInclude Include="TinyLog.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H1Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CplexResult.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

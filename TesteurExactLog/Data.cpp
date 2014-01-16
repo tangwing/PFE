@@ -10,6 +10,7 @@ SDEFData Data;
 // List of accessors to the data
 /****************************************************************************/
 
+// The getters: they are used to know the value of the data
 int T() // Returns the length of the time horizon
 { return Data.TimeHorizon;}
 int N() // Returns the number of tasks
@@ -68,6 +69,8 @@ short int v(unsigned int j) // Returns the speed of machine j in loading a proce
 // For the network
 short int maxb() // Returns the maximum bandwidth of any edge
 { return  Data.Network.MaxBandwidth ;}
+short int MigrateBdw() // Returns the maximum bandwidth of any edge
+{ return  Data.Network.MigrateBandwidth;}
 short int NbEdges() // Returns the number of Edges in the network
 { return  Data.Network.NbEdges ;}
 short int NbMachEdge(unsigned int e) // Returns the number of couples of machines that use the edge e
@@ -76,6 +79,73 @@ void CoupleMachines(unsigned int e, unsigned int pos, unsigned int &Mach1, unsig
 {
 	Mach1=Data.Network.ListOfMachinesByEdge[e][pos][0]-1;	
 	Mach2=Data.Network.ListOfMachinesByEdge[e][pos][1]-1;
+}
+
+// The setters: they are used to modify the value of the data
+void SetT(short int val) // Sets the length of the time horizon
+{ Data.TimeHorizon=val;}
+void SetN(short int val) // Sets the number of tasks
+{ Data.NbTasks=val;}
+void SetM(short int val) // Sets the number of machines
+{ Data.NbMachines=val; }
+
+// For tasks
+void Setnc(unsigned int i,short int val) // Sets the required CPU load of task i
+{ Data.ListOfTasks[i].QtyCPU=val ;}
+void Setng(unsigned int i,short int val) // Sets the required GPU load of task i
+{ Data.ListOfTasks[i].QtyGPU=val  ;}
+void Setnr(unsigned int i,short int val) // Sets the required RAM of task i
+{ Data.ListOfTasks[i].QtyRAM=val  ;}
+void Setnh(unsigned int i,short int val) // Sets the required harddrive of task i
+{ Data.ListOfTasks[i].QtyHDD=val  ;}
+void Setu(unsigned int i, unsigned int t,short int val) // Sets if task i is likely to be processed at time t
+{ Data.ListOfTasks[i].LIsToBeProcessed[t]=val  ;}
+void Seta(unsigned int i, unsigned int k,short int val) // Sets 1 if tasks i and k have an affinity; 0 otherwise
+{ Data.ListOfTasks[i].LAffinities[k]=val ;}
+void Setq(unsigned int i, unsigned int j,short int val) // Sets 1 if task i can be assigned to machine j; 0 otherwise
+{ Data.ListOfTasks[i].LPreAssignement[j]=val ;}
+void Setb(unsigned int i, unsigned int j,short int val) // Sets the bandwidth required by tasks i and j to communicate over the network
+{ Data.Network.ComBandwidth[i][j]=val ;}
+void SetR(unsigned int i,short int val) // Sets 1 if task i is preemptable; 0 otherwise
+{ Data.ListOfTasks[i].isPreemptable=val ;}
+void Setrho(unsigned int i,short int val) // Sets the unitary penalty induced by preempting taks i
+{ Data.ListOfTasks[i].CostPreemption=val ;}
+
+// For machines
+void Setmc(unsigned int j,short int val) // Sets the maximum accepted CPU load of machine j
+{   Data.ListOfMachines[j].QtyCPU=val ;}
+void Setmg(unsigned int j,short int val) // Sets the maximum accepted GPU load of machine j
+{ Data.ListOfMachines[j].QtyGPU=val ;}
+void Setmr(unsigned int j,short int val) // Sets the maximum accepted RAM load of machine j
+{   Data.ListOfMachines[j].QtyRAM=val ;}
+void Setmh(unsigned int j,short int val) // Sets the maximum accepted harddrive load of machine j
+{   Data.ListOfMachines[j].QtyHDD=val ;}
+void Setalphac(unsigned int j,short int val) // Sets the cost for using CPU of machine j
+{ Data.ListOfMachines[j].CostCPU=val  ;}
+void Setalphag(unsigned int j,short int val) // Sets the cost for using GPU of machine j
+{ Data.ListOfMachines[j].CostGPU=val  ;}
+void Setalphar(unsigned int j,short int val) // Sets the cost for using RAM of machine j
+{ Data.ListOfMachines[j].CostRAM=val  ;}
+void Setalphah(unsigned int j,short int val) // Sets the cost for using Harddrive of machine j
+{ Data.ListOfMachines[j].CostHDD=val  ;}
+void Setbeta(unsigned int t,short int val) // Sets the cost for turning on a machine at time t
+{ Data.CostTurnOn[t]=val  ;}
+void Setv(unsigned int j,short int val) // Sets the speed of machine j in loading a processing context
+{ Data.ListOfMachines[j].SpeedContext=val  ;}
+
+// For the network
+void Setmaxb(short int val) // Sets the maximum bandwidth of any edge
+{ Data.Network.MaxBandwidth=val ;}
+void SetMigrateBdw(short int val) // Sets the bandwidth used for migration
+{ Data.Network.MigrateBandwidth=val ;}
+void SetNbEdges(short int val) // Sets the number of Edges in the network
+{ Data.Network.NbEdges=val ;}
+void SetNbMachEdge(unsigned int e,short int val) // Sets the number of couples of machines that use the edge e
+{ Data.Network.NbMachinesByEdge[e]=val;}
+void SetCoupleMachines(unsigned int e, unsigned int pos, unsigned int Mach1, unsigned int Mach2) // Mach1 and Mach2 are the machines in position pos in the list of couples usinge the edge e
+{
+	Data.Network.ListOfMachinesByEdge[e][pos][0]=Mach1+1;	
+	Data.Network.ListOfMachinesByEdge[e][pos][1]=Mach2+1;
 }
 
 /****************************************************************************/
@@ -112,7 +182,6 @@ void GetData(void)
  FILE *file;
  int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
 
- //file=fopen("Donnees/donnees5_6.dat","rt");
  file=fopen("donnees.dat","rt");
  // We read the length of the Time Horizon
  fscanf(file,"%d\n",&Data.TimeHorizon);
@@ -181,7 +250,90 @@ void GetData(void)
 	  fscanf(file,"\n");
   }
  fclose(file);
+}
+
+/****************************************************************************/
+// Function WriteData
+// Write the instance in a file  name donnees.dat
+/****************************************************************************/
+
+void WriteData(void)
+{
+	static int idScenario = 1;
+	static int idInstance = 1;
+	if(idInstance==21){idScenario++; idInstance=1;}
+ int num,ri_temp,pi_temp,j,i;
+ FILE *file;
+ int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
+ ///char filename[20]="donnees5_20.dat";
+ ///sprintf(filename, "donnees%d_%d.dat", idScenario, idInstance++);
+ //file=fopen(filename, "wt");
+ file=fopen("donnees.dat","wt");
+ // We write the length of the Time Horizon
+ fprintf(file,"%d\n",Data.TimeHorizon);
+ // We write the number of tasks
+ fprintf(file,"%d\n",Data.NbTasks);
+ // We write the number of machines
+ fprintf(file,"%d\n",Data.NbMachines);
+
+ // Writting the information related to the tasks
+ // Each line of the input file can be decomposed as follows: Qty of CPU, Qty of GPU, Qty of RAM, Qty of Harddrive, Ri boolean indicating if preemptable, Cost for suspending, 
+ for (iLoop=0;iLoop<Data.NbTasks;iLoop++)
+	 fprintf(file,"%hd %hd %hd %hd %hd %hd\n",Data.ListOfTasks[iLoop].QtyCPU,Data.ListOfTasks[iLoop].QtyGPU,Data.ListOfTasks[iLoop].QtyRAM,Data.ListOfTasks[iLoop].QtyHDD,Data.ListOfTasks[iLoop].isPreemptable,Data.ListOfTasks[iLoop].CostPreemption);
+
+ // We write the uit data
+ for (iLoop=0;iLoop<Data.NbTasks;iLoop++)
+ {
+	 for (iLoop2=0;iLoop2<Data.TimeHorizon;iLoop2++) // We write the variables uit: 1 if task i has to be processed at time t
+		fprintf(file,"%hd ",Data.ListOfTasks[iLoop].LIsToBeProcessed[iLoop2]); 
+	 fprintf(file,"\n");
+ }
+
+ // We write the matrix of affinities A=(aij)
+ for (iLoop=0;iLoop<Data.NbTasks;iLoop++)
+ {
+	 for (iLoop2=0;iLoop2<Data.NbTasks;iLoop2++) 
+			 fprintf(file,"%hd ",Data.ListOfTasks[iLoop].LAffinities[iLoop2]); 
+	 fprintf(file,"\n");
+ }
+
+ // We write the matrix of preassignments Q=(qi,k)
+ for (iLoop=0;iLoop<Data.NbTasks;iLoop++)
+ {
+	 for (iLoop2=0;iLoop2<Data.NbMachines;iLoop2++) 
+			 fprintf(file,"%hd ",Data.ListOfTasks[iLoop].LPreAssignement[iLoop2]); 
+	 fprintf(file,"\n");
+ }
+
+ // Writting of data related to the machines
+ for (iLoop=0;iLoop<Data.NbMachines;iLoop++) // We write the CPU, GPU, RAM, Harddrive availability of each machine and at last the speed in loading contexts (vj)
+	 fprintf(file,"%hd %hd %hd %hd %hd\n",Data.ListOfMachines[iLoop].QtyCPU,Data.ListOfMachines[iLoop].QtyGPU,Data.ListOfMachines[iLoop].QtyRAM,Data.ListOfMachines[iLoop].QtyHDD,Data.ListOfMachines[iLoop].SpeedContext);
+ for (iLoop=0;iLoop<Data.NbMachines;iLoop++) // We write the cost for using CPU, GPU, RAM, Harddrive on each machine
+	 fprintf(file,"%hd %hd %hd %hd\n",Data.ListOfMachines[iLoop].CostCPU,Data.ListOfMachines[iLoop].CostGPU,Data.ListOfMachines[iLoop].CostRAM,Data.ListOfMachines[iLoop].CostHDD);
+ for (iLoop=0;iLoop<Data.TimeHorizon;iLoop++)
+	 fprintf(file,"%hd ",Data.CostTurnOn[iLoop]);
+ fprintf(file,"\n");
+
+ // Writting of data related to the network
+ fprintf(file,"%hd\n",Data.Network.MaxBandwidth); // We write the maximum bandwidth of any link (b)
+ fprintf(file,"%hd\n",Data.Network.MigrateBandwidth); // We write the bandwidth reserved for a migration (bii)
+ for (iLoop=0;iLoop<Data.NbTasks;iLoop++)
+ {
+	 for (iLoop2=0;iLoop2<Data.NbTasks;iLoop2++) 
+			 fprintf(file,"%hd ",Data.Network.ComBandwidth[iLoop][iLoop2]); 
+	 fprintf(file,"\n");
+ }
+ 
+  // We read the network structure, link by link
+  fprintf(file,"%hd\n",Data.Network.NbEdges);
+  for (iLoop=0;iLoop<Data.Network.NbEdges;iLoop++)
+  {
+	  fprintf(file,"%hd ",Data.Network.NbMachinesByEdge[iLoop]);
+	  for (iLoop2=0;iLoop2<Data.Network.NbMachinesByEdge[iLoop];iLoop2++)
+		  fprintf(file,"%hd %hd ",Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][0],Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][1]);
+	  fprintf(file,"\n");
+  }
+ fclose(file);
 
  
 }
-
