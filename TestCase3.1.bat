@@ -10,7 +10,7 @@ cd .\Testeur
 ::test 2
 cd ..
 time /t >> time.log
-Copy .\HeuristiqueBis\SCPTimInd\Release\H2.exe .\Testeur\SCPTimInd.exe
+Copy .\HeuristiqueBis\SCPTimInd\Release\H2.exe .\Testeur\PFE.exe
 cd .\Testeur
 .\Release\EvalIP.exe > test2.log 2>test2.err
 cd ..
