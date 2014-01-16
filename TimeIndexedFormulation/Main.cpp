@@ -8,6 +8,7 @@
 #include <ctime>
 #include <process.h>
 #include "Data.h"
+#include <Windows.h>
 
 #define DEBUG false
 #define DEBUG_MOD false
@@ -42,7 +43,7 @@ IloIntVarArray2D d(env);
 IloIntVar RE(env,0,9999999);
 
 
-double dOptValue, dOptTime;
+double dOptValue, dOptTime, dOptTimeCpu;
 int isOptimal, isFeasible,iNbNodesIP;
 
 void PreByCalCost(int begin, int end, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
@@ -909,11 +910,21 @@ double CountPMsTurnedOn(IloCplex *pcplex)
  return (dCount/=(double)T());
 }
 
+//Get cpu time for the current process
+double GetCpuTime()
+{
+    FILETIME a,b,c,d;
+    if (GetProcessTimes(GetCurrentProcess(),&a,&b,&c,&d) != 0){
+        return    (double)(d.dwLowDateTime |
+            ((unsigned long long)d.dwHighDateTime << 32)) * 0.0000001;
+    }else return 0;
+}
 
 /* Programme Principal */
 int main(int argc)
 {
   time_t temp1,temp2,tempPre1,tempPre2;
+  double dTime0, dTime1;	//cpu time
   FILE *fic;
   double dNbMach;
 
@@ -921,6 +932,7 @@ int main(int argc)
 	if (DEBUG) DisplayData();
 
 	time(&temp1);
+	dTime0 = GetCpuTime();
 
 		/*CREATION OF MODEL, CONSTRAINTS AND UB HERE*/
 		//InitializeLPModel();
@@ -999,10 +1011,16 @@ int main(int argc)
 	}
 
 	time(&temp2);	
+	dTime1 = GetCpuTime();
+
+
 	dOptTime=difftime(temp2,temp1);
+	dOptTimeCpu = dTime1 - dTime0;
+
+	printf("isFeasible:%d\nisOptimal:%d\ndOptValue:%d\ndOptCPUTime:%lf\ndOptWallTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTimeCpu,dOptTime,iNbNodesIP,dNbMach);
 
     fic=fopen("SCPres.txt","wt");
-	fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach);
+	fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach,dOptTimeCpu);
 	fclose(fic);
 
 	if (DEBUG && dOptValue!=9999999.0)

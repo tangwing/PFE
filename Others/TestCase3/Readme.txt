@@ -9,5 +9,5 @@ ComparationMatrix: Statistics.
 time.log: 3time points, begin of test1, end of test1 (begin of test2), end of test2. 
 
 Problems:
-+ In *.log, there miss some informations which should have been output by printf.
-+ In the ResultLog of the test2, the time used by cplex for sc5-6 sc6-9 and sc6-17 has passed 400s, which is not coherent with our setting.
++ In *.log, there miss some informations which should have been output by printf. (Resolved.those info are only in test2.log)
++ In the ResultLog of the test2, the time used by cplex for sc5-6 sc6-9 and sc6-17 has passed 400s, which is not coherent with our setting. (Resolved. Because they are cpu time)

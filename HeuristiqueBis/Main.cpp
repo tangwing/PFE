@@ -44,7 +44,7 @@ IloIntVarArray2D d(env);
 IloIntVar RE(env,0,9999999);
 
 
-double dOptValue, dOptTime;
+double dOptValue, dOptTime, dOptTimeCpu;
 int isOptimal, isFeasible,iNbNodesIP;
 
 void PreByCalCost(int begin, int end, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
@@ -1020,13 +1020,13 @@ int main(int argc)
 	dTime1 = GetCpuTime();
 
 
-	double dOptWallTime=difftime(temp2,temp1);
-	dOptTime = dTime1 - dTime0;
+	dOptTime=difftime(temp2,temp1);
+	dOptTimeCpu = dTime1 - dTime0;
 
-	printf("isFeasible:%d\nisOptimal:%d\ndOptValue:%d\ndOptCPUTime:%lf\ndOptWallTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,dOptWallTime,iNbNodesIP,dNbMach);
+	printf("isFeasible:%d\nisOptimal:%d\ndOptValue:%d\ndOptCPUTime:%lf\ndOptWallTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTimeCpu,dOptTime,iNbNodesIP,dNbMach);
 
     fic=fopen("SCPres.txt","wt");
-	fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach);
+	fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach,dOptTimeCpu);
 	fclose(fic);
 
 	if (DEBUG && dOptValue!=9999999.0)

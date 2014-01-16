@@ -16,7 +16,8 @@ int main()
 	using namespace std;
 	double dOptValue=-1,dOptTime=-1;
 	bool isFeasible = true;
-	double dTime0, dTime1;
+	double dTime0, dTime1; //cputime
+	time_t temp1,temp2;//wall time
 	FILE *fic;
     GetData();
 
@@ -28,6 +29,7 @@ int main()
 
 	printf("The heuristic program is running...\n");
 	
+	time(&temp1);    
 	dTime0 = GetCpuTime();
 	CalculInterval();
 	CreerListeMachineTriee();///Trier les serveurs
@@ -52,12 +54,14 @@ int main()
 		}
 	dOptValue = TotalCost();
 	
+	time(&temp2);
+    dOptTime=difftime(temp2,temp1);
 	dTime1 = GetCpuTime();
 	 
-	dOptTime= dTime1 - dTime0;
+	double dOptTimeCpu= dTime1 - dTime0;
 	fic=fopen("Heuristic.txt","wt");
-	fprintf(fic,"%d\n%d\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
+	fprintf(fic,"%d\n%d\n%lf\n%lf\n%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T(), dOptTimeCpu);
 	fclose(fic);
-	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
+	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n TempsCPU:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime,dOptTimeCpu, (double)Traitement.NbServeurOn/T());
 	//getchar();
 }
