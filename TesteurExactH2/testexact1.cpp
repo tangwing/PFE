@@ -145,14 +145,14 @@ void main(void)
 	   dCpuTime = h2.durationCpuClock;
 	  
 	   ///Fill the result matrix
-	   ScRes[0][j][0] = isFeas;
-	   ScRes[0][j][1] = isOpt;
-	   ScRes[0][j][2] = iOptValue;
-	   ScRes[0][j][3] = dTime;
-	   ScRes[0][j][4] = dNbMach;
-	   ScRes[0][j][5] = cplex.isMemLimit;
-	   ScRes[0][j][6] = cplex.isTimeLimit;
-	   ScRes[0][j][7] = dCpuTime;
+	   ScRes[1][j][0] = isFeas;
+	   ScRes[1][j][1] = isOpt;
+	   ScRes[1][j][2] = iOptValue;
+	   ScRes[1][j][3] = dTime;
+	   ScRes[1][j][4] = dNbMach;
+	   ScRes[1][j][5] = cplex.isMemLimit;
+	   ScRes[1][j][6] = cplex.isTimeLimit;
+	   ScRes[1][j][7] = dCpuTime;
 
 	   fichier=fopen("ScpTraces.txt","at");
 	   fprintf(fichier,"Sc%d %d * * %lf %lf %ld\n",i+1,isFeas,dTime,dNbMach, iOptValue);
@@ -164,6 +164,7 @@ void main(void)
 	 ScNM[i][0] + ScNM[i][1] + ScNM[i][2] + ScNM[i][3] + ScNM[i][4], ///N
 	 ScNM[i][5] + ScNM[i][6] + ScNM[i][7] + ScNM[i][8],				 ///M
 	 iterations);
+
  fichier=fopen("ScpIPStats.txt","at");
  fprintf(fichier,"Sc%d %d %d %d %d %d %lf %d %3.2lf %3.2lf %3.2lf %2.2lf %2.2lf %2.2lf\n",i+1,InFeas,Solved,uiMemLim,uiTimLim,Ndmin,(double)Ndmoy/(double)iTot,Ndmax,Timin,Timoy/(double)(iTot),Timax,dNbMachmin,dNbMachmoy/(double)(iTot2),dNbMachmax);
  fclose(fichier);
@@ -251,10 +252,10 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		printHeader = false;
 		//fprintf(fichier,"Number of instance for each scenario: %d\n", NbIter);
 		fprintf(fRes,"Scenario(N/M); isFea(E); isFea(H); isOpt(E); isOpt(H); sol(E); sol(H); time(E); time(H); nbMach(E); nbMach(H);  nbMemLimit(E); nbMemLimit(H);  nbTimeLimit(E); nbTimeLimit(H);  CPUtime(E); CPUtime(H)\n");
-		fprintf(fichier,"Scenario(N/M); Infeasable  ;Solved(E/H) ;MemLim(E) ;TimeLim(E) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
+		fprintf(fichier,"Scenario(N/M); Infeasable  ;Solved(E/H) ;MemLim(E/H) ;TimeLim(E/H) ;TMin(E/H)   ;TAvg(E/H)     ;TMax(E/H)     ;DevMin  ;DevAvg  ;DevMax\n");
 	}
-	fprintf(fichier,"Sc%d(%d/%d)      ;%d         ;%d/%d         ;%d          ;%d      ;%3.2lf/%3.2lf   ;%3.2lf/%3.2lf     ;%3.2lf/%3.2lf ;",
-		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
+	fprintf(fichier,"Sc%d(%d/%d)      ;%d         ;%d/%d         ;%d/%d          ;%d/%d      ;%3.2lf/%3.2lf   ;%3.2lf/%3.2lf     ;%3.2lf/%3.2lf ;",
+		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbMemLimitH, NbTimeLimitE, NbTimeLimitH,TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
 	if(NbResH != 0)
 		fprintf(fichier, "     %3.2lf\t  ;%3.2lf\t  ;%3.2lf\n", DevMin, DevTotal/NbInstanceDev, DevMax);
 	else fprintf(fichier, "      *      ;*      ;*\n");
