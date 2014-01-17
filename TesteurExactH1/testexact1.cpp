@@ -243,7 +243,7 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 	}
 	fprintf(fichier,"Sc%d(%d/%d)      ;%d         ;%d/%d         ;%d          ;%d      ;%3.2lf/%3.2lf   ;%3.2lf/%3.2lf     ;%3.2lf/%3.2lf ;",
 		IdSce+1, NbTache, NbMach, iterations - NbResE, NbResE, NbResH, NbMemLimitE, NbTimeLimitE, TMinE, TMinH, TTotalE/NbIter, TTotalH/NbIter, TMaxE, TMaxH);
-	if(NbResH != 0)
+	if(NbInstanceDev > 0)
 		fprintf(fichier, "     %3.2lf\t  ;%3.2lf\t  ;%3.2lf\n", DevMin, DevTotal/NbInstanceDev, DevMax);
 	else fprintf(fichier, "      *      ;*      ;*\n");
 	fclose(fichier);
