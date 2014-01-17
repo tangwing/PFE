@@ -10,6 +10,7 @@ cd .\TesteurExactH1
 ::test 2
 cd ..
 time /t >> time.log
+Copy .\TimeIndexedFormulation\SCPTimInd\Release\SCPTimInd.exe .\TesteurExactH2\SCPTimInd.exe
 Copy .\H2\SCPTimInd\Release\H2.exe .\TesteurExactH2\H2.exe
 cd .\TesteurExactH2
 .\Release\EvalIP.exe > test2.log 2>test2.err
