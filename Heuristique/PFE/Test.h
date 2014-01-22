@@ -16,7 +16,7 @@
 #include "ConsoleTable.h"
 
 #define CACHER_TOUT false
-#define AFFICHER_AFFINITE true
+#define AFFICHER_AFFINITE false
 #define AFFICHER_RT false
 #define AFFICHER_UIT false
 #define AFFICHER_MACHINE false

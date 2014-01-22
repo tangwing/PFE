@@ -116,7 +116,10 @@ int TotalCost(){
 	int CoutAffect = 0;
 	int CoutUnitaire = 0;
 	int Penalty = 0;
-
+	//Traitement.ListOfOrdo[4][4].IndiceMachine=1;
+	//Traitement.ListOfOrdo[4][4].isMigrated=0;
+	//Traitement.ListOfOrdo[5][4].IndiceMachine=1;
+	//Traitement.ListOfOrdo[6][4].isMigrated=0;
 	AfficherOrdo();
 	//LoadOrdo();
 	//AfficherAffinite();
@@ -131,7 +134,11 @@ int TotalCost(){
 				int iMache = Traitement.ListOfOrdo[t][n].IndiceMachine;
 				CoutAffect = CoutAffect+ (alphac(iMache)*nc(n)+alphag(iMache)*ng(n)+alphar(iMache)*nr(n)+alphah(iMache)*nh(n));//CalculCoutAffectation( n, Traitement.ListOfOrdo[t][n].IndiceMachine);
 				if(Traitement.ListOfOrdo[t][n].isMigrated)
+				{
+					//int in = Traitement.ListOfOrdo[t][n].IndiceMachine;
+					//printf("%d:%d->%d:%d*(%d*%d+%d*%d)\n", t,n,in, mt(n), alphar(in),nr(n), alphah(in), nh(n));
 					CoutMigration += mt(n)*(alphar(Traitement.ListOfOrdo[t][n].IndiceMachine)*nr(n)+alphah(Traitement.ListOfOrdo[t][n].IndiceMachine)*nh(n));
+				}
 			}
 			else if(u(n,t)==1&& R(n)==1)
 			{
@@ -166,9 +173,7 @@ bool CalculFesabiliteResau(
 	unsigned machinei,unsigned machinej,
 	unsigned indice) ///Indice de l'intervalle
 {
-	if( tachei == tachej && machinei == machinej) return true;	
-	if(a(tachei, tachej) != 1)return true;
-	
+	if(machinei == machinej || (tachei != tachej && a(tachei, tachej) != 1))return true;	
 	int intervalInf = Traitement.ListOfIntervalles[indice].BorneInf;
 	int intervalSup = Traitement.ListOfIntervalles[indice].BorneSup;
 
@@ -452,7 +457,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 					(listeTache[iboucle1].prio>=0))
 				{
 					LastExecution(indice, indiceVM, lastIndiceInterval, lastIndiceServeur, duree);
-					if(  lastIndiceServeur != indiceServeur && duree>mt(indiceVM)) 
+					if(  lastIndiceServeur != indiceServeur && duree>=mt(indiceVM)) 
 					{///Traitement pour migration
 							needMigration = true;
 							bandMigration = b(indiceVM, indiceVM);
@@ -484,7 +489,6 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 
 									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
-										
 										///Si on trouve une VM qui a une affinité de celle qu'on est en train de traiter
 										if(a(indiceVM,indiceVM2)==1)
 										{

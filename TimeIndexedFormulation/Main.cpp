@@ -403,8 +403,8 @@ void InitializeIPModel()
 				   if (iLoop5!=iLoop3)
 					{
 					 IloExpr F(env);
-					 F+=x[iLoop2][iLoop3][iLoop4];
-					 F+=x[iLoop2][iLoop5][iLoop6];
+					 F+=x[iLoop2][iLoop3][iLoop4];//i,j,t1
+					 F+=x[iLoop2][iLoop5][iLoop6];//i,j',t2
 					 F-=y[iLoop2][iLoop2][iLoop3][iLoop5][iLoop];
 					 for (iLoop7=0;iLoop7<M();iLoop7++)
 						for (iLoop8=iLoop4+1;iLoop8<iLoop6;iLoop8++)
@@ -439,7 +439,7 @@ void InitializeIPModel()
 					 for (iLoop6=0;iLoop6<M();iLoop6++)
 						 for (iLoop7=iLoop+1;iLoop7<iLoop4;iLoop7++)
 							 F1-=mt(iLoop2)*x[iLoop2][iLoop6][iLoop7];
-					 for (iLoop6=iLoop;iLoop6>(int)max((int)iLoop+1-mt(iLoop2),(int)0);iLoop6--)
+					 for (iLoop6=iLoop;iLoop6>=(int)max((int)iLoop+1-mt(iLoop2),(int)0);iLoop6--)
 						 F1-=x[iLoop2][iLoop3][iLoop6];
 					 con.add(F1<=mt(iLoop2));
 				 }

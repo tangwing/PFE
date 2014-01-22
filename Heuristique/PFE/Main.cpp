@@ -28,8 +28,8 @@ int main()
 	FILE *fic;
     GetData();
 	//DisplayData();
-	//AfficherUit();
-	//AfficherAffinite();
+	AfficherCaracMachine();
+	AfficherAffinite();
 	Init();
 	ticks0 = clock();
 	CalculInterval();
