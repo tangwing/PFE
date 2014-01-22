@@ -13,7 +13,7 @@
 
 // Definition of the scenarii for the instance generation
 // Meaning of columns: N1 N2 N3 N4 N5 M1 M2 M3 M4
-extern unsigned int ScNM [6][9];
+extern unsigned int ScNM [8][9];
 
 // Definition of PMs' features
 // Meaning of columns: CPU GPU RAM HDD vj ajc ajg ajr ajh

@@ -62,7 +62,7 @@ public:
 	int isTimeLimit;
 	int isMemLimit;
 	double nbMachine;
-	int nbNode;
+	int nbNode; //the number of nodes processed so far in the active branch-and-cut search.
 	int statusCode;
 	double value;
 	double durationWallClock;

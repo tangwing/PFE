@@ -11,6 +11,11 @@
 #include "Test.h"
 #include "H1Result.h"
 
+double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1)
+{
+	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;
+}
+
 int main()
 {
 	using namespace std;
@@ -18,19 +23,15 @@ int main()
 	bool isFeasible = true;
 	double dTime0, dTime1; //cputime
 	time_t temp1,temp2;//wall time
+	clock_t ticks0;
+
 	FILE *fic;
     GetData();
-
 	//DisplayData();
 	//AfficherUit();
 	//AfficherAffinite();
-
 	Init();
-
-	printf("The heuristic program is running...\n");
-	
-	time(&temp1);    
-	dTime0 = GetCpuTime();
+	ticks0 = clock();
 	CalculInterval();
 	CreerListeMachineTriee();///Trier les serveurs
 	for(int i=0;i<Traitement.NbInterval;i++){
@@ -47,21 +48,19 @@ int main()
 	///Tester si les taches non-pré sont toutes affectées. Sinon alors on a pas trouvé la solution.
 	///Afficher la matrice d'ordo
 	for(int i=0;i<Traitement.NbInterval;i++)
+	{
 		for(int j=0;j<N();j++)
 		{
 			if ((Traitement.ListOfOrdo[i][j].IndiceMachine == -1)&&(R(j)==0))
 				isFeasible = 0;
 		}
+	}
 	dOptValue = TotalCost();
-	
-	time(&temp2);
-    dOptTime=difftime(temp2,temp1);
-	dTime1 = GetCpuTime();
+	dOptTime = GetTimeByClockTicks(ticks0, clock());
 	 
-	double dOptTimeCpu= dTime1 - dTime0;
-	H1Result res(isFeasible, (double)Traitement.NbServeurOn/T(),dOptValue,dOptTime, dOptTimeCpu);
+	H1Result res(isFeasible, (double)Traitement.NbServeurOn/T(),dOptValue,-1, dOptTime);
 	res.ExportToFile("Heuristic.txt");
 
-	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n TempsCPU:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime,dOptTimeCpu, (double)Traitement.NbServeurOn/T());
+	printf("Feasible:%d\n ValeurOpt:%d\n Temps:%lf\n NbMoyServeurOn:%lf\n",isFeasible,(int)dOptValue,dOptTime, (double)Traitement.NbServeurOn/T());
 	//getchar();
 }

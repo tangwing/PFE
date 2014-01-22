@@ -16,8 +16,6 @@
 #define DEBUG_MOD false
 #define CONFIG true
 
-#define FILENAME "donnees.dat"
-
 #define MemLimit 1024.0
 #define TimeLimit 1800.0
 
@@ -44,8 +42,7 @@ IloIntVarArray1D Z(env);
 IloIntVarArray2D d(env);
 IloIntVar RE(env,0,9999999);
 
-
-double dOptValue, dOptTime, dOptTimeCpu;
+double dOptValue, dOptTime;
 int isOptimal, isFeasible,iNbNodesIP;
 int isTimeLimit=0, isMemLimit=0;
 
@@ -913,30 +910,26 @@ double CountPMsTurnedOn(IloCplex *pcplex)
  return (dCount/=(double)T());
 }
 
-//Get cpu time for the current process
-double GetCpuTime()
+
+double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1)
 {
-    FILETIME a,b,c,d;
-    if (GetProcessTimes(GetCurrentProcess(),&a,&b,&c,&d) != 0){
-        return    (double)(d.dwLowDateTime |
-            ((unsigned long long)d.dwHighDateTime << 32)) * 0.0000001;
-    }else return 0;
+	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;
 }
 
 /* Programme Principal */
 int main(int argc)
 {
-	  time_t temp1,temp2,tempPre1,tempPre2;
-	  double dTime0, dTime1;	//cpu time
-	  FILE *fic;
-	  double dNbMach;
+	time_t temp1,temp2,tempPre1,tempPre2;
+	clock_t ticks0;
+	FILE *fic;
+	double dNbMach;
+	int iTimeLimit = CalculateTimeLimit();
+    printf("TimeLimit : %d\n", iTimeLimit);
 
 	GetData();
 	if (DEBUG) DisplayData();
 
-	time(&temp1);
-	dTime0 = GetCpuTime();
-
+	ticks0 = clock();
 	/*CREATION OF MODEL, CONSTRAINTS AND UB HERE*/
 	//InitializeLPModel();
 	InitializeIPModel();
@@ -950,9 +943,6 @@ int main(int argc)
 		if(CONFIG)
 		{
 			cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
-			cplex.setParam(IloCplex::TreLim,MemLimit);// We limit the size of the search tree
-			int iTimeLimit = CalculateTimeLimit();
-			printf("TimeLimit : %d\n", iTimeLimit);
 			cplex.setParam(IloCplex::TiLim, iTimeLimit);
 		}
 		//PreByCalCost(0,var.getSize(),head,nbBool,Lmax_Schrage, &env , &cplex , &model , &var , &con);	// See above
@@ -984,8 +974,6 @@ int main(int argc)
 				isFeasible=1;
 				dOptValue=cplex.getObjValue();
 				dNbMach=CountPMsTurnedOn(&cplex);
-				if (cplex.getCplexStatus()== IloCplex::AbortTimeLim) isTimeLimit = 1;
-				else if (cplex.getCplexStatus()== IloCplex::MemLimFeas) isMemLimit = 1;
 			} 
 	 	    iNbNodesIP=cplex.getNnodes();
 		}
@@ -999,7 +987,6 @@ int main(int argc)
 		isFeasible=0;
 		//getch();
 	}
-	
 	catch (...)
 	{
 		cerr << "Unknown exception caught" << endl;
@@ -1008,13 +995,14 @@ int main(int argc)
 		isFeasible=0;
 		//getch();
 	}
-
-	time(&temp2);	
-	dTime1 = GetCpuTime();
-	dOptTime=difftime(temp2,temp1);
-	dOptTimeCpu = dTime1 - dTime0;
-
-	printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptWallTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\n",
+	//We put the test of limit here because an cplex exception can also be caused by Limit.
+	//in which case there is no solution found but the status code is set. We count this case
+	//in #TimLim or #MemLim but not in #inFea.
+	if (cplex.getCplexStatus()== IloCplex::AbortTimeLim) isTimeLimit = 1;
+	else if (cplex.getCplexStatus()== IloCplex::MemLimFeas) isMemLimit = 1;
+	
+	dOptTime = GetTimeByClockTicks( ticks0, clock());
+	printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\n",
 		isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach);
 
 	CplexResult res(isFeasible
@@ -1025,11 +1013,9 @@ int main(int argc)
 		,iNbNodesIP
 		,cplex.getCplexStatus()
 		,dOptValue
-		,dOptTime
-		,dOptTimeCpu);
-
+		,-1
+		,dOptTime);
 	res.ExportToFile("H2.txt");
-	//fprintf(fic,"%d\n%d\n%d\n%lf\n%d\n%lf\n%lf\n",isFeasible,isOptimal,(int)dOptValue,dOptTime,,dOptTimeCpu);
 
 	if (DEBUG && dOptValue!=9999999.0)
 			SolutionToFile(cplex);
