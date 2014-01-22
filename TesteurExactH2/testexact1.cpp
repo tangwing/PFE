@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <process.h>
 #include <limits>
+#include <ctime>
 #include "RandGeneration.h"
 #include "CplexResult.h"
 
@@ -24,7 +25,7 @@ void main(void)
  int i,j;
  for (i=0;i<8;i++)
  {
-	  srand(1);
+	  srand(time(NULL));
 	  for (j=0;j<iterations;j++)
 	  {
 	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);
@@ -117,7 +118,7 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		if(ScRes[0][i][3]<TMinE) TMinE = ScRes[0][i][3];
 		if(ScRes[0][i][3]>TMaxE) TMaxE = ScRes[0][i][3];
 
-		///Heuristic
+		///Heuristic2
 		if(ScRes[1][i][0] == 1) {NbResH++; if(ScRes[1][i][1] == 1) NbOptH++;}
 		TTotalH += ScRes[1][i][3];
 		if(ScRes[1][i][3]<TMinH) TMinH = ScRes[1][i][3];
@@ -130,7 +131,7 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 			double dev = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
 			DevTotal += dev;
 			if(dev < DevMin) DevMin = dev;
-			if(dev>DevMax) DevMax = dev;
+			if(dev > DevMax) DevMax = dev;
 		}
 	}
 

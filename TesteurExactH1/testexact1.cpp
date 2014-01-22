@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <process.h>
 #include <limits>
+#include <ctime>
 #include "RandGeneration.h"
 #include "H1Result.h"
 #include "CplexResult.h"
@@ -27,7 +28,7 @@ void main(void)
  int i,j;
  for (i=0;i<8;i++)
  {
-	  srand(1);
+	  srand(time(NULL));
 	  for (j=0;j<iterations;j++)
 	  {
 	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);
