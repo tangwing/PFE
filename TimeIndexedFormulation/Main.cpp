@@ -963,6 +963,7 @@ int main(int argc)
 		} else
 		{ // We now test if the solution found is optimal or feasible
 			printf("Cplex status: %ld\n",cplex.getCplexStatus());
+			fflush(stdout);
 			if (cplex.getCplexStatus()==IloCplex::Optimal || cplex.getCplexStatus()==IloCplex::OptimalTol)
 			{
 				isOptimal=1;

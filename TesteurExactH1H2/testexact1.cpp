@@ -4,6 +4,7 @@
 #include <process.h>
 #include <limits>
 #include <ctime>
+#include <cmath>
 #include "RandGeneration.h"
 #include "H1Result.h"
 #include "CplexResult.h"
@@ -19,7 +20,7 @@ unsigned int iterations=20;
 //		  7: nbTimeLimit(for ExactMethod).
 //		  8: not used
 double ScRes[3][20][8];
-
+int Round(double);
 void MakeStatCplexH1(int IdSce, int NbTache, int NbMach, int NbIter);
 void MakeStatCplexH2(int IdSce, int NbTache, int NbMach, int NbIter);
 
@@ -32,7 +33,7 @@ void main(void)
 	  srand(1);
 	  for (j=0;j<iterations;j++)
 	  {
-	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);
+	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   if (DEBUG)
 	   {
@@ -41,7 +42,7 @@ void main(void)
 		   getch();
 	   }
 
-	   printf("The IP model is running...\n");
+	   printf("The IP model is running...\n");fflush(stdout);
 	   spawnl(P_WAIT,"SCPTimInd.exe","SCPTimInd.exe",NULL);
 	   if (DEBUG)
 	   {
@@ -63,7 +64,7 @@ void main(void)
 	   //***********************************************
 	   //Use the same data to test H1
 	   //***********************************************
-		printf("The H1 program is running...\n");
+		printf("The H1 program is running...\n");fflush(stdout);
 		spawnl(P_WAIT,"PFE.exe","PFE.exe",NULL);
 		H1Result h1;
 		h1.ImportFromFile("Heuristic.txt");
@@ -79,7 +80,7 @@ void main(void)
 		//***********************************************
 	   //Use the same data to test H2
 	   //***********************************************
-		printf("The H2 program is running...\n");
+		printf("The H2 program is running...\n");fflush(stdout);
 		spawnl(P_WAIT,"H2.exe","H2.exe",NULL);
 		CplexResult h2;
         h2.ImportFromFile("H2.txt");
@@ -154,7 +155,8 @@ void MakeStatCplexH1(int IdSce, int NbTache, int NbMach, int NbIter)
 		{
 			NbInstanceDev ++;
 			double dev = (ScRes[1][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
-			if(dev<0)printf("\n[WARNING][H1]:dev=%lf. Sc%d-%d\n", dev, IdSce+1, i+1);
+			if(dev<0)
+			{printf("\n[WARNING][H1]:dev=%lf. Sc%d-%d\n", dev, IdSce+1, i+1);fflush(stdout);}
 			DevTotal += dev;
 			if(dev < DevMin) DevMin = dev;
 			if(dev>DevMax) DevMax = dev;
@@ -169,7 +171,7 @@ void MakeStatCplexH1(int IdSce, int NbTache, int NbMach, int NbIter)
 		fRes = fopen("LogCplexH1.csv","wt");
 	    fichier=fopen("StatCplexH1.csv","wt");
 		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); nbMach(E);  MemLim(E); TimeLim(E); isFea(H1); sol(H); time(H); nbMach(H)\n");
-		fprintf(fichier,"Sc(N/M); #Infeas; #Solved; #Mem; #Tim; TMin; TAvg; TMax; #Infeas; #Solved; TMin; TAvg; TMax; DevMin; DevAvg; DevMax\n");
+		fprintf(fichier,"Sc(N/M); #Infeas; #SolvedOpt; #Mem; #Tim; TMin; TAvg; TMax; #Infeas; #Solved; TMin; TAvg; TMax; DevMin; DevAvg; DevMax\n");
 	}else
 	{
 		fRes = fopen("LogCplexH1.csv","at");
@@ -183,7 +185,7 @@ void MakeStatCplexH1(int IdSce, int NbTache, int NbMach, int NbIter)
 		iterations - NbResH, NbResH,
 		TMinH, TTotalH/NbIter, TMaxH);
 	if(NbInstanceDev > 0)
-		fprintf(fichier, "; %3.2lf; %3.2lf; %3.2lf\n", DevMin, DevTotal/NbInstanceDev, DevMax);
+		fprintf(fichier, "; %d%%; %d%%; %d%%\n", Round(DevMin*100), Round(DevTotal/NbInstanceDev), Round(DevMax));
 	else fprintf(fichier, "; *; *;*\n");
 	fclose(fichier);
 
@@ -257,7 +259,7 @@ void MakeStatCplexH2(int IdSce, int NbTache, int NbMach, int NbIter)
 		{
 			NbInstanceDev ++;
 			double dev = (ScRes[2][i][2]-ScRes[0][i][2])/ScRes[0][i][2];
-			if(dev<0)printf("\n[WARNING][H2]:dev=%lf. Sc%d-%d\n", dev, IdSce+1, i+1);
+			if(dev<0){printf("\n[WARNING][H2]:dev=%lf. Sc%d-%d\n", dev, IdSce+1, i+1); fflush(stdout);}
 			DevTotal += dev;
 			if(dev < DevMin) DevMin = dev;
 			if(dev > DevMax) DevMax = dev;
@@ -272,7 +274,7 @@ void MakeStatCplexH2(int IdSce, int NbTache, int NbMach, int NbIter)
 		fRes = fopen("LogCplexH2.csv","wt");
 	    fichier=fopen("StatCplexH2.csv","wt");
 		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); nbMach(E);  MemLim(E); TimeLim(E); isFea(H1); sol(H); time(H); nbMach(H)\n");
-		fprintf(fichier,"Sc(N/M); #Infeas; #Solved; #Mem; #Tim; TMin; TAvg; TMax; #Infeas; #Solved; TMin; TAvg; TMax; DevMin; DevAvg; DevMax\n");
+		fprintf(fichier,"Sc(N/M); #Infeas; #SolvedOpt; #Mem; #Tim; TMin; TAvg; TMax; #Infeas; #Solved; TMin; TAvg; TMax; DevMin; DevAvg; DevMax\n");
 	}else
 	{
 		fRes = fopen("LogCplexH2.csv","at");
@@ -286,7 +288,7 @@ void MakeStatCplexH2(int IdSce, int NbTache, int NbMach, int NbIter)
 		iterations - NbResH, NbResH,
 		TMinH, TTotalH/NbIter, TMaxH);
 	if(NbInstanceDev > 0)
-		fprintf(fichier, "; %3.2lf; %3.2lf; %3.2lf\n", DevMin, DevTotal/NbInstanceDev, DevMax);
+		fprintf(fichier, "; %d%%; %d%%; %d%%\n", Round(DevMin*100), Round(DevTotal/NbInstanceDev), Round(DevMax));
 	else fprintf(fichier, "; *; *;*\n");
 	fclose(fichier);
 
@@ -310,4 +312,20 @@ void MakeStatCplexH2(int IdSce, int NbTache, int NbMach, int NbIter)
 		);
 	}
 	fclose(fRes);
+}
+
+//Round a double to int
+//Ex: Round(3.141) = 3
+//	  Round(2.56) = 3
+int Round(double d)
+{
+	return int(d+0.5);
+}
+
+//Round a double in preserving [point] digits after its decimal point
+//Ex: Round(3.141) = 3.14
+//	  Round(2.3456,3) = 2.346
+double Round(double d, int point)
+{
+	return double(int((d*pow(double(10), point+1) + 5)/10))/pow(double(10),point);
 }
