@@ -336,6 +336,6 @@ void WriteData(void)
   }
  fclose(file);
  //Backup the file for further analysis
- CreateDirectory( "Donnees", NULL);
- CopyFile("donnees.dat", bkfilename, FALSE);
+ //CreateDirectory( "Donnees", NULL);
+ //CopyFile("donnees.dat", bkfilename, FALSE);
 }

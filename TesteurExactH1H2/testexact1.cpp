@@ -29,7 +29,7 @@ void main(void)
  int i,j;
  for (i=0;i<8;i++)
  {
-	  srand(time(NULL));
+	  srand(1);
 	  for (j=0;j<iterations;j++)
 	  {
 	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);
