@@ -201,6 +201,9 @@ void Preprocessing::PRESolveLP()
 	 dPRElpOpt=PRElp->LPGetOptValue();
 	 dPRELB=dPRElpOpt;
 	 PRElp->LPGetVarResults(PREvarInfo);	// Sets the costs, and values of the Variable array
+	 for(int i=0; i<PREvar->getSize(); i++)
+		 if((PREvarInfo[i]).VARGetExtractable()==false)
+			 pdPREFixedVariables[i]==IloInfinity;
 	 if(bPREisDebug) cout<<"Solved!"<<endl;
  } else
  {

@@ -10,6 +10,7 @@ Variable::Variable(void)
 	VARUj=0;
 	VARValue=-1;
 	VARBase=-1;
+	VARExtractable = true;
 }
 
 
