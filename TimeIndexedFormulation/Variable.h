@@ -26,7 +26,7 @@ public:
 	double VARGetUj(){return VARUj;}
 
 	double VARGetValue(){return VARValue;}			// Get the variable value in the optimal solution of LP
-	int VARGetBasisStatus(){return VARBase;}			// Get the basis status of the variable
+	int VARGetBasisStatus(){return VARBase;}		// Get the basis status of the variable
 
 	// Set the value of the attribute in the class
 	// name: a string: "" by default

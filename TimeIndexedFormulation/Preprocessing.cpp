@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
 #include <string.h>
 #include <process.h>
@@ -15,7 +14,7 @@ ILOSTLBEGIN
 /*******************************************************************************************************************************
 Name: Preprocessing
 ********************************************************************************************************************************
-Discription: Constructor
+Description: Constructor
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: nil
@@ -40,7 +39,7 @@ Preprocessing::Preprocessing()
 /*******************************************************************************************************************************
 Name: PREInitializeLP
 ********************************************************************************************************************************
-Discription: Initialize a LP problem
+Description: Initialize a LP problem
 ********************************************************************************************************************************
 Input: The Envirenment, the variables, the model, the cplex solver and the constraints of a LP problem
 Necessitates: All the four input arguments are well allocated
@@ -50,23 +49,30 @@ leads to: It pass the four arguments to the class PRElp to initialize the LP pro
 *******************************************************************************************************************************/
 void Preprocessing::PREInitializeLP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
 {
-  PREenv=penv;
-  PREvar=pvar;
-  PRElp->LPInitialize(penv,pcplex,pmodel,pvar,pcon);
-  iPREnbVar=pvar->getSize();
-  iPREVarEnd=iPREnbVar;
-  pdPREFixedVariables=new double[pvar->getSize()];
-  PREvarInfo=new Variable[pvar->getSize()];
-  for(int i=0;i<pvar->getSize();i++)
+	PREenv=penv;
+	PREvar=pvar;
+	PRElp->LPInitialize(penv,pcplex,pmodel,pvar,pcon);
+	PREcutsLP=new IloConstraintArray(*penv);
+	iPREnbVar=pvar->getSize();
+	iPREVarEnd=iPREnbVar;
+	pdPREFixedVariables=new double[pvar->getSize()];
+	PREvarInfo=new Variable[pvar->getSize()];
+	iPREnbBool=0;
+	for(int i=0;i<pvar->getSize();i++) {
 	pdPREFixedVariables[i]=IloInfinity;
-  bPREisSet=true;
-  if(bPREisDebug) cout<<"Succes to initialize a LP problem"<<endl;
+	if((*PREvar)[i].getId() == ipPREhead[iPREnbBool]) {
+			pdPREFixedVariables[i]=-1;
+			iPREnbBool++;
+	}
+	}
+	bPREisSet=true;
+	if(bPREisDebug) cout<<"Succes to initialize a LP problem"<<endl;
 }
 
 /*******************************************************************************************************************************
 Name: PREInitializeMIP
 ********************************************************************************************************************************
-Discription: Initialize a MIP problem
+Description: Initialize a MIP problem
 ********************************************************************************************************************************
 Input: The Environnement, the variables, the model, the cplex solver and the constraints of a MIP problem
 Necessitates: All the four input arguments are well allocated
@@ -76,18 +82,18 @@ leads to: It pass the four arguments to the class PREmip to initialize the MIP p
 *******************************************************************************************************************************/
 void Preprocessing::PREInitializeMIP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
 {
-  PREenv=penv;
-  PREmip->MIPInitialize(penv,pcplex,pmodel,pvar,pcon);
-  PREmip->MIPInitializeCplexParameters(0,750);
-  iPREnbVar=pvar->getSize();
-  bPREisSet=true;
-  if(bPREisDebug) cout<<"Succes to initialize a MIP problem"<<endl;
+	PREenv=penv;
+	PREmip->MIPInitialize(penv,pcplex,pmodel,pvar,pcon);
+	PREcutsMIP=new IloConstraintArray(*penv);
+	iPREnbVar=pvar->getSize();
+	bPREisSet=true;
+	if(bPREisDebug) cout<<"Succes to initialize a MIP problem"<<endl;
 }
 
 /*******************************************************************************************************************************
 Name: PREInitializeMIPfromLP
 ********************************************************************************************************************************
-Discription: Initialize a MIP from a existe LP
+Description: Initialize a MIP from a existe LP
 ********************************************************************************************************************************
 Input: The Environnement, the variables, the model, the cplex solver and the constraints of the LP and a indice array of the bool variables to be fixed
 Necessitates: All the four input arguments are well allocated
@@ -100,13 +106,11 @@ void Preprocessing::PREInitializeMIPfromLP(IloEnv *penv, IloCplex *pcplex, IloMo
   iPREnbVar=pvar->getSize();
   int i;
   for(i=0;i<iPREnbVar;i++)
-	  if(PREToFix((*pvar)[i].getId(),head))
+	  if(pdPREFixedVariables[i]!=IloInfinity)
 	  {
-		  //printf("change the type of variable: %s\n",(*pvar)[i].getName());
 		  pmodel->add(IloConversion(*penv,(*pvar)[i],ILOBOOL));
 	  }
   PREmip->MIPInitialize(penv,pcplex,pmodel,pvar,pcon);
-  PREmip->MIPInitializeCplexParameters(0,750);
   bPREisSet=true;
   if(bPREisDebug) cout<<"Succes to initialize a MIP problem"<<endl;
 }
@@ -114,7 +118,7 @@ void Preprocessing::PREInitializeMIPfromLP(IloEnv *penv, IloCplex *pcplex, IloMo
 /*******************************************************************************************************************************
 Name: PREArSup
 ********************************************************************************************************************************
-Discription: Round up a real value.
+Description: Round up a real value.
 ********************************************************************************************************************************
 Input: A value of double
 Necessitates: nil
@@ -123,14 +127,14 @@ leads to: It Returns the smallest integral value that is not less than the value
 *******************************************************************************************************************************/
 double Preprocessing::PREArSup(double value)
 {
- return (ceil(value-0.001)); // ???
+ return (ceil(value-0.001)); 
 }
 
 
 /*******************************************************************************************************************************
 Name: PREFixVarToLP
 ********************************************************************************************************************************
-Discription: Fix the value of variables to the LP model
+Description: Fix the value of variables to the LP model
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: nil
@@ -142,10 +146,11 @@ void Preprocessing::PREFixVarToLP()
 	iPREnbFix=0;
 	for(int i=0;i<iPREnbVar;i++)
 	{
-		if(pdPREFixedVariables[i]!=IloInfinity)
+		if(pdPREFixedVariables[i]!=IloInfinity && pdPREFixedVariables[i]!=-1)
 		{
 			PRElp->LPAddFix(i,pdPREFixedVariables[i]);
-			if(bPREisDebug) cout<<"I have fixed the var "<<(*PREvar)[i].getName()<<"to "<<pdPREFixedVariables[i]<<" !"<<endl;
+			if(bPREisDebug) 
+				//cout<<"I have fixed the var "<<(*PREvar)[i].getName()<<" to "<<pdPREFixedVariables[i]<<" !"<<endl;
 			iPREnbFix++;
 		}
 	}
@@ -155,7 +160,7 @@ void Preprocessing::PREFixVarToLP()
 /*******************************************************************************************************************************
 Name: PREFixVarToMIP
 ********************************************************************************************************************************
-Discription: Fix the value of variables to the MIP model
+Description: Fix the value of variables to the MIP model
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: nil
@@ -167,10 +172,11 @@ void Preprocessing::PREFixVarToMIP()
 	iPREnbFix=0;
 	for(int i=0;i<iPREnbVar;i++)
 	{
-		if(pdPREFixedVariables[i]!=IloInfinity)
+		if(pdPREFixedVariables[i]!=IloInfinity && pdPREFixedVariables[i]!=-1)
 		{
 			PREmip->MIPAddFix(i,pdPREFixedVariables[i]);
-			cout<<"I have fixed the var "<<i<<"to "<<pdPREFixedVariables[i]<<" !"<<endl;
+			if(bPREisDebug) 
+				//cout<<"I have fixed the var "<<i<<" to "<<pdPREFixedVariables[i]<<"!"<<endl;
 			iPREnbFix++;
 		}
 	}
@@ -179,7 +185,7 @@ void Preprocessing::PREFixVarToMIP()
 /*******************************************************************************************************************************
 Name: PRESolveLP
 ********************************************************************************************************************************
-Discription: Solve a LP problem by Cplex 
+Description: Solve a LP problem by Cplex 
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: LP problem should be well initialized
@@ -193,17 +199,20 @@ void Preprocessing::PRESolveLP()
  {
 	 PRElp->LPSolveByCplex();
 	 dPRElpOpt=PRElp->LPGetOptValue();
+	 dPRELB=dPRElpOpt;
+	 PRElp->LPGetVarResults(PREvarInfo);	// Sets the costs, and values of the Variable array
+	 if(bPREisDebug) cout<<"Solved!"<<endl;
  } else
  {
-	 //cout << "ERROR: the LP model has not been intialized and thus cannot be solved\n";
+	 cout << "ERROR: the LP model has not been intialized and thus cannot be solved\n";
 	 throw(5);
  }
 }
 
 /*******************************************************************************************************************************
-Name: PRESolveMIP
+Name: PRESolveMIPgui
 ********************************************************************************************************************************
-Discription: Solve a MIP problem by Cplex 
+Description: Solve a MIP problem by Cplex 
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: MIP problem should be well initialized
@@ -217,9 +226,10 @@ void Preprocessing::PRESolveMIP()
 	{
 		PREmip->MIPSolveByCplex();
 		dPREmipOpt=PREmip->MIPGetOptValue();
+		if(bPREisDebug) cout<<"Solved!"<<endl;
 	}else
 	{
-		 //cout << "ERROR: the MIP model has not been intialized and thus cannot be solved\n";		
+		 cout << "ERROR: the MIP model has not been intialized and thus cannot be solved\n";		
 		 throw(6);
 	}
 }
@@ -229,7 +239,7 @@ void Preprocessing::PRESolveMIP()
 /*******************************************************************************************************************************
 Name: PREGetMIPResVar
 ********************************************************************************************************************************
-Discription: Get the values of the varialbes after the MIP problem solved by Cplex
+Description: Get the values of the varialbes after the MIP problem solved by Cplex
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: The MIP problem must be solved
@@ -251,45 +261,63 @@ double* Preprocessing::PREGetMIPResVar()
 /*******************************************************************************************************************************
 Name: PREPreprocessing
 ********************************************************************************************************************************
-Discription: This method implements the preprocessing algorithm
+Description: This method implements the preprocessing algorithm
 ********************************************************************************************************************************
-Input: head is a indice array for the bool variables
-	   nb is the number of the bool variables the to fix
-Necessitates: 0 <= iVarBeg <= iVarEnd < Number of variables
-			  The variables between iVarBeg and iVarEnd must be boolean variables
+Input: Nothing
+Necessitates: The variables between indexed in the head array must be boolean variables
 Output: Nothing
 leads to: the variables in head have been preprocessed and potentially fixed in the LP model 
           to fix them in the MIP model, use method PREfixVarToMIP()
-Return: true if the programm did the preprocessing, false if the LB=UB (i.e. shrage is the optimal solution)
+Return: true if the programm did the preprocessing, false if the LB=UB
 *******************************************************************************************************************************/
-bool Preprocessing::PREPreprocessing(int * head,int nb)
+bool Preprocessing::PREPreprocessing()
 {
 	if(bPREisDebug) cout<<"I start fixing the variables"<<endl;
 	double dOpt;
-	bool bLbisUb=false;
+	bool bLbisUb=false, bisIntegral=true;
+	int iOldnbFix;
+	bPREOptiNoPRE=false;
 	dPRELB=dPRElpOpt;
 	iPREnbFix=0;
+
+	if(bPREisDebug) {
+		ofstream logs("logs/LOGS.txt", ios::app);
+		logs << "LP: " << dPRELB << endl << "Shrage: " << dPREUB << endl;
+		logs.close();
+	}
 	try
 	{
-		do
-		{
-			if(dPRELB-dPREUB>-0.0001) 
-				bLbisUb=true;
-			else {
-				dOpt=PREArSup(dPRElpOpt);		// Rounding up the optimal solution of the LP
-				PREFixVar();					// Preprocessing on the variables
-				if(bPREisDebug) cout<<"Calculate finish!"<<endl;
-				//PREFixVarToLP();	// Attention !!!
-				PRESolveLP();
-				if(bPREisDebug) 
-				{
-					printf("Opt lp: %lf, dOpt: %lf, UB: %lf\n",dPRElpOpt,dOpt, dPREUB);
-					getchar();
-				}
-			}
+		if(dPRELB-dPREUB>-0.0001) {
+			bPREOptiNoPRE=true;
 		}
-		while(!bLbisUb && dOpt!=PREArSup(dPRElpOpt)); // It repeats until there is no more variable that can be fixed
+		else {
+			do
+			{
+				if(dPRELB-dPREUB>-0.0001) {
+					bLbisUb=true;
+					iPREnbFix=iPREnbBool;
+				}
+				else {
+					dOpt=PREArSup(dPRElpOpt);		// Rounding up the optimal solution of the LP
+					iOldnbFix=iPREnbFix;
+					PREFixVar();					// Preprocessing on the variables
+					if(bPREisDebug) cout<<"Calculate finish!"<<endl;
+					PRESolveLP();
+				}
+				//cout << "One loop done : nb fix var = "<<iPREnbFix<<endl;
+			}
+			while(!bLbisUb && (dOpt!=PREArSup(dPRElpOpt)||iOldnbFix<iPREnbFix)); // It repeats until there is no more variable that can be fixed
+		}
 		bPREisSolved=true;
+
+		if(bPREisDebug) {
+			ofstream logs("logs/LOGS.txt", ios::app);
+			if (!bPREOptiNoPRE)
+				logs<<"Fixed "<<100.0*double(iPREnbFix)/double(iPREnbBool)<< "% of the boolean variables!" << " (" << iPREnbFix << " out of " << iPREnbBool << " boolean variables)" <<endl;	// Showing the percentage of fixed boolean variables
+			else 
+				logs<<"LB = UB No Preprocessing!"<<endl;
+			logs.close();
+		}
 	}
 	catch(int e)
 	{
@@ -333,13 +361,25 @@ bool Preprocessing::PREPreprocessing(int * head,int nb)
 				break;
 		}
 	}
-	return !bLbisUb;
+    
+	// We test the integrality of the continuous solution: if it is integral, then it is optimal for the MIP
+	for(int i=0;i<PREvar->getSize() && bisIntegral;i++) 
+		if (pdPREFixedVariables[i]!=IloInfinity && PREvarInfo[i].VARGetValue()>0.000001 && PREvarInfo[i].VARGetValue()<0.999999)
+			bisIntegral=false;
+	if (bisIntegral)
+	{
+		dPRELB=dPREUB=dPRElpOpt;
+		iPREnbFix=iPREnbBool;
+		cout<<"IS INTEGRAL!"<<endl;
+	}
+
+	return !bPREOptiNoPRE;
 }
 
 /*******************************************************************************************************************************
 Name: PREToFix
 ********************************************************************************************************************************
-Discription: This method is to detect if a variable should be check and fixed.
+Description: This method is to detect if a variable should be check and fixed.
 ********************************************************************************************************************************
 Input: indice is the indice of a variable to be detected
        head is a indice array for the bool variables
@@ -347,6 +387,7 @@ Necessitates: nil
 Output: true if the variable is in the array to be fixed
         false if not
 leads to: nil
+Note : This method is outdated and should not be used
 *******************************************************************************************************************************/
 bool Preprocessing::PREToFix(int VarId,int * head)
 {
@@ -358,7 +399,6 @@ bool Preprocessing::PREToFix(int VarId,int * head)
 		{
 			if(VarId==head[i])
 			{
-				//printf("the variable %s is to be fixed\n",(*PREvar)[indice].getName());
 				return true;
 			}
 			else if (head[i]==-1) return false;
@@ -369,7 +409,7 @@ bool Preprocessing::PREToFix(int VarId,int * head)
 /*******************************************************************************************************************************
 Name: PREFixVar
 ***************************************************************************************************************************************************
-Discription: Fix the variables off-base by comparing the reduced cost with the difference between UB and LB
+Description: Fix the variables off-base by comparing the reduced cost with the difference between UB and LB
              Fix the variables in-base by comparing the pseudo-cost with the difference between UB and LB
 ***************************************************************************************************************************************************
 Input: Nothing
@@ -382,14 +422,12 @@ leads to: Compare the reduced cost of the off-base variables with the difference
 
 void Preprocessing::PREFixVar()
 {
-	if(bPREisDebug) cout<<"Fix the variables using the class <Variabl>"<<endl;
 	int i;			// This double array is to save the reduced cost and return by the function PREGetReducedCost
-	PREGetRedCost();	// Get the reduced cost from the LP et set the variables from the variable class with the values
-	PREGetPseuCost();	// Get the pseudo cost from the LP et set the variables from the variable class with the values
-	PREGetVarValue();	// Get the values of the variable from the LP et set the variable from the variable class with the values
-	if(bPREisDebug)
-		for(i=0;i<PREvar->getSize();i++)
-			PREvarInfo[i].VAROutput();
+
+	if(bPREisDebug) cout<<"All data get"<<endl;
+
+	ofstream logs;
+	if(bPREisDebug) logs.open("logs/LOGS.txt", ios::app);		
 
 	if(!PRElp->LPisSolved()) // ERROR: The LP problem has not been solved!
 		throw(1);
@@ -401,31 +439,30 @@ void Preprocessing::PREFixVar()
 		if(dPRELB-dPREUB<-0.0001) // LB no more than UB
 		for(i=0;i<PREvar->getSize();i++)
 		{
-		  if(PREToFix((*PREvar)[i].getId(),ipPREhead))
-		  {
+		  if(pdPREFixedVariables[i]==-1)
+		  {			  
 			  if(PREvarInfo[i].VARGetBasisStatus()==0)	// Off-base variable
 			  {
+			    if(bPREisDebug)
+					logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() << endl;
 				if(PREvarInfo[i].VARGetRedCost()>0 //If r_ij>UB-LB, it will fix the variable i to 0
 					&& PREvarInfo[i].VARGetRedCost()>dPREUB-dPRELB+EPSILON)	
 				{
+					if(bPREisDebug)
+						logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() << " > " << dPREUB-dPRELB+EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
 					pdPREFixedVariables[i] = 0;
 					(*PREvar)[i].setUB(0.0);
 					iPREnbFix++;
-					if(bPREisDebug)
-					{
-						//printf("Reduced cost for %s is: %.2lf\n",(*PREvar)[i].getName(),RedCost);
-					}
 				}
 				if(PREvarInfo[i].VARGetRedCost()<0 
-					&& PREvarInfo[i].VARGetRedCost()<dPRELB-dPREUB-EPSILON)	//If r_ij>UB-LB, it will fix the variable i to 1
+					&& PREvarInfo[i].VARGetRedCost()<dPRELB-dPREUB-EPSILON && (*PREvar)[i].getLB() != 1)	//If r_ij>UB-LB, it will fix the variable i to 1
 				{
+					if(bPREisDebug)
+						logs << "RedCost["<<i<<"]: " << PREvarInfo[i].VARGetRedCost()<< " < " << dPRELB-dPREUB-EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
+								
 					pdPREFixedVariables[i] = 1;
 					(*PREvar)[i].setLB(1.0);
 					iPREnbFix++;
-					if(bPREisDebug)
-					{
-						//printf("Reduced cost for %s is: %.2lf\n",(*PREvar)[i].getName(),RedCost);
-					}
 				}
 			  }
 			  else if(PREvarInfo[i].VARGetBasisStatus()==1)	// In-base variables
@@ -434,29 +471,238 @@ void Preprocessing::PREFixVar()
 					  && (1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()>dPREUB-dPRELB+EPSILON)   
 					{ 
 						pdPREFixedVariables[i] = 0;
-						(*PREvar)[i].setLB(0.0);
+						(*PREvar)[i].setUB(0.0);
 						iPREnbFix++;
 						
-						if(bPREisDebug)
-						{
-							printf("Uj for %s is %.2lf\n",(*PREvar)[i].getName(),PREvarInfo[i].VARGetUj());
-							cout<<"Fix "<< (*PREvar)[i].getName()<<" to 0 by pseudo-cost"<<endl;
+						if(bPREisDebug) {
+							logs << "Uj["<<i<<"]: " << PREvarInfo[i].VARGetUj() << " " <<(1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()<< " > " << dPREUB-dPRELB+EPSILON<< " LB: " << dPRELB << " UB: " << dPREUB << endl;
+							//cout<<"Fix "<< (*PREvar)[i].getName()<<" to 0 by pseudo-cost"<<endl;
 						}
 					}
-					if (PREvarInfo[i].VARGetLj()<99999999.0 // I try to fix variables to 1 PROBLEME ICI!!!
+					if (PREvarInfo[i].VARGetLj()<99999999.0 // I try to fix variables to 1
 						&& PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()>dPREUB-dPRELB+EPSILON)   
 					{ 
 						pdPREFixedVariables[i] = 1;
-						(*PREvar)[i].setLB(1);
+						(*PREvar)[i].setLB(1.0);
 						iPREnbFix++;
 						
-						if(bPREisDebug)
-						{
-							printf("Lj for %s is %.2lf\n",(*PREvar)[i].getName(),PREvarInfo[i].VARGetLj());
-							cout<<"Fix "<<(*PREvar)[i].getName()<<" to 1 by pseudo-cost"<<endl;
+						if(bPREisDebug) {
+							logs << "Lj["<<i<<"]: " << PREvarInfo[i].VARGetUj() <<" "<<PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()<<">"<<dPREUB-dPRELB+EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
+							//cout<<"Fix "<<(*PREvar)[i].getName()<<" to 1 by pseudo-cost"<<endl;
 						}
 					}
 				}	
+			}
+		}
+		  if(bPREisDebug)
+			logs.close();
+	}
+}
+
+void Preprocessing::PRESetHead(int *head) {
+	ipPREhead=head;
+	bPREhasHead=true;
+}
+
+/*******************************************************************************************************************************
+Name: PreAddCuts
+***************************************************************************************************************************************************
+Description: Adds the cuts stored in the object PREcuts into the LP model
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The LP must be initialized.
+Output: Nothing
+leads to: The LP model has the cuts stored in the object PREcuts
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddCutsToLP()
+{
+	/*if (bPREisDebug) */printf("Number of added cuts : %d\n",PREcutsLP->getSize());
+	if (PREcutsLP->getSize()>0)
+		PRElp->LPAddCuts(PREcutsLP);
+}
+
+/*******************************************************************************************************************************
+Name: PreAddCutsToMIP
+***************************************************************************************************************************************************
+Description: Adds the cuts stored in the object PREcuts into the MIP model
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The MIP must be initialized.
+Output: Nothing
+leads to: The MIP model has the cuts stored in the object PREcuts
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddCutsToMIP()
+{
+	/*if (bPREisDebug) */printf("Number of added cuts : %d\n",PREcutsMIP->getSize());
+	if (PREcutsMIP->getSize()>0)
+		PREmip->LPAddCuts(PREcutsMIP);
+}
+
+/*******************************************************************************************************************************
+Name: PRERemoveCuts
+***************************************************************************************************************************************************
+Description: Removes the cuts stored in the object PREcuts from the LP model
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The LP must be initialized.
+Output: Nothing
+leads to: The LP model doesn't have the cuts stored in the object PREcutsLP
+**************************************************************************************************************************************************/
+void Preprocessing::PRERemoveCutsFromLP()
+{
+	if (bPREisDebug) printf("Number of removed cuts : %d\n",PREcutsLP->getSize());
+	if (PREcutsLP->getSize()>0)
+		PRElp->LPRemoveCuts(PREcutsLP);
+	delete PREcutsLP;
+	PREcutsLP = new IloConstraintArray(*PREenv);
+}
+
+/*******************************************************************************************************************************
+Name: PRERemoveCuts
+***************************************************************************************************************************************************
+Description: Removes the cuts stored in the object PREcuts from the MIP model
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The MIP must be initialized.
+Output: Nothing
+leads to: The MIP model doesn't have the cuts stored in the object PREcutsMIP
+**************************************************************************************************************************************************/
+void Preprocessing::PRERemoveCutsFromMIP()
+{
+	if (bPREisDebug) printf("Number of removed cuts : %d\n",PREcutsMIP->getSize());
+	if (PREcutsMIP->getSize()>0)
+		PREmip->LPRemoveCuts(PREcutsMIP);
+	delete PREcutsMIP;
+	PREcutsMIP = new IloConstraintArray(*PREenv);
+}
+
+/*******************************************************************************************************************************
+Name: PREAddLPCut
+***************************************************************************************************************************************************
+Description: Adds a constraint to the object PREcutsLP
+***************************************************************************************************************************************************
+Input: The constraint to be added
+Necessitates: Nothing
+Output: Nothing
+leads to: The constraint is added to the object PREcutsLP
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddLPCut(IloConstraint constraint) 
+{
+	PREcutsLP->add(constraint);
+}
+
+/*******************************************************************************************************************************
+Name: PREAddLPCuts
+***************************************************************************************************************************************************
+Description: Adds an array of constraint to the object PREcutsLP
+***************************************************************************************************************************************************
+Input: The array of constraint to be added
+Necessitates: Nothing
+Output: Nothing
+leads to: The array of constraint is added to the object PREcutsLP
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddLPCuts(IloConstraintArray* constraints) 
+{
+	cout << "Adding cuts" << endl;
+	for(int i=0; i<constraints->getSize(); i++) 
+		PREcutsLP->add((*constraints)[i]);
+
+	cout << "Number of total cuts " << PREcutsLP->getSize() << endl;
+}
+
+/*******************************************************************************************************************************
+Name: PREClearLPCuts
+***************************************************************************************************************************************************
+Description: Reinitialize the array of cuts for the LP
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: PREenv must be set
+Output: Nothing
+leads to: The array PREcutsLP is empty
+**************************************************************************************************************************************************/
+void Preprocessing::PREClearLPCuts() 
+{
+	PREcutsLP=new IloConstraintArray(*PREenv);
+}
+
+/*******************************************************************************************************************************
+Name: PREAddMIPCut
+***************************************************************************************************************************************************
+Description: Adds a constraint to the object PREcutsMIP
+***************************************************************************************************************************************************
+Input: The constraint to be added
+Necessitates: Nothing
+Output: Nothing
+leads to: The constraint is added to the object PREcutsMIP
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddMIPCut(IloConstraint constraint) 
+{
+	PREcutsMIP->add(constraint);
+}
+
+/*******************************************************************************************************************************
+Name: PREAddMIPCuts
+***************************************************************************************************************************************************
+Description: Adds an array of constraint to the object PREcutsMIP
+***************************************************************************************************************************************************
+Input: The array of constraint to be added
+Necessitates: Nothing
+Output: Nothing
+leads to: The array of constraint is added to the object PREcutsMIP
+**************************************************************************************************************************************************/
+void Preprocessing::PREAddMIPCuts(IloConstraintArray* constraints) 
+{
+	for(int i=0; i<constraints->getSize(); i++) 
+		PREcutsMIP->add((*constraints)[i]);
+}
+
+/*******************************************************************************************************************************
+Name: PREClearMIPCuts
+***************************************************************************************************************************************************
+Description: Reinitialize the array of cuts for the MIP
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: PREenv must be set
+Output: Nothing
+leads to: The array PREcutsMIP is empty
+**************************************************************************************************************************************************/
+void Preprocessing::PREClearMIPCuts() 
+{
+	PREcutsMIP=new IloConstraintArray(*PREenv);
+}
+
+/*******************************************************************************************************************************
+Name: PREGenAllRedCostCut
+***************************************************************************************************************************************************
+Description: Generate all the possible cuts using the reduced costs. For all i j if ri+rj>UB-LB then we add the cut xi+xj<=1.
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The LP must be initialised and solved
+Output: Nothing
+leads to: The object PREcuts as all the generated cuts
+**************************************************************************************************************************************************/
+void Preprocessing::PREGenAllRedCostCut()
+{
+	if(!PRElp->LPisSolved())
+		throw(1);	// The LP has not been solved
+	int ri, rj;
+	for(int i=0; i<PREvar->getSize(); i++) {
+		if(pdPREFixedVariables[i] != IloInfinity) {
+			ri = PREvarInfo[i].VARGetRedCost();
+			if(ri<=dPREUB-dPRELB && PREvarInfo[i].VARGetBasisStatus()==0) {
+				for(int j=i+1; j<PREvar->getSize(); j++) {
+					if(i != j && pdPREFixedVariables[j] != IloInfinity) {
+						rj = PREvarInfo[j].VARGetRedCost();
+						if(rj<=dPREUB-dPRELB && PREvarInfo[j].VARGetBasisStatus()==0)
+							if(ri+rj>dPREUB-dPRELB) {
+								IloExpr expr(*PREenv);
+								expr += (*PREvar)[i];
+								expr += (*PREvar)[j];
+								PREAddLPCut(expr<=1);
+								expr.end();
+							}
+					}
+				}
 			}
 		}
 	}

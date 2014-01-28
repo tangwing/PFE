@@ -6,7 +6,7 @@
 /*******************************************************************************************************************************
 Name: LinearProgram
 ********************************************************************************************************************************
-Discription: Default constructor: before using the model, the method LPInitialize() must be called
+Description: Default constructor: before using the model, the method LPInitialize() must be called
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: nil
@@ -27,17 +27,16 @@ LinearProgram::LinearProgram(void)
 /*******************************************************************************************************************************
 Name: LPInitialize
 ********************************************************************************************************************************
-Discription: Initialize the LP problem
+Description: Initialize the LP problem
 ********************************************************************************************************************************
-Input: The Envirenment, the variables, the model, the cplex solver and the constraints of a LP problem
+Input: The Environnement, the variables, the model, the cplex solver and the constraints of a LP problem
 Necessitates: All the four input arguments are well allocated
 Output: Nothing
 leads to: Obtain the four arguments necessite to create a LP model and set bLPisSet to true.                           
           It also initialize some attributes of LinearProgram.
 *******************************************************************************************************************************/
-void LinearProgram::LPInitialize(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
+void LinearProgram::LPInitialize(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar, IloRangeArray *pcon)
 {
-	printf("Initialize a LP problem\n");
 	LPenv=penv;
 	LPcplex=pcplex;
 	LPmodel=pmodel;
@@ -50,15 +49,13 @@ void LinearProgram::LPInitialize(IloEnv *penv, IloCplex *pcplex, IloModel *pmode
 	pLPlj=new IloNumArray(*penv);
 	pLPuj=new IloNumArray(*penv);
 
-	//LPcplex->exportModel("test.lp");
-
 	bLPisSet=true;
 }
 
 /*******************************************************************************************************************************
 Name: LPSolveByCplex
 ********************************************************************************************************************************
-Discription: Solve a LP problem by Cplex 
+Description: Solve a LP problem by Cplex 
 ********************************************************************************************************************************
 Input: Nothing
 Necessitates: LP problem should be well initialized
@@ -90,17 +87,13 @@ void LinearProgram::LPSolveByCplex()
    }
   
   dLPOptimalValue = LPcplex->getObjValue();
-  //printf("Result of LP: %.2lf\n", dLPOptimalValue);
-  /*for(int i=0;i<LPvar->getSize();i++)
-	pdLPVariables[i] = LPcplex->getValue((*LPvar)[i]);*/
-
   bLPisSolved=true;
 }
 
 /*******************************************************************************************************************************
 Name: LPGetReducedCost
 ********************************************************************************************************************************
-Discription: Get the reduced cost 
+Description: Get the reduced cost 
 ********************************************************************************************************************************
 Input: A double array to save the reduced cost
 Necessitates: LP problem must be solved by cplex and the input double array is well allocated
@@ -145,7 +138,7 @@ void LinearProgram::LPGetVarValue(double *var)
 /*******************************************************************************************************************************
 Name: LPGetBasisStatus
 ********************************************************************************************************************************
-Discription: Get the basis status
+Description: Get the basis status
 ********************************************************************************************************************************
 Input: nothing
 Necessitates: LP problem must be solved by cplex
@@ -169,7 +162,7 @@ int* LinearProgram::LPGetBasisStatus()
 /*******************************************************************************************************************************
 Name: LPGetPseudoCost
 ********************************************************************************************************************************
-Discription: Get the pseudo cost
+Description: Get the pseudo cost
 ********************************************************************************************************************************
 Input: nothing
 Necessitates: LP problem must be solved by cplex
@@ -190,32 +183,19 @@ void LinearProgram::LPGetPseudoCost()
  piLPIndiceBaseConcert=new int[LPvar->getSize()];
  for (i=0;i < LPvar->getSize();i++) piLPIndiceBaseConcert[i]=-1;
   for (i=0;i < LPvar->getSize();i++)
-	if (LPcplex->getBasisStatus((*LPvar)[i])==1)
+	if (LPcplex->getBasisStatus((*LPvar)[i])==1 || LPcplex->getBasisStatus((*LPvar)[i])==4)
 	{
 		piLPIndiceBaseConcert[iLPnbBaseConcert]=i;
 		pLPVarBase->add((*LPvar)[i]);							 // I put the basic variables into VarBases
 		iLPnbBaseConcert++;
 	}
   LPcplex->getDriebeekPenalties(*pLPlj,*pLPuj,*pLPVarBase);	 // I get the Driebeek's pseudo costs (the equivalent function under CPX callable lib is CPXmdleave)
-  
-	 /********************************A SUPPRIMER***************************/
-    /*FILE * fichier;
-	fichier=fopen("LPPseudo.txt","wt");
-	for (i = 0; i<pLPVarBase->getSize(); i++)
-		{
-			fprintf(fichier,"%s\t%.2lf\t%.2lf\n",(*pLPVarBase)[i].getName(),(*pLPlj)[i],(*pLPuj)[i]);
-			
-		}
-	fclose(fichier);*/
-	/**********************************************************************/
-	//LPCalAij();
-	//LPCalculateTomlin();
 }
 
 /*******************************************************************************************************************************
 Name: LPAddFix
 ********************************************************************************************************************************
-Discription: Fix the value of variables to the LP model
+Description: Fix the value of variables to the LP model
 ********************************************************************************************************************************
 Input: iIndex (the index of the variable will be fixed) and iValue the value to fix
 Necessitates: nil
@@ -235,7 +215,7 @@ void LinearProgram::LPAddFix(int iIndex, int iValue)
 /*******************************************************************************************************************************
 Name: LPArSup
 ********************************************************************************************************************************
-Discription: Round up a real value.
+Description: Round up a real value.
 ********************************************************************************************************************************
 Input: A value of double
 Necessitates: nil
@@ -250,7 +230,7 @@ double LinearProgram::LPArSup(double value)
 /*******************************************************************************************************************************
 Name: LPCalAij
 ********************************************************************************************************************************
-Discription: Get the coeffients to calculate the pseudo cost based on the Tomlin's panalties
+Description: Get the coeffients to calculate the pseudo cost based on the Tomlin's panalties
 ********************************************************************************************************************************
 Input: none
 Necessitates: nil
@@ -270,11 +250,8 @@ void LinearProgram::LPCalAij()
 	CPXENVptr     cpxenv = NULL;
 	CPXLPptr      cpxlp = NULL;
 
-	//cout<<aji<<endl;
-
 	cpxenv = CPXopenCPLEX (&status);
 	if ( cpxenv == NULL ) {
-      //char  errmsg[1024];
       fprintf (stderr, "Could not open CPLEX environment.\n");
    }
    cpxlp = CPXcreateprob (cpxenv, &status, "diet");
@@ -298,26 +275,12 @@ void LinearProgram::LPCalAij()
   
    status = CPXfreeprob (cpxenv, &cpxlp);
    status = CPXcloseCPLEX (&cpxenv);
-
-    /******************************** TEST *********************************/
- //   FILE * fichier;
-	//fichier=fopen("LPAji.txt","wt");
-	//for (j = 0; j < iLPnbCols; j++)
-	//	{
-	//		//cout<<"Xj "<<j<<":"<<endl;
-	//		fprintf(fichier,"Xj %d: ",j);
-	//		for(i=0;i<iLPnbRows;i++)
-	//			fprintf(fichier,"aji %d, %d: %lf\t",j,i,pdLPAij[i][j]);
-	//			//cout<<"aji "<<j<<" , "<<i<<": "<<pdLPAij[i][j]<<endl;
-	//		fprintf(fichier, "\n");
-	//	}
-	//fclose(fichier);
-	/**********************************************************************/
 }
+
 /*******************************************************************************************************************************
 Name: LPCalculateTomlin
 ********************************************************************************************************************************
-Discription: Get the pseudo cost based on the Tomlin's penalties
+Description: Get the pseudo cost based on the Tomlin's penalties
 ********************************************************************************************************************************
 Input: nothing
 Necessitates: LP problem must be solved by cplex
@@ -332,53 +295,33 @@ void LinearProgram::LPCalculateTomlin()
 	pLPTomlinLj=(double *)malloc(sizeof(double)*iLPnbCols);
 	pLPTomlinUj=(double *)malloc(sizeof(double)*iLPnbCols);
 
-	//printf("Tomlin penalties\n");
-	//printf("Basic Variable | Lj        | Uj\n");
-
 	for (i=1;i<lrows;i++)
 	{
-		//printf(" %15ld |",piLPVarLibTom[i]-2,pdLPVarValTom[i]);
 		// We now compute the lower Tomlin penalty
 		minra=999999999.0;
 		for (j=1;j<iLPnbCols;j++) 
 			if (pdLPAij[i][j]>0)
 			{ 
-				/*qj=((-1.0*pdLPAij[0][j])/pdLPAij[i][j])*pdLPVarValTom[i];
-				if (qj<(-1.0*pdLPAij[0][j])) qj=(-1.0*pdLPAij[0][j]);*/
 				qj=-pdLPAij[0][j];
 				if (qj<minra) minra=qj;
 			}
 	 pLPTomlinLj[i]=minra;
-	 //printf("%3.3lf ",minra);
 	 // We now compute the upper Tomlin penalty
 	 minra=999999999.0;
 	 for (j=1;j<iLPnbCols;j++) 
 	 	 if (pdLPAij[i][j]<0)
 		 { 
-			 /*qj=((-1.0*pdLPAij[0][j])/(-1.0*pdLPAij[i][j]))*(1.0-pdLPVarValTom[i]);
-			 if (qj<(-1.0*pdLPAij[0][j])) qj=(-1.0*pdLPAij[0][j]);*/
 			 qj=-pdLPAij[0][j];
 			 if (qj<minra) minra=qj;
 		 }
 	 pLPTomlinUj[i]=minra;
-	 //printf("%3.3lf  \n",minra);
 	}
-	/*FILE * file;
-	file=fopen("LPPseudoTomlin.txt","wt");
-	fprintf(file, "VarName\tLj\tUj\t");
-	for (i = 0; i<iLPnbBase; i++)
-		{
-			fprintf(file,"%s\t%.2lf\t%.2lf\n",(*LPvar)[i].getName(),pLPTomlinLj[i],pLPTomlinUj[i]);
-			
-		}
-	fclose(file);*/
-
 }
 
 /*******************************************************************************************************************************
 Name: LPGetPseudoCostByCPX
 ********************************************************************************************************************************
-Discription: Get the pseudo cost using the function in DLL
+Description: Get the pseudo cost using the function in DLL
 ********************************************************************************************************************************
 Input: nothing
 Necessitates: LP problem must be solved by cplex
@@ -394,9 +337,7 @@ void LinearProgram::LPGetPseudoCostByCPX()
 	}
 	unsigned int i;
 	
- 
-	
-	LPcplex->exportModel("model.lp");
+ 	LPcplex->exportModel("model.lp");
 	int status,j;
 	CPXENVptr     cpxenv = NULL;
 	CPXLPptr      cpxlp = NULL;
@@ -422,33 +363,14 @@ void LinearProgram::LPGetPseudoCostByCPX()
    double   *dj=new double[iLPnbCols];
    int *cstat=new int[iLPnbCols];
    int *rstat=new int[iLPnbRows];
-   /*status = CPXsolution (cpxenv, cpxlp, &solstat, &objval, x, pi, slack, dj);
-   if ( status ) {
-      fprintf (stderr, "Failed to obtain solution.\n");
-      
-   }
-
-   printf ("\nSolution status = %d\n", solstat);
-   printf ("Solution value  = %f\n", objval);
-   printf ("Iteration count = %d\n\n", CPXgetitcnt (cpxenv, cpxlp));*/
-
-   
-   
-   //piLPVarLibTom=(int *)malloc(sizeof(int)*iLPnbRows);
-   //pdLPVarValTom=(double *)malloc(sizeof(double)*iLPnbRows);
+ 
    status=CPXgetbase(cpxenv,cpxlp,cstat,rstat);
-   //printf("number of variables in CPX: %d\n",iLPnbCols);
-   /*for(i=0;i<iLPnbCols;i++)
-   {
-	   printf("CPX cstat %d: %d\n",i,cstat[i]);
-   }*/
-   //printf("GETBASE: %d\n",status);
    piLPIndiceBase=new int[iLPnbCols];
    int cnt=0;
    for (i=0;i < iLPnbCols;i++)
 	if (cstat[i]==1||cstat[i]==4)
 	{
-		piLPIndiceBase[cnt]=i;							 // I put the basic variables into VarBases
+		piLPIndiceBase[cnt]=i;				// I put the basic variables into VarBases
 		cnt++;
 
 	}
@@ -461,66 +383,45 @@ void LinearProgram::LPGetPseudoCostByCPX()
 	delete [] x,pi,slack,dj,cstat,rstat;
 }
 
-void LinearProgram::LPGetRedCost(Variable *var)
+void LinearProgram::LPGetVarResults(Variable *var) 
 {
-	int i;
-
+	int j=0;
 	if(!bLPisSolved) 
 	{
 		//cout<<"ERROR: the reduced costs cannot be returned as the problem as not been solved"<<endl;
 		throw(1);
 	}
-	for (i=0;i<LPvar->getSize();i++)
+	pLPVarBase->clear();
+	for (int i=0;i<LPvar->getSize();i++)
 	{
+		if (LPcplex->getBasisStatus((*LPvar)[i])==1 || LPcplex->getBasisStatus((*LPvar)[i])==4 )
+		{
+			var[i].VARSetBasisStatus(1);
+			pLPVarBase->add((*LPvar)[i]);	// I put the basic variables into VarBases
+			iLPnbBaseConcert++;
+		}
+		else
+			var[i].VARSetBasisStatus(0);
+	}
+	LPcplex->getDriebeekPenalties(*pLPlj,*pLPuj,*pLPVarBase);	// I get the Driebeek's pseudo costs (the equivalent function under CPX callable lib is CPXmdleave)
+	for (int i=0;i<LPvar->getSize();i++)
+	{
+		if (var[i].VARGetBasisStatus() == 1)
+		{
+			var[i].VARSetPseuCost((*pLPlj)[j],(*pLPuj)[j]);
+		}	
 		var[i].VARSetRedCost(LPcplex->getReducedCost((*LPvar)[i])); // Get the reduced cost by calling the function if Cplex
+		var[i].VARSetValue(LPcplex->getValue((*LPvar)[i]));
+		var[i].VARSetName(const_cast<char*>((*LPvar)[i].getName()));
 	}
-};	// Get the reduced cost 
+}
 
-void LinearProgram::LPGetPseuCost(Variable *var)
+void LinearProgram::LPAddCuts(IloConstraintArray* cuts)
 {
- unsigned int i;
- pLPVarBase->clear();
- //IloCplex::BasisStatusArray cstat(*LPenv);
- if(!bLPisSolved) 
-	{
-		//cout<<"ERROR: the basis status cannot be returned as the problem as not been solved"<<endl;
-		throw(1);
-	} 
+	LPmodel->add(*cuts);
+}
 
-  for (i=0;i < LPvar->getSize();i++)
-	if (LPcplex->getBasisStatus((*LPvar)[i])==1)
-	{
-		var[i].VARSetBasisStatus(1);
-		pLPVarBase->add((*LPvar)[i]);							 // I put the basic variables into VarBases
-		iLPnbBaseConcert++;
-	}
-	else if(LPcplex->getBasisStatus((*LPvar)[i])==0)
-	{
-		var[i].VARSetBasisStatus(0);
-	}
-  LPcplex->getDriebeekPenalties(*pLPlj,*pLPuj,*pLPVarBase);	 // I get the Driebeek's pseudo costs (the equivalent function under CPX callable lib is CPXmdleave)
-  int j=0;
-  for(i=0;i<LPvar->getSize();i++)
-  {
-	  if(var[i].VARGetBasisStatus()==1)
-	  {
-		  var[i].VARSetPseuCost((*pLPlj)[j],(*pLPuj)[j]);
-		  j++;
-	  }
-  }	
-};	// Get the pseudo-cost
-
-void LinearProgram::LPGetVarValue(Variable *var)
+void LinearProgram::LPRemoveCuts(IloConstraintArray* cuts)
 {
-	int i;
-
-	if(!bLPisSolved) 
-	{
-		//cout<<"ERROR: the reduced costs cannot be returned as the problem as not been solved"<<endl;
-		throw(1);
-	}
-	for (i=0;i<LPvar->getSize();i++)
-	{
-		var[i].VARSetValue(LPcplex->getValue((*LPvar)[i]));				// Get the variable values in the optimal solutions
-	}
-};	// Get the variable value in the optimal solution
+	LPmodel->remove(*cuts);
+}

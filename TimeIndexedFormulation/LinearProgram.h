@@ -53,9 +53,11 @@ public:
 
 	// Methods related to the initialization of the LP model
 	LinearProgram(void);				// Default constructor: before using the model, the method LPInitialize() must be called
-	void LPInitialize(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon);
+	void LPInitialize(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar, IloRangeArray *pcon);
 										// This method must be used to initialize the model
-	~LinearProgram(void){delete pLPlj,pLPuj,pLPVarBase; delete [] pdLPVariables;delete [] pdLPAij;} // Destructor of the class
+	void LPAddCuts(IloConstraintArray*);	// Adds the constraints to the model
+	void LPRemoveCuts(IloConstraintArray*);	// Removes the constraints from the model
+	~LinearProgram(void){delete pLPlj; delete pLPuj; delete pLPVarBase; delete [] pdLPVariables; /*for (int i=0;i<iLPnbRows;i++) free(pdLPAij[i]); free(pdLPAij);*/} // Destructor of the class
 	 
 	void LPSolveByCplex();				// Solve the LP problem using cplex and return the value of the funtion objective
 										// And get the result of each variable after the problem solved by cplex
@@ -72,23 +74,21 @@ public:
 	double * LPGetujCPX() {return pdLPujCPX;}		// Get uj from CPX
 	double* LPGetTomlinLj(){return pLPTomlinLj;}	// Get pLPlj to fix the variable in base
 	double* LPGetTomlinUj(){return pLPTomlinUj;}	// Get pLPuj to fix the variable in base
-	void LPAddFix(int iIndex, int iValue);// To fix the (iIndex)th variable to iValue
-	bool LPisSet(){return bLPisSet;}
-	bool LPisSolved(){return bLPisSolved;}
-	double LPGetOptValue(){return dLPOptimalValue;}
-	double* LPGetvariables(){return pdLPVariables;}
+	void LPAddFix(int iIndex, int iValue);	// To fix the (iIndex)th variable to iValue
+	bool LPisSet(){return bLPisSet;}		// True if the model is set, false otherwise
+	bool LPisSolved(){return bLPisSolved;}	// True if the model has been solved, false otherwise
+	double LPGetOptValue(){return dLPOptimalValue;}	// Getter for the optimal value
+	double* LPGetvariables(){return pdLPVariables;}	// Getter for the optimal values of the variables
 	void LPGetVarValue(double *var);	// Get the variable values in the optimal solution
 	double LPArSup(double value);
-	double** LPGetAij(){return pdLPAij;}
+	double** LPGetAij(){return pdLPAij;}	
 	void LPGetPseudoCostByCPX();
 	int LPGetNbBase(){return iLPnbBaseConcert;}
 	int * LPGetIndiceBase(){ return piLPIndiceBase;}
 	double LPGetVarValue(IloNumVar var){if(!bLPisSolved) throw(1);else return LPcplex->getValue(var);}
 	double LPGetReducedCostX(IloNumVar var){if(!bLPisSolved) throw(1);else return LPcplex->getReducedCost(var);}
 
-	void LPGetRedCost(Variable *var);	// Get the reduced cost 
-	void LPGetPseuCost(Variable *var);	// Get the pseudo-cost
-	void LPGetVarValue(Variable *var);	// Get the variable value in the optimal solution
+	void LPGetVarResults(Variable *var);// Set the reduced costs, pseudo-costs, optimal variable values and basic variable status
 private: 
 	void LPCalAij();					// Get the coeffients to calculate the pseudo cost based on Tomlin's penalties.
 };

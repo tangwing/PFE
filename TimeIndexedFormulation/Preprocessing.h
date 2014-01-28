@@ -21,6 +21,8 @@ private:
 	bool bPREisSet;					// A flag to note if the models and preprocessing objects have been correctly initialized
 	bool bPREisSolved;				// A flag to note if the preprocessing has been applied or not
 	Variable *PREvarInfo;			// A pointer to the variable array
+	IloConstraintArray *PREcutsMIP;	// A pointer to the CPLEX cuts to be added to the MIP model 
+	IloConstraintArray *PREcutsLP;	// A pointer to the CPLEX cuts to be added to the LP model 
 
 	// Attributes related to the preprocessing phase
 	int *ipPREhead;					// A tableau to save the indices of bool variables
@@ -28,12 +30,14 @@ private:
 	double dPREUB;					// An Upper Bound computed by an heuristic, outside the class Preprocessing
 	bool bPREisUB;					// A flag to note is an Upper Bound has been set by the user or not
 	int iPREnbFix;					// Number of variables fixed by the preprocessing phase
-    double *pdPREFixedVariables;	// Array that contains the status of variables: IloInfinity=> The corresponding variable is not fixed. Otherwise to value to which 
+    double *pdPREFixedVariables;	// Array that contains the status of variables: IloInfinity=> The corresponding variable is not fixed. -1 => the variable is a boolean and can be fixed
+									// Otherwise to value to which 
 									// it has been fixed to.
 	bool *pbPREisFixed;				// Array of flags. If true, the variables has been fixed by preprocessing.
 	int iPREVarBeg;					// Index of the first fixed variable
 	int iPREVarEnd;					// Index of the last fixed variable
 	int iPREnbVar;					// The number of variables
+	int iPREnbBool;					// The number of boolean variables
 	
 	double dPRElpOpt;				// The optimal solution of the LP problem
 	double dPREmipOpt;				// The optimal solution of the MIP problem
@@ -42,6 +46,8 @@ private:
 	bool bPRETomDrie;				// If true, it calculates the pseudo cost based on the Tomlin's Penalties.
 	                                // Else, it calculates the pseudo cost based on the Driebeek's penalties.
 	bool bPREhasHead;				// If true, it has a indice table saved the indice of bool variables
+	bool bPREOptiNoPRE;				// If true, the optimal solution has been found without preprocessing
+
 public:
 	// Methods to manipulate the Mathematical models and the preprocessing phase (USABLE BY THE USERS)
 
@@ -51,36 +57,41 @@ public:
 	/* This method enables to initialize the LP model */
 	void PREInitializeLP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon);
 	/* This method enables to initialize the MIP model */
-	void PREInitializeMIP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon);
+	void PREInitializeMIP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar, IloRangeArray *pcon);
 	void PREInitializeMIPfromLP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon,int *head);
 	void PRESetDebug(bool debug){bPREisDebug=debug;}	// The user can decide whether he check the debug information or not
 	void PRESetTomlin(bool tomlin){bPRETomDrie=tomlin;}
+	bool PREIsOptiNoPRE(){return bPREOptiNoPRE;}
 	
 	// Methods related to the solution of the LP
 	void PRESolveLP();				// Solve a LP problem by Cplex
 	double PREGetLpOpt()			// Get the optimal solution value
 		{if (PRElp->LPisSolved()) return dPRElpOpt; else throw(1);}
-	
+
+	// Methods related to the cuts
+	void PREAddCutsToLP();
+	void PREAddCutsToMIP();
+	void PREClearLPCuts();
+	void PREClearMIPCuts();
+	void PRERemoveCutsFromLP();
+	void PRERemoveCutsFromMIP();
+	void PREAddLPCut(IloConstraint);
+	void PREAddMIPCut(IloConstraint);
+	void PREAddLPCuts(IloConstraintArray*);
+	void PREAddMIPCuts(IloConstraintArray*);
+	void PREGenAllRedCostCut();
 
 	// Methods related to the solution of the MIP
 	void PRESolveMIP();				// Solve a MIP problem by Cplex
-	double* PREGetMIPResVar();		// Get the values of the varialbes after the MIP problem solved by Cplex										
+	double* PREGetMIPResVar();		// Get the values of the variables after the MIP problem solved by Cplex										
 	double PREGetMipOpt()			// Get the optimal solution value
 		{if (PREmip->MIPisSolved()) return dPREmipOpt; else throw(2);}
 	int PREGetMIPNbNode(){if(PREmip->MIPisSolved()) return PREmip->MIPGetNbNode();else throw(2);}
+	bool PREisMIPOpt(){return PREmip->MIPisOpt();}
 
 	// Methods relate to the preprocessing algorithm
-	//void PREPreprocessing(int iVarBeg, int iVarEnd);
-									// This method implements the preprocessing algorithm
-									// Input: iVarBeg is the number of the first variable to fix 
-									//        iVarEnd is the number of the last variable to fix
-									// Necessitate: 0 <= iVarBeg <= iVarEnd < Number of variables
-									//				The variables between iVarBeg and iVarEnd must be boolean variables
-									// Lead to: the variables between iVarBeg and iVarEnd have been preprocessed and potentially fixed in the LP model
-									//			to fix them in the MIP model, use method PREfixVarToMIP()
-
-	bool PREPreprocessing(int * head,int nb);
-	void PRESetHead(int * head){ipPREhead=head;bPREhasHead=true;}
+	bool PREPreprocessing();
+	void PRESetHead(int * head);
 	void PRESetUB(double UB)		// Enables to set the UB required by the preprocessing
 		{dPREUB=UB;bPREisUB=true;}				
 	double PREGetUB()				// Get the best known UB after the preprocessing
@@ -89,6 +100,8 @@ public:
 		{if (bPREisSolved) return dPRELB; else throw(3);}
 	int PREGetNbFix()				// Get the number of variables fixed by the preprocessing
 		{if (bPREisSolved) return iPREnbFix; else throw(3);}		
+	Variable* PREGetVarInfo()		// Get the variable array containing all the variable informations
+		{if(PRElp->LPisSolved()) return PREvarInfo; else throw(1);}
 	void PREFixVarToMIP();			// Fix the variables deduced by the preprocessing in the MIP model
 									// Necessitate: the LP and the MIP model have the same variables declared in the same order
 
@@ -98,9 +111,6 @@ private:
 	void PREFixVarToLP();			// Fix the variables(add upper and lower bound to a variable) in the LP problem (Used by the preprocessing algorithm)
 																	
 	bool PREToFix(int indice,int * head); // To Test if this indice is in the list of indices. indice should be a positive integer.
-	void PREGetRedCost(){PRElp->LPGetRedCost(PREvarInfo);}
-	void PREGetPseuCost(){PRElp->LPGetPseuCost(PREvarInfo);}
-	void PREGetVarValue(){PRElp->LPGetVarValue(PREvarInfo);}
 	void PREFixVar();				// Fix the variables using the class "Variable" to get the information.
 };
 #endif
