@@ -49,10 +49,9 @@
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS ;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
-      <ExceptionHandling>
-      </ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -76,7 +75,7 @@
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS ;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -90,7 +89,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>wsock32.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\cplex1260.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\lib\x86_windows_vs2010\stat_mta\ilocplex.lib;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\lib\x86_windows_vs2010\stat_mta\concert.lib</AdditionalDependencies>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -3,24 +3,22 @@
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <ctime>
+#include <conio.h>
 #include <process.h>
 #include <Windows.h>
+#include <ilcplex/ilocplex.h>
 #include "Data.h"
 #include "CplexResult.h"
+using namespace std;
 
 #define DEBUG false
 #define DEBUG_MOD false
 #define CONFIG true
-
 #define MemLimit 1024.0
 #define TimeLimit 1800.0
-
-using namespace std;
-
-#include <ilcplex/ilocplex.h>
-#include <ilcplex/cplex.h>
 
 ILOSTLBEGIN
 typedef IloIntVarArray IloIntVarArray1D; // 1-dimension array of integer variables
@@ -40,7 +38,6 @@ IloIntVarArray1D Z(env);
 IloIntVarArray2D d(env);
 IloIntVar RE(env,0,9999999);
 
-// Variables for results
 double dOptValue, dOptTime;
 int isOptimal, isFeasible,iNbNodesIP;
 int isTimeLimit=0, isMemLimit=0;
@@ -114,7 +111,7 @@ void SolutionToFile(IloCplex & cplex)
 	 for (iTime=0;iTime<T();iTime++)
 	 {
 	  for (iMach=0;iMach<M();iMach++)
-		  if ((tmp=cplex.getValue(x[iTask][iMach][iTime]))>0.999)
+		  if ((tmp= int(cplex.getValue(x[iTask][iMach][iTime])))>0.999)
 		  { // Task iTask is processed by iMach at time [iTime,iTime+1]
 		   fprintf(SolFic,"%d (%d) ",iTime+1,iMach+1);
 		  }
@@ -147,7 +144,7 @@ void SolutionToFile(IloCplex & cplex)
 		 for (iTask=0;iTask<N();iTask++)
 			 for (iTask2=iTask+1;iTask2<N();iTask2++)
 				 if (a(iTask,iTask2)==1 
-					 && (tmp=cplex.getValue(y[iTask][iTask2][iMach1][iMach2][iTime]))>0.999 )
+					 && (tmp=int(cplex.getValue(y[iTask][iTask2][iMach1][iMach2][iTime])))>0.999 )
 						iBdw+=b(iTask,iTask2);
 		 for (iTask=0;iTask<N();iTask++)
 				 if (cplex.getValue(y[iTask][iTask][iMach1][iMach2][iTime])>0.999 || cplex.getValue(y[iTask][iTask][iMach2][iMach1][iTime])>0.999)
@@ -215,7 +212,7 @@ void InitializeIPModel()
   gap[iLoop][iLoop2]=iLoop3;
   if (DEBUG_MOD) printf("%d ",gap[iLoop][iLoop2]);
  }
- if (DEBUG_MOD) getch();
+ if (DEBUG_MOD) _getch();
  if (DEBUG_MOD) printf("[DEBUG] Starting to create the IP model: variables creation\n");
  /***************************/
  // We create the variables
@@ -574,42 +571,34 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  if (DEBUG_MOD) 
  {
 	 printf("[DEBUG] The model is created\n");
-	 getch();
+	 _getch();
  }
 }
 
 // This function counts the number of machines which are turned on, on the average, at any time t
 double CountPMsTurnedOn(IloCplex *pcplex)
 {
- unsigned int iLoop;
+ int iLoop;
  double dCount=0;
-
  for (iLoop=0;iLoop<T();iLoop++)
 	 dCount+=pcplex->getValue(Z[iLoop]);
  return (dCount/=(double)T());
 }
 
-enum SolveMode{MIP, PRE_MIP_ONLY, PRE_PRE};
 /* Programme Principal */
-int main(int argc)
+int main(int argc, char* argvs[])
 {
-	time_t temp1,temp2,tempPre1,tempPre2;
 	clock_t ticks0;
-	FILE *fic;
 	double dNbMach;
-	SolveMode sm = MIP;
 
-	GetData();
+	if(argc > 1)GetData(argvs[1]);
+	else GetData();
 	if (DEBUG) DisplayData();
-
 	ticks0 = clock();
-	
 	IloCplex cplex;
 	try
     {
-		/*CREATION OF MODEL, CONSTRAINTS AND UB HERE*/
-		if(sm == MIP) InitializeIPModel();
-		else InitializeLPModel();
+		InitializeIPModel();
         cplex = IloCplex(model);		
 		if (DEBUG)
 			cplex.exportModel("SCP.lp");
@@ -627,48 +616,7 @@ int main(int argc)
 			cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
 			//cplex.setParam(IloCplex::Threads,3);
 		}
-		if(sm != MIP)
-		{
-			 //prepare preprocessing
-			 int nbBool=0;
-			 int * head = new int[var.getSize()];
-			 //Add all x into head
-			 for(int i=0;i< T()*N()*M();i++)
-			 {
-				 head[nbBool]=var[i].getId();
-				 nbBool++;
-			 }
-			 //Some Yii'jj't have no effect on Objectif so they are not extractable. We should avoid adding them otherwise exception will occur during preprocessing
-			 //for(int iT=0; iT<T(); iT++)
-				// for(int iN=0; iN<N(); iN++)
-				//	for(int iN2=iN; iN2<N(); iN2++)
-				//		if(iN2!=iN && a(iN, iN2)!=1)continue;
-				//		else
-				//		for(int iM=0; iM<M(); iM++)
-				//		{
-				//			int iM2=0;
-				//			if(iN!=iN2)iM2=iM+1;
-				//			for(; iM2<M(); iM2++)
-				//				if(iM==iM2)continue;
-				//				else
-				//				{
-				//					 head[nbBool]=var[ indY(iT,iN,iN2,iM,iM2)].getId();
-				//					 nbBool++;
-				//				}
-				//		}
-			 //Add all z into head
-			 for(int i=T()*N()*M()+T()*N()*N()*M()*M();i< var.getSize();i++)
-			 {
-				 head[nbBool]=var[i].getId();
-				 nbBool++;
-			 }
-			 
-			 if(sm == PRE_MIP_ONLY)
-				PreByCalCost(true,head,nbBool,1221005, &env , &cplex , &model , &var , &con);	// See above
-			 else PreByCalCost(false,head,nbBool,717777, &env , &cplex , &model , &var , &con);	// See above
-			 getch();
-			 return 0;
-		}
+		
 
 		//direct MIP without preprocessing
 		dNbMach=-1.0;
@@ -709,11 +657,11 @@ int main(int argc)
 		dOptValue=9999999.0;
 		isOptimal=0;
 		isFeasible=0;
-		//getch();
+		//_getch();
 	}
 	catch (int e) {
 		cerr << "Known exception caught : " << e << endl;
-		getch();
+		//_getch();
 	}
 	catch (...)
 	{
@@ -721,7 +669,7 @@ int main(int argc)
 		dOptValue=9999999.0;
 		isOptimal=0;
 		isFeasible=0;
-		//getch();
+		//_getch();
 	}
 	//We put the test of limit here because an cplex exception can also be caused by Limit.
 	//in which case there is no solution found but the status code is set. We count this case
@@ -748,6 +696,6 @@ int main(int argc)
 	if (DEBUG && dOptValue!=9999999.0)
 			SolutionToFile(cplex);
 	if (DEBUG)
-		getch();
+		_getch();
 	return 0;
 }

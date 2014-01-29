@@ -59,7 +59,7 @@ extern SDEFData Data;
 // List of functions available to manipulate the data
 
 // Function for reading/displaying the instance from file donnees.dat
-extern void GetData(char*); 
+extern void GetData(char*filename = NULL); 
 extern void DisplayData(void);
 
 

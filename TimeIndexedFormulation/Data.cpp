@@ -97,7 +97,7 @@ void DisplayData(void)
 	for (iTask=0;iTask<N();iTask++)
 		printf("\t\t Task %d : QtyCPU=%ld, QtyGPU=%ld, QtyRAM=%ld, QtyHDD=%ld, isPreemp=%ld, CostPreemp=%ld.\n",iTask,nc(iTask),ng(iTask),nr(iTask),nh(iTask),R(iTask),rho(iTask));
 
-	getch();
+	_getch();
 
 }
 
@@ -106,7 +106,7 @@ void DisplayData(void)
 // Read the instance in a file  name donnees.dat
 /****************************************************************************/
 
-void GetData(char * filename = NULL)
+void GetData(char * filename)
 {
  //int num,ri_temp,pi_temp,j,i;
  FILE *file;
