@@ -106,14 +106,15 @@ void DisplayData(void)
 // Read the instance in a file  name donnees.dat
 /****************************************************************************/
 
-void GetData(void)
+void GetData(char * filename = NULL)
 {
- int num,ri_temp,pi_temp,j,i;
+ //int num,ri_temp,pi_temp,j,i;
  FILE *file;
- int iLoop,iLoop2,iLoop3,iLoop4,iNbJobs;
+ int iLoop,iLoop2;//,iLoop3,iLoop4,iNbJobs;
 
- file=fopen("Donnees/donnees4_18.dat","rt");
- //file=fopen("donnees.dat","rt");
+ if(filename==NULL)filename = "donnees.dat";
+ //filename="Donnees/donnees4_18.dat";
+ file=fopen(filename,"rt");
  // We read the length of the Time Horizon
  fscanf(file,"%d\n",&Data.TimeHorizon);
  // We read the number of tasks

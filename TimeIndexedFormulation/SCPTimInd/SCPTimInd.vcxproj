@@ -49,7 +49,7 @@
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -76,7 +76,7 @@
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\cplex\include;C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126\concert\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IL_STD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -100,19 +100,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Data.cpp" />
-    <ClCompile Include="..\LinearProgram.cpp" />
     <ClCompile Include="..\Main.cpp" />
-    <ClCompile Include="..\MixedIntegerProgram.cpp" />
-    <ClCompile Include="..\Preprocessing.cpp" />
-    <ClCompile Include="..\Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CplexResult.h" />
     <ClInclude Include="..\Data.h" />
-    <ClInclude Include="..\LinearProgram.h" />
-    <ClInclude Include="..\MixedIntegerProgram.h" />
-    <ClInclude Include="..\Preprocessing.h" />
-    <ClInclude Include="..\Variable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

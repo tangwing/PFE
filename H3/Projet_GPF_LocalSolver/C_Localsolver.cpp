@@ -12,7 +12,7 @@ using namespace localsolver;
 class C_Localsolver
 {
      public:
-		 
+		 //C_Localsolver(){};
 		 /*
 		 C_scp(const C_scp &);
 		 ~C_scp();*/
@@ -849,11 +849,18 @@ void writeSolution()
 void main(void)
 {
 	
-	/*GetData();
-	cout<<"nombre de tache :" << N() <<endl;*/
-	C_Localsolver model;
-	GetData();
-	model.solve(30);
-	model.writeSolution();
+	
+	try
+	{
+		C_Localsolver model;
+		GetData();
+		model.solve(30);
+		model.writeSolution();
+	}
+	catch(LSException e)
+	{
+		cerr<<e.getMessage()<<endl;
+	}
+	getch();
 
 }
