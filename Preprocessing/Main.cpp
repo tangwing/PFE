@@ -12,7 +12,7 @@
 #include "CplexResult.h"
 #include "PreprocessingResult.h"
 
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -633,10 +633,10 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 enum SolveMode{PRE_MIP_ONLY, PRE_PRE};
 int main(int argc, char* argvs[])
 {
-	if(argc < 2)abort();
+	//if(argc < 2)abort();
 	for(int i=0; i<argc; i++)cout<<argvs[i]<<endl;
-	int UB = 9999999;
-	UB = atoi(argvs[1]);
+	int UB = 235566;
+	//UB = atoi(argvs[1]);
 	time_t temp1,temp2,tempPre1,tempPre2;
 	clock_t ticks0;
 	FILE *fic;
@@ -644,7 +644,7 @@ int main(int argc, char* argvs[])
 	SolveMode sm = PRE_PRE;
 
 	if(argc==3)GetData(argvs[2]);
-	else GetData();
+	else GetData("Donnees/donnees1_4.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -737,6 +737,6 @@ int main(int argc, char* argvs[])
 		isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach, dPreProcessingTime, nbBool, iNbFixed);
 
 	if (DEBUG)
-		getch();
+		_getch();
 	return 0;
 }

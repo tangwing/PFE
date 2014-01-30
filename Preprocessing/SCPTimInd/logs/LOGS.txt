@@ -1,609 +1,436 @@
-LP: 776135
-Shrage: 824830
-RedCost[0]: 1602
-RedCost[1]: 1602
-RedCost[2]: 9776.89
-RedCost[3]: 9776.89
-RedCost[4]: 9776.89
-RedCost[9]: 0
-RedCost[12]: 688.012
-RedCost[13]: 737.746
-RedCost[14]: 688.012
-RedCost[15]: 344
-RedCost[16]: 344
-RedCost[17]: 2094.72
-RedCost[18]: 2151.85
-RedCost[19]: 2094.72
-RedCost[22]: 9.09495e-013
-RedCost[25]: 344
-RedCost[26]: 344
-RedCost[27]: 2094.72
-RedCost[28]: 2151.85
-RedCost[29]: 2094.72
-RedCost[33]: 1355.43
-RedCost[38]: 1355.43
-RedCost[43]: 2683.15
-RedCost[48]: 5153.28
-RedCost[53]: 1354.14
-RedCost[55]: 312
-RedCost[56]: 312
-RedCost[57]: 1717.59
-RedCost[58]: 1700.95
-RedCost[59]: 1717.59
-RedCost[64]: -1.81899e-012
-RedCost[69]: 0
-RedCost[70]: 1962
-RedCost[71]: 1962
-RedCost[72]: 10808.9
-RedCost[73]: 12088.9
-RedCost[74]: 10808.9
-RedCost[78]: 4608.72
-RedCost[84]: -10099.1
-RedCost[85]: 1932
-RedCost[86]: 1932
-RedCost[87]: 10700.9
-RedCost[88]: 11850.9
-RedCost[89]: 10736.9
-RedCost[90]: 1602
-RedCost[91]: 1602
-RedCost[92]: 7134
-RedCost[93]: 7134
-RedCost[94]: 7134
-RedCost[102]: 486.265
-RedCost[103]: 536
-RedCost[104]: 486.265
-RedCost[107]: 1183.87
-RedCost[108]: 1241
-RedCost[109]: 1183.87
-RedCost[113]: -1.81899e-012
-RedCost[117]: 1183.87
-RedCost[118]: 1241
-RedCost[119]: 1183.87
-RedCost[123]: 1355.43
-RedCost[128]: 1355.43
-RedCost[133]: 1537
-RedCost[138]: 5139.28
-RedCost[143]: 1354.14
-RedCost[147]: 933.643
-RedCost[148]: 917
-RedCost[149]: 933.643
-RedCost[154]: 466
-RedCost[163]: 1280
-RedCost[165]: 3844
-RedCost[166]: 3844
-RedCost[167]: 16082.3
-RedCost[168]: 20691
-RedCost[169]: 16082.3
-RedCost[174]: -12742
-RedCost[177]: 2568
-RedCost[178]: 3718
-RedCost[179]: 2604
-RedCost[180]: 1602
-RedCost[181]: 1602
-RedCost[182]: 7134
-RedCost[183]: 7134
-RedCost[184]: 7134
-RedCost[192]: 472.265
-RedCost[193]: 522
-RedCost[194]: 472.265
-RedCost[197]: 1183.87
-RedCost[198]: 1241
-RedCost[199]: 1183.87
-RedCost[200]: 1602
-RedCost[201]: 1602
-RedCost[202]: 7134
-RedCost[203]: 7134
-RedCost[204]: 7134
-RedCost[207]: 1183.87
-RedCost[208]: 1241
-RedCost[209]: 1183.87
-RedCost[213]: 1355.43
-RedCost[218]: 1354.87
-RedCost[223]: 1537
-RedCost[225]: 2289.28
-RedCost[226]: 2289.28
-RedCost[227]: 11631.3
-RedCost[228]: 16797.3
-RedCost[229]: 11631.3
-RedCost[233]: 1340.7
-RedCost[237]: 933.643
-RedCost[238]: 917
-RedCost[239]: 933.643
-RedCost[244]: 466
-RedCost[253]: 1280
-RedCost[258]: 4608.72
-RedCost[264]: -12742
-RedCost[267]: 2568
-RedCost[268]: 3718
-RedCost[269]: 2604
-RedCost[273]: 154.195
-RedCost[278]: 154.195
-RedCost[282]: 349
-RedCost[283]: 522
-RedCost[284]: 354.609
-RedCost[287]: 854
-RedCost[288]: 1227
-RedCost[289]: 868.374
-RedCost[290]: 1602
-RedCost[291]: 1602
-RedCost[292]: 5624
-RedCost[293]: 7134
-RedCost[294]: 5692.72
-RedCost[295]: 344
-RedCost[296]: 344
-RedCost[297]: 1226
-RedCost[298]: 1599
-RedCost[299]: 1240.37
-RedCost[300]: 535
-RedCost[301]: 535
-RedCost[302]: 2390
-RedCost[303]: 4069
-RedCost[304]: 2404.72
-RedCost[308]: 1664.28
-RedCost[310]: 1067
-RedCost[311]: 1067
-RedCost[312]: 4788
-RedCost[313]: 8126
-RedCost[314]: 4817.8
-RedCost[318]: 6607.28
-RedCost[323]: 1664.28
-RedCost[327]: 664
-RedCost[328]: 917
-RedCost[329]: 676.271
-RedCost[343]: 2074.2
-RedCost[345]: 3844
-RedCost[346]: 3844
-RedCost[347]: 13486
-RedCost[348]: 20691
-RedCost[349]: 13604.1
-RedCost[357]: 1058
-RedCost[358]: 3718
-RedCost[359]: 1162.72
-RedCost[362]: 7134
-RedCost[363]: 4491.11
-RedCost[364]: 7134
-RedCost[372]: 688.012
-RedCost[373]: 522
-RedCost[374]: 688.012
-RedCost[375]: 330
-RedCost[376]: 330
-RedCost[377]: 2080.72
-RedCost[378]: 1585
-RedCost[379]: 2080.72
-RedCost[380]: 1602
-RedCost[381]: 1602
-RedCost[382]: 9776.89
-RedCost[383]: 7134
-RedCost[384]: 9776.89
-RedCost[387]: 1736.72
-RedCost[388]: 1241
-RedCost[389]: 1736.72
-RedCost[393]: 789.094
-RedCost[398]: 774.929
-RedCost[403]: 1537
-RedCost[408]: 2495.11
-RedCost[413]: 789.094
-RedCost[417]: 1405.59
-RedCost[418]: 917
-RedCost[419]: 1405.59
-RedCost[422]: 1089.61
-RedCost[424]: 1089.61
-RedCost[427]: 0
-RedCost[438]: 64.5647
-RedCost[444]: -10099.1
-RedCost[445]: 1932
-RedCost[446]: 1932
-RedCost[447]: 10700.9
-RedCost[448]: 9208
-RedCost[449]: 10736.9
-RedCost[455]: 1602
-RedCost[456]: 1602
-RedCost[457]: 9776.89
-RedCost[458]: 7134
-RedCost[459]: 9776.89
-RedCost[462]: 688.012
-RedCost[463]: 522
-RedCost[464]: 688.012
-RedCost[467]: 1736.72
-RedCost[468]: 1241
-RedCost[469]: 1736.72
-RedCost[470]: 1602
-RedCost[471]: 1602
-RedCost[472]: 9776.89
-RedCost[473]: 7134
-RedCost[474]: 9776.89
-RedCost[477]: 1736.72
-RedCost[478]: 1241
-RedCost[479]: 1736.72
-RedCost[483]: 789.094
-RedCost[488]: 774.929
-RedCost[493]: 1537
-RedCost[498]: 2509.11
-RedCost[503]: 789.094
-RedCost[507]: 1405.59
-RedCost[508]: 917
-RedCost[509]: 1405.59
-RedCost[514]: 0
-RedCost[528]: 64.5647
-RedCost[534]: -10099.1
-RedCost[537]: 5210.89
-RedCost[538]: 3718
-RedCost[539]: 5246.89
-RedCost[545]: 1602
-RedCost[546]: 1602
-RedCost[547]: 7134
-RedCost[548]: 7134
-RedCost[549]: 7134
-RedCost[552]: 486.265
-RedCost[553]: 536
-RedCost[554]: 486.265
-RedCost[557]: 1183.87
-RedCost[558]: 1241
-RedCost[559]: 1183.87
-RedCost[567]: 1169.87
-RedCost[568]: 1227
-RedCost[569]: 1169.87
-RedCost[573]: 1355.43
-RedCost[578]: 1341.26
-RedCost[583]: 2025.84
-RedCost[588]: 5166
-RedCost[593]: 1355.43
-RedCost[597]: 933.643
-RedCost[598]: 917
-RedCost[599]: 933.643
-RedCost[604]: 417.755
-RedCost[613]: 598.553
-RedCost[615]: 3844
-RedCost[616]: 3844
-RedCost[617]: 16082.3
-RedCost[618]: 20691
-RedCost[619]: 16082.3
-RedCost[624]: -12742
-RedCost[627]: 2568
-RedCost[628]: 3718
-RedCost[629]: 2604
-RedCost[632]: 0
-RedCost[639]: 0
-RedCost[642]: 946.837
-RedCost[643]: 887.954
-RedCost[644]: 946.837
-RedCost[647]: 2364.08
-RedCost[648]: 2142.88
-RedCost[649]: 2364.08
-RedCost[654]: 0
-RedCost[657]: 2350.08
-RedCost[658]: 2128.88
-RedCost[659]: 2350.08
-RedCost[663]: 1070.31
-RedCost[668]: 1056.14
-RedCost[672]: -4.54747e-013
-RedCost[673]: 2106.12
-RedCost[677]: -9.09495e-013
-RedCost[678]: 3835.44
-RedCost[683]: 1070.31
-RedCost[687]: 1941.14
-RedCost[688]: 1686.9
-RedCost[689]: 1941.14
-RedCost[697]: 9769.65
-RedCost[698]: 7959.09
-RedCost[699]: 9769.65
-RedCost[708]: 2320.97
-RedCost[714]: -7100
-RedCost[717]: 8210
-RedCost[718]: 8029.44
-RedCost[719]: 8246
-RedCost[723]: 810.258
-RedCost[725]: 271.435
-RedCost[726]: 271.435
-RedCost[727]: 4293.44
-RedCost[728]: 5803.44
-RedCost[729]: 4293.44
-RedCost[732]: 363
-RedCost[733]: 536
-RedCost[734]: 363
-RedCost[737]: 868
-RedCost[738]: 1241
-RedCost[739]: 868
-RedCost[743]: 812.435
-RedCost[747]: 854
-RedCost[748]: 1227
-RedCost[749]: 854
-RedCost[750]: 535
-RedCost[751]: 535
-RedCost[752]: 2390
-RedCost[753]: 4069
-RedCost[754]: 2390
-RedCost[758]: 1665
-RedCost[762]: 3487.37
-RedCost[763]: 6825.37
-RedCost[764]: 3487.37
-RedCost[768]: 6676
-RedCost[773]: 1679
-RedCost[776]: 0
-RedCost[777]: 664
-RedCost[778]: 917
-RedCost[779]: 664
-RedCost[790]: 1911.44
-RedCost[791]: 1911.44
-RedCost[792]: 6605.44
-RedCost[793]: 9395.44
-RedCost[794]: 6605.44
-RedCost[795]: 3844
-RedCost[796]: 3844
-RedCost[797]: 13486
-RedCost[798]: 20691
-RedCost[799]: 13486
-RedCost[804]: -14252
-RedCost[805]: 1932
-RedCost[806]: 1932
-RedCost[807]: 6548
-RedCost[808]: 9208
-RedCost[809]: 6584
-RedCost[813]: 628.644
-RedCost[820]: 139
-RedCost[821]: 139
-RedCost[822]: 568.321
-RedCost[823]: 675
-RedCost[824]: 573.592
-RedCost[827]: 1037.95
-RedCost[828]: 1241
-RedCost[829]: 1051.45
-RedCost[833]: 633
-RedCost[835]: 330
-RedCost[836]: 330
-RedCost[837]: 1381.95
-RedCost[838]: 1585
-RedCost[839]: 1395.45
-RedCost[840]: 535
-RedCost[841]: 535
-RedCost[842]: 2564.09
-RedCost[843]: 4069
-RedCost[844]: 2577.93
-RedCost[848]: 1491.07
-RedCost[853]: 2314.35
-RedCost[855]: 2316
-RedCost[856]: 2316
-RedCost[857]: 10960.4
-RedCost[858]: 16824
-RedCost[859]: 11025
-RedCost[860]: 535
-RedCost[861]: 535
-RedCost[862]: 2564.09
-RedCost[863]: 4069
-RedCost[864]: 2577.93
-RedCost[867]: 795.078
-RedCost[868]: 903
-RedCost[869]: 806.607
-RedCost[883]: 1913
-RedCost[885]: 3844
-RedCost[886]: 3844
-RedCost[887]: 14882.9
-RedCost[888]: 20691
-RedCost[889]: 14993.9
-RedCost[894]: -13375
-RedCost[897]: 1870.44
-RedCost[898]: 3718
-RedCost[899]: 1971
-RedCost[900]: 1597.64
-RedCost[901]: 1597.64
-RedCost[902]: 7129.64
-RedCost[903]: 7129.64
-RedCost[904]: 7129.64
-RedCost[912]: 486.265
-RedCost[913]: 536
-RedCost[914]: 486.265
-RedCost[917]: 1197.87
-RedCost[918]: 1255
-RedCost[919]: 1197.87
-RedCost[927]: 1169.87
-RedCost[928]: 1227
-RedCost[929]: 1169.87
-RedCost[933]: 1355.43
-RedCost[938]: 1355.43
-RedCost[940]: 1067
-RedCost[941]: 1067
-RedCost[942]: 5442.85
-RedCost[943]: 8126
-RedCost[944]: 5442.85
-RedCost[945]: 2316
-RedCost[946]: 2316
-RedCost[947]: 11658
-RedCost[948]: 16824
-RedCost[949]: 11658
-RedCost[950]: 535
-RedCost[951]: 535
-RedCost[952]: 2713.57
-RedCost[953]: 4069
-RedCost[954]: 2713.57
-RedCost[955]: 298
-RedCost[956]: 298
-RedCost[957]: 1231.64
-RedCost[958]: 1215
-RedCost[959]: 1231.64
-RedCost[964]: 0
-RedCost[969]: 0
-RedCost[973]: 1266
-RedCost[978]: 4608.72
-RedCost[984]: -12742
-RedCost[987]: 2568
-RedCost[988]: 3718
-RedCost[989]: 2604
-RedCost[993]: 651.127
-RedCost[998]: 651.127
-RedCost[1000]: 139
-RedCost[1001]: 139
-RedCost[1002]: 571.757
-RedCost[1003]: 675
-RedCost[1004]: 572.112
-RedCost[1005]: 344
-RedCost[1006]: 344
-RedCost[1007]: 1404.75
-RedCost[1008]: 1599
-RedCost[1009]: 1405.66
-RedCost[1013]: 651.127
-RedCost[1017]: 1046.75
-RedCost[1018]: 1241
-RedCost[1019]: 1047.66
-RedCost[1023]: 1494.96
-RedCost[1025]: 535
-RedCost[1026]: 535
-RedCost[1027]: 2573.11
-RedCost[1028]: 4069
-RedCost[1029]: 2574.04
-RedCost[1030]: 1067
-RedCost[1031]: 1067
-RedCost[1032]: 5158.58
-RedCost[1033]: 8126
-RedCost[1034]: 5160.47
-RedCost[1038]: 5817.13
-RedCost[1040]: 535
-RedCost[1041]: 535
-RedCost[1042]: 2573.11
-RedCost[1043]: 4069
-RedCost[1044]: 2574.04
-RedCost[1047]: 802.592
-RedCost[1048]: 903
-RedCost[1049]: 803.37
-RedCost[1060]: 1962
-RedCost[1061]: 1962
-RedCost[1062]: 7510.52
-RedCost[1063]: 9446
-RedCost[1064]: 7514.87
-RedCost[1065]: 3844
-RedCost[1066]: 3844
-RedCost[1067]: 14955.2
-RedCost[1068]: 20691
-RedCost[1069]: 14962.7
-RedCost[1074]: -13393.1
-RedCost[1077]: 1912.52
-RedCost[1078]: 3718
-RedCost[1079]: 1952.87
-Fixed 0% of the boolean variables! (0 out of 1080 boolean variables)
-LP: 494914
-Shrage: 614993
-RedCost[0]: 344
-RedCost[1]: 3523.05
-RedCost[4]: 344
-RedCost[5]: 3523.05
-RedCost[10]: 1067
-RedCost[11]: 9550.17
-RedCost[18]: 1602
-RedCost[19]: 27301.6
-RedCost[24]: -3173.05
-RedCost[35]: 10696.6
-RedCost[36]: -5100.6
-RedCost[40]: -11149.2
-RedCost[51]: 10696.6
-RedCost[53]: 11149.2
-RedCost[56]: -5092.6
-RedCost[64]: 344
-RedCost[65]: 3523.05
-RedCost[75]: -4638.83
-RedCost[76]: 1067
-RedCost[77]: 9550.17
-RedCost[84]: 344
-RedCost[85]: 3523.05
-RedCost[88]: -6042.09
-RedCost[90]: 1067
-RedCost[91]: 9550.17
-RedCost[92]: 1067
-RedCost[93]: 9550.17
-RedCost[98]: 1602
-RedCost[99]: 27301.6
-RedCost[116]: -5424.6
-RedCost[122]: 1067
-RedCost[123]: 9550.17
-RedCost[131]: 10696.6
-RedCost[132]: -8911.65
-RedCost[136]: -10833.2
-RedCost[147]: 10696.6
-RedCost[152]: 28
-RedCost[153]: 5444.6
-RedCost[160]: 344
-RedCost[161]: 5760.6
-RedCost[162]: 1602
-RedCost[163]: 27301.6
-RedCost[179]: 10696.6
-RedCost[180]: -10825.2
-RedCost[184]: -11149.2
-Fixed 0% of the boolean variables! (0 out of 192 boolean variables)
-LP: 300747
-Shrage: 346234
-RedCost[0]: -4
-RedCost[3]: 452.665
-RedCost[5]: 2273.35
-RedCost[6]: 344
-RedCost[7]: 1451.62
-RedCost[9]: 62.6243
-RedCost[12]: 1067
-RedCost[13]: 6873.5
-RedCost[15]: -6660
-RedCost[19]: 14.0554
-RedCost[25]: 1107.62
-RedCost[29]: -9056.5
-RedCost[31]: -6567.12
-RedCost[32]: 546.805
-RedCost[33]: 502
-RedCost[41]: 719
-RedCost[42]: 7311.61
-RedCost[43]: 10148
-RedCost[47]: -10845
-RedCost[49]: 363
-RedCost[53]: 1465.54
-RedCost[54]: 229.624
-RedCost[55]: 1111.62
-RedCost[61]: -11156
-RedCost[62]: 2316
-RedCost[63]: 10148
-RedCost[65]: 58.8603
-RedCost[73]: 62.6243
-RedCost[77]: -9056.5
-RedCost[79]: -6567.12
-RedCost[81]: 466.665
-RedCost[84]: 710
-RedCost[85]: 2983.35
-RedCost[86]: 292.249
-RedCost[87]: 1399.87
-RedCost[89]: 62.6243
-RedCost[93]: -9056.5
-RedCost[95]: -6674
-RedCost[97]: 466.665
-RedCost[102]: 292.249
-RedCost[103]: 1399.87
-RedCost[105]: 1107.62
-RedCost[109]: -8011.5
-RedCost[111]: -4400.65
-RedCost[113]: 466.665
-RedCost[118]: 292.249
-RedCost[119]: 1399.87
-RedCost[121]: 62.6243
-RedCost[125]: -8011.5
-RedCost[127]: -4400.65
-RedCost[129]: 466.665
-RedCost[133]: 2380.23
-RedCost[135]: 1055.87
-RedCost[136]: 344
-RedCost[137]: 1451.62
-RedCost[141]: -9056.5
-RedCost[143]: -6674
-RedCost[147]: 511.526
-RedCost[151]: 62.6243
-RedCost[153]: 62.6243
-RedCost[156]: 3233.46
-RedCost[157]: 6873.5
-RedCost[159]: -6660
-RedCost[160]: 183.805
-RedCost[161]: 242.665
-RedCost[165]: 106.883
-RedCost[167]: 62.6243
-RedCost[169]: 62.6243
-RedCost[173]: -9056.5
-RedCost[175]: -6674
-RedCost[180]: 710
-RedCost[181]: 2526
-RedCost[182]: -882
-RedCost[184]: -882
-RedCost[186]: 2316
-RedCost[187]: 10148
-RedCost[189]: -11156
-Fixed 0% of the boolean variables! (0 out of 192 boolean variables)
+Lj[1]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[2]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[4]: -16
+RedCost[7]: 3611
+RedCost[7]: 3611 > 2471.48 LB: 233095 UB: 235566
+Lj[9]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
+Lj[11]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[13]: 58.3571
+Lj[15]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[17]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[18]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[20]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[21]: 2674.26
+RedCost[21]: 2674.26 > 2471.48 LB: 233095 UB: 235566
+RedCost[23]: 2942
+RedCost[23]: 2942 > 2471.48 LB: 233095 UB: 235566
+RedCost[24]: 1602
+RedCost[25]: 5624
+RedCost[25]: 5624 > 2471.48 LB: 233095 UB: 235566
+Lj[27]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[29]: -85
+Lj[31]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[33]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[34]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[36]: -577.872
+RedCost[38]: 1602
+RedCost[39]: 6293
+RedCost[39]: 6293 > 2471.48 LB: 233095 UB: 235566
+Lj[41]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
+Lj[43]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[45]: 58.3571
+Lj[47]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[49]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[50]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[52]: -868
+RedCost[53]: 1238.13
+RedCost[55]: 2942
+RedCost[55]: 2942 > 2471.48 LB: 233095 UB: 235566
+RedCost[56]: 1602
+RedCost[57]: 5624
+RedCost[57]: 5624 > 2471.48 LB: 233095 UB: 235566
+RedCost[58]: 535
+RedCost[59]: 2390
+RedCost[60]: 535
+RedCost[61]: 2390
+Lj[63]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[65]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[66]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[68]: -695.976
+RedCost[69]: 1120.02
+RedCost[71]: 3338.67
+RedCost[71]: 3338.67 > 2471.48 LB: 233095 UB: 235566
+RedCost[73]: -272.333
+RedCost[74]: 535
+RedCost[75]: 2475
+RedCost[75]: 2475 > 2471.48 LB: 233095 UB: 235566
+Lj[79]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[80]: 1602
+RedCost[81]: 5624
+RedCost[81]: 5624 > 2471.48 LB: 233095 UB: 235566
+Lj[82]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[83]: 349
+RedCost[87]: 2942
+RedCost[87]: 2942 > 2471.48 LB: 233095 UB: 235566
+RedCost[89]: -669
+Lj[91]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[93]: -85
+Lj[95]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[97]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[98]: 139
+RedCost[99]: 556.612
+RedCost[100]: -563.872
+RedCost[101]: 1410.15
+RedCost[103]: 3611
+RedCost[103]: 3611 > 2471.48 LB: 233095 UB: 235566
+Lj[105]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
+Lj[107]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[109]: 58.3571
+Lj[111]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[112]: 1602
+RedCost[113]: 5624
+RedCost[113]: 5624 > 2471.48 LB: 233095 UB: 235566
+Lj[114]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[116]: -868
+RedCost[117]: 1238.13
+RedCost[119]: 2942
+RedCost[119]: 2942 > 2471.48 LB: 233095 UB: 235566
+RedCost[121]: -669
+Lj[123]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[125]: -85
+Lj[127]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[129]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[130]: 139
+RedCost[131]: 556.612
+RedCost[132]: -563.872
+RedCost[133]: 1238.13
+RedCost[135]: 3611
+RedCost[135]: 3611 > 2471.48 LB: 233095 UB: 235566
+Lj[137]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
+Lj[139]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[141]: 58.3571
+Lj[143]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[144]: 1602
+RedCost[145]: 5624
+RedCost[145]: 5624 > 2471.48 LB: 233095 UB: 235566
+Lj[146]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[148]: -868
+RedCost[149]: 1238.13
+RedCost[150]: 1602
+RedCost[151]: 5624
+RedCost[151]: 5624 > 2471.48 LB: 233095 UB: 235566
+RedCost[153]: -669
+RedCost[154]: 535
+RedCost[155]: 2390
+RedCost[157]: -85
+Lj[159]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[161]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[162]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[163]: 403.612
+RedCost[165]: 346.128
+RedCost[167]: 3611
+RedCost[167]: 3611 > 2471.48 LB: 233095 UB: 235566
+Lj[169]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
+Lj[171]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[173]: 58.3571
+Lj[175]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[177]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[178]: 139
+RedCost[179]: 502
+RedCost[180]: -3324
+RedCost[180]: -3324 < -2471.48 LB: 233095 UB: 235566
+RedCost[181]: 948
+RedCost[182]: 1602
+RedCost[183]: 5624
+RedCost[183]: 5624 > 2471.48 LB: 233095 UB: 235566
+RedCost[184]: 1602
+RedCost[185]: 5624
+RedCost[185]: 5624 > 2471.48 LB: 233095 UB: 235566
+RedCost[186]: 535
+RedCost[187]: 2390
+RedCost[189]: -85
+RedCost[190]: 1067
+RedCost[191]: 4788
+RedCost[191]: 4788 > 2471.48 LB: 233095 UB: 235566
+RedCost[193]: 6181
+RedCost[193]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[194]: 1522
+RedCost[197]: 0
+RedCost[217]: 0
+RedCost[229]: 542.612
+RedCost[230]: 129
+RedCost[249]: 0
+RedCost[301]: 6181
+RedCost[301]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[302]: 1522
+RedCost[337]: 6181
+RedCost[337]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[338]: 1522
+RedCost[373]: 2435.36
+RedCost[374]: 465
+RedCost[409]: 2435.36
+RedCost[410]: 465
+RedCost[445]: 4896.13
+RedCost[445]: 4896.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[446]: 937
+RedCost[449]: 5512
+RedCost[449]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[450]: 1522
+RedCost[453]: 0
+RedCost[473]: 0
+RedCost[485]: 488
+RedCost[486]: 129
+RedCost[505]: 0
+RedCost[521]: 1238.13
+RedCost[522]: 670
+RedCost[557]: 5512
+RedCost[557]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[558]: 1522
+RedCost[593]: 5512
+RedCost[593]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[594]: 1522
+RedCost[629]: 2292
+RedCost[630]: 465
+RedCost[665]: 2292
+RedCost[666]: 465
+RedCost[701]: 4606
+RedCost[701]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[702]: 937
+RedCost[705]: 6181
+RedCost[705]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[706]: 1522
+RedCost[709]: 0
+RedCost[729]: 0
+RedCost[741]: 542.612
+RedCost[742]: 129
+RedCost[761]: 0
+RedCost[778]: 670
+RedCost[813]: 6181
+RedCost[813]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[814]: 1522
+RedCost[849]: 6181
+RedCost[849]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[850]: 1522
+RedCost[885]: 2435.36
+RedCost[886]: 465
+RedCost[921]: 2435.36
+RedCost[922]: 465
+RedCost[957]: 4896.13
+RedCost[957]: 4896.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[958]: 937
+RedCost[961]: 5512
+RedCost[961]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[962]: 1522
+RedCost[965]: 0
+RedCost[985]: 0
+RedCost[997]: 488
+RedCost[998]: 129
+RedCost[1017]: 0
+RedCost[1034]: 670
+RedCost[1069]: 5512
+RedCost[1069]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1070]: 1522
+RedCost[1105]: 5512
+RedCost[1105]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1106]: 1522
+RedCost[1141]: 2292
+RedCost[1142]: 465
+RedCost[1177]: 2292
+RedCost[1178]: 465
+RedCost[1213]: 4606
+RedCost[1213]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[1214]: 937
+RedCost[1217]: 5908.67
+RedCost[1217]: 5908.67 > 2471.48 LB: 233095 UB: 235566
+RedCost[1218]: 1522
+RedCost[1221]: 0
+RedCost[1241]: 0
+RedCost[1253]: 520.381
+RedCost[1254]: 129
+RedCost[1273]: 0
+RedCost[1290]: 670
+RedCost[1325]: 5908.67
+RedCost[1325]: 5908.67 > 2471.48 LB: 233095 UB: 235566
+RedCost[1326]: 1522
+RedCost[1361]: 5908.67
+RedCost[1361]: 5908.67 > 2471.48 LB: 233095 UB: 235566
+RedCost[1362]: 1522
+RedCost[1397]: 2377
+RedCost[1398]: 465
+RedCost[1433]: 2377
+RedCost[1434]: 465
+RedCost[1469]: 4778.02
+RedCost[1469]: 4778.02 > 2471.48 LB: 233095 UB: 235566
+RedCost[1470]: 937
+RedCost[1473]: 5512
+RedCost[1473]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1474]: 1522
+RedCost[1477]: 0
+RedCost[1497]: 0
+RedCost[1509]: 488
+RedCost[1510]: 129
+RedCost[1529]: 0
+RedCost[1545]: 2470
+RedCost[1546]: 670
+RedCost[1581]: 5512
+RedCost[1581]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1582]: 1522
+RedCost[1617]: 5512
+RedCost[1617]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1618]: 1522
+RedCost[1653]: 2292
+RedCost[1654]: 465
+RedCost[1689]: 2292
+RedCost[1690]: 465
+RedCost[1725]: 4606
+RedCost[1725]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[1726]: 937
+RedCost[1729]: 6181
+RedCost[1729]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[1730]: 1522
+RedCost[1733]: 0
+RedCost[1753]: 0
+RedCost[1765]: 542.612
+RedCost[1766]: 129
+RedCost[1785]: 0
+RedCost[1802]: 670
+RedCost[1837]: 6181
+RedCost[1837]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[1838]: 1522
+RedCost[1873]: 6181
+RedCost[1873]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[1874]: 1522
+RedCost[1909]: 2435.36
+RedCost[1910]: 465
+RedCost[1945]: 2435.36
+RedCost[1946]: 465
+RedCost[1981]: 4896.13
+RedCost[1981]: 4896.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[1982]: 937
+RedCost[1985]: 5512
+RedCost[1985]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[1986]: 1522
+RedCost[1989]: 0
+RedCost[2009]: 0
+RedCost[2021]: 488
+RedCost[2022]: 129
+RedCost[2041]: 0
+RedCost[2058]: 670
+RedCost[2093]: 5512
+RedCost[2093]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[2094]: 1522
+RedCost[2129]: 5512
+RedCost[2129]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[2130]: 1522
+RedCost[2165]: 2292
+RedCost[2166]: 465
+RedCost[2201]: 2292
+RedCost[2202]: 465
+RedCost[2237]: 4606
+RedCost[2237]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[2238]: 937
+RedCost[2241]: 6181
+RedCost[2241]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2242]: 1522
+RedCost[2245]: 0
+RedCost[2265]: 0
+RedCost[2277]: 542.612
+RedCost[2278]: 129
+RedCost[2297]: 0
+RedCost[2314]: 670
+RedCost[2349]: 6181
+RedCost[2349]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2350]: 1522
+RedCost[2385]: 6181
+RedCost[2385]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2386]: 1522
+RedCost[2421]: 2435.36
+RedCost[2422]: 465
+RedCost[2457]: 2435.36
+RedCost[2458]: 465
+RedCost[2493]: 4896.13
+RedCost[2493]: 4896.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[2494]: 937
+RedCost[2497]: 5512
+RedCost[2497]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[2498]: 1522
+RedCost[2501]: 0
+RedCost[2521]: 0
+RedCost[2533]: 488
+RedCost[2534]: 129
+RedCost[2553]: 0
+RedCost[2570]: 670
+RedCost[2605]: 5512
+RedCost[2605]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[2606]: 1522
+RedCost[2641]: 5512
+RedCost[2641]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[2642]: 1522
+RedCost[2677]: 2292
+RedCost[2678]: 465
+RedCost[2713]: 2292
+RedCost[2714]: 465
+RedCost[2749]: 4606
+RedCost[2749]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[2750]: 937
+RedCost[2753]: 6181
+RedCost[2753]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2754]: 1522
+RedCost[2757]: 0
+RedCost[2777]: 0
+RedCost[2789]: 542.612
+RedCost[2790]: 129
+RedCost[2809]: 0
+RedCost[2825]: 2760.13
+RedCost[2825]: 2760.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[2826]: 670
+RedCost[2861]: 6181
+RedCost[2861]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2862]: 1522
+RedCost[2897]: 6181
+RedCost[2897]: 6181 > 2471.48 LB: 233095 UB: 235566
+RedCost[2898]: 1522
+RedCost[2933]: 2435.36
+RedCost[2934]: 465
+RedCost[2969]: 2435.36
+RedCost[2970]: 465
+RedCost[3005]: 4896.13
+RedCost[3005]: 4896.13 > 2471.48 LB: 233095 UB: 235566
+RedCost[3006]: 937
+RedCost[3009]: 5512
+RedCost[3009]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[3010]: 1522
+RedCost[3013]: 0
+RedCost[3033]: 0
+RedCost[3045]: 488
+RedCost[3046]: 129
+RedCost[3065]: 0
+RedCost[3081]: 2470
+RedCost[3082]: 670
+RedCost[3117]: 5512
+RedCost[3117]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[3118]: 1522
+RedCost[3153]: 5512
+RedCost[3153]: 5512 > 2471.48 LB: 233095 UB: 235566
+RedCost[3154]: 1522
+RedCost[3189]: 2292
+RedCost[3190]: 465
+RedCost[3225]: 2292
+RedCost[3226]: 465
+RedCost[3261]: 4606
+RedCost[3261]: 4606 > 2471.48 LB: 233095 UB: 235566
+RedCost[3262]: 937
+RedCost[3264]: -403.612
+Lj[3265]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3266]: -349
+Lj[3267]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3268]: -403.612
+Lj[3269]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3270]: -349
+Lj[3271]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3272]: -381.381
+Lj[3273]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3274]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3275]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3276]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3277]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3278]: -349
+Lj[3279]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3280]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3281]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+RedCost[3282]: -349
+Lj[3283]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3284]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3285]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3286]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+Lj[3287]: 1e+075 4705>2471.48 LB: 233095 UB: 235566

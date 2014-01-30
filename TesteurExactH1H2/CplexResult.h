@@ -11,10 +11,11 @@ public:
 	CplexResult()
 	{
 		isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
-		value=durationCpuClock=durationWallClock=statusCode=nbMachine=nbNode=-1;
+		value=durationCpuClock=durationWallClock=nbMachine=-1;
+		statusCode=nbNode=-1;
 	}
 	CplexResult(int isFea, int isOpt, int isTimLim, int isMemLim,
-		int nbMach, int nbNod, int status, 
+		double nbMach, int nbNod, int status, 
 		double v, double duree, double dureeCPU)
 	  :isFeasible(isFea)
 	  ,isOptimal(isOpt)
@@ -62,7 +63,7 @@ public:
 	int isTimeLimit;
 	int isMemLimit;
 	double nbMachine;
-	int nbNode;
+	int nbNode; //the number of nodes processed so far in the active branch-and-cut search.
 	int statusCode;
 	double value;
 	double durationWallClock;

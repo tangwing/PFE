@@ -3,7 +3,6 @@
 #include<conio.h>
 #include<math.h>
 #include "Data.h"
-#include "ConsoleTable.h"
 
 SDEFData Data;
 
@@ -19,63 +18,63 @@ int M() // Returns the number of machines
 { return Data.NbMachines; }
 
 // For tasks
-int nc(unsigned int i) // Returns the required CPU load of task i
+short int nc(unsigned int i) // Returns the required CPU load of task i
 { return Data.ListOfTasks[i].QtyCPU ;}
-int ng(unsigned int i) // Returns the required GPU load of task i
+short int ng(unsigned int i) // Returns the required GPU load of task i
 { return Data.ListOfTasks[i].QtyGPU ;}
-int nr(unsigned int i) // Returns the required RAM of task i
+short int nr(unsigned int i) // Returns the required RAM of task i
 { return Data.ListOfTasks[i].QtyRAM ;}
-int nh(unsigned int i) // Returns the required harddrive of task i
+short int nh(unsigned int i) // Returns the required harddrive of task i
 { return Data.ListOfTasks[i].QtyHDD ;}
-int u(unsigned int i, unsigned int t) // Returns if task i is likely to be processed at time t
+short int u(unsigned int i, unsigned int t) // Returns if task i is likely to be processed at time t
 { return Data.ListOfTasks[i].LIsToBeProcessed[t] ;}
-int a(unsigned int i, unsigned int k) // Returns 1 if tasks i and k have an affinity; 0 otherwise
-{ return Data.ListOfTasks[i].LAffinities[k];}
-int q(unsigned int i, unsigned int j) // Returns 1 if task i can be assigned to machine j; 0 otherwise
+short int a(unsigned int i, unsigned int k) // Returns 1 if tasks i and k have an affinity; 0 otherwise
+{ return Data.ListOfTasks[i].LAffinities[k] ;}
+short int q(unsigned int i, unsigned int j) // Returns 1 if task i can be assigned to machine j; 0 otherwise
 { return Data.ListOfTasks[i].LPreAssignement[j] ;}
-int b(unsigned int i, unsigned int j) // Returns the bandwidth required by tasks i and j to communicate over the network
-{ return i<=j? Data.Network.ComBandwidth[i][j]:Data.Network.ComBandwidth[j][i] ;}
-int R(unsigned int i) // Returns 1 if task i is preemptable; 0 otherwise
+short int b(unsigned int i, unsigned int j) // Returns the bandwidth required by tasks i and j to communicate over the network
+{ return Data.Network.ComBandwidth[i][j] ;}
+short int R(unsigned int i) // Returns 1 if task i is preemptable; 0 otherwise
 { return Data.ListOfTasks[i].isPreemptable ;}
-int rho(unsigned int i) // Returns the unitary penalty induced by preempting taks i
+short int rho(unsigned int i) // Returns the unitary penalty induced by preempting taks i
 { return Data.ListOfTasks[i].CostPreemption ;}
-int mt(unsigned int i) // Returns the migration time of task i
-{ return (int)ceil((double)(nh(i)+nr(i))/(double)b(i,i));}
-int rt(unsigned int i, unsigned int j) //Returns the resuming time of task i on machine j
-{  return (int)ceil((double)nr(i)/(double)v(j));}
+short int mt(unsigned int i) // Returns the migration time of task i
+{ return (short int)ceil((float)(nh(i)+nr(i))/(float)b(i,i));}
+short int rt(unsigned int i, unsigned int j) //Returns the resuming time of task i on machine j
+{  return (short int)ceil((float)nr(i)/(float)v(j));}
 
 // For machines
-int mc(unsigned int j) // Returns the maximum accepted CPU load of machine j
+short int mc(unsigned int j) // Returns the maximum accepted CPU load of machine j
 { return  Data.ListOfMachines[j].QtyCPU ;}
-int mg(unsigned int j) // Returns the maximum accepted GPU load of machine j
+short int mg(unsigned int j) // Returns the maximum accepted GPU load of machine j
 { return  Data.ListOfMachines[j].QtyGPU ;}
-int mr(unsigned int j) // Returns the maximum accepted RAM load of machine j
+short int mr(unsigned int j) // Returns the maximum accepted RAM load of machine j
 { return  Data.ListOfMachines[j].QtyRAM ;}
-int mh(unsigned int j) // Returns the maximum accepted harddrive load of machine j
+short int mh(unsigned int j) // Returns the maximum accepted harddrive load of machine j
 { return  Data.ListOfMachines[j].QtyHDD ;}
-int alphac(unsigned int j) // Returns the cost for using CPU of machine j
+short int alphac(unsigned int j) // Returns the cost for using CPU of machine j
 { return  Data.ListOfMachines[j].CostCPU ;}
-int alphag(unsigned int j) // Returns the cost for using GPU of machine j
+short int alphag(unsigned int j) // Returns the cost for using GPU of machine j
 { return  Data.ListOfMachines[j].CostGPU ;}
-int alphar(unsigned int j) // Returns the cost for using RAM of machine j
+short int alphar(unsigned int j) // Returns the cost for using RAM of machine j
 { return  Data.ListOfMachines[j].CostRAM ;}
-int alphah(unsigned int j) // Returns the cost for using Harddrive of machine j
+short int alphah(unsigned int j) // Returns the cost for using Harddrive of machine j
 { return  Data.ListOfMachines[j].CostHDD ;}
-int beta(unsigned int t) // Returns the cost for turning on a machine at time t
+short int beta(unsigned int t) // Returns the cost for turning on a machine at time t
 { return  Data.CostTurnOn[t] ;}
-int v(unsigned int j) // Returns the speed of machine j in loading a processing context
+short int v(unsigned int j) // Returns the speed of machine j in loading a processing context
 { return  Data.ListOfMachines[j].SpeedContext ;}
 
 // For the network
-int maxb() // Returns the maximum bandwidth of any edge
+short int maxb() // Returns the maximum bandwidth of any edge
 { return  Data.Network.MaxBandwidth ;}
-int NbEdges() // Returns the number of Edges in the network
+short int NbEdges() // Returns the number of Edges in the network
 { return  Data.Network.NbEdges ;}
-int NbMachEdge(unsigned int e) // Returns the number of couples of machines that use the edge e
+short int NbMachEdge(unsigned int e) // Returns the number of couples of machines that use the edge e
 { return  Data.Network.NbMachinesByEdge[e];}
 void CoupleMachines(unsigned int e, unsigned int pos, unsigned int &Mach1, unsigned int &Mach2) // Mach1 and Mach2 are the machines in position pos in the list of couples usinge the edge e
 {
-	Mach1=Data.Network.ListOfMachinesByEdge[e][pos][0]-1;	///The first machine of the pos'th couple who use the e'th edge
+	Mach1=Data.Network.ListOfMachinesByEdge[e][pos][0]-1;	
 	Mach2=Data.Network.ListOfMachinesByEdge[e][pos][1]-1;
 }
 
@@ -93,37 +92,34 @@ void DisplayData(void)
 	printf("\t Time Horizon T: %ld\n",T());
 	printf("\t Number of Tasks N: %ld\n",N());
 	printf("\t Number of Machines M: %ld\n",M());
-	ConsoleTable ct("Tasks", N(), 6);
-	ct.SetColHeader(0, "QtyCPU")
-		.SetColHeader(1, "QtyGPU")
-		.SetColHeader(2, "QtyRAM")
-		.SetColHeader(3, "QtyHDD")
-		.SetColHeader(4, "IsPreemp")
-		.SetColHeader(5, "CostPreemp");
-	for (iTask=0;iTask<N();iTask++) 
-	{
-		ct.Print(nc(iTask));
-		ct.Print(ng(iTask));
-		ct.Print(nr(iTask));
-		ct.Print(nh(iTask));
-		ct.Print(R(iTask));
-		ct.Print(rho(iTask));
-	}
+	printf("\t Characteristics of each task:\n");
+	
+	for (iTask=0;iTask<N();iTask++)
+		printf("\t\t Task %d : QtyCPU=%ld, QtyGPU=%ld, QtyRAM=%ld, QtyHDD=%ld, isPreemp=%ld, CostPreemp=%ld.\n",iTask,nc(iTask),ng(iTask),nr(iTask),nh(iTask),R(iTask),rho(iTask));
+
+	_getch();
+
 }
 
 /****************************************************************************/
 // Function GetData
-// Read the instance from donnees.dat
+// Read the instance in a file  name donnees.dat
 /****************************************************************************/
-void GetData(void)
-{
- FILE *file;
- int iLoop,iLoop2;
 
- //file=fopen("Donnees/donnees1_2.dat","rt");
- file=fopen("donnees.dat","rt");
+void GetData(char * filename)
+{
+ //int num,ri_temp,pi_temp,j,i;
+ FILE *file;
+ int iLoop,iLoop2;//,iLoop3,iLoop4,iNbJobs;
+
+ if(filename==NULL)filename = "donnees.dat";
+ //filename="Donnees/donnees4_18.dat";
+ file=fopen(filename,"rt");
+ // We read the length of the Time Horizon
  fscanf(file,"%d\n",&Data.TimeHorizon);
+ // We read the number of tasks
  fscanf(file,"%d\n",&Data.NbTasks);
+ // We read the number of machines
  fscanf(file,"%d\n",&Data.NbMachines);
 
  // Reading of the information related to the tasks
@@ -185,6 +181,8 @@ void GetData(void)
 		  fscanf(file,"%hd %hd ",&Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][0],&Data.Network.ListOfMachinesByEdge[iLoop][iLoop2][1]);
 	  fscanf(file,"\n");
   }
- fclose(file); 
+ fclose(file);
+
+ 
 }
 
