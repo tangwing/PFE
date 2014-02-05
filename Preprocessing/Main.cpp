@@ -637,9 +637,11 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 enum SolveMode{PRE_MIP_ONLY, PRE_PRE};
 int main(int argc, char* argvs[])
 {
+	//cout<<"argc="<<argc<<endl;
 	if(argc < 2){cerr<<"Fatal Error!! Need UB as param of program!"<<endl; abort();}
-	for(int i=0; i<argc; i++)cout<<argvs[i]<<endl;
-	//int UB = 272844;
+	for(int i=0; i<argc; i++)
+		cout<<argvs[i]<<endl;
+	//int UB = 202776;argc=3;
 	int UB = 99999999;
 	UB = atoi(argvs[1]);
 	//time_t temp1,temp2,tempPre1,tempPre2;
@@ -648,9 +650,8 @@ int main(int argc, char* argvs[])
 
 	SolveMode sm = PRE_PRE;
 
-	if(argc==3)GetData(argvs[2]);
-	else GetData();
-	//else GetData("Donnees/donnees1_4.dat");
+	GetData();
+	//GetData("Donnees/donnees1_20.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -677,35 +678,20 @@ int main(int argc, char* argvs[])
 				head[nbBool]=var[i].getId();
 				nbBool++;
 			}
-			//Add all y into head
-			for(int i=T()*N()*M(); i<T()*N()*M()+T()*N()*N()*M()*M();i++)
+			if(argc != 3) //argc==3 => preprocess X only
 			{
-				head[nbBool]=var[i].getId();
-				nbBool++;
-			}
-			//Some Yii'jj't have no effect on Objectif so they are not extractable. We should avoid adding them otherwise exception will occur during preprocessing
-			//for(int iT=0; iT<T(); iT++)
-			// for(int iN=0; iN<N(); iN++)
-			//	for(int iN2=iN; iN2<N(); iN2++)
-			//		if(iN2!=iN && a(iN, iN2)!=1)continue;
-			//		else
-			//		for(int iM=0; iM<M(); iM++)
-			//		{
-			//			int iM2=0;
-			//			if(iN!=iN2)iM2=iM+1;
-			//			for(; iM2<M(); iM2++)
-			//				if(iM==iM2)continue;
-			//				else
-			//				{
-			//					 head[nbBool]=var[ indY(iT,iN,iN2,iM,iM2)].getId();
-			//					 nbBool++;
-			//				}
-			//		}
-			//Add all z into head
-			for(int i=T()*N()*M()+T()*N()*N()*M()*M();i< var.getSize();i++)
-			{
-				head[nbBool]=var[i].getId();
-				nbBool++;
+				//Add all y into head
+				for(int i=T()*N()*M(); i<T()*N()*M()+T()*N()*N()*M()*M();i++)
+				{
+					head[nbBool]=var[i].getId();
+					nbBool++;
+				}
+				//Add all z into head
+				for(int i=T()*N()*M()+T()*N()*N()*M()*M();i< var.getSize();i++)
+				{
+					head[nbBool]=var[i].getId();
+					nbBool++;
+				}
 			}
 			 
 			if(sm == PRE_MIP_ONLY)

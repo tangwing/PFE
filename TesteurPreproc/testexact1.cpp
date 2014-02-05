@@ -30,10 +30,14 @@ unsigned int iterations=20;
 //   ScRes[3][j][5] = pre.nbFixed;
 //   ScRes[3][j][6] = pre.lastIFixed;
 //	 ScRes[3][j][7] = pre.value;
-double ScRes[3][20][8];
+//Dim4(Preprocessing for X only)
+double ScRes[4][20][8];
 char tmp[20];//For sprintf
+char *tmp2="xonly";//For sprintf
+int nbBoolX = 0, nbFixX = 0;
 
-int Round(double);
+double Round(double,int);
+double Round(double);
 void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter);
 
 //Variables used to compute statistics
@@ -121,9 +125,8 @@ void main(void)
 		if( h2.isFeasible && h2.value<UB) UB = h2.value;
 		sprintf(tmp, "%d",int(UB));
 
-		printf("The Preprocessing program is running...\n");fflush(stdout);
+		printf("The Preprocessing program is running for all bools...\n");fflush(stdout);
 		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp,NULL);
-		printf("fini\n");
 		PreprocessingResult pre;
         pre.ImportFromFile("Preproc.txt");
 	    ///Fill the result matrix
@@ -133,8 +136,15 @@ void main(void)
 	    ScRes[3][j][3] = pre.LB;
 	    ScRes[3][j][4] = pre.nbBool;
 	    ScRes[3][j][5] = pre.nbFixed;
-	    ScRes[3][j][6] = pre.lastIFixed;
+	    //ScRes[3][j][6] = pre.nbXFixed;
 		ScRes[3][j][7] = pre.value;
+
+		//Launch again with X only
+		printf("The Preprocessing program is running for X[]...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2,NULL);
+        pre.ImportFromFile("Preproc.txt");
+	    ScRes[4][j][4] = pre.nbBool;
+	    ScRes[4][j][5] = pre.nbFixed;
 	  }
 
 	 MakeStatPreproc( i,
@@ -157,8 +167,8 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 
 	int NbInstanceDev = 0; //Nb d'instance qui participe au calcul de déviation
 
-	NbFixMin = 99999999;
-	NbFixMax = -1;
+	NbFixMin = std::numeric_limits<int>::max();
+	NbFixMax = std::numeric_limits<int>::min();
 	LBDevMin = UBDevMin = RatioFixMin = std::numeric_limits<double>::max();
 	LBDevMax = UBDevMax = RatioFixMax = std::numeric_limits<double>::min();
 	LBDevTotal = UBDevTotal = RatioFixTotal= 0;
@@ -172,7 +182,7 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 			continue;
 
 		NbInstanceDev++;
-		Opt = ScRes[0][i][1];
+		Opt = ScRes[0][i][2];
 		UB = ScRes[3][i][2];
 		LB = ScRes[3][i][3];
 		NbBool = int(ScRes[3][i][4]);
@@ -192,7 +202,7 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 		if(NbFixed> NbFixMax)NbFixMax = NbFixed;
 		if(NbBool!=0)
 		{
-			tmp = NbFixed/NbBool;
+			tmp = NbFixed/double(NbBool);
 			if(tmp < RatioFixMin) RatioFixMin=tmp;
 			if(tmp > RatioFixMax) RatioFixMax=tmp;
 			RatioFixTotal+=tmp;
@@ -206,19 +216,19 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 		printHeader = false;
 		fRes = fopen("LogStatPre.csv","wt");
 	    fichier=fopen("StatPre.csv","wt");
-		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); isFea(H1); sol(H1); time(H1); isFea(H2); sol(H2); time(H2); isOptNoPre; isAllFixed; LB; UB; nbBool; nbFixed; lastFixedI\n");
-		fprintf(fichier,"Sc(N/M); LBDevMin; LBDevAvg; LBDevMax; UBDevMin; UBDevAvg; UBDevMax; FixedMin(%); FixedAvg(%); FixedMax(%); NbFixedMax\n");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); isFea(H1); sol(H1); time(H1); isFea(H2); sol(H2); time(H2); isOptNoPre; isAllFixed; LB; UB; nbBool; nbFixed; nbBoolX; nbFixedX\n");
+		fprintf(fichier,"Sc(N/M); LBDevMin; LBDevAvg; LBDevMax; UBDevMin; UBDevAvg; UBDevMax; FixedMin(%%); FixedAvg(%%); FixedMax(%%); NbFixedMax\n");
 	}else
 	{
 		fRes = fopen("LogStatPre.csv","at");
 	    fichier=fopen("StatPre.csv","at");
 	}
 	if(NbInstanceDev > 0)
-		fprintf(fichier,"Sc%d(%d/%d); %d%%; %d%%; %d%%; %d%%; %d%%; %d%%; %d%%; %d%%; %d%%; %d\n",
+		fprintf(fichier,"Sc%d(%d/%d); %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %.2lf%%; %d\n",
 		IdSce+1, NbTache, NbMach,
-		Round(LBDevMin*100), Round(LBDevTotal/NbInstanceDev), Round(LBDevMax*100),
-		Round(UBDevMin*100), Round(UBDevTotal/NbInstanceDev), Round(UBDevMax*100),
-		Round(RatioFixMin*100), Round(RatioFixTotal/NbInstanceDev), Round(RatioFixMax*100),
+		Round(LBDevMin*100), Round(LBDevTotal/NbInstanceDev*100), Round(LBDevMax*100),
+		Round(UBDevMin*100), Round(UBDevTotal/NbInstanceDev*100), Round(UBDevMax*100),
+		Round(RatioFixMin*100), Round(RatioFixTotal/NbInstanceDev*100), Round(RatioFixMax*100),
 		NbFixMax);
 	else fprintf(fichier, "Sc%d(%d/%d); *; *; *; *; *; *; *; *; *; *\n",IdSce+1, NbTache, NbMach);
 	fclose(fichier);
@@ -226,8 +236,8 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 	//Export all results
 	for(int i = 0; i<NbIter; i++)
 	{
-		//Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); isFea(H1); sol(H1); time(H1); isFea(H2); sol(H2); time(H2); isOptNoPre; isAllFixed; LB; UB; nbBool; nbFixed; lastFixedI
-		fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %3.2lf; %d; %3.2lf; %3.2lf; %d; %3.2lf; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
+		//Sc(N/M); isFea(E); isOpt(E); sol(E); time(E); isFea(H1); sol(H1); time(H1); isFea(H2); sol(H2); time(H2); isOptNoPre; isAllFixed; LB; UB; nbBool; nbFixed; nbBoolX, nbFixedX
+		fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %3.2lf; %d; %3.2lf; %3.2lf; %d; %3.2lf; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d; %d\n",
 		IdSce+1, i+1,         
 		int(ScRes[0][i][0]), 
 		int(ScRes[0][i][1]), 
@@ -248,7 +258,9 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 		(ScRes[3][i][2]),
 		int(ScRes[3][i][4]),
 		int(ScRes[3][i][5]),
-		int(ScRes[3][i][6])
+		//Preprocess X only
+		int(ScRes[4][i][4]),
+		int(ScRes[4][i][5])
 		);
 	}
 	fclose(fRes);
@@ -259,9 +271,10 @@ void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)
 //Round a double to int
 //Ex: Round(3.141) = 3
 //	  Round(2.56) = 3
-int Round(double d)
+double Round(double d)
 {
-	return int(d+0.5);
+	//return int(d+0.5);
+	return d;
 }
 
 //Round a double in preserving [point] digits after its decimal point
