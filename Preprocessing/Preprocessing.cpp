@@ -34,8 +34,6 @@ Preprocessing::Preprocessing()
 	bPREisDebug=true;
 	bPRETomDrie=false;
 	bPREhasHead=false;
-
-	PRELastFixedI=-1;
 }
 
 /*******************************************************************************************************************************
@@ -54,18 +52,21 @@ void Preprocessing::PREInitializeLP(IloEnv *penv, IloCplex *pcplex, IloModel *pm
 	PREenv=penv;
 	PREvar=pvar;
 	PRElp->LPInitialize(penv,pcplex,pmodel,pvar,pcon);
+	///!TODO not released?
 	PREcutsLP=new IloConstraintArray(*penv);
 	iPREnbVar=pvar->getSize();
 	iPREVarEnd=iPREnbVar;
 	pdPREFixedVariables=new double[pvar->getSize()];
 	PREvarInfo=new Variable[pvar->getSize()];
-	iPREnbBool=0;
-	for(int i=0;i<pvar->getSize();i++) {
+
+	///!Add head array boundry test
+	int iLoopHead=0;
+	for(int i=0;i<pvar->getSize() && iLoopHead<iPREnbBool;i++) {
 	pdPREFixedVariables[i]=IloInfinity;
-	if((*PREvar)[i].getId() == ipPREhead[iPREnbBool]) {
-			pdPREFixedVariables[i]=-1;
-			iPREnbBool++;
-	}
+	if((*PREvar)[i].getId() == ipPREhead[iLoopHead]) {
+				pdPREFixedVariables[i]=-1;
+				iLoopHead++;
+		}
 	}
 	bPREisSet=true;
 	if(bPREisDebug) cout<<"Succes to initialize a LP problem"<<endl;
@@ -86,6 +87,7 @@ void Preprocessing::PREInitializeMIP(IloEnv *penv, IloCplex *pcplex, IloModel *p
 {
 	PREenv=penv;
 	PREmip->MIPInitialize(penv,pcplex,pmodel,pvar,pcon);
+	///!TODO not released
 	PREcutsMIP=new IloConstraintArray(*penv);
 	iPREnbVar=pvar->getSize();
 	bPREisSet=true;
@@ -203,9 +205,6 @@ void Preprocessing::PRESolveLP()
 	 dPRElpOpt=PRElp->LPGetOptValue();
 	 dPRELB=dPRElpOpt;
 	 PRElp->LPGetVarResults(PREvarInfo);	// Sets the costs, and values of the Variable array
-	 for(int i=0; i<PREvar->getSize(); i++)
-		 if((PREvarInfo[i]).VARGetExtractable()==false)
-			 pdPREFixedVariables[i]==IloInfinity;
 	 if(bPREisDebug) cout<<"Solved!"<<endl;
  } else
  {
@@ -446,10 +445,11 @@ void Preprocessing::PREFixVar()
 		{
 		  if(pdPREFixedVariables[i]==-1)
 		  {			  
+			  //int tmp=iPREnbFix;
 			  if(PREvarInfo[i].VARGetBasisStatus()==0)	// Off-base variable
 			  {
 			    if(bPREisDebug)
-					logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() << endl;
+					logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() <<"; var="<<PREvarInfo[i].VARGetValue()<< endl;
 				if(PREvarInfo[i].VARGetRedCost()>0 //If r_ij>UB-LB, it will fix the variable i to 0
 					&& PREvarInfo[i].VARGetRedCost()>dPREUB-dPRELB+EPSILON)	
 				{
@@ -458,7 +458,6 @@ void Preprocessing::PREFixVar()
 					pdPREFixedVariables[i] = 0;
 					(*PREvar)[i].setUB(0.0);
 					iPREnbFix++;
-					if(i>PRELastFixedI)PRELastFixedI=i;//tmp
 				}
 				if(PREvarInfo[i].VARGetRedCost()<0 
 					&& PREvarInfo[i].VARGetRedCost()<dPRELB-dPREUB-EPSILON && (*PREvar)[i].getLB() != 1)	//If r_ij>UB-LB, it will fix the variable i to 1
@@ -468,17 +467,19 @@ void Preprocessing::PREFixVar()
 								
 					pdPREFixedVariables[i] = 1;
 					(*PREvar)[i].setLB(1.0);
-					iPREnbFix++;if(i>PRELastFixedI)PRELastFixedI=i;
+					iPREnbFix++;
 				}
 			  }
 			  else if(PREvarInfo[i].VARGetBasisStatus()==1)	// In-base variables
 			  {
+				  if(bPREisDebug)
+					logs  << "var["<<i<<"]="<<PREvarInfo[i].VARGetValue()<< endl;
 				  if (PREvarInfo[i].VARGetUj()<99999999.0 // I try to fix variables to 0
 					  && (1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()>dPREUB-dPRELB+EPSILON)   
 					{ 
 						pdPREFixedVariables[i] = 0;
 						(*PREvar)[i].setUB(0.0);
-						iPREnbFix++;if(i>PRELastFixedI)PRELastFixedI=i;
+						iPREnbFix++;
 						
 						if(bPREisDebug) {
 							logs << "Uj["<<i<<"]: " << PREvarInfo[i].VARGetUj() << " " <<(1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()<< " > " << dPREUB-dPRELB+EPSILON<< " LB: " << dPRELB << " UB: " << dPREUB << endl;
@@ -490,7 +491,7 @@ void Preprocessing::PREFixVar()
 					{ 
 						pdPREFixedVariables[i] = 1;
 						(*PREvar)[i].setLB(1.0);
-						iPREnbFix++;if(i>PRELastFixedI)PRELastFixedI=i;
+						iPREnbFix++;
 						
 						if(bPREisDebug) {
 							logs << "Lj["<<i<<"]: " << PREvarInfo[i].VARGetUj() <<" "<<PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()<<">"<<dPREUB-dPRELB+EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
@@ -498,6 +499,8 @@ void Preprocessing::PREFixVar()
 						}
 					}
 				}	
+			  ///!TMP
+			  //if(iPREnbFix>tmp)break;
 			}
 		}
 		  if(bPREisDebug)
@@ -505,8 +508,10 @@ void Preprocessing::PREFixVar()
 	}
 }
 
-void Preprocessing::PRESetHead(int *head) {
+void Preprocessing::PRESetHead(int *head, int size) {
 	ipPREhead=head;
+	///! set nbbool here
+	iPREnbBool = size;
 	bPREhasHead=true;
 }
 

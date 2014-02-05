@@ -87,6 +87,7 @@ void LinearProgram::LPSolveByCplex()
    }
   
   dLPOptimalValue = LPcplex->getObjValue();
+  cout<<endl<<"optLP="<<dLPOptimalValue<<endl;
   bLPisSolved=true;
 }
 
@@ -112,7 +113,9 @@ void LinearProgram::LPGetReducedCost(double *pdReducedCost)
 	}
 	for (i=0;i<LPvar->getSize();i++)
 	{
-		pdReducedCost[i]=LPcplex->getReducedCost((*LPvar)[i]);				// Get the reduced cost by calling the function if Cplex
+		///!
+		if(LPcplex->isExtracted((*LPvar)[i]))
+			pdReducedCost[i]=LPcplex->getReducedCost((*LPvar)[i]);				// Get the reduced cost by calling the function if Cplex
 	}
 
 }
@@ -130,7 +133,8 @@ void LinearProgram::LPGetVarValue(double *var)
 	}
 	for (i=0;i<LPvar->getSize();i++)
 	{
-		if(IloTrue == LPcplex->isExtracted((*LPvar)[i]))
+		///!
+		if(LPcplex->isExtracted((*LPvar)[i]))
 			var[i]=LPcplex->getValue((*LPvar)[i]);				// Get the variable values in the optimal solutions
 	}
 
@@ -153,10 +157,12 @@ int* LinearProgram::LPGetBasisStatus()
 		//cout<<"ERROR: the basis status cannot be returned as the problem as not been solved"<<endl;
 		throw(1);
 	}
-	int *pdBasisStatuts;											
+	int *pdBasisStatuts;			
+	///! à free
 	pdBasisStatuts=(int *)malloc(sizeof(double)*LPvar->getSize());
 	for (int i=0;i<LPvar->getSize();i++)
-		if(IloTrue == LPcplex->isExtracted((*LPvar)[i]))
+		///!
+		if(LPcplex->isExtracted((*LPvar)[i]))
 			pdBasisStatuts[i]=LPcplex->getBasisStatus((*LPvar)[i]);			// This function gathering the basis status is to estimate whether a variable is in base or not
 	return pdBasisStatuts;
 }
@@ -173,6 +179,8 @@ leads to: Get the pseudo cost of each variables in-base by calling the function 
 *******************************************************************************************************************************/
 void LinearProgram::LPGetPseudoCost()
 {
+	///!TODO
+ cerr<<"Risk: LPGetPseudoCost() need to be reviewed before use, especially need to check mem leaks."<<endl;
  unsigned int i;
  pLPVarBase->clear();
  //IloCplex::BasisStatusArray cstat(*LPenv);
@@ -185,13 +193,16 @@ void LinearProgram::LPGetPseudoCost()
  piLPIndiceBaseConcert=new int[LPvar->getSize()];
  for (i=0;i < LPvar->getSize();i++) piLPIndiceBaseConcert[i]=-1;
   for (i=0;i < LPvar->getSize();i++)
-	if(IloTrue == LPcplex->isExtracted((*LPvar)[i]))
+	///!
+	if(LPcplex->isExtracted((*LPvar)[i]))
+	{
 		if (LPcplex->getBasisStatus((*LPvar)[i])==1 || LPcplex->getBasisStatus((*LPvar)[i])==4)
 		{
 			piLPIndiceBaseConcert[iLPnbBaseConcert]=i;
 			pLPVarBase->add((*LPvar)[i]);							 // I put the basic variables into VarBases
 			iLPnbBaseConcert++;
 		}
+	}
   LPcplex->getDriebeekPenalties(*pLPlj,*pLPuj,*pLPVarBase);	 // I get the Driebeek's pseudo costs (the equivalent function under CPX callable lib is CPXmdleave)
 }
 
@@ -333,6 +344,7 @@ leads to: Get the pseudo cost of each variables in-base by calling the function 
 *******************************************************************************************************************************/
 void LinearProgram::LPGetPseudoCostByCPX()
 {
+	cerr<<"Risk: LPGetPseudoCostByCPX() need to be reviewed before use, 'delete[]' can be only used on one var each time."<<endl;
 	if(!bLPisSolved) 
 	{
 		cout<<"ERROR: the basis status cannot be returned as the problem as not been solved"<<endl;
@@ -397,10 +409,10 @@ void LinearProgram::LPGetVarResults(Variable *var)
 	pLPVarBase->clear();
 	for (int i=0;i<LPvar->getSize();i++)
 	{
-		//if(LPcplex -> isExtracted((*LPvar)[i]) == IloFalse)cout<<"Not extractable:"<<i<<endl;
-		if ( LPcplex -> isExtracted((*LPvar)[i]) == IloTrue )
+		///!
+		if(LPcplex->isExtracted((*LPvar)[i]))
 		{
-			if(LPcplex->getBasisStatus((*LPvar)[i])==1 || LPcplex->getBasisStatus((*LPvar)[i])==4 )
+			if (LPcplex->getBasisStatus((*LPvar)[i])==1 || LPcplex->getBasisStatus((*LPvar)[i])==4 )
 			{
 				var[i].VARSetBasisStatus(1);
 				pLPVarBase->add((*LPvar)[i]);	// I put the basic variables into VarBases
@@ -408,19 +420,24 @@ void LinearProgram::LPGetVarResults(Variable *var)
 			}
 			else
 				var[i].VARSetBasisStatus(0);
-		}else var[i].VARSetExtractable(false);
+		}
 	}
 	LPcplex->getDriebeekPenalties(*pLPlj,*pLPuj,*pLPVarBase);	// I get the Driebeek's pseudo costs (the equivalent function under CPX callable lib is CPXmdleave)
 	for (int i=0;i<LPvar->getSize();i++)
 	{
-		if(var[i].VARGetExtractable()==false)continue;
-		if (var[i].VARGetBasisStatus() == 1)
+		///!
+		if(LPcplex->isExtracted((*LPvar)[i]))
 		{
-			var[i].VARSetPseuCost((*pLPlj)[j],(*pLPuj)[j]);
-		}	
-		var[i].VARSetRedCost(LPcplex->getReducedCost((*LPvar)[i])); // Get the reduced cost by calling the function if Cplex
-		var[i].VARSetValue(LPcplex->getValue((*LPvar)[i]));
-		var[i].VARSetName(const_cast<char*>((*LPvar)[i].getName()));
+			if (var[i].VARGetBasisStatus() == 1)
+			{
+				var[i].VARSetPseuCost((*pLPlj)[j],(*pLPuj)[j]);
+				///!!!
+				j++;
+			}	
+			var[i].VARSetRedCost(LPcplex->getReducedCost((*LPvar)[i])); // Get the reduced cost by calling the function if Cplex
+			var[i].VARSetValue(LPcplex->getValue((*LPvar)[i]));
+			var[i].VARSetName(const_cast<char*>((*LPvar)[i].getName()));
+		}
 	}
 }
 

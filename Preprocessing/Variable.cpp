@@ -3,14 +3,12 @@
 
 Variable::Variable(void)
 {
-	VARName=new char[20];
 	VARName="";
 	VARRedCost=0;
 	VARLj=0;
 	VARUj=0;
 	VARValue=-1;
 	VARBase=-1;
-	VARExtractable = true;
 }
 
 

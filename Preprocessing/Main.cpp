@@ -12,7 +12,7 @@
 #include "CplexResult.h"
 #include "PreprocessingResult.h"
 
-#define DEBUG true
+#define DEBUG false
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -54,7 +54,7 @@ double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1
 // This function counts the number of machines which are turned on, on the average, at any time t
 double CountPMsTurnedOn(IloCplex *pcplex)
 {
- unsigned int iLoop;
+ int iLoop;
  double dCount=0;
 
  for (iLoop=0;iLoop<T();iLoop++)
@@ -71,7 +71,7 @@ void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, Il
 	int nbFix = 0, nbNodes=0;
 
 	Preprocessing *prepro=new Preprocessing();
-	prepro->PRESetHead(head);
+	prepro->PRESetHead(head, nbBool);
 	prepro->PRESetDebug(DEBUG);
 	prepro->PRESetTomlin(false);
 	prepro->PRESetUB(UB);		// Fix the variables using the result of an heuristique algorithme Schrage as the UB
@@ -167,7 +167,7 @@ void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, Il
 		res.LB = dLB;
 		res.nbBool = nbBool;
 		res.nbFixed = nbFix;
-		res.lastIFixed = prepro->PRELastFixedI;
+		//res.lastIFixed = prepro->PRELastFixedI;
 		res.durationPre = GetTimeByClockTicks(tempPre1, clock());
 		res.ExportToFile("Preproc.txt");
 		
@@ -616,6 +616,10 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  // e-constraint on RE
  //con.add(RE<=50000);
 
+ //IloExpr Fix(env);
+ //Fix = var[9];
+ //con.add(Fix<=0);
+
  if (DEBUG_MOD) printf("[DEBUG] All constraints are created and are now added to the model\n");
  model.add(con);
  if (DEBUG_MOD) 
@@ -633,18 +637,20 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 enum SolveMode{PRE_MIP_ONLY, PRE_PRE};
 int main(int argc, char* argvs[])
 {
-	//if(argc < 2)abort();
+	if(argc < 2){cerr<<"Fatal Error!! Need UB as param of program!"<<endl; abort();}
 	for(int i=0; i<argc; i++)cout<<argvs[i]<<endl;
-	int UB = 235566;
-	//UB = atoi(argvs[1]);
-	time_t temp1,temp2,tempPre1,tempPre2;
+	//int UB = 272844;
+	int UB = 99999999;
+	UB = atoi(argvs[1]);
+	//time_t temp1,temp2,tempPre1,tempPre2;
 	clock_t ticks0;
-	FILE *fic;
+	//FILE *fic;
 
 	SolveMode sm = PRE_PRE;
 
 	if(argc==3)GetData(argvs[2]);
-	else GetData("Donnees/donnees1_4.dat");
+	else GetData();
+	//else GetData("Donnees/donnees1_4.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -705,7 +711,7 @@ int main(int argc, char* argvs[])
 			if(sm == PRE_MIP_ONLY)
 			PreByCalCost(true,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
 			else PreByCalCost(false,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
-
+			delete [] head;
 	}
 	catch (IloException& e) {
 		cerr << "Concert exception caught: " << e.getMessage() << endl;
@@ -716,7 +722,7 @@ int main(int argc, char* argvs[])
 	}
 	catch (int e) {
 		cerr << "Known exception caught : " << e << endl;
-		getch();
+		getchar();
 	}
 	catch (...)
 	{

@@ -12,10 +12,9 @@ private:
 	double VARLj,VARUj;			// The pseudo-cost of the variable
 	double VARValue;			// The variable value in the optimal solution
 	int VARBase;				// The basis status of the variable
-	bool VARExtractable;
 public:
 	Variable(void);										// Class constructor
-	//~Variable(void){delete VARName;}					// Class destructor
+	///! ~Variable(void){delete VARName;}					// Class destructor
 
 	// Get the information of the variable. 
 	// The LP problem should be solved, if not, these functions return the default values initilized in the class constructor.
@@ -28,7 +27,6 @@ public:
 
 	double VARGetValue(){return VARValue;}			// Get the variable value in the optimal solution of LP
 	int VARGetBasisStatus(){return VARBase;}		// Get the basis status of the variable
-	bool VARGetExtractable(){return VARExtractable;}
 
 	// Set the value of the attribute in the class
 	// name: a string: "" by default
@@ -46,5 +44,5 @@ public:
 	void VARSetValue(double value){VARValue=value;}				// Set the variable value in the optimal solution
 	void VARSetBasisStatus(int base){VARBase=base;}				// Set the basis status of the variable
 	void VAROutput();											// Output the information of the variable
-	void VARSetExtractable(bool extractable){ VARExtractable=extractable;}
+
 };

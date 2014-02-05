@@ -21,6 +21,8 @@ private:
 	bool bPREisSet;					// A flag to note if the models and preprocessing objects have been correctly initialized
 	bool bPREisSolved;				// A flag to note if the preprocessing has been applied or not
 	Variable *PREvarInfo;			// A pointer to the variable array
+
+	///!NotUsed
 	IloConstraintArray *PREcutsMIP;	// A pointer to the CPLEX cuts to be added to the MIP model 
 	IloConstraintArray *PREcutsLP;	// A pointer to the CPLEX cuts to be added to the LP model 
 
@@ -33,7 +35,9 @@ private:
     double *pdPREFixedVariables;	// Array that contains the status of variables: IloInfinity=> The corresponding variable is not fixed. -1 => the variable is a boolean and can be fixed
 									// Otherwise to value to which 
 									// it has been fixed to.
+	///!NotUsed
 	bool *pbPREisFixed;				// Array of flags. If true, the variables has been fixed by preprocessing.
+	
 	int iPREVarBeg;					// Index of the first fixed variable
 	int iPREVarEnd;					// Index of the last fixed variable
 	int iPREnbVar;					// The number of variables
@@ -50,7 +54,7 @@ private:
 
 public:
 	// Methods to manipulate the Mathematical models and the preprocessing phase (USABLE BY THE USERS)
-	int PRELastFixedI;
+
 	// Methods related to the initialization of the models and the preprocessing objects
 	Preprocessing();			// Default constructor: before using the models, the method PREInitializeLP() and/or PREInitializeMIP() must be called
 	~Preprocessing(void) {delete PRElp; delete PREmip;delete [] PREvarInfo; delete [] pdPREFixedVariables;}	// Destructor
@@ -91,7 +95,7 @@ public:
 
 	// Methods relate to the preprocessing algorithm
 	bool PREPreprocessing();
-	void PRESetHead(int * head);
+	void PRESetHead(int * head, int length);
 	void PRESetUB(double UB)		// Enables to set the UB required by the preprocessing
 		{dPREUB=UB;bPREisUB=true;}				
 	double PREGetUB()				// Get the best known UB after the preprocessing
