@@ -31,6 +31,8 @@ unsigned int iterations=20;
 //   ScRes[3][j][6] = pre.lastIFixed;
 //	 ScRes[3][j][7] = pre.value;
 double ScRes[3][20][8];
+char tmp[20];//For sprintf
+
 int Round(double);
 void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter);
 
@@ -43,7 +45,7 @@ void main(void)
 	  srand(1);
 	  for (j=0;j<iterations;j++)
 	  {
-	   printf("\n--------------- Sc %d: Data set %ld -------------\n", i+1, j+1);fflush(stdout);
+	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   if (DEBUG)
 	   {
@@ -117,11 +119,11 @@ void main(void)
 		double UB = std::numeric_limits<double>::max();
 		if( h1.isFeasible) UB = h1.value;
 		if( h2.isFeasible && h2.value<UB) UB = h2.value;
-		std::stringstream ub;
-		ub<< UB;
+		sprintf(tmp, "%d",int(UB));
 
 		printf("The Preprocessing program is running...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", ub.str().c_str(),NULL);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp,NULL);
+		printf("fini\n");
 		PreprocessingResult pre;
         pre.ImportFromFile("Preproc.txt");
 	    ///Fill the result matrix
