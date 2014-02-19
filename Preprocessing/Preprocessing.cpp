@@ -511,7 +511,8 @@ void Preprocessing::PREFixVar()
 
 void Preprocessing::PRESetHead(int *head, int size) {
 	ipPREhead=head;
-	///! set nbbool here
+	///! set array size here for boundry test.
+	///! Warning: This modif changes the signature of this function!
 	iPREnbBool = size;
 	bPREhasHead=true;
 }
