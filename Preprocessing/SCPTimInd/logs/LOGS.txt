@@ -1,436 +1,3926 @@
-Lj[1]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[2]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[4]: -16
-RedCost[7]: 3611
-RedCost[7]: 3611 > 2471.48 LB: 233095 UB: 235566
-Lj[9]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
-Lj[11]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[13]: 58.3571
-Lj[15]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[17]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[18]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[20]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[21]: 2674.26
-RedCost[21]: 2674.26 > 2471.48 LB: 233095 UB: 235566
-RedCost[23]: 2942
-RedCost[23]: 2942 > 2471.48 LB: 233095 UB: 235566
-RedCost[24]: 1602
-RedCost[25]: 5624
-RedCost[25]: 5624 > 2471.48 LB: 233095 UB: 235566
-Lj[27]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[29]: -85
-Lj[31]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[33]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[34]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[36]: -577.872
-RedCost[38]: 1602
-RedCost[39]: 6293
-RedCost[39]: 6293 > 2471.48 LB: 233095 UB: 235566
-Lj[41]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
-Lj[43]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[45]: 58.3571
-Lj[47]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[49]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[50]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[52]: -868
-RedCost[53]: 1238.13
-RedCost[55]: 2942
-RedCost[55]: 2942 > 2471.48 LB: 233095 UB: 235566
-RedCost[56]: 1602
-RedCost[57]: 5624
-RedCost[57]: 5624 > 2471.48 LB: 233095 UB: 235566
-RedCost[58]: 535
-RedCost[59]: 2390
-RedCost[60]: 535
-RedCost[61]: 2390
-Lj[63]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[65]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[66]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[68]: -695.976
-RedCost[69]: 1120.02
-RedCost[71]: 3338.67
-RedCost[71]: 3338.67 > 2471.48 LB: 233095 UB: 235566
-RedCost[73]: -272.333
-RedCost[74]: 535
-RedCost[75]: 2475
-RedCost[75]: 2475 > 2471.48 LB: 233095 UB: 235566
-Lj[79]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[80]: 1602
-RedCost[81]: 5624
-RedCost[81]: 5624 > 2471.48 LB: 233095 UB: 235566
-Lj[82]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[83]: 349
-RedCost[87]: 2942
-RedCost[87]: 2942 > 2471.48 LB: 233095 UB: 235566
-RedCost[89]: -669
-Lj[91]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[93]: -85
-Lj[95]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[97]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[98]: 139
-RedCost[99]: 556.612
-RedCost[100]: -563.872
-RedCost[101]: 1410.15
-RedCost[103]: 3611
-RedCost[103]: 3611 > 2471.48 LB: 233095 UB: 235566
-Lj[105]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
-Lj[107]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[109]: 58.3571
-Lj[111]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[112]: 1602
-RedCost[113]: 5624
-RedCost[113]: 5624 > 2471.48 LB: 233095 UB: 235566
-Lj[114]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[116]: -868
-RedCost[117]: 1238.13
-RedCost[119]: 2942
-RedCost[119]: 2942 > 2471.48 LB: 233095 UB: 235566
-RedCost[121]: -669
-Lj[123]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[125]: -85
-Lj[127]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[129]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[130]: 139
-RedCost[131]: 556.612
-RedCost[132]: -563.872
-RedCost[133]: 1238.13
-RedCost[135]: 3611
-RedCost[135]: 3611 > 2471.48 LB: 233095 UB: 235566
-Lj[137]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
-Lj[139]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[141]: 58.3571
-Lj[143]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[144]: 1602
-RedCost[145]: 5624
-RedCost[145]: 5624 > 2471.48 LB: 233095 UB: 235566
-Lj[146]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[148]: -868
-RedCost[149]: 1238.13
-RedCost[150]: 1602
-RedCost[151]: 5624
-RedCost[151]: 5624 > 2471.48 LB: 233095 UB: 235566
-RedCost[153]: -669
-RedCost[154]: 535
-RedCost[155]: 2390
-RedCost[157]: -85
-Lj[159]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[161]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[162]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[163]: 403.612
-RedCost[165]: 346.128
-RedCost[167]: 3611
-RedCost[167]: 3611 > 2471.48 LB: 233095 UB: 235566
-Lj[169]: 1e+075 4032.86>2471.48 LB: 233095 UB: 235566
-Lj[171]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[173]: 58.3571
-Lj[175]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[177]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[178]: 139
-RedCost[179]: 502
-RedCost[180]: -3324
-RedCost[180]: -3324 < -2471.48 LB: 233095 UB: 235566
-RedCost[181]: 948
-RedCost[182]: 1602
-RedCost[183]: 5624
-RedCost[183]: 5624 > 2471.48 LB: 233095 UB: 235566
-RedCost[184]: 1602
-RedCost[185]: 5624
-RedCost[185]: 5624 > 2471.48 LB: 233095 UB: 235566
-RedCost[186]: 535
-RedCost[187]: 2390
-RedCost[189]: -85
-RedCost[190]: 1067
-RedCost[191]: 4788
-RedCost[191]: 4788 > 2471.48 LB: 233095 UB: 235566
-RedCost[193]: 6181
-RedCost[193]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[194]: 1522
-RedCost[197]: 0
-RedCost[217]: 0
-RedCost[229]: 542.612
-RedCost[230]: 129
-RedCost[249]: 0
-RedCost[301]: 6181
-RedCost[301]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[302]: 1522
-RedCost[337]: 6181
-RedCost[337]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[338]: 1522
-RedCost[373]: 2435.36
-RedCost[374]: 465
-RedCost[409]: 2435.36
-RedCost[410]: 465
-RedCost[445]: 4896.13
-RedCost[445]: 4896.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[446]: 937
-RedCost[449]: 5512
-RedCost[449]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[450]: 1522
-RedCost[453]: 0
-RedCost[473]: 0
-RedCost[485]: 488
-RedCost[486]: 129
-RedCost[505]: 0
-RedCost[521]: 1238.13
-RedCost[522]: 670
-RedCost[557]: 5512
-RedCost[557]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[558]: 1522
-RedCost[593]: 5512
-RedCost[593]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[594]: 1522
-RedCost[629]: 2292
-RedCost[630]: 465
-RedCost[665]: 2292
-RedCost[666]: 465
-RedCost[701]: 4606
-RedCost[701]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[702]: 937
-RedCost[705]: 6181
-RedCost[705]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[706]: 1522
-RedCost[709]: 0
-RedCost[729]: 0
-RedCost[741]: 542.612
-RedCost[742]: 129
-RedCost[761]: 0
-RedCost[778]: 670
-RedCost[813]: 6181
-RedCost[813]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[814]: 1522
-RedCost[849]: 6181
-RedCost[849]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[850]: 1522
-RedCost[885]: 2435.36
-RedCost[886]: 465
-RedCost[921]: 2435.36
-RedCost[922]: 465
-RedCost[957]: 4896.13
-RedCost[957]: 4896.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[958]: 937
-RedCost[961]: 5512
-RedCost[961]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[962]: 1522
-RedCost[965]: 0
-RedCost[985]: 0
-RedCost[997]: 488
-RedCost[998]: 129
-RedCost[1017]: 0
-RedCost[1034]: 670
-RedCost[1069]: 5512
-RedCost[1069]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1070]: 1522
-RedCost[1105]: 5512
-RedCost[1105]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1106]: 1522
-RedCost[1141]: 2292
-RedCost[1142]: 465
-RedCost[1177]: 2292
-RedCost[1178]: 465
-RedCost[1213]: 4606
-RedCost[1213]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[1214]: 937
-RedCost[1217]: 5908.67
-RedCost[1217]: 5908.67 > 2471.48 LB: 233095 UB: 235566
-RedCost[1218]: 1522
-RedCost[1221]: 0
-RedCost[1241]: 0
-RedCost[1253]: 520.381
-RedCost[1254]: 129
-RedCost[1273]: 0
-RedCost[1290]: 670
-RedCost[1325]: 5908.67
-RedCost[1325]: 5908.67 > 2471.48 LB: 233095 UB: 235566
-RedCost[1326]: 1522
-RedCost[1361]: 5908.67
-RedCost[1361]: 5908.67 > 2471.48 LB: 233095 UB: 235566
-RedCost[1362]: 1522
-RedCost[1397]: 2377
-RedCost[1398]: 465
-RedCost[1433]: 2377
-RedCost[1434]: 465
-RedCost[1469]: 4778.02
-RedCost[1469]: 4778.02 > 2471.48 LB: 233095 UB: 235566
-RedCost[1470]: 937
-RedCost[1473]: 5512
-RedCost[1473]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1474]: 1522
-RedCost[1477]: 0
-RedCost[1497]: 0
-RedCost[1509]: 488
-RedCost[1510]: 129
-RedCost[1529]: 0
-RedCost[1545]: 2470
-RedCost[1546]: 670
-RedCost[1581]: 5512
-RedCost[1581]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1582]: 1522
-RedCost[1617]: 5512
-RedCost[1617]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1618]: 1522
-RedCost[1653]: 2292
-RedCost[1654]: 465
-RedCost[1689]: 2292
-RedCost[1690]: 465
-RedCost[1725]: 4606
-RedCost[1725]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[1726]: 937
-RedCost[1729]: 6181
-RedCost[1729]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[1730]: 1522
-RedCost[1733]: 0
-RedCost[1753]: 0
-RedCost[1765]: 542.612
-RedCost[1766]: 129
-RedCost[1785]: 0
-RedCost[1802]: 670
-RedCost[1837]: 6181
-RedCost[1837]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[1838]: 1522
-RedCost[1873]: 6181
-RedCost[1873]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[1874]: 1522
-RedCost[1909]: 2435.36
-RedCost[1910]: 465
-RedCost[1945]: 2435.36
-RedCost[1946]: 465
-RedCost[1981]: 4896.13
-RedCost[1981]: 4896.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[1982]: 937
-RedCost[1985]: 5512
-RedCost[1985]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[1986]: 1522
-RedCost[1989]: 0
-RedCost[2009]: 0
-RedCost[2021]: 488
-RedCost[2022]: 129
-RedCost[2041]: 0
-RedCost[2058]: 670
-RedCost[2093]: 5512
-RedCost[2093]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[2094]: 1522
-RedCost[2129]: 5512
-RedCost[2129]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[2130]: 1522
-RedCost[2165]: 2292
-RedCost[2166]: 465
-RedCost[2201]: 2292
-RedCost[2202]: 465
-RedCost[2237]: 4606
-RedCost[2237]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[2238]: 937
-RedCost[2241]: 6181
-RedCost[2241]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2242]: 1522
-RedCost[2245]: 0
-RedCost[2265]: 0
-RedCost[2277]: 542.612
-RedCost[2278]: 129
-RedCost[2297]: 0
-RedCost[2314]: 670
-RedCost[2349]: 6181
-RedCost[2349]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2350]: 1522
-RedCost[2385]: 6181
-RedCost[2385]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2386]: 1522
-RedCost[2421]: 2435.36
-RedCost[2422]: 465
-RedCost[2457]: 2435.36
-RedCost[2458]: 465
-RedCost[2493]: 4896.13
-RedCost[2493]: 4896.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[2494]: 937
-RedCost[2497]: 5512
-RedCost[2497]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[2498]: 1522
-RedCost[2501]: 0
-RedCost[2521]: 0
-RedCost[2533]: 488
-RedCost[2534]: 129
-RedCost[2553]: 0
-RedCost[2570]: 670
-RedCost[2605]: 5512
-RedCost[2605]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[2606]: 1522
-RedCost[2641]: 5512
-RedCost[2641]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[2642]: 1522
-RedCost[2677]: 2292
-RedCost[2678]: 465
-RedCost[2713]: 2292
-RedCost[2714]: 465
-RedCost[2749]: 4606
-RedCost[2749]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[2750]: 937
-RedCost[2753]: 6181
-RedCost[2753]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2754]: 1522
-RedCost[2757]: 0
-RedCost[2777]: 0
-RedCost[2789]: 542.612
-RedCost[2790]: 129
-RedCost[2809]: 0
-RedCost[2825]: 2760.13
-RedCost[2825]: 2760.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[2826]: 670
-RedCost[2861]: 6181
-RedCost[2861]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2862]: 1522
-RedCost[2897]: 6181
-RedCost[2897]: 6181 > 2471.48 LB: 233095 UB: 235566
-RedCost[2898]: 1522
-RedCost[2933]: 2435.36
-RedCost[2934]: 465
-RedCost[2969]: 2435.36
-RedCost[2970]: 465
-RedCost[3005]: 4896.13
-RedCost[3005]: 4896.13 > 2471.48 LB: 233095 UB: 235566
-RedCost[3006]: 937
-RedCost[3009]: 5512
-RedCost[3009]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[3010]: 1522
-RedCost[3013]: 0
-RedCost[3033]: 0
-RedCost[3045]: 488
-RedCost[3046]: 129
-RedCost[3065]: 0
-RedCost[3081]: 2470
-RedCost[3082]: 670
-RedCost[3117]: 5512
-RedCost[3117]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[3118]: 1522
-RedCost[3153]: 5512
-RedCost[3153]: 5512 > 2471.48 LB: 233095 UB: 235566
-RedCost[3154]: 1522
-RedCost[3189]: 2292
-RedCost[3190]: 465
-RedCost[3225]: 2292
-RedCost[3226]: 465
-RedCost[3261]: 4606
-RedCost[3261]: 4606 > 2471.48 LB: 233095 UB: 235566
-RedCost[3262]: 937
-RedCost[3264]: -403.612
-Lj[3265]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3266]: -349
-Lj[3267]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3268]: -403.612
-Lj[3269]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3270]: -349
-Lj[3271]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3272]: -381.381
-Lj[3273]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3274]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3275]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3276]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3277]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3278]: -349
-Lj[3279]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3280]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3281]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-RedCost[3282]: -349
-Lj[3283]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3284]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3285]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3286]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
-Lj[3287]: 1e+075 4705>2471.48 LB: 233095 UB: 235566
+LP: 233095
+Shrage: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+RedCost[7]: 3611; var=0
+RedCost[7]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+RedCost[21]: 2674.26; var=0
+RedCost[21]: 2674.26 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[23]: 2942; var=0
+RedCost[23]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+RedCost[25]: 5624; var=0
+RedCost[25]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+RedCost[39]: 6293; var=0
+RedCost[39]: 6293 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[55]: 2942; var=0
+RedCost[55]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[57]: 5624; var=0
+RedCost[57]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+RedCost[71]: 3338.67; var=0
+RedCost[71]: 3338.67 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+RedCost[81]: 5624; var=0
+RedCost[81]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+RedCost[87]: 2942; var=0
+RedCost[87]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+RedCost[103]: 3611; var=0
+RedCost[103]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+RedCost[113]: 5624; var=0
+RedCost[113]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+RedCost[119]: 2942; var=0
+RedCost[119]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+RedCost[135]: 3611; var=0
+RedCost[135]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+RedCost[145]: 5624; var=0
+RedCost[145]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+RedCost[151]: 5624; var=0
+RedCost[151]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+RedCost[167]: 3611; var=0
+RedCost[167]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[180]: -3324; var=1
+RedCost[180]: -3324 < -2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[183]: 5624; var=0
+RedCost[183]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[184]: 1602; var=0
+RedCost[185]: 5624; var=0
+RedCost[185]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[184]: 1602; var=0
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+RedCost[191]: 4788; var=0
+RedCost[191]: 4788 > 2475.48 LB: 233095 UB: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[184]: 1602; var=0
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+Fixed 10.9375% of the boolean variables! (21 out of 192 boolean variables)
+LP: 233095
+Shrage: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+RedCost[7]: 3611; var=0
+RedCost[7]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+RedCost[21]: 2674.26; var=0
+RedCost[21]: 2674.26 > 2475.48 LB: 233095 UB: 235570
+var[22]=0
+RedCost[23]: 2942; var=0
+RedCost[23]: 2942 > 2475.48 LB: 233095 UB: 235570
+RedCost[24]: 1602; var=0
+RedCost[25]: 5624; var=0
+RedCost[25]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+RedCost[39]: 6293; var=0
+RedCost[39]: 6293 > 2475.48 LB: 233095 UB: 235570
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[55]: 2942; var=0
+RedCost[55]: 2942 > 2475.48 LB: 233095 UB: 235570
+RedCost[56]: 1602; var=0
+RedCost[57]: 5624; var=0
+RedCost[57]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+RedCost[71]: 3338.67; var=0
+RedCost[71]: 3338.67 > 2475.48 LB: 233095 UB: 235570
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+RedCost[81]: 5624; var=0
+RedCost[81]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+RedCost[87]: 2942; var=0
+RedCost[87]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+RedCost[103]: 3611; var=0
+RedCost[103]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+RedCost[113]: 5624; var=0
+RedCost[113]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+RedCost[119]: 2942; var=0
+RedCost[119]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+RedCost[135]: 3611; var=0
+RedCost[135]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+RedCost[145]: 5624; var=0
+RedCost[145]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+RedCost[151]: 5624; var=0
+RedCost[151]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+RedCost[167]: 3611; var=0
+RedCost[167]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[180]: -3324; var=1
+RedCost[180]: -3324 < -2475.48 LB: 233095 UB: 235570
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[183]: 5624; var=0
+RedCost[183]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[184]: 1602; var=0
+RedCost[185]: 5624; var=0
+RedCost[185]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+RedCost[191]: 4788; var=0
+RedCost[191]: 4788 > 2475.48 LB: 233095 UB: 235570
+RedCost[193]: 6181; var=0
+RedCost[193]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[194]: 1522; var=0
+RedCost[197]: 0; var=0
+RedCost[217]: 0; var=0
+RedCost[229]: 542.612; var=0
+RedCost[230]: 129; var=0
+RedCost[249]: 0; var=1
+var[265]=0
+Uj[265]: 2674.26 2674.26 > 2475.48 LB: 233095 UB: 235570
+var[266]=0
+RedCost[301]: 6181; var=0
+RedCost[301]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[302]: 1522; var=0
+RedCost[337]: 6181; var=0
+RedCost[337]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[338]: 1522; var=0
+RedCost[373]: 2435.36; var=0
+RedCost[374]: 465; var=0
+RedCost[409]: 2435.36; var=0
+RedCost[410]: 465; var=0
+RedCost[445]: 4896.13; var=0
+RedCost[445]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[446]: 937; var=0
+RedCost[449]: 5512; var=0
+RedCost[449]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[450]: 1522; var=0
+RedCost[453]: 0; var=0
+RedCost[473]: 0; var=0
+RedCost[485]: 488; var=0
+RedCost[486]: 129; var=0
+RedCost[505]: 0; var=1
+RedCost[521]: 1238.13; var=0
+RedCost[522]: 670; var=0
+RedCost[557]: 5512; var=0
+RedCost[557]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[558]: 1522; var=0
+RedCost[593]: 5512; var=0
+RedCost[593]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[594]: 1522; var=0
+RedCost[629]: 2292; var=0
+RedCost[630]: 465; var=0
+RedCost[665]: 2292; var=0
+RedCost[666]: 465; var=0
+RedCost[701]: 4606; var=0
+RedCost[701]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[702]: 937; var=0
+RedCost[705]: 6181; var=0
+RedCost[705]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[706]: 1522; var=0
+RedCost[709]: 0; var=0
+RedCost[729]: 0; var=0
+RedCost[741]: 542.612; var=0
+RedCost[742]: 129; var=0
+RedCost[761]: 0; var=1
+var[777]=0
+RedCost[778]: 670; var=0
+RedCost[813]: 6181; var=0
+RedCost[813]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[814]: 1522; var=0
+RedCost[849]: 6181; var=0
+RedCost[849]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[850]: 1522; var=0
+RedCost[885]: 2435.36; var=0
+RedCost[886]: 465; var=0
+RedCost[921]: 2435.36; var=0
+RedCost[922]: 465; var=0
+RedCost[957]: 4896.13; var=0
+RedCost[957]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[958]: 937; var=0
+RedCost[961]: 5512; var=0
+RedCost[961]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[962]: 1522; var=0
+RedCost[965]: 0; var=0
+RedCost[985]: 0; var=0
+RedCost[997]: 488; var=0
+RedCost[998]: 129; var=0
+RedCost[1017]: 0; var=0
+var[1033]=0
+RedCost[1034]: 670; var=0
+RedCost[1069]: 5512; var=0
+RedCost[1069]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1070]: 1522; var=0
+RedCost[1105]: 5512; var=0
+RedCost[1105]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1106]: 1522; var=0
+RedCost[1141]: 2292; var=0
+RedCost[1142]: 465; var=0
+RedCost[1177]: 2292; var=0
+RedCost[1178]: 465; var=0
+RedCost[1213]: 4606; var=0
+RedCost[1213]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[1214]: 937; var=0
+RedCost[1217]: 5908.67; var=0
+RedCost[1217]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1218]: 1522; var=0
+RedCost[1221]: 0; var=0
+RedCost[1241]: 0; var=0
+RedCost[1253]: 520.381; var=0
+RedCost[1254]: 129; var=0
+RedCost[1273]: 0; var=1
+var[1289]=0
+RedCost[1290]: 670; var=0
+RedCost[1325]: 5908.67; var=0
+RedCost[1325]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1326]: 1522; var=0
+RedCost[1361]: 5908.67; var=0
+RedCost[1361]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1362]: 1522; var=0
+RedCost[1397]: 2377; var=0
+RedCost[1398]: 465; var=0
+RedCost[1433]: 2377; var=0
+RedCost[1434]: 465; var=0
+RedCost[1469]: 4778.02; var=0
+RedCost[1469]: 4778.02 > 2475.48 LB: 233095 UB: 235570
+RedCost[1470]: 937; var=0
+RedCost[1473]: 5512; var=0
+RedCost[1473]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1474]: 1522; var=0
+RedCost[1477]: 0; var=0
+RedCost[1497]: 0; var=0
+RedCost[1509]: 488; var=0
+RedCost[1510]: 129; var=0
+RedCost[1529]: 0; var=1
+RedCost[1545]: 2470; var=0
+RedCost[1546]: 670; var=0
+RedCost[1581]: 5512; var=0
+RedCost[1581]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1582]: 1522; var=0
+RedCost[1617]: 5512; var=0
+RedCost[1617]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1618]: 1522; var=0
+RedCost[1653]: 2292; var=0
+RedCost[1654]: 465; var=0
+RedCost[1689]: 2292; var=0
+RedCost[1690]: 465; var=0
+RedCost[1725]: 4606; var=0
+RedCost[1725]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[1726]: 937; var=0
+RedCost[1729]: 6181; var=0
+RedCost[1729]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1730]: 1522; var=0
+RedCost[1733]: 0; var=0
+RedCost[1753]: 0; var=0
+RedCost[1765]: 542.612; var=0
+RedCost[1766]: 129; var=0
+RedCost[1785]: 0; var=0
+var[1801]=0
+RedCost[1802]: 670; var=0
+RedCost[1837]: 6181; var=0
+RedCost[1837]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1838]: 1522; var=0
+RedCost[1873]: 6181; var=0
+RedCost[1873]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1874]: 1522; var=0
+RedCost[1909]: 2435.36; var=0
+RedCost[1910]: 465; var=0
+RedCost[1945]: 2435.36; var=0
+RedCost[1946]: 465; var=0
+RedCost[1981]: 4896.13; var=0
+RedCost[1981]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[1982]: 937; var=0
+RedCost[1985]: 5512; var=0
+RedCost[1985]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1986]: 1522; var=0
+RedCost[1989]: 0; var=0
+RedCost[2009]: 0; var=0
+RedCost[2021]: 488; var=0
+RedCost[2022]: 129; var=0
+RedCost[2041]: 0; var=1
+var[2057]=0
+RedCost[2058]: 670; var=0
+RedCost[2093]: 5512; var=0
+RedCost[2093]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2094]: 1522; var=0
+RedCost[2129]: 5512; var=0
+RedCost[2129]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2130]: 1522; var=0
+RedCost[2165]: 2292; var=0
+RedCost[2166]: 465; var=0
+RedCost[2201]: 2292; var=0
+RedCost[2202]: 465; var=0
+RedCost[2237]: 4606; var=0
+RedCost[2237]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[2238]: 937; var=0
+RedCost[2241]: 6181; var=0
+RedCost[2241]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2242]: 1522; var=0
+RedCost[2245]: 0; var=0
+RedCost[2265]: 0; var=0
+RedCost[2277]: 542.612; var=0
+RedCost[2278]: 129; var=0
+RedCost[2297]: 0; var=0
+var[2313]=0
+RedCost[2314]: 670; var=0
+RedCost[2349]: 6181; var=0
+RedCost[2349]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2350]: 1522; var=0
+RedCost[2385]: 6181; var=0
+RedCost[2385]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2386]: 1522; var=0
+RedCost[2421]: 2435.36; var=0
+RedCost[2422]: 465; var=0
+RedCost[2457]: 2435.36; var=0
+RedCost[2458]: 465; var=0
+RedCost[2493]: 4896.13; var=0
+RedCost[2493]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[2494]: 937; var=0
+RedCost[2497]: 5512; var=0
+RedCost[2497]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2498]: 1522; var=0
+RedCost[2501]: 0; var=0
+RedCost[2521]: 0; var=0
+RedCost[2533]: 488; var=0
+RedCost[2534]: 129; var=0
+RedCost[2553]: 0; var=1
+var[2569]=0
+RedCost[2570]: 670; var=0
+RedCost[2605]: 5512; var=0
+RedCost[2605]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2606]: 1522; var=0
+RedCost[2641]: 5512; var=0
+RedCost[2641]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2642]: 1522; var=0
+RedCost[2677]: 2292; var=0
+RedCost[2678]: 465; var=0
+RedCost[2713]: 2292; var=0
+RedCost[2714]: 465; var=0
+RedCost[2749]: 4606; var=0
+RedCost[2749]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[2750]: 937; var=0
+RedCost[2753]: 6181; var=0
+RedCost[2753]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2754]: 1522; var=0
+RedCost[2757]: 0; var=0
+RedCost[2777]: 0; var=0
+RedCost[2789]: 542.612; var=0
+RedCost[2790]: 129; var=0
+RedCost[2809]: 0; var=1
+RedCost[2825]: 2760.13; var=0
+RedCost[2825]: 2760.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[2826]: 670; var=0
+RedCost[2861]: 6181; var=0
+RedCost[2861]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2862]: 1522; var=0
+RedCost[2897]: 6181; var=0
+RedCost[2897]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2898]: 1522; var=0
+RedCost[2933]: 2435.36; var=0
+RedCost[2934]: 465; var=0
+RedCost[2969]: 2435.36; var=0
+RedCost[2970]: 465; var=0
+RedCost[3005]: 4896.13; var=0
+RedCost[3005]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[3006]: 937; var=0
+RedCost[3009]: 5512; var=0
+RedCost[3009]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3010]: 1522; var=0
+RedCost[3013]: 0; var=0
+RedCost[3033]: 0; var=0
+RedCost[3045]: 488; var=0
+RedCost[3046]: 129; var=0
+RedCost[3065]: 0; var=0
+RedCost[3081]: 2470; var=0
+RedCost[3082]: 670; var=0
+RedCost[3117]: 5512; var=0
+RedCost[3117]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3118]: 1522; var=0
+RedCost[3153]: 5512; var=0
+RedCost[3153]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3154]: 1522; var=0
+RedCost[3189]: 2292; var=0
+RedCost[3190]: 465; var=0
+RedCost[3225]: 2292; var=0
+RedCost[3226]: 465; var=0
+RedCost[3261]: 4606; var=0
+RedCost[3261]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[3262]: 937; var=0
+RedCost[3264]: -403.612; var=1
+var[3265]=1
+RedCost[3266]: -349; var=1
+var[3267]=1
+RedCost[3268]: -403.612; var=1
+var[3269]=1
+RedCost[3270]: -349; var=1
+var[3271]=1
+RedCost[3272]: -381.381; var=1
+var[3273]=1
+var[3274]=1
+var[3275]=1
+var[3276]=1
+var[3277]=1
+RedCost[3278]: -349; var=1
+var[3279]=1
+var[3280]=1
+var[3281]=1
+RedCost[3282]: -349; var=1
+var[3283]=1
+var[3284]=1
+var[3285]=1
+var[3286]=1
+Lj[3286]: 14 3324>2475.48 LB: 233095 UB: 235570
+var[3287]=1
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[184]: 1602; var=0
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+RedCost[194]: 1522; var=0
+RedCost[197]: 0; var=0
+RedCost[217]: 0; var=0
+RedCost[229]: 542.612; var=0
+RedCost[230]: 129; var=0
+RedCost[249]: 0; var=1
+var[266]=0
+RedCost[302]: 1522; var=0
+RedCost[338]: 1522; var=0
+RedCost[373]: 2435.36; var=0
+RedCost[374]: 465; var=0
+RedCost[409]: 2435.36; var=0
+RedCost[410]: 465; var=0
+RedCost[446]: 937; var=0
+RedCost[450]: 1522; var=0
+RedCost[453]: 0; var=0
+RedCost[473]: 0; var=0
+RedCost[485]: 488; var=0
+RedCost[486]: 129; var=0
+RedCost[505]: 0; var=1
+RedCost[521]: 1238.13; var=0
+RedCost[522]: 670; var=0
+RedCost[558]: 1522; var=0
+RedCost[594]: 1522; var=0
+RedCost[629]: 2292; var=0
+RedCost[630]: 465; var=0
+RedCost[665]: 2292; var=0
+RedCost[666]: 465; var=0
+RedCost[702]: 937; var=0
+RedCost[706]: 1522; var=0
+RedCost[709]: 0; var=0
+RedCost[729]: 0; var=0
+RedCost[741]: 542.612; var=0
+RedCost[742]: 129; var=0
+RedCost[761]: 0; var=1
+var[777]=0
+RedCost[778]: 670; var=0
+RedCost[814]: 1522; var=0
+RedCost[850]: 1522; var=0
+RedCost[885]: 2435.36; var=0
+RedCost[886]: 465; var=0
+RedCost[921]: 2435.36; var=0
+RedCost[922]: 465; var=0
+RedCost[958]: 937; var=0
+RedCost[962]: 1522; var=0
+RedCost[965]: 0; var=0
+RedCost[985]: 0; var=0
+RedCost[997]: 488; var=0
+RedCost[998]: 129; var=0
+RedCost[1017]: 0; var=0
+var[1033]=0
+RedCost[1034]: 670; var=0
+RedCost[1070]: 1522; var=0
+RedCost[1106]: 1522; var=0
+RedCost[1141]: 2292; var=0
+RedCost[1142]: 465; var=0
+RedCost[1177]: 2292; var=0
+RedCost[1178]: 465; var=0
+RedCost[1214]: 937; var=0
+RedCost[1218]: 1522; var=0
+RedCost[1221]: 0; var=0
+RedCost[1241]: 0; var=0
+RedCost[1253]: 520.381; var=0
+RedCost[1254]: 129; var=0
+RedCost[1273]: 0; var=1
+var[1289]=0
+RedCost[1290]: 670; var=0
+RedCost[1326]: 1522; var=0
+RedCost[1362]: 1522; var=0
+RedCost[1397]: 2377; var=0
+RedCost[1398]: 465; var=0
+RedCost[1433]: 2377; var=0
+RedCost[1434]: 465; var=0
+RedCost[1470]: 937; var=0
+RedCost[1474]: 1522; var=0
+RedCost[1477]: 0; var=0
+RedCost[1497]: 0; var=0
+RedCost[1509]: 488; var=0
+RedCost[1510]: 129; var=0
+RedCost[1529]: 0; var=1
+RedCost[1545]: 2470; var=0
+RedCost[1546]: 670; var=0
+RedCost[1582]: 1522; var=0
+RedCost[1618]: 1522; var=0
+RedCost[1653]: 2292; var=0
+RedCost[1654]: 465; var=0
+RedCost[1689]: 2292; var=0
+RedCost[1690]: 465; var=0
+RedCost[1726]: 937; var=0
+RedCost[1730]: 1522; var=0
+RedCost[1733]: 0; var=0
+RedCost[1753]: 0; var=0
+RedCost[1765]: 542.612; var=0
+RedCost[1766]: 129; var=0
+RedCost[1785]: 0; var=0
+var[1801]=0
+RedCost[1802]: 670; var=0
+RedCost[1838]: 1522; var=0
+RedCost[1874]: 1522; var=0
+RedCost[1909]: 2435.36; var=0
+RedCost[1910]: 465; var=0
+RedCost[1945]: 2435.36; var=0
+RedCost[1946]: 465; var=0
+RedCost[1982]: 937; var=0
+RedCost[1986]: 1522; var=0
+RedCost[1989]: 0; var=0
+RedCost[2009]: 0; var=0
+RedCost[2021]: 488; var=0
+RedCost[2022]: 129; var=0
+RedCost[2041]: 0; var=1
+var[2057]=0
+RedCost[2058]: 670; var=0
+RedCost[2094]: 1522; var=0
+RedCost[2130]: 1522; var=0
+RedCost[2165]: 2292; var=0
+RedCost[2166]: 465; var=0
+RedCost[2201]: 2292; var=0
+RedCost[2202]: 465; var=0
+RedCost[2238]: 937; var=0
+RedCost[2242]: 1522; var=0
+RedCost[2245]: 0; var=0
+RedCost[2265]: 0; var=0
+RedCost[2277]: 542.612; var=0
+RedCost[2278]: 129; var=0
+RedCost[2297]: 0; var=0
+var[2313]=0
+RedCost[2314]: 670; var=0
+RedCost[2350]: 1522; var=0
+RedCost[2386]: 1522; var=0
+RedCost[2421]: 2435.36; var=0
+RedCost[2422]: 465; var=0
+RedCost[2457]: 2435.36; var=0
+RedCost[2458]: 465; var=0
+RedCost[2494]: 937; var=0
+RedCost[2498]: 1522; var=0
+RedCost[2501]: 0; var=0
+RedCost[2521]: 0; var=0
+RedCost[2533]: 488; var=0
+RedCost[2534]: 129; var=0
+RedCost[2553]: 0; var=1
+var[2569]=0
+RedCost[2570]: 670; var=0
+RedCost[2606]: 1522; var=0
+RedCost[2642]: 1522; var=0
+RedCost[2677]: 2292; var=0
+RedCost[2678]: 465; var=0
+RedCost[2713]: 2292; var=0
+RedCost[2714]: 465; var=0
+RedCost[2750]: 937; var=0
+RedCost[2754]: 1522; var=0
+RedCost[2757]: 0; var=0
+RedCost[2777]: 0; var=0
+RedCost[2789]: 542.612; var=0
+RedCost[2790]: 129; var=0
+RedCost[2809]: 0; var=1
+RedCost[2826]: 670; var=0
+RedCost[2862]: 1522; var=0
+RedCost[2898]: 1522; var=0
+RedCost[2933]: 2435.36; var=0
+RedCost[2934]: 465; var=0
+RedCost[2969]: 2435.36; var=0
+RedCost[2970]: 465; var=0
+RedCost[3006]: 937; var=0
+RedCost[3010]: 1522; var=0
+RedCost[3013]: 0; var=0
+RedCost[3033]: 0; var=0
+RedCost[3045]: 488; var=0
+RedCost[3046]: 129; var=0
+RedCost[3065]: 0; var=0
+RedCost[3081]: 2470; var=0
+RedCost[3082]: 670; var=0
+RedCost[3118]: 1522; var=0
+RedCost[3154]: 1522; var=0
+RedCost[3189]: 2292; var=0
+RedCost[3190]: 465; var=0
+RedCost[3225]: 2292; var=0
+RedCost[3226]: 465; var=0
+RedCost[3262]: 937; var=0
+RedCost[3264]: -403.612; var=1
+var[3265]=1
+RedCost[3266]: -349; var=1
+var[3267]=1
+RedCost[3268]: -403.612; var=1
+var[3269]=1
+RedCost[3270]: -349; var=1
+var[3271]=1
+RedCost[3272]: -381.381; var=1
+var[3273]=1
+var[3274]=1
+var[3275]=1
+var[3276]=1
+var[3277]=1
+RedCost[3278]: -349; var=1
+var[3279]=1
+var[3280]=1
+var[3281]=1
+RedCost[3282]: -349; var=1
+var[3283]=1
+var[3284]=1
+var[3285]=1
+var[3287]=1
+Fixed 2.18978% of the boolean variables! (72 out of 3288 boolean variables)
+LP: 233095
+Shrage: 235570
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+RedCost[7]: 3611; var=0
+RedCost[7]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+RedCost[21]: 2674.26; var=0
+RedCost[21]: 2674.26 > 2475.48 LB: 233095 UB: 235570
+var[22]=0
+RedCost[23]: 2942; var=0
+RedCost[23]: 2942 > 2475.48 LB: 233095 UB: 235570
+RedCost[24]: 1602; var=0
+RedCost[25]: 5624; var=0
+RedCost[25]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+RedCost[39]: 6293; var=0
+RedCost[39]: 6293 > 2475.48 LB: 233095 UB: 235570
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[55]: 2942; var=0
+RedCost[55]: 2942 > 2475.48 LB: 233095 UB: 235570
+RedCost[56]: 1602; var=0
+RedCost[57]: 5624; var=0
+RedCost[57]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+RedCost[71]: 3338.67; var=0
+RedCost[71]: 3338.67 > 2475.48 LB: 233095 UB: 235570
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+RedCost[81]: 5624; var=0
+RedCost[81]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+RedCost[87]: 2942; var=0
+RedCost[87]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+RedCost[103]: 3611; var=0
+RedCost[103]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+RedCost[113]: 5624; var=0
+RedCost[113]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+RedCost[119]: 2942; var=0
+RedCost[119]: 2942 > 2475.48 LB: 233095 UB: 235570
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+RedCost[135]: 3611; var=0
+RedCost[135]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+RedCost[145]: 5624; var=0
+RedCost[145]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+RedCost[151]: 5624; var=0
+RedCost[151]: 5624 > 2475.48 LB: 233095 UB: 235570
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+RedCost[167]: 3611; var=0
+RedCost[167]: 3611 > 2475.48 LB: 233095 UB: 235570
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[180]: -3324; var=1
+RedCost[180]: -3324 < -2475.48 LB: 233095 UB: 235570
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[183]: 5624; var=0
+RedCost[183]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[184]: 1602; var=0
+RedCost[185]: 5624; var=0
+RedCost[185]: 5624 > 2475.48 LB: 233095 UB: 235570
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+RedCost[191]: 4788; var=0
+RedCost[191]: 4788 > 2475.48 LB: 233095 UB: 235570
+RedCost[193]: 6181; var=0
+RedCost[193]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[194]: 1522; var=0
+RedCost[197]: 0; var=0
+RedCost[217]: 0; var=0
+RedCost[229]: 542.612; var=0
+RedCost[230]: 129; var=0
+RedCost[249]: 0; var=1
+var[265]=0
+Uj[265]: 2674.26 2674.26 > 2475.48 LB: 233095 UB: 235570
+var[266]=0
+RedCost[301]: 6181; var=0
+RedCost[301]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[302]: 1522; var=0
+RedCost[337]: 6181; var=0
+RedCost[337]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[338]: 1522; var=0
+RedCost[373]: 2435.36; var=0
+RedCost[374]: 465; var=0
+RedCost[409]: 2435.36; var=0
+RedCost[410]: 465; var=0
+RedCost[445]: 4896.13; var=0
+RedCost[445]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[446]: 937; var=0
+RedCost[449]: 5512; var=0
+RedCost[449]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[450]: 1522; var=0
+RedCost[453]: 0; var=0
+RedCost[473]: 0; var=0
+RedCost[485]: 488; var=0
+RedCost[486]: 129; var=0
+RedCost[505]: 0; var=1
+RedCost[521]: 1238.13; var=0
+RedCost[522]: 670; var=0
+RedCost[557]: 5512; var=0
+RedCost[557]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[558]: 1522; var=0
+RedCost[593]: 5512; var=0
+RedCost[593]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[594]: 1522; var=0
+RedCost[629]: 2292; var=0
+RedCost[630]: 465; var=0
+RedCost[665]: 2292; var=0
+RedCost[666]: 465; var=0
+RedCost[701]: 4606; var=0
+RedCost[701]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[702]: 937; var=0
+RedCost[705]: 6181; var=0
+RedCost[705]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[706]: 1522; var=0
+RedCost[709]: 0; var=0
+RedCost[729]: 0; var=0
+RedCost[741]: 542.612; var=0
+RedCost[742]: 129; var=0
+RedCost[761]: 0; var=1
+var[777]=0
+RedCost[778]: 670; var=0
+RedCost[813]: 6181; var=0
+RedCost[813]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[814]: 1522; var=0
+RedCost[849]: 6181; var=0
+RedCost[849]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[850]: 1522; var=0
+RedCost[885]: 2435.36; var=0
+RedCost[886]: 465; var=0
+RedCost[921]: 2435.36; var=0
+RedCost[922]: 465; var=0
+RedCost[957]: 4896.13; var=0
+RedCost[957]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[958]: 937; var=0
+RedCost[961]: 5512; var=0
+RedCost[961]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[962]: 1522; var=0
+RedCost[965]: 0; var=0
+RedCost[985]: 0; var=0
+RedCost[997]: 488; var=0
+RedCost[998]: 129; var=0
+RedCost[1017]: 0; var=0
+var[1033]=0
+RedCost[1034]: 670; var=0
+RedCost[1069]: 5512; var=0
+RedCost[1069]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1070]: 1522; var=0
+RedCost[1105]: 5512; var=0
+RedCost[1105]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1106]: 1522; var=0
+RedCost[1141]: 2292; var=0
+RedCost[1142]: 465; var=0
+RedCost[1177]: 2292; var=0
+RedCost[1178]: 465; var=0
+RedCost[1213]: 4606; var=0
+RedCost[1213]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[1214]: 937; var=0
+RedCost[1217]: 5908.67; var=0
+RedCost[1217]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1218]: 1522; var=0
+RedCost[1221]: 0; var=0
+RedCost[1241]: 0; var=0
+RedCost[1253]: 520.381; var=0
+RedCost[1254]: 129; var=0
+RedCost[1273]: 0; var=1
+var[1289]=0
+RedCost[1290]: 670; var=0
+RedCost[1325]: 5908.67; var=0
+RedCost[1325]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1326]: 1522; var=0
+RedCost[1361]: 5908.67; var=0
+RedCost[1361]: 5908.67 > 2475.48 LB: 233095 UB: 235570
+RedCost[1362]: 1522; var=0
+RedCost[1397]: 2377; var=0
+RedCost[1398]: 465; var=0
+RedCost[1433]: 2377; var=0
+RedCost[1434]: 465; var=0
+RedCost[1469]: 4778.02; var=0
+RedCost[1469]: 4778.02 > 2475.48 LB: 233095 UB: 235570
+RedCost[1470]: 937; var=0
+RedCost[1473]: 5512; var=0
+RedCost[1473]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1474]: 1522; var=0
+RedCost[1477]: 0; var=0
+RedCost[1497]: 0; var=0
+RedCost[1509]: 488; var=0
+RedCost[1510]: 129; var=0
+RedCost[1529]: 0; var=1
+RedCost[1545]: 2470; var=0
+RedCost[1546]: 670; var=0
+RedCost[1581]: 5512; var=0
+RedCost[1581]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1582]: 1522; var=0
+RedCost[1617]: 5512; var=0
+RedCost[1617]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1618]: 1522; var=0
+RedCost[1653]: 2292; var=0
+RedCost[1654]: 465; var=0
+RedCost[1689]: 2292; var=0
+RedCost[1690]: 465; var=0
+RedCost[1725]: 4606; var=0
+RedCost[1725]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[1726]: 937; var=0
+RedCost[1729]: 6181; var=0
+RedCost[1729]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1730]: 1522; var=0
+RedCost[1733]: 0; var=0
+RedCost[1753]: 0; var=0
+RedCost[1765]: 542.612; var=0
+RedCost[1766]: 129; var=0
+RedCost[1785]: 0; var=0
+var[1801]=0
+RedCost[1802]: 670; var=0
+RedCost[1837]: 6181; var=0
+RedCost[1837]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1838]: 1522; var=0
+RedCost[1873]: 6181; var=0
+RedCost[1873]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[1874]: 1522; var=0
+RedCost[1909]: 2435.36; var=0
+RedCost[1910]: 465; var=0
+RedCost[1945]: 2435.36; var=0
+RedCost[1946]: 465; var=0
+RedCost[1981]: 4896.13; var=0
+RedCost[1981]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[1982]: 937; var=0
+RedCost[1985]: 5512; var=0
+RedCost[1985]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[1986]: 1522; var=0
+RedCost[1989]: 0; var=0
+RedCost[2009]: 0; var=0
+RedCost[2021]: 488; var=0
+RedCost[2022]: 129; var=0
+RedCost[2041]: 0; var=1
+var[2057]=0
+RedCost[2058]: 670; var=0
+RedCost[2093]: 5512; var=0
+RedCost[2093]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2094]: 1522; var=0
+RedCost[2129]: 5512; var=0
+RedCost[2129]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2130]: 1522; var=0
+RedCost[2165]: 2292; var=0
+RedCost[2166]: 465; var=0
+RedCost[2201]: 2292; var=0
+RedCost[2202]: 465; var=0
+RedCost[2237]: 4606; var=0
+RedCost[2237]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[2238]: 937; var=0
+RedCost[2241]: 6181; var=0
+RedCost[2241]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2242]: 1522; var=0
+RedCost[2245]: 0; var=0
+RedCost[2265]: 0; var=0
+RedCost[2277]: 542.612; var=0
+RedCost[2278]: 129; var=0
+RedCost[2297]: 0; var=0
+var[2313]=0
+RedCost[2314]: 670; var=0
+RedCost[2349]: 6181; var=0
+RedCost[2349]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2350]: 1522; var=0
+RedCost[2385]: 6181; var=0
+RedCost[2385]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2386]: 1522; var=0
+RedCost[2421]: 2435.36; var=0
+RedCost[2422]: 465; var=0
+RedCost[2457]: 2435.36; var=0
+RedCost[2458]: 465; var=0
+RedCost[2493]: 4896.13; var=0
+RedCost[2493]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[2494]: 937; var=0
+RedCost[2497]: 5512; var=0
+RedCost[2497]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2498]: 1522; var=0
+RedCost[2501]: 0; var=0
+RedCost[2521]: 0; var=0
+RedCost[2533]: 488; var=0
+RedCost[2534]: 129; var=0
+RedCost[2553]: 0; var=1
+var[2569]=0
+RedCost[2570]: 670; var=0
+RedCost[2605]: 5512; var=0
+RedCost[2605]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2606]: 1522; var=0
+RedCost[2641]: 5512; var=0
+RedCost[2641]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[2642]: 1522; var=0
+RedCost[2677]: 2292; var=0
+RedCost[2678]: 465; var=0
+RedCost[2713]: 2292; var=0
+RedCost[2714]: 465; var=0
+RedCost[2749]: 4606; var=0
+RedCost[2749]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[2750]: 937; var=0
+RedCost[2753]: 6181; var=0
+RedCost[2753]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2754]: 1522; var=0
+RedCost[2757]: 0; var=0
+RedCost[2777]: 0; var=0
+RedCost[2789]: 542.612; var=0
+RedCost[2790]: 129; var=0
+RedCost[2809]: 0; var=1
+RedCost[2825]: 2760.13; var=0
+RedCost[2825]: 2760.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[2826]: 670; var=0
+RedCost[2861]: 6181; var=0
+RedCost[2861]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2862]: 1522; var=0
+RedCost[2897]: 6181; var=0
+RedCost[2897]: 6181 > 2475.48 LB: 233095 UB: 235570
+RedCost[2898]: 1522; var=0
+RedCost[2933]: 2435.36; var=0
+RedCost[2934]: 465; var=0
+RedCost[2969]: 2435.36; var=0
+RedCost[2970]: 465; var=0
+RedCost[3005]: 4896.13; var=0
+RedCost[3005]: 4896.13 > 2475.48 LB: 233095 UB: 235570
+RedCost[3006]: 937; var=0
+RedCost[3009]: 5512; var=0
+RedCost[3009]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3010]: 1522; var=0
+RedCost[3013]: 0; var=0
+RedCost[3033]: 0; var=0
+RedCost[3045]: 488; var=0
+RedCost[3046]: 129; var=0
+RedCost[3065]: 0; var=0
+RedCost[3081]: 2470; var=0
+RedCost[3082]: 670; var=0
+RedCost[3117]: 5512; var=0
+RedCost[3117]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3118]: 1522; var=0
+RedCost[3153]: 5512; var=0
+RedCost[3153]: 5512 > 2475.48 LB: 233095 UB: 235570
+RedCost[3154]: 1522; var=0
+RedCost[3189]: 2292; var=0
+RedCost[3190]: 465; var=0
+RedCost[3225]: 2292; var=0
+RedCost[3226]: 465; var=0
+RedCost[3261]: 4606; var=0
+RedCost[3261]: 4606 > 2475.48 LB: 233095 UB: 235570
+RedCost[3262]: 937; var=0
+RedCost[3264]: -403.612; var=1
+var[3265]=1
+RedCost[3266]: -349; var=1
+var[3267]=1
+RedCost[3268]: -403.612; var=1
+var[3269]=1
+RedCost[3270]: -349; var=1
+var[3271]=1
+RedCost[3272]: -381.381; var=1
+var[3273]=1
+var[3274]=1
+var[3275]=1
+var[3276]=1
+var[3277]=1
+RedCost[3278]: -349; var=1
+var[3279]=1
+var[3280]=1
+var[3281]=1
+RedCost[3282]: -349; var=1
+var[3283]=1
+var[3284]=1
+var[3285]=1
+var[3286]=1
+Lj[3286]: 14 3324>2475.48 LB: 233095 UB: 235570
+var[3287]=1
+var[0]=0
+var[1]=1
+var[2]=1
+var[3]=0
+RedCost[4]: -16; var=1
+var[5]=0
+var[6]=0
+var[8]=0
+var[9]=0.857143
+var[10]=0
+var[11]=1
+var[12]=0
+RedCost[13]: 58.3571; var=0
+var[14]=0
+var[15]=1
+var[16]=0
+var[17]=1
+var[18]=1
+var[19]=0
+var[20]=1
+var[22]=0
+RedCost[24]: 1602; var=0
+var[26]=0
+var[27]=1
+var[28]=0
+RedCost[29]: -85; var=1
+var[30]=0
+var[31]=1
+var[32]=0
+var[33]=1
+var[34]=1
+var[35]=0
+RedCost[36]: -577.872; var=1
+var[37]=0
+RedCost[38]: 1602; var=0
+var[40]=0
+var[41]=0.857143
+var[42]=0
+var[43]=1
+var[44]=0
+RedCost[45]: 58.3571; var=0
+var[46]=0
+var[47]=1
+var[48]=0
+var[49]=1
+var[50]=1
+var[51]=0
+RedCost[52]: -868; var=1
+RedCost[53]: 1238.13; var=0
+var[54]=0
+RedCost[56]: 1602; var=0
+RedCost[58]: 535; var=0
+RedCost[59]: 2390; var=0
+RedCost[60]: 535; var=0
+RedCost[61]: 2390; var=0
+var[62]=0
+var[63]=1
+var[64]=0
+var[65]=1
+var[66]=1
+var[67]=0
+RedCost[68]: -695.976; var=1
+RedCost[69]: 1120.02; var=0
+var[70]=0
+var[72]=0
+RedCost[73]: -272.333; var=1
+RedCost[74]: 535; var=0
+RedCost[75]: 2475; var=0
+var[76]=0
+var[77]=0.333333
+var[78]=0
+var[79]=1
+RedCost[80]: 1602; var=0
+var[82]=1
+RedCost[83]: 349; var=0
+var[84]=0
+var[85]=0
+var[86]=0
+var[88]=0
+RedCost[89]: -669; var=1
+var[90]=0
+var[91]=1
+var[92]=0
+RedCost[93]: -85; var=1
+var[94]=0
+var[95]=1
+var[96]=0
+var[97]=1
+RedCost[98]: 139; var=0
+RedCost[99]: 556.612; var=0
+RedCost[100]: -563.872; var=1
+RedCost[101]: 1410.15; var=0
+var[102]=0
+var[104]=0
+var[105]=0.857143
+var[106]=0
+var[107]=1
+var[108]=0
+RedCost[109]: 58.3571; var=0
+var[110]=0
+var[111]=1
+RedCost[112]: 1602; var=0
+var[114]=1
+var[115]=0
+RedCost[116]: -868; var=1
+RedCost[117]: 1238.13; var=0
+var[118]=0
+var[120]=0
+RedCost[121]: -669; var=1
+var[122]=0
+var[123]=1
+var[124]=0
+RedCost[125]: -85; var=1
+var[126]=0
+var[127]=1
+var[128]=0
+var[129]=1
+RedCost[130]: 139; var=0
+RedCost[131]: 556.612; var=0
+RedCost[132]: -563.872; var=1
+RedCost[133]: 1238.13; var=0
+var[134]=0
+var[136]=0
+var[137]=0.857143
+var[138]=0
+var[139]=1
+var[140]=0
+RedCost[141]: 58.3571; var=0
+var[142]=0
+var[143]=1
+RedCost[144]: 1602; var=0
+var[146]=1
+var[147]=0
+RedCost[148]: -868; var=1
+RedCost[149]: 1238.13; var=0
+RedCost[150]: 1602; var=0
+var[152]=0
+RedCost[153]: -669; var=1
+RedCost[154]: 535; var=0
+RedCost[155]: 2390; var=0
+var[156]=0
+RedCost[157]: -85; var=1
+var[158]=0
+var[159]=1
+var[160]=0
+var[161]=1
+var[162]=1
+RedCost[163]: 403.612; var=0
+var[164]=0
+RedCost[165]: 346.128; var=0
+var[166]=0
+var[168]=0
+var[169]=0.857143
+var[170]=0
+var[171]=1
+var[172]=0
+RedCost[173]: 58.3571; var=0
+var[174]=0
+var[175]=1
+var[176]=0
+var[177]=1
+RedCost[178]: 139; var=0
+RedCost[179]: 502; var=0
+RedCost[181]: 948; var=0
+RedCost[182]: 1602; var=0
+RedCost[184]: 1602; var=0
+RedCost[186]: 535; var=0
+RedCost[187]: 2390; var=0
+var[188]=0
+RedCost[189]: -85; var=1
+RedCost[190]: 1067; var=0
+RedCost[194]: 1522; var=0
+RedCost[197]: 0; var=0
+RedCost[217]: 0; var=0
+RedCost[229]: 542.612; var=0
+RedCost[230]: 129; var=0
+RedCost[249]: 0; var=1
+var[266]=0
+RedCost[302]: 1522; var=0
+RedCost[338]: 1522; var=0
+RedCost[373]: 2435.36; var=0
+RedCost[374]: 465; var=0
+RedCost[409]: 2435.36; var=0
+RedCost[410]: 465; var=0
+RedCost[446]: 937; var=0
+RedCost[450]: 1522; var=0
+RedCost[453]: 0; var=0
+RedCost[473]: 0; var=0
+RedCost[485]: 488; var=0
+RedCost[486]: 129; var=0
+RedCost[505]: 0; var=1
+RedCost[521]: 1238.13; var=0
+RedCost[522]: 670; var=0
+RedCost[558]: 1522; var=0
+RedCost[594]: 1522; var=0
+RedCost[629]: 2292; var=0
+RedCost[630]: 465; var=0
+RedCost[665]: 2292; var=0
+RedCost[666]: 465; var=0
+RedCost[702]: 937; var=0
+RedCost[706]: 1522; var=0
+RedCost[709]: 0; var=0
+RedCost[729]: 0; var=0
+RedCost[741]: 542.612; var=0
+RedCost[742]: 129; var=0
+RedCost[761]: 0; var=1
+var[777]=0
+RedCost[778]: 670; var=0
+RedCost[814]: 1522; var=0
+RedCost[850]: 1522; var=0
+RedCost[885]: 2435.36; var=0
+RedCost[886]: 465; var=0
+RedCost[921]: 2435.36; var=0
+RedCost[922]: 465; var=0
+RedCost[958]: 937; var=0
+RedCost[962]: 1522; var=0
+RedCost[965]: 0; var=0
+RedCost[985]: 0; var=0
+RedCost[997]: 488; var=0
+RedCost[998]: 129; var=0
+RedCost[1017]: 0; var=0
+var[1033]=0
+RedCost[1034]: 670; var=0
+RedCost[1070]: 1522; var=0
+RedCost[1106]: 1522; var=0
+RedCost[1141]: 2292; var=0
+RedCost[1142]: 465; var=0
+RedCost[1177]: 2292; var=0
+RedCost[1178]: 465; var=0
+RedCost[1214]: 937; var=0
+RedCost[1218]: 1522; var=0
+RedCost[1221]: 0; var=0
+RedCost[1241]: 0; var=0
+RedCost[1253]: 520.381; var=0
+RedCost[1254]: 129; var=0
+RedCost[1273]: 0; var=1
+var[1289]=0
+RedCost[1290]: 670; var=0
+RedCost[1326]: 1522; var=0
+RedCost[1362]: 1522; var=0
+RedCost[1397]: 2377; var=0
+RedCost[1398]: 465; var=0
+RedCost[1433]: 2377; var=0
+RedCost[1434]: 465; var=0
+RedCost[1470]: 937; var=0
+RedCost[1474]: 1522; var=0
+RedCost[1477]: 0; var=0
+RedCost[1497]: 0; var=0
+RedCost[1509]: 488; var=0
+RedCost[1510]: 129; var=0
+RedCost[1529]: 0; var=1
+RedCost[1545]: 2470; var=0
+RedCost[1546]: 670; var=0
+RedCost[1582]: 1522; var=0
+RedCost[1618]: 1522; var=0
+RedCost[1653]: 2292; var=0
+RedCost[1654]: 465; var=0
+RedCost[1689]: 2292; var=0
+RedCost[1690]: 465; var=0
+RedCost[1726]: 937; var=0
+RedCost[1730]: 1522; var=0
+RedCost[1733]: 0; var=0
+RedCost[1753]: 0; var=0
+RedCost[1765]: 542.612; var=0
+RedCost[1766]: 129; var=0
+RedCost[1785]: 0; var=0
+var[1801]=0
+RedCost[1802]: 670; var=0
+RedCost[1838]: 1522; var=0
+RedCost[1874]: 1522; var=0
+RedCost[1909]: 2435.36; var=0
+RedCost[1910]: 465; var=0
+RedCost[1945]: 2435.36; var=0
+RedCost[1946]: 465; var=0
+RedCost[1982]: 937; var=0
+RedCost[1986]: 1522; var=0
+RedCost[1989]: 0; var=0
+RedCost[2009]: 0; var=0
+RedCost[2021]: 488; var=0
+RedCost[2022]: 129; var=0
+RedCost[2041]: 0; var=1
+var[2057]=0
+RedCost[2058]: 670; var=0
+RedCost[2094]: 1522; var=0
+RedCost[2130]: 1522; var=0
+RedCost[2165]: 2292; var=0
+RedCost[2166]: 465; var=0
+RedCost[2201]: 2292; var=0
+RedCost[2202]: 465; var=0
+RedCost[2238]: 937; var=0
+RedCost[2242]: 1522; var=0
+RedCost[2245]: 0; var=0
+RedCost[2265]: 0; var=0
+RedCost[2277]: 542.612; var=0
+RedCost[2278]: 129; var=0
+RedCost[2297]: 0; var=0
+var[2313]=0
+RedCost[2314]: 670; var=0
+RedCost[2350]: 1522; var=0
+RedCost[2386]: 1522; var=0
+RedCost[2421]: 2435.36; var=0
+RedCost[2422]: 465; var=0
+RedCost[2457]: 2435.36; var=0
+RedCost[2458]: 465; var=0
+RedCost[2494]: 937; var=0
+RedCost[2498]: 1522; var=0
+RedCost[2501]: 0; var=0
+RedCost[2521]: 0; var=0
+RedCost[2533]: 488; var=0
+RedCost[2534]: 129; var=0
+RedCost[2553]: 0; var=1
+var[2569]=0
+RedCost[2570]: 670; var=0
+RedCost[2606]: 1522; var=0
+RedCost[2642]: 1522; var=0
+RedCost[2677]: 2292; var=0
+RedCost[2678]: 465; var=0
+RedCost[2713]: 2292; var=0
+RedCost[2714]: 465; var=0
+RedCost[2750]: 937; var=0
+RedCost[2754]: 1522; var=0
+RedCost[2757]: 0; var=0
+RedCost[2777]: 0; var=0
+RedCost[2789]: 542.612; var=0
+RedCost[2790]: 129; var=0
+RedCost[2809]: 0; var=1
+RedCost[2826]: 670; var=0
+RedCost[2862]: 1522; var=0
+RedCost[2898]: 1522; var=0
+RedCost[2933]: 2435.36; var=0
+RedCost[2934]: 465; var=0
+RedCost[2969]: 2435.36; var=0
+RedCost[2970]: 465; var=0
+RedCost[3006]: 937; var=0
+RedCost[3010]: 1522; var=0
+RedCost[3013]: 0; var=0
+RedCost[3033]: 0; var=0
+RedCost[3045]: 488; var=0
+RedCost[3046]: 129; var=0
+RedCost[3065]: 0; var=0
+RedCost[3081]: 2470; var=0
+RedCost[3082]: 670; var=0
+RedCost[3118]: 1522; var=0
+RedCost[3154]: 1522; var=0
+RedCost[3189]: 2292; var=0
+RedCost[3190]: 465; var=0
+RedCost[3225]: 2292; var=0
+RedCost[3226]: 465; var=0
+RedCost[3262]: 937; var=0
+RedCost[3264]: -403.612; var=1
+var[3265]=1
+RedCost[3266]: -349; var=1
+var[3267]=1
+RedCost[3268]: -403.612; var=1
+var[3269]=1
+RedCost[3270]: -349; var=1
+var[3271]=1
+RedCost[3272]: -381.381; var=1
+var[3273]=1
+var[3274]=1
+var[3275]=1
+var[3276]=1
+var[3277]=1
+RedCost[3278]: -349; var=1
+var[3279]=1
+var[3280]=1
+var[3281]=1
+RedCost[3282]: -349; var=1
+var[3283]=1
+var[3284]=1
+var[3285]=1
+var[3287]=1
+Fixed 2.18978% of the boolean variables! (72 out of 3288 boolean variables)

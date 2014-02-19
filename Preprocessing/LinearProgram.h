@@ -37,6 +37,7 @@ private:
 	int *piLPIndiceBase;					// The array for to stock the indice of the in-base variables
 
 	// Attributes related to the Tomlin's penalties
+	///! Tomlin related parts are not reviewed, there may be mem leaks
 	double *pLPTomlinLj,*pLPTomlinUj;		// The pseudo-costs computed by Cplex, based on Tomlin's penalties
 	double **pdLPAij;						// The coeffients to calculate the pseudo cost based on Tomlin's penalties.
 	int *piLPVarLibTom;						// An array. The array contains the indices of the variables in the resident basis.
@@ -57,7 +58,16 @@ public:
 										// This method must be used to initialize the model
 	void LPAddCuts(IloConstraintArray*);	// Adds the constraints to the model
 	void LPRemoveCuts(IloConstraintArray*);	// Removes the constraints from the model
-	~LinearProgram(void){delete pLPlj; delete pLPuj; delete pLPVarBase; delete [] pdLPVariables; /*for (int i=0;i<iLPnbRows;i++) free(pdLPAij[i]); free(pdLPAij);*/} // Destructor of the class
+	~LinearProgram(void)
+	{
+		delete pLPlj; delete pLPuj; delete pLPVarBase; delete [] pdLPVariables; /*for (int i=0;i<iLPnbRows;i++) free(pdLPAij[i]); free(pdLPAij);*/
+		///!Add some "delete"
+		if(NULL!=piLPIndiceBaseConcert)delete piLPIndiceBaseConcert;
+		if(NULL!=piLPIndiceBase)delete piLPIndiceBase;
+		if(NULL!=pdLPljCPX)delete pdLPljCPX;
+		if(NULL!=pdLPujCPX)delete pdLPujCPX;
+	} // Destructor of the class
+
 	 
 	void LPSolveByCplex();				// Solve the LP problem using cplex and return the value of the funtion objective
 										// And get the result of each variable after the problem solved by cplex

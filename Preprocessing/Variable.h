@@ -14,7 +14,7 @@ private:
 	int VARBase;				// The basis status of the variable
 public:
 	Variable(void);										// Class constructor
-	///! ~Variable(void){delete VARName;}					// Class destructor
+	///! No dynamically allocated mem. ~Variable(void){delete VARName;}					// Class destructor
 
 	// Get the information of the variable. 
 	// The LP problem should be solved, if not, these functions return the default values initilized in the class constructor.

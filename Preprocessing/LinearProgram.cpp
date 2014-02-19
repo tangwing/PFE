@@ -20,6 +20,12 @@ LinearProgram::LinearProgram(void)
   dLPOptimalValue=IloInfinity;
   pdLPVariables=NULL;
   iLPnbBase=0;
+  ///! Initialization of pointers
+  piLPIndiceBaseConcert=NULL;
+  pLPVarBase=NULL;
+  pLPlj=pLPuj=NULL;
+  piLPIndiceBase=NULL;
+  pdLPljCPX=pdLPujCPX=NULL;
 }
 
 
@@ -158,7 +164,6 @@ int* LinearProgram::LPGetBasisStatus()
 		throw(1);
 	}
 	int *pdBasisStatuts;			
-	///! à free
 	pdBasisStatuts=(int *)malloc(sizeof(double)*LPvar->getSize());
 	for (int i=0;i<LPvar->getSize();i++)
 		///!
@@ -179,8 +184,7 @@ leads to: Get the pseudo cost of each variables in-base by calling the function 
 *******************************************************************************************************************************/
 void LinearProgram::LPGetPseudoCost()
 {
-	///!TODO
- cerr<<"Risk: LPGetPseudoCost() need to be reviewed before use, especially need to check mem leaks."<<endl;
+ ///cerr<<"Risk: LPGetPseudoCost() need to be reviewed before use, especially need to check mem leaks."<<endl;
  unsigned int i;
  pLPVarBase->clear();
  //IloCplex::BasisStatusArray cstat(*LPenv);
@@ -190,7 +194,9 @@ void LinearProgram::LPGetPseudoCost()
 		throw(1);
 	} 
 
- piLPIndiceBaseConcert=new int[LPvar->getSize()];
+ ///! Avoid mem leak
+ if(NULL==piLPIndiceBaseConcert)
+	piLPIndiceBaseConcert=new int[LPvar->getSize()];
  for (i=0;i < LPvar->getSize();i++) piLPIndiceBaseConcert[i]=-1;
   for (i=0;i < LPvar->getSize();i++)
 	///!
@@ -303,6 +309,7 @@ leads to: Get the pseudo cost of each variables in-base based on the Tomlin's pe
 *******************************************************************************************************************************/
 void LinearProgram::LPCalculateTomlin()
 {	
+	///! TODO need to be reviewed when using
 	int i,j,lrows=iLPnbRows;
 	double minra,qj;
 	if (lrows>LPvar->getSize()) lrows=LPvar->getSize();
@@ -344,7 +351,7 @@ leads to: Get the pseudo cost of each variables in-base by calling the function 
 *******************************************************************************************************************************/
 void LinearProgram::LPGetPseudoCostByCPX()
 {
-	cerr<<"Risk: LPGetPseudoCostByCPX() need to be reviewed before use, 'delete[]' can be only used on one var each time."<<endl;
+	///cerr<<"Risk: LPGetPseudoCostByCPX() need to be reviewed before use, 'delete[]' can be only used on one var each time."<<endl;
 	if(!bLPisSolved) 
 	{
 		cout<<"ERROR: the basis status cannot be returned as the problem as not been solved"<<endl;
@@ -395,7 +402,13 @@ void LinearProgram::LPGetPseudoCostByCPX()
 	pdLPujCPX=new double[cnt];
 	int cpxdb=CPXmdleave(cpxenv, cpxlp, piLPIndiceBase, cnt, pdLPljCPX, pdLPujCPX);
 	
-	delete [] x,pi,slack,dj,cstat,rstat;
+	///! Apply delete one by one
+	delete [] x;
+	delete [] pi;
+	delete [] slack;
+	delete [] dj;
+	delete [] cstat;
+	delete [] rstat;
 }
 
 void LinearProgram::LPGetVarResults(Variable *var) 
@@ -431,7 +444,7 @@ void LinearProgram::LPGetVarResults(Variable *var)
 			if (var[i].VARGetBasisStatus() == 1)
 			{
 				var[i].VARSetPseuCost((*pLPlj)[j],(*pLPuj)[j]);
-				///!!!
+				///! The following line had been omitted
 				j++;
 			}	
 			var[i].VARSetRedCost(LPcplex->getReducedCost((*LPvar)[i])); // Get the reduced cost by calling the function if Cplex

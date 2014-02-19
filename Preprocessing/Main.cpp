@@ -14,6 +14,7 @@
 
 #define DEBUG false
 #define DEBUG_MOD false
+#define ENABLE_CMD_PARAM false
 #define CONFIG true
 
 #define MemLimit 1024.0
@@ -33,7 +34,7 @@ IloModel model(env);
 IloRangeArray con(env);
 
 // Data structures for the LP and preprocessing
-IloNumVarArray var(env);	//It contains bool variables (x,y,z) à be preprocessed afterwards
+IloNumVarArray var(env);	//It contains bool variables (x,y,z) ?be preprocessed afterwards
 							//The order of elements are X(ijt),Y(ii'jj't), Z(jt). For each of the 3 parts, the up down hierarchical order is (t,i,j).
 IloFloatVarArray1D lp_Z(env);
 IloFloatVarArray2D lp_d(env);
@@ -44,6 +45,8 @@ int indX( int t, int i, int j){return t*N()*M()+i*M()+j;}
 int indY( int t, int i1, int i2, int j1, int j2){return T()*N()*M() + t*N()*N()*M()*M()+ i1*N()*M()*M() + i2*M()*M()+ j1*M() +j2 ;}
 int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
 
+//Mode de r¨¦solution
+enum SolveMode{PRE_MIP_ONLY, PRE_LP_ONLY, PRE_PRE};
 double dOptValue, dOptTime, dPreProcessingTime, dNbMach, dUB, dLB;
 int isOptimal, isFeasible,iNbNodesIP, isOptiNoPre, isAllFixed;
 int isTimeLimit=0, isMemLimit=0;
@@ -64,7 +67,7 @@ double CountPMsTurnedOn(IloCplex *pcplex)
 
 
 //Preprocess and solve
-void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
+void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
 {
 	double objValue, temps_cpu=0, temps_cpu_pre=0;
 	clock_t temp1,temp2,tempPre1,tempPre2;
@@ -78,7 +81,7 @@ void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, Il
 	pcplex->exportModel("model.lp");
 
 	// CASE 1: No preprocessing is required before solving the IP model
-	if(isMIPOnly)//Only for testing the correctness of LP model
+	if(sm==PRE_MIP_ONLY)//Only for testing the correctness of LP model
 	{ 
 		temp1 = clock();
 		// Step 1: give the LP relaxation to the library
@@ -119,7 +122,26 @@ void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, Il
 		outFile.close();
 		exit(0);
 	} // END CASE 1
-	else	// CASE 2: Preprocessing is requested before MIP is solved
+	else if(sm==PRE_LP_ONLY)
+	{
+		if (!(pcplex->solve()))							// The LP problem can't solve by cplex
+		{
+			if (pcplex->getCplexStatus()!=IloCplex::InfeasibleOrUnbounded	// The LP problem isn't infeasible or unbounded
+				&& pcplex->getCplexStatus()!=IloCplex::Infeasible			// The LP problem is feasible
+				&& pcplex->getCplexStatus()!=IloCplex::InfOrUnbd)			// The LP problem is bounded
+			{
+				cout<<"Failed to optimise model" <<endl;
+				throw(7);
+			} else 
+			{
+				cout<<"Failed to optimise model: it is either infeasible or unbounded" <<endl;
+				throw(8);
+			}
+		}
+		cout<<"SolOptLP = "<<pcplex->getObjValue()<<endl;
+		exit(0);
+	}
+	else	// CASE 3: Preprocessing is requested before MIP is solved
 	{ 
 		if(DEBUG)
 			pcplex->exportModel("model.lp");	
@@ -179,7 +201,7 @@ void PreByCalCost(bool isMIPOnly, int *head, int nbBool,int UB, IloEnv *penv, Il
 											// cout << "NbFix " << nbFix << " on " << nbBool << " variables" <<endl;
 											// // Step 5.1: convert the LP model into an IP model (real valued variables are turned into integer valued variables) 
 											// prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
-											// // Step 5.2: clear data structures of cplex
+											// // Step 5.2: clear data structures of cplex (basis)
 											// pcplex->extract(*pmodel);
 											// // Step 5.3: fix variables to the IP formulation, as deduced during the preprocessing phase (normally useless, since we convert reduced LP model)
 											// prepro->PREFixVarToMIP();
@@ -634,24 +656,22 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 //
 /* Programme Principal */
 //
-enum SolveMode{PRE_MIP_ONLY, PRE_PRE};
 int main(int argc, char* argvs[])
 {
-	//cout<<"argc="<<argc<<endl;
-	if(argc < 2){cerr<<"Fatal Error!! Need UB as param of program!"<<endl; abort();}
-	for(int i=0; i<argc; i++)
-		cout<<argvs[i]<<endl;
-	//int UB = 202776;argc=3;
 	int UB = 99999999;
-	UB = atoi(argvs[1]);
-	//time_t temp1,temp2,tempPre1,tempPre2;
+	if(ENABLE_CMD_PARAM)
+	{
+		if(argc < 2){cerr<<"Fatal Error!! Need UB as param of program!"<<endl; abort();}
+		for(int i=0; i<argc; i++)
+			cout<<argvs[i]<<endl;
+		UB = atoi(argvs[1]);
+		GetData();
+	}
+	else	
+		GetData("Donnees/donnees4_11.dat");
+
 	clock_t ticks0;
-	//FILE *fic;
-
-	SolveMode sm = PRE_PRE;
-
-	GetData();
-	//GetData("Donnees/donnees1_20.dat");
+	SolveMode sm = PRE_LP_ONLY;
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -694,9 +714,7 @@ int main(int argc, char* argvs[])
 				}
 			}
 			 
-			if(sm == PRE_MIP_ONLY)
-			PreByCalCost(true,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
-			else PreByCalCost(false,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
+			PreByCalCost(sm,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
 	}
 	catch (IloException& e) {

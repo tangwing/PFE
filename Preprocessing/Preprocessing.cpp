@@ -34,6 +34,11 @@ Preprocessing::Preprocessing()
 	bPREisDebug=true;
 	bPRETomDrie=false;
 	bPREhasHead=false;
+	///! init
+	ipPREhead=NULL;
+	PREcutsMIP=PREcutsLP=NULL;
+	pdPREFixedVariables=NULL;
+	PREvarInfo=NULL;
 }
 
 /*******************************************************************************************************************************
@@ -52,7 +57,6 @@ void Preprocessing::PREInitializeLP(IloEnv *penv, IloCplex *pcplex, IloModel *pm
 	PREenv=penv;
 	PREvar=pvar;
 	PRElp->LPInitialize(penv,pcplex,pmodel,pvar,pcon);
-	///!TODO not released?
 	PREcutsLP=new IloConstraintArray(*penv);
 	iPREnbVar=pvar->getSize();
 	iPREVarEnd=iPREnbVar;
@@ -87,7 +91,6 @@ void Preprocessing::PREInitializeMIP(IloEnv *penv, IloCplex *pcplex, IloModel *p
 {
 	PREenv=penv;
 	PREmip->MIPInitialize(penv,pcplex,pmodel,pvar,pcon);
-	///!TODO not released
 	PREcutsMIP=new IloConstraintArray(*penv);
 	iPREnbVar=pvar->getSize();
 	bPREisSet=true;
@@ -499,8 +502,6 @@ void Preprocessing::PREFixVar()
 						}
 					}
 				}	
-			  ///!TMP
-			  //if(iPREnbFix>tmp)break;
 			}
 		}
 		  if(bPREisDebug)
@@ -633,6 +634,7 @@ leads to: The array PREcutsLP is empty
 **************************************************************************************************************************************************/
 void Preprocessing::PREClearLPCuts() 
 {
+	///! Warning: possible mem leak.
 	PREcutsLP=new IloConstraintArray(*PREenv);
 }
 
@@ -679,6 +681,7 @@ leads to: The array PREcutsMIP is empty
 **************************************************************************************************************************************************/
 void Preprocessing::PREClearMIPCuts() 
 {
+	///! Warning: possible mem leak.
 	PREcutsMIP=new IloConstraintArray(*PREenv);
 }
 

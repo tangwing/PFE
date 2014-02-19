@@ -22,7 +22,6 @@ private:
 	bool bPREisSolved;				// A flag to note if the preprocessing has been applied or not
 	Variable *PREvarInfo;			// A pointer to the variable array
 
-	///!NotUsed
 	IloConstraintArray *PREcutsMIP;	// A pointer to the CPLEX cuts to be added to the MIP model 
 	IloConstraintArray *PREcutsLP;	// A pointer to the CPLEX cuts to be added to the LP model 
 
@@ -57,7 +56,15 @@ public:
 
 	// Methods related to the initialization of the models and the preprocessing objects
 	Preprocessing();			// Default constructor: before using the models, the method PREInitializeLP() and/or PREInitializeMIP() must be called
-	~Preprocessing(void) {delete PRElp; delete PREmip;delete [] PREvarInfo; delete [] pdPREFixedVariables;}	// Destructor
+	~Preprocessing(void) 
+	{
+		delete PRElp; delete PREmip;
+		///! delete
+		if(NULL!=PREvarInfo) delete [] PREvarInfo; 
+		if(NULL!=pdPREFixedVariables) delete [] pdPREFixedVariables;
+		if(NULL!=PREcutsMIP) delete PREcutsMIP;
+		if(NULL!=PREcutsLP) delete PREcutsLP;
+	}	// Destructor
 	/* This method enables to initialize the LP model */
 	void PREInitializeLP(IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon);
 	/* This method enables to initialize the MIP model */
