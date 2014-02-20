@@ -1,5 +1,5 @@
 ///
-///This class represents all result info of H1 ( heuristique de liste).
+///This class represents all result info of Preprocessing. Ex: Result about LP procedure and result about the amount of fixed variables
 ///
 #pragma once
 #ifndef PREPROCESSINGRESULT_H
@@ -12,11 +12,11 @@ public:
 	{
 		isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
 		value=durationCpuClock=durationPre=nbMachine=-1;
-		statusCode=nbNode=nbBool = nbFixed= lastIFixed = -1;
+		statusCode=nbNode=nbBool = nbFixed= errCodeLP = -1;
 	}
 	PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
 		int nbMach, int nbNod, int status, 
-		double v, double duree, double dureeCPU, int nbbool, int nbfixed, double ub, double lb, int lastI)
+		double v, double duree, double dureeCPU, int nbbool, int nbfixed, double ub, double lb, int errLP)
 	  :isOptiNoPre(isPre)
 	  ,isAllFixed(isInteg)
 	  ,isFeasible(isFea)
@@ -33,7 +33,7 @@ public:
 	  ,nbFixed(nbfixed)
 	  ,UB(ub)
 	  ,LB(lb)
-	  ,lastIFixed(lastI)
+	  ,errCodeLP(errLP)
 	{}
 
 	///@brief export the current result object to file
@@ -43,7 +43,7 @@ public:
 		fprintf(fic,"%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n%d\n%lf\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%d\n",
 			isOptiNoPre,isAllFixed,isFeasible, isOptimal,
 			value, durationPre, nbMachine, nbNode,durationCpuClock, 
-			statusCode, isTimeLimit, isMemLimit,nbBool,nbFixed, UB, LB, lastIFixed);
+			statusCode, isTimeLimit, isMemLimit,nbBool,nbFixed, UB, LB, errCodeLP);
 		fclose(fic);
 	}
 
@@ -67,13 +67,20 @@ public:
 		fscanf(fichier,"%d\n",&nbFixed);
 		fscanf(fichier,"%lf\n",&UB);
 		fscanf(fichier,"%lf\n",&LB);
-		fscanf(fichier,"%d\n",&lastIFixed);
+		fscanf(fichier,"%d\n",&errCodeLP);
 	    fclose(fichier);
 	}
 
 	//--------------Members--------------
+	int errCodeLP;
 	int isOptiNoPre;
 	int isAllFixed;
+	int nbBool;
+	int nbFixed;
+	double UB;
+	double LB;
+	double durationPre;
+	
 	int isFeasible;
 	int isOptimal;
 	int isTimeLimit;
@@ -82,13 +89,8 @@ public:
 	int nbNode; //the number of nodes processed so far in the active branch-and-cut search.
 	int statusCode;
 	double value;
-	double durationPre;
 	double durationCpuClock;
-	int nbBool;
-	int nbFixed;
-	double UB;
-	double LB;
-	int lastIFixed;
+	
 };
 
 #endif PREPROCESSINGRESULT_H

@@ -16,6 +16,7 @@
 #define DEBUG_MOD false
 #define ENABLE_CMD_PARAM false
 #define CONFIG true
+#define ADDCUTS_C1 true
 
 #define MemLimit 1024.0
 #define TimeLimit 1800.0
@@ -52,6 +53,8 @@ int isOptimal, isFeasible,iNbNodesIP, isOptiNoPre, isAllFixed;
 int isTimeLimit=0, isMemLimit=0;
 int iNbFixed = 0, nbBool=0;
 
+PreprocessingResult res;
+
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
 
 // This function counts the number of machines which are turned on, on the average, at any time t
@@ -78,7 +81,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 	prepro->PRESetDebug(DEBUG);
 	prepro->PRESetTomlin(false);
 	prepro->PRESetUB(UB);		// Fix the variables using the result of an heuristique algorithme Schrage as the UB
-	pcplex->exportModel("model.lp");
+	//pcplex->exportModel("model.lp");
 
 	// CASE 1: No preprocessing is required before solving the IP model
 	if(sm==PRE_MIP_ONLY)//Only for testing the correctness of LP model
@@ -151,18 +154,23 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		// Step 1: give the LP relaxation to the library
 		prepro->PREInitializeLP(penv, pcplex, pmodel, pvar, pcon);
 		// Step 2: solves the LP relaxation
-		prepro->PRESolveLP();
+		try{ prepro->PRESolveLP();}
+		catch(int err)
+		{
+			res.errCodeLP = err;
+			return;
+		}
 		// Step 3: preprocess by using the LP relaxation
 		prepro->PREPreprocessing();
-		
+
 		// Step 4: analyse the situation after preprocessing
+		tempPre2  = clock();
+		temps_cpu_pre = GetTimeByClockTicks(tempPre1,tempPre2);
 		isOptiNoPre = 0;
 		isAllFixed = 0;
-		nbFix += prepro->PREGetNbFix();
+		nbFix = prepro->PREGetNbFix();
 		if(prepro->PREIsOptiNoPRE() || nbFix == nbBool) // If no preprocessing (i.e. LB=UB before prepro)
 		{
-			tempPre2  = clock();
-			temps_cpu_pre+= GetTimeByClockTicks(tempPre1,tempPre2);
 			if(prepro->PREIsOptiNoPRE())
 			{
 				cout << "UB=LB!" << " " << UB << " " << prepro->PREGetLpOpt() << endl;
@@ -176,100 +184,28 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 				cout << "IS INTEGRAL!"<<endl;
 				isAllFixed = 1;
 				iNbFixed = nbFix;
-				dOptTime = temps_cpu;
-				dPreProcessingTime = temps_cpu_pre;
+				dOptTime = dPreProcessingTime = temps_cpu_pre;
+				dOptValue = prepro->PREGetLpOpt();
 			}
+			res.value = dOptValue;
 		}
 		dUB = prepro->PREGetUB();
 		dLB = prepro->PREGetLB();
-		PreprocessingResult res;
+		
+		//Recode preprocessing results
 		res.isOptiNoPre = isOptiNoPre;
 		res.isAllFixed = isAllFixed;
 		res.UB = dUB;
 		res.LB = dLB;
 		res.nbBool = nbBool;
 		res.nbFixed = nbFix;
-		//res.lastIFixed = prepro->PRELastFixedI;
-		res.durationPre = GetTimeByClockTicks(tempPre1, clock());
-		res.ExportToFile("Preproc.txt");
+		res.durationPre = temps_cpu_pre;
 		
-											//Pour le but de test de preprocessing, on va pas résoudre le MIP.
-											//else // Step 5: solve the reduced IP formulation
-											//{
-											// tempPre2=clock();
-											// temps_cpu_pre += GetTimeByClockTicks(tempPre1,tempPre2);
-											// cout << "NbFix " << nbFix << " on " << nbBool << " variables" <<endl;
-											// // Step 5.1: convert the LP model into an IP model (real valued variables are turned into integer valued variables) 
-											// prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
-											// // Step 5.2: clear data structures of cplex (basis)
-											// pcplex->extract(*pmodel);
-											// // Step 5.3: fix variables to the IP formulation, as deduced during the preprocessing phase (normally useless, since we convert reduced LP model)
-											// prepro->PREFixVarToMIP();
-											// // Step 5.4: solve the reduced IP formulation
-											// prepro->PRESolveMIP();
-
-											// // Step 5.5: retrieving information from the solution
-											// objValue=prepro->PREGetMipOpt();
-											// nbNodes = prepro->PREGetMIPNbNode();
-											// //opti = prepro->PREisMIPOpt();
-											// temps_cpu=temps_cpu_pre + GetTimeByClockTicks(tempPre2, clock());
-											// if(DEBUG)
-											//		cout << "--------------------------" << endl;
-											//}
-
-	    // Step 6: output the results
-		//ofstream outFile("PreMIP.txt");
-		//if (prepro->PREIsOptiNoPRE() && nbFix == 0)
-		//			outFile << "NO_PRE" << endl;
-		//	else
-		//			outFile << "PRE" << endl;
-		//if(prepro->PREisMIPOpt())
-		//	outFile << "OPTIMAL" << endl;
-		//else
-		//	outFile << "NOT_OPTIMAL" << endl;
-		////outFile << nbJobs << endl;
-		//outFile << objValue << endl;
-		//outFile << temps_cpu << endl; // CPU time for the whole solution process
-		//outFile << temps_cpu_pre << endl; // CPU time of the preprocessing
-		//outFile << nbNodes << endl;
-		//if (nbBool>0) // Percentage of fixed variables
-		//		outFile << 100.0*double(nbFix)/double(nbBool) << endl;
-		//	else 
-		//		outFile << 0 << endl;
-		//outFile.close();
-
-		//Step 7	
-		// We now test if the solution found is optimal or feasible
-		//printf("Cplex status: %ld\n",pcplex->getCplexStatus());
-		//fflush(stdout);
-		
-		//if(isOptiNoPre)
-		//{
-		//	//do nothing
-		//}
-		//else if (pcplex->getCplexStatus()==IloCplex::Optimal || pcplex->getCplexStatus()==IloCplex::OptimalTol)
-		//{
-		//	isOptimal=1;
-		//	isFeasible=1;
-		//	dOptValue=pcplex->getObjValue();
-		//	dNbMach=CountPMsTurnedOn(pcplex);
-		//} else if (pcplex->getCplexStatus()==IloCplex::Infeasible || pcplex->getCplexStatus()==IloCplex::InfeasibleOrUnbounded || pcplex->getCplexStatus()==IloCplex::InfOrUnbd)
-		//{
-		//	isOptimal=0;
-		//	isFeasible=0;
-		//	dOptValue=-1;
-		//} else 
-		//{
-		//	isOptimal=0;
-		//	isFeasible=1;
-		//	dOptValue=pcplex->getObjValue();
-		//	dNbMach=CountPMsTurnedOn(pcplex);
-		//} 
-	 //	iNbNodesIP=pcplex->getNnodes();
-		//dOptTime = temps_cpu;
-		//dPreProcessingTime = temps_cpu_pre;
-		//iNbFixed = nbFix;
-		//printf("\nValeur de la fonction objectif : %lf\n",(double)pcplex->getObjValue());
+		//Solve the reduced IP formulation
+		if(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0)///!TODO. we don't solve MIP if the preprocessing didn't work
+			return;
+		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
+		pcplex->extract(*pmodel);
 	}
 
 	// Delete the preprocessing object
@@ -279,8 +215,6 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 	catch(...) {
 		cerr << "Error while deleting prepro!" << endl;
 	}
-	//TODO
-	exit(0);
 }
 
 
@@ -626,7 +560,70 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 					 con.add(O>=-1*mt(iLoop2));
 					}
 
- 
+ if(ADDCUTS_C1)
+ {
+	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either with j needing more ressources.
+	 if (DEBUG_MOD) printf("[DEBUG] Declaration of Cut1: about ressources CPU/GPU/HDD/RAM \n");
+	 for (iLoop=0;iLoop<T();iLoop++)
+		for (iLoop3=0;iLoop3<M();iLoop3++)
+		  for (iLoop2=0;iLoop2<N();iLoop2++)
+			 for (iLoop4=0;iLoop4<N();iLoop4++)
+			 {
+				 //Test the pre-assaignment to reduce the amount of cuts, but is this necessary? Should we do the same thing in other contraints?
+				 if(q(iLoop2, iLoop3) == 1 && q(iLoop4, iLoop3) == 1)
+				 {
+					if (nc(iLoop4) >= nc(iLoop2))
+					{
+						IloExpr VI1_CPU(env);
+						for (iLoop5=0;iLoop5<N();iLoop5++)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+								VI1_CPU += (var[indX(iLoop,iLoop5,iLoop3)] * nc(iLoop5));
+						VI1_CPU += nc(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+						con.add(VI1_CPU <= mc(iLoop3));
+					}
+					if (ng(iLoop4) >= ng(iLoop2))
+					{
+						IloExpr VI1_GPU(env);
+						for (iLoop5=0;iLoop5<N();iLoop5++)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+								VI1_GPU += (var[indX(iLoop,iLoop5,iLoop3)] * ng(iLoop5));
+						VI1_GPU += ng(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+						con.add(VI1_GPU <= mg(iLoop3));
+					}
+					if (nh(iLoop4) >= nh(iLoop2))
+					{
+						IloExpr VI1_HDD(env);
+						for (iLoop5=0;iLoop5<N();iLoop5++)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							{
+								VI1_HDD += (var[indX(iLoop,iLoop5,iLoop3)] * nh(iLoop5));
+								//HDD used by migration
+								for (iLoop6=0;iLoop6<M();iLoop6++)
+									VI1_HDD += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nh(iLoop5));
+							}
+
+						VI1_HDD += nh(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+						con.add(VI1_HDD <= mh(iLoop3));
+					}
+					if (nr(iLoop4) >= nr(iLoop2))
+					{
+						IloExpr VI1_RAM(env);
+						for (iLoop5=0;iLoop5<N();iLoop5++)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							{
+								VI1_RAM += (var[indX(iLoop,iLoop5,iLoop3)] * nr(iLoop5));
+								//RAM used by migration
+								for (iLoop6=0;iLoop6<M();iLoop6++)
+									VI1_RAM += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nr(iLoop5));
+							}
+
+						VI1_RAM += nr(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+						con.add(VI1_RAM <= mr(iLoop3));
+					}
+
+				 }
+			 }
+ }
  // Definition of criterion RE
  if (DEBUG_MOD) printf("[DEBUG] Declaration of RE\n");
  IloExpr ExprRE(env);
@@ -671,7 +668,7 @@ int main(int argc, char* argvs[])
 		GetData("Donnees/donnees4_11.dat");
 
 	clock_t ticks0;
-	SolveMode sm = PRE_LP_ONLY;
+	SolveMode sm = PRE_PRE;
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -713,9 +710,42 @@ int main(int argc, char* argvs[])
 					nbBool++;
 				}
 			}
-			 
 			PreByCalCost(sm,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
+			if(!(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0))///!TODO. we don't solve MIP if the preprocessing didn't work
+			{
+				dNbMach=-1.0;
+				if (!cplex.solve())
+				{ // cplex fails to solve the problem
+					dOptValue=-1;
+					isOptimal=0;
+					isFeasible=0;
+				} else
+				{ // We now test if the solution found is optimal or feasible
+					printf("Cplex status: %ld\n",cplex.getCplexStatus());
+					fflush(stdout);
+					if (cplex.getCplexStatus()==IloCplex::Optimal || cplex.getCplexStatus()==IloCplex::OptimalTol)
+					{
+						isOptimal=1;
+						isFeasible=1;
+						dOptValue=cplex.getObjValue();
+						dNbMach=CountPMsTurnedOn(&cplex);
+					} else if (cplex.getCplexStatus()==IloCplex::Infeasible || cplex.getCplexStatus()==IloCplex::InfeasibleOrUnbounded || cplex.getCplexStatus()==IloCplex::InfOrUnbd)
+					{
+						isOptimal=0;
+						isFeasible=0;
+						dOptValue=-1;
+					} else 
+					{
+						isOptimal=0;
+						isFeasible=1;
+						dOptValue=cplex.getObjValue();
+						dNbMach=CountPMsTurnedOn(&cplex);
+					} 
+	 				iNbNodesIP=cplex.getNnodes();
+				}
+				//printf("\nValeur de la fonction objectif : %lf\n",(double)cplex.getObjValue());
+			}
 	}
 	catch (IloException& e) {
 		cerr << "Concert exception caught: " << e.getMessage() << endl;
@@ -745,7 +775,17 @@ int main(int argc, char* argvs[])
 	dOptTime = GetTimeByClockTicks( ticks0, clock());
 	printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\nPrecTime:%lf\niNbBool:%d\niNbFixed:%d\n",
 		isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach, dPreProcessingTime, nbBool, iNbFixed);
-
+	
+	res.isFeasible = isFeasible;
+	res.isOptimal = isOptimal;
+	res.isTimeLimit = isTimeLimit;
+	res.isMemLimit = isMemLimit;
+	res.nbMachine = dNbMach;
+	res.nbNode = iNbNodesIP;
+	res.durationCpuClock = dOptTime;
+	res.statusCode = cplex.getCplexStatus();
+	res.value = dOptValue;
+	res.ExportToFile("Preproc.txt");
 	if (DEBUG)
 		_getch();
 	return 0;
