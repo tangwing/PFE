@@ -7,9 +7,7 @@
 #include <cmath>
 #include <sstream>
 #include "RandGeneration.h"
-#include "H1Result.h"
 #include "PreprocessingResult.h"
-#include "CplexResult.h"
 #include "DataBis.h"
 
 #define DEBUG false
@@ -34,7 +32,7 @@ unsigned int iterations=20;
 //Dim4(Preprocessing for X only)
 double ScRes[4][20][8];
 char tmp[20];//For sprintf
-char *tmp2="xonly";//For sprintf
+//char *tmp2="xonly";//For sprintf
 int nbBoolX = 0, nbFixX = 0;
 
 double Round(double,int);
@@ -52,7 +50,7 @@ void main(void)
 	  for (j=0;j<iterations;j++)
 	  {
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
-	   
+	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
 	   if(pbIsSolOpt[i][j] == false)
 	   {
@@ -60,7 +58,6 @@ void main(void)
 		   continue;
 	   }
 
-	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   if (DEBUG)
 	   {
 		   //DisplayData();
@@ -92,7 +89,7 @@ void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
 	{
 		printHeader = false;
 		fRes = fopen("LogPreprocessing.csv","wt");
-		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal\n");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
 	}else
 	{
 		fRes = fopen("LogPreprocessing.csv","at");
@@ -103,12 +100,12 @@ void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
 		for(; j<20; j++)
 		{
 			if(i==iSce && j==jIter)break;
-			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
 		}
 	lastI = iSce;
 	lastJ = jIter;
 	//Log the current result
-	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf\n",
+	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
 		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
 		r.errCodeLP,
 		r.isOptiNoPre,
@@ -128,7 +125,12 @@ void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
 		r.nbNode,
 		r.statusCode,
 		r.value,
-		r.durationCpuClock );
+		r.durationCpuClock,
+		r.nbConCut1,
+		r.nbConCut2,
+		r.nbConCut3
+		);
+	fclose(fRes);
 }
 
 

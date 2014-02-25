@@ -14,15 +14,14 @@
 
 #define DEBUG false
 #define DEBUG_MOD false
-#define ENABLE_CMD_PARAM true
 #define CONFIG true
-bool ADDCUTS_C1 = false;
-bool ADDCUTS_C2 = false;
-bool ADDCUTS_C3 = false;
 
 #define MemLimit 1024.0
 #define TimeLimit 1800.0
 
+bool ADDCUTS_C1 = false;
+bool ADDCUTS_C2 = false;
+bool ADDCUTS_C3 = false;
 using namespace std;
 
 #include <ilcplex/ilocplex.h>
@@ -341,15 +340,15 @@ void InitializeLPModel()
  for (iLoop=0;iLoop<T();iLoop++)
 	 for (iLoop3=0;iLoop3<M();iLoop3++)
 	 {
-		IloExpr D(env);
-		for (iLoop2=0;iLoop2<N();iLoop2++)
-		{
-			D+=nr(iLoop2)*var[indX(iLoop,iLoop2,iLoop3)];
-			for (iLoop4=0;iLoop4<M();iLoop4++)
-				if (iLoop4!=iLoop3)
-					D+=nr(iLoop2)* var[indY(iLoop,iLoop2,iLoop2,iLoop4,iLoop3)];
-		}
-		con.add(D<=mr(iLoop3));
+		 IloExpr D(env);
+		 for (iLoop2=0;iLoop2<N();iLoop2++)
+		 {
+			 D+=nr(iLoop2)*var[indX(iLoop,iLoop2,iLoop3)];
+			 for (iLoop4=0;iLoop4<M();iLoop4++)
+				 if (iLoop4!=iLoop3)
+					 D+=nr(iLoop2)* var[indY(iLoop,iLoop2,iLoop2,iLoop4,iLoop3)];
+		 }
+		 con.add(D<=mr(iLoop3));
 	 }
  // Constraints defining the network use
  if (DEBUG_MOD) printf("[DEBUG] Declaration of constraints E\n");
@@ -571,63 +570,67 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  {
 	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either with j needing more ressources.
 	 printf("[Info] Declaration of Cut1: about ressources CPU/GPU/HDD/RAM \n");
+	 res.nbConCut1 = 0;
 	 for (iLoop=0;iLoop<T();iLoop++)
 		for (iLoop3=0;iLoop3<M();iLoop3++)
 		  for (iLoop2=0;iLoop2<N();iLoop2++)
-			 for (iLoop4=0;iLoop4<N();iLoop4++)
-			 {
+			 for (iLoop4=iLoop2+1 ;iLoop4<N();iLoop4++)
+			 {	 
 				 //Test the pre-assaignment to reduce the amount of cuts, but is this necessary? Should we do the same thing in other contraints?
 				 if(q(iLoop2, iLoop3) == 1 && q(iLoop4, iLoop3) == 1)
 				 {
+					res.nbConCut1 += 4;
+					//CPU
+					IloExpr VI1_CPU(env);
+					for (iLoop5=0;iLoop5<N();iLoop5++)
+						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							VI1_CPU += (var[indX(iLoop,iLoop5,iLoop3)] * nc(iLoop5));
 					if (nc(iLoop4) >= nc(iLoop2))
-					{
-						IloExpr VI1_CPU(env);
-						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
-								VI1_CPU += (var[indX(iLoop,iLoop5,iLoop3)] * nc(iLoop5));
 						VI1_CPU += nc(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_CPU <= mc(iLoop3));
-					}
-					if (ng(iLoop4) >= ng(iLoop2))
-					{
-						IloExpr VI1_GPU(env);
-						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
-								VI1_GPU += (var[indX(iLoop,iLoop5,iLoop3)] * ng(iLoop5));
+					else VI1_CPU += nc(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+					con.add(VI1_CPU <= mc(iLoop3));
+
+					//GPU
+					IloExpr VI1_GPU(env);
+					for (iLoop5=0;iLoop5<N();iLoop5++)
+						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							VI1_GPU += (var[indX(iLoop,iLoop5,iLoop3)] * ng(iLoop5));
+					if (ng(iLoop4) >= ng(iLoop2))	
 						VI1_GPU += ng(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_GPU <= mg(iLoop3));
-					}
-					if (nh(iLoop4) >= nh(iLoop2))
-					{
-						IloExpr VI1_HDD(env);
-						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
-							{
-								VI1_HDD += (var[indX(iLoop,iLoop5,iLoop3)] * nh(iLoop5));
-								//HDD used by migration
-								for (iLoop6=0;iLoop6<M();iLoop6++)
+					else VI1_GPU += ng(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+					con.add(VI1_GPU <= mg(iLoop3));
+					
+					//HDD
+					IloExpr VI1_HDD(env);
+					for (iLoop5=0;iLoop5<N();iLoop5++)
+						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+						{
+							VI1_HDD += (var[indX(iLoop,iLoop5,iLoop3)] * nh(iLoop5));
+							//HDD used by migration
+							for (iLoop6=0;iLoop6<M();iLoop6++)
+								if(iLoop6 != iLoop3)
 									VI1_HDD += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nh(iLoop5));
-							}
-
+						}
+					if (nh(iLoop4) >= nh(iLoop2))
 						VI1_HDD += nh(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_HDD <= mh(iLoop3));
-					}
-					if (nr(iLoop4) >= nr(iLoop2))
-					{
-						IloExpr VI1_RAM(env);
-						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
-							{
-								VI1_RAM += (var[indX(iLoop,iLoop5,iLoop3)] * nr(iLoop5));
-								//RAM used by migration
-								for (iLoop6=0;iLoop6<M();iLoop6++)
+					else	VI1_HDD += nh(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+					con.add(VI1_HDD <= mh(iLoop3));
+
+					//RAM
+					IloExpr VI1_RAM(env);
+					for (iLoop5=0;iLoop5<N();iLoop5++)
+						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+						{
+							VI1_RAM += (var[indX(iLoop,iLoop5,iLoop3)] * nr(iLoop5));
+							//RAM used by migration
+							for (iLoop6=0;iLoop6<M();iLoop6++)
+								if(iLoop6 != iLoop3)
 									VI1_RAM += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nr(iLoop5));
-							}
-
+						}
+					if (nr(iLoop4) >= nr(iLoop2))
 						VI1_RAM += nr(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_RAM <= mr(iLoop3));
-					}
-
+					else VI1_RAM += nr(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
+					con.add(VI1_RAM <= mr(iLoop3));
 				 }
 			 }
  }
@@ -656,7 +659,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 }
 
 
-
+#define ENABLE_CMD_PARAM true
 //
 /* Programme Principal */
 //
@@ -679,7 +682,7 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_11.dat");
+		GetData("Donnees/donnees3_17.dat");
 
 	clock_t ticks0;
 	SolveMode sm = PRE_PRE;
@@ -708,8 +711,8 @@ int main(int argc, char* argvs[])
 				head[nbBool]=var[i].getId();
 				nbBool++;
 			}
-			if(argc != 3) //argc==3 => preprocess X only
-			{
+			//if(argc != 3) //argc==3 => preprocess X only
+			//{
 				//Add all y into head
 				for(int i=T()*N()*M(); i<T()*N()*M()+T()*N()*N()*M()*M();i++)
 				{
@@ -722,7 +725,7 @@ int main(int argc, char* argvs[])
 					head[nbBool]=var[i].getId();
 					nbBool++;
 				}
-			}
+			//}
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
 			if( res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!

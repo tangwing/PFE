@@ -12,30 +12,30 @@ public:
 	{
 		isMIPExecuted = isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
 		UB = LB = value=durationCpuClock=durationPre=-1;
-		statusCode=nbNode=nbMachine=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
+		nbConCut1=nbConCut2=nbConCut3=statusCode=nbNode=nbMachine=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
 	}
-	PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
-		int nbMach, int nbNod, int status, 
-		double v, double duree, double dureeCPU, int nbbool,  int nbboole, int nbfixed, double ub, double lb, int errLP)
-	  :isOptiNoPre(isPre)
-	  ,isAllFixed(isInteg)
-	  ,isFeasible(isFea)
-	  ,isOptimal(isOpt)
-	  ,isTimeLimit(isTimLim)
-	  ,isMemLimit(isMemLim)
-	  ,nbMachine(nbMach)
-	  ,nbNode(nbNod)
-	  ,statusCode(status)
-	  ,value(v)
-	  ,durationPre(duree)
-	  ,durationCpuClock(dureeCPU)
-	  ,nbBool(nbbool)
-	  ,nbBoolExtractable(nbboole)
-	  ,nbFixed(nbfixed)
-	  ,UB(ub)
-	  ,LB(lb)
-	  ,errCodeLP(errLP)
-	{}
+	//PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
+	//	int nbMach, int nbNod, int status, 
+	//	double v, double duree, double dureeCPU, int nbbool,  int nbboole, int nbfixed, double ub, double lb, int errLP)
+	//  :isOptiNoPre(isPre)
+	//  ,isAllFixed(isInteg)
+	//  ,isFeasible(isFea)
+	//  ,isOptimal(isOpt)
+	//  ,isTimeLimit(isTimLim)
+	//  ,isMemLimit(isMemLim)
+	//  ,nbMachine(nbMach)
+	//  ,nbNode(nbNod)
+	//  ,statusCode(status)
+	//  ,value(v)
+	//  ,durationPre(duree)
+	//  ,durationCpuClock(dureeCPU)
+	//  ,nbBool(nbbool)
+	//  ,nbBoolExtractable(nbboole)
+	//  ,nbFixed(nbfixed)
+	//  ,UB(ub)
+	//  ,LB(lb)
+	//  ,errCodeLP(errLP)
+	//{}
 
 	///@brief export the current result object to file
 	void ExportToFile(const char* filename)
@@ -44,8 +44,8 @@ public:
 		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
 			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
 			
-		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n",
-			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock);
+		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n%d\n%d\n%d\n",
+			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock, nbConCut1,nbConCut2,nbConCut3);
 		fclose(fic);
 	}
 
@@ -73,7 +73,9 @@ public:
 		fscanf(fichier,"%d\n",&statusCode);
 	    fscanf(fichier,"%lf\n",&value);
 	    fscanf(fichier,"%lf\n",&durationCpuClock);
-		
+		fscanf(fichier,"%d\n", &nbConCut1);
+		fscanf(fichier,"%d\n", &nbConCut2);
+		fscanf(fichier,"%d\n", &nbConCut3);
 	    fclose(fichier);
 	}
 
@@ -101,6 +103,10 @@ public:
 	int statusCode;
 	double value;
 	double durationCpuClock;
+
+	int nbConCut1;
+	int nbConCut2;
+	int nbConCut3;
 	
 };
 
