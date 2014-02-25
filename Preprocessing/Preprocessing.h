@@ -115,6 +115,7 @@ public:
 		{if(PRElp->LPisSolved()) return PREvarInfo; else throw(1);}
 	void PREFixVarToMIP();			// Fix the variables deduced by the preprocessing in the MIP model
 									// Necessitate: the LP and the MIP model have the same variables declared in the same order
+	int PREGetTreatedVarCount();   // Get the number of bool vars treated, that means, the vars in the Head and can be extracted by Cplex
 
 private:
 	// Methods to manipulate the Mathematical models in the preprocessing phase (UNUSABLE BY THE USERS)

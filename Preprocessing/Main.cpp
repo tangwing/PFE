@@ -48,12 +48,12 @@ int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
 
 //Mode de r¨¦solution
 enum SolveMode{PRE_MIP_ONLY, PRE_LP_ONLY, PRE_PRE};
-double dOptValue, dOptTime, dPreProcessingTime, dNbMach, dUB, dLB;
-int isOptimal, isFeasible,iNbNodesIP, isOptiNoPre, isAllFixed;
-int isTimeLimit=0, isMemLimit=0;
-int iNbFixed = 0, nbBool=0;
+double dOptValue = -1, dOptTime = -1, dPreProcessingTime = -1, dNbMach = -1, dUB = -1, dLB = -1;
+int isOptimal = -1, isFeasible = -1,iNbNodesIP = -1, isOptiNoPre = -1, isAllFixed = -1;
+int isTimeLimit=-1, isMemLimit=-1;
+int iNbFixed = -1, nbBool=-1;
 
-PreprocessingResult res;
+PreprocessingResult res; //The final result which will be exported to file
 
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
 
@@ -72,7 +72,7 @@ double CountPMsTurnedOn(IloCplex *pcplex)
 //Preprocess and solve
 void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
 {
-	double objValue, temps_cpu=0, temps_cpu_pre=0;
+	double objValue=-1, temps_cpu=0, temps_cpu_pre=0;
 	clock_t temp1,temp2,tempPre1,tempPre2;
 	int nbFix = 0, nbNodes=0;
 
@@ -85,7 +85,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 
 	// CASE 1: No preprocessing is required before solving the IP model
 	if(sm==PRE_MIP_ONLY)//Only for testing the correctness of LP model
-	{ 
+	{
 		temp1 = clock();
 		// Step 1: give the LP relaxation to the library
 		prepro->PREInitializeLP(penv, pcplex, pmodel, pvar, pcon);
@@ -160,6 +160,9 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			res.errCodeLP = err;
 			return;
 		}
+		// If no exception occurs, the instance is feasible
+		isFeasible = 1;
+		
 		// Step 3: preprocess by using the LP relaxation
 		prepro->PREPreprocessing();
 
@@ -198,12 +201,11 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		res.UB = dUB;
 		res.LB = dLB;
 		res.nbBool = nbBool;
+		res.nbBoolExtractable = prepro->PREGetTreatedVarCount();
 		res.nbFixed = nbFix;
 		res.durationPre = temps_cpu_pre;
 		
-		//Solve the reduced IP formulation
-		if(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0)///!TODO. we don't solve MIP if the preprocessing didn't work
-			return;
+		//Init the reduced IP formulation
 		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
 		pcplex->extract(*pmodel);
 	}
@@ -684,7 +686,6 @@ int main(int argc, char* argvs[])
 		{
 			cplex.setParam(IloCplex::TreLim,MemLimit);// We limit the size of the search tree
 			cplex.setParam(IloCplex::TiLim,TimeLimit);// We limit the time for exploring of the search tree
-			//cplex.setParam(IloCplex::Threads,3);
 		}
 			//prepare preprocessing
 			nbBool=0;
@@ -710,9 +711,9 @@ int main(int argc, char* argvs[])
 					nbBool++;
 				}
 			}
-			PreByCalCost(sm,head,nbBool,UB, &env , &cplex , &model , &var , &con);	// See above
+			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
-			if(!(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0))///!TODO. we don't solve MIP if the preprocessing didn't work
+			if(!(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0))///!TODO. we don't solve MIP if the preprocessing didn't work!
 			{
 				dNbMach=-1.0;
 				if (!cplex.solve())
@@ -745,7 +746,7 @@ int main(int argc, char* argvs[])
 	 				iNbNodesIP=cplex.getNnodes();
 				}
 				//printf("\nValeur de la fonction objectif : %lf\n",(double)cplex.getObjValue());
-			}
+			}else res.isMIPExecuted = 0; // MIP not executed
 	}
 	catch (IloException& e) {
 		cerr << "Concert exception caught: " << e.getMessage() << endl;
@@ -773,8 +774,8 @@ int main(int argc, char* argvs[])
 	else if (cplex.getCplexStatus()== IloCplex::MemLimFeas) isMemLimit = 1;
 	
 	dOptTime = GetTimeByClockTicks( ticks0, clock());
-	printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\nPrecTime:%lf\niNbBool:%d\niNbFixed:%d\n",
-		isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach, dPreProcessingTime, nbBool, iNbFixed);
+	//printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\nPrecTime:%lf\niNbBool:%d\niNbFixed:%d\n",
+		//isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach, dPreProcessingTime, nbBool, iNbFixed);
 	
 	res.isFeasible = isFeasible;
 	res.isOptimal = isOptimal;

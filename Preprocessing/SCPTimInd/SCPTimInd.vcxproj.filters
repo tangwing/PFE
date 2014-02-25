@@ -53,5 +53,8 @@
     <ClInclude Include="..\PreprocessingResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\CplexResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

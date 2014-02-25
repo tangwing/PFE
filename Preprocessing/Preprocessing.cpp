@@ -208,6 +208,11 @@ void Preprocessing::PRESolveLP()
 	 dPRElpOpt=PRElp->LPGetOptValue();
 	 dPRELB=dPRElpOpt;
 	 PRElp->LPGetVarResults(PREvarInfo);	// Sets the costs, and values of the Variable array
+	 ///! Update pdPREFixedVariables because some vars are not extractable so they are not useful.
+	 for(int i=0; i< PREvar->getSize(); i++)
+		 if( pdPREFixedVariables[i]!=IloInfinity && PREvarInfo[i].VARGetValue() == -1 &&  PREvarInfo[i].VARGetBasisStatus()==-1)
+			 pdPREFixedVariables[i] = IloInfinity;
+
 	 if(bPREisDebug) cout<<"Solved!"<<endl;
  } else
  {
@@ -721,4 +726,22 @@ void Preprocessing::PREGenAllRedCostCut()
 			}
 		}
 	}
+}
+
+
+/*******************************************************************************************************************************
+Name: PREGetTreatedVarCount
+***************************************************************************************************************************************************
+Description: Get the number of bool vars treated, that means, the vars in the Head and can be extracted by Cplex
+***************************************************************************************************************************************************
+Input: Nothing
+Necessitates: The Preprocessing precedure is finished.
+Output: The number of bool vars treated
+leads to: Nothing
+**************************************************************************************************************************************************/
+int Preprocessing::PREGetTreatedVarCount()
+{
+	int count = 0;
+	for(int i=0; i<PREvar->getSize(); i++) if(pdPREFixedVariables[i] != IloInfinity) count++;
+	return count;
 }

@@ -108,6 +108,7 @@
     <ClCompile Include="..\Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\CplexResult.h" />
     <ClInclude Include="..\Data.h" />
     <ClInclude Include="..\LinearProgram.h" />
     <ClInclude Include="..\MixedIntegerProgram.h" />

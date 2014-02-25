@@ -10,13 +10,13 @@ class PreprocessingResult
 public:
 	PreprocessingResult()
 	{
-		isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
-		value=durationCpuClock=durationPre=nbMachine=-1;
-		statusCode=nbNode=nbBool = nbFixed= errCodeLP = -1;
+		isMIPExecuted = isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
+		UB = LB = value=durationCpuClock=durationPre=-1;
+		statusCode=nbNode=nbMachine=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
 	}
 	PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
 		int nbMach, int nbNod, int status, 
-		double v, double duree, double dureeCPU, int nbbool, int nbfixed, double ub, double lb, int errLP)
+		double v, double duree, double dureeCPU, int nbbool,  int nbboole, int nbfixed, double ub, double lb, int errLP)
 	  :isOptiNoPre(isPre)
 	  ,isAllFixed(isInteg)
 	  ,isFeasible(isFea)
@@ -30,6 +30,7 @@ public:
 	  ,durationPre(duree)
 	  ,durationCpuClock(dureeCPU)
 	  ,nbBool(nbbool)
+	  ,nbBoolExtractable(nbboole)
 	  ,nbFixed(nbfixed)
 	  ,UB(ub)
 	  ,LB(lb)
@@ -40,10 +41,11 @@ public:
 	void ExportToFile(const char* filename)
 	{
 		FILE * fic=fopen(filename,"wt");
-		fprintf(fic,"%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n%d\n%lf\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%d\n",
-			isOptiNoPre,isAllFixed,isFeasible, isOptimal,
-			value, durationPre, nbMachine, nbNode,durationCpuClock, 
-			statusCode, isTimeLimit, isMemLimit,nbBool,nbFixed, UB, LB, errCodeLP);
+		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
+			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
+			
+		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n",
+			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock);
 		fclose(fic);
 	}
 
@@ -51,36 +53,45 @@ public:
 	void ImportFromFile(const char* filename)
 	{
 		FILE * fichier=fopen(filename,"rt");
+		fscanf(fichier,"%d\n",&errCodeLP);
 		fscanf(fichier,"%d\n",&isOptiNoPre);
 		fscanf(fichier,"%d\n",&isAllFixed);
-		fscanf(fichier,"%d\n",&isFeasible);
-		fscanf(fichier,"%d\n",&isOptimal);
-	    fscanf(fichier,"%lf\n",&value);
-	    fscanf(fichier,"%lf\n",&durationPre);
-	    fscanf(fichier,"%lf\n",&nbMachine);
-	    fscanf(fichier,"%d\n",&nbNode);
-	    fscanf(fichier,"%lf\n",&durationCpuClock);
-		fscanf(fichier,"%d\n",&statusCode);
-		fscanf(fichier,"%d\n",&isTimeLimit);
-		fscanf(fichier,"%d\n",&isMemLimit);
 		fscanf(fichier,"%d\n",&nbBool);
+		fscanf(fichier,"%d\n",&nbBoolExtractable);
 		fscanf(fichier,"%d\n",&nbFixed);
 		fscanf(fichier,"%lf\n",&UB);
 		fscanf(fichier,"%lf\n",&LB);
-		fscanf(fichier,"%d\n",&errCodeLP);
+	    fscanf(fichier,"%lf\n",&durationPre);
+
+		fscanf(fichier,"%d\n",&isMIPExecuted);
+		fscanf(fichier,"%d\n",&isFeasible);
+		fscanf(fichier,"%d\n",&isOptimal);
+		fscanf(fichier,"%d\n",&isTimeLimit);
+		fscanf(fichier,"%d\n",&isMemLimit);
+	    fscanf(fichier,"%lf\n",&nbMachine);
+	    fscanf(fichier,"%d\n",&nbNode);
+		fscanf(fichier,"%d\n",&statusCode);
+	    fscanf(fichier,"%lf\n",&value);
+	    fscanf(fichier,"%lf\n",&durationCpuClock);
+		
 	    fclose(fichier);
 	}
 
 	//--------------Members--------------
-	int errCodeLP;
+	// Preprocessing/LP part
+	int errCodeLP;		//LP exception
 	int isOptiNoPre;
 	int isAllFixed;
 	int nbBool;
+	int nbBoolExtractable;
 	int nbFixed;
 	double UB;
 	double LB;
 	double durationPre;
 	
+	// MIP part: 
+	//If errCodeLP!=-1 ou isOptiNoPre==1 ou isAllFixed==1 ou nbFixed==0, the MIP won't be executed!!
+	int isMIPExecuted;
 	int isFeasible;
 	int isOptimal;
 	int isTimeLimit;
