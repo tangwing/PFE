@@ -14,9 +14,11 @@
 
 #define DEBUG false
 #define DEBUG_MOD false
-#define ENABLE_CMD_PARAM false
+#define ENABLE_CMD_PARAM true
 #define CONFIG true
-#define ADDCUTS_C1 true
+bool ADDCUTS_C1 = false;
+bool ADDCUTS_C2 = false;
+bool ADDCUTS_C3 = false;
 
 #define MemLimit 1024.0
 #define TimeLimit 1800.0
@@ -161,7 +163,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			return;
 		}
 		// If no exception occurs, the instance is feasible
-		isFeasible = 1;
+		//isFeasible = 1;
 		
 		// Step 3: preprocess by using the LP relaxation
 		prepro->PREPreprocessing();
@@ -171,8 +173,9 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		temps_cpu_pre = GetTimeByClockTicks(tempPre1,tempPre2);
 		isOptiNoPre = 0;
 		isAllFixed = 0;
+		int nbBoolExtractable = prepro->PREGetTreatedVarCount();
 		nbFix = prepro->PREGetNbFix();
-		if(prepro->PREIsOptiNoPRE() || nbFix == nbBool) // If no preprocessing (i.e. LB=UB before prepro)
+		if(prepro->PREIsOptiNoPRE() || nbFix == nbBoolExtractable) // If no preprocessing (i.e. LB=UB before prepro)
 		{
 			if(prepro->PREIsOptiNoPRE())
 			{
@@ -182,7 +185,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 				dOptValue = UB;
 				dOptTime = dPreProcessingTime = temps_cpu_pre;
 			}
-			else if(nbFix == nbBool)
+			else if(nbFix == nbBoolExtractable)
 			{
 				cout << "IS INTEGRAL!"<<endl;
 				isAllFixed = 1;
@@ -190,6 +193,8 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 				dOptTime = dPreProcessingTime = temps_cpu_pre;
 				dOptValue = prepro->PREGetLpOpt();
 			}
+			res.isFeasible = 1;
+			res.isOptimal = 1;
 			res.value = dOptValue;
 		}
 		dUB = prepro->PREGetUB();
@@ -201,7 +206,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		res.UB = dUB;
 		res.LB = dLB;
 		res.nbBool = nbBool;
-		res.nbBoolExtractable = prepro->PREGetTreatedVarCount();
+		res.nbBoolExtractable = nbBoolExtractable;
 		res.nbFixed = nbFix;
 		res.durationPre = temps_cpu_pre;
 		
@@ -565,7 +570,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  if(ADDCUTS_C1)
  {
 	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either with j needing more ressources.
-	 if (DEBUG_MOD) printf("[DEBUG] Declaration of Cut1: about ressources CPU/GPU/HDD/RAM \n");
+	 printf("[Info] Declaration of Cut1: about ressources CPU/GPU/HDD/RAM \n");
 	 for (iLoop=0;iLoop<T();iLoop++)
 		for (iLoop3=0;iLoop3<M();iLoop3++)
 		  for (iLoop2=0;iLoop2<N();iLoop2++)
@@ -660,10 +665,17 @@ int main(int argc, char* argvs[])
 	int UB = 99999999;
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Fatal Error!! Need UB as param of program!"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 3->addCut1&2. Mind the order.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
+		if(argc==3) //Add Cuts
+		{
+			int flag = atoi(argvs[2]);
+			ADDCUTS_C1 = flag % 2;
+			ADDCUTS_C2 = (flag >> 1)%2;
+			ADDCUTS_C3 = (flag >> 2)%2;
+		}
 		GetData();
 	}
 	else	
@@ -713,8 +725,11 @@ int main(int argc, char* argvs[])
 			}
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
-			if(!(res.isOptiNoPre || res.isAllFixed || res.nbFixed==0))///!TODO. we don't solve MIP if the preprocessing didn't work!
+			if( res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
+				res.isMIPExecuted = 0; // MIP not executed
+			else
 			{
+				res.isMIPExecuted = 1;
 				dNbMach=-1.0;
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
@@ -746,7 +761,7 @@ int main(int argc, char* argvs[])
 	 				iNbNodesIP=cplex.getNnodes();
 				}
 				//printf("\nValeur de la fonction objectif : %lf\n",(double)cplex.getObjValue());
-			}else res.isMIPExecuted = 0; // MIP not executed
+			}
 	}
 	catch (IloException& e) {
 		cerr << "Concert exception caught: " << e.getMessage() << endl;
@@ -767,22 +782,25 @@ int main(int argc, char* argvs[])
 		isFeasible=0;
 		//getch();
 	}
-	//We put the test of limit here because an cplex exception can also be caused by Limit.
-	//in which case there is no solution found but the status code is set. We count this case
-	//in #TimLim or #MemLim but not in #inFea.
-	if (cplex.getCplexStatus()== IloCplex::AbortTimeLim) isTimeLimit = 1;
-	else if (cplex.getCplexStatus()== IloCplex::MemLimFeas) isMemLimit = 1;
-	
+
 	dOptTime = GetTimeByClockTicks( ticks0, clock());
 	//printf("isFeasible:%d\nisOptimal:%d\nisTimeLim:%d\nisMemLim:%d\ndOptValue:%d\ndOptTime:%lf\niNbNodesIP:%d\ndNbMach:%lf\nPrecTime:%lf\niNbBool:%d\niNbFixed:%d\n",
 		//isFeasible,isOptimal,isTimeLimit, isMemLimit,(int)dOptValue,dOptTime,iNbNodesIP,dNbMach, dPreProcessingTime, nbBool, iNbFixed);
-	
-	res.isFeasible = isFeasible;
-	res.isOptimal = isOptimal;
-	res.isTimeLimit = isTimeLimit;
-	res.isMemLimit = isMemLimit;
-	res.nbMachine = dNbMach;
-	res.nbNode = iNbNodesIP;
+		
+	if(res.isMIPExecuted)
+	{
+		//We put the test of limit here because an cplex exception can also be caused by Limit.
+		//in which case there is no solution found but the status code is set. We count this case
+		//in #TimLim or #MemLim but not in #inFea.
+		if (cplex.getCplexStatus()== IloCplex::AbortTimeLim) isTimeLimit = 1;
+		else if (cplex.getCplexStatus()== IloCplex::MemLimFeas) isMemLimit = 1;
+		res.isFeasible = isFeasible;
+		res.isOptimal = isOptimal;
+		res.isTimeLimit = isTimeLimit;
+		res.isMemLimit = isMemLimit;
+		res.nbMachine = dNbMach;
+		res.nbNode = iNbNodesIP;
+	}
 	res.durationCpuClock = dOptTime;
 	res.statusCode = cplex.getCplexStatus();
 	res.value = dOptValue;

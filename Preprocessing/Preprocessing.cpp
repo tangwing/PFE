@@ -157,7 +157,7 @@ void Preprocessing::PREFixVarToLP()
 		{
 			PRElp->LPAddFix(i,pdPREFixedVariables[i]);
 			if(bPREisDebug) 
-				//cout<<"I have fixed the var "<<(*PREvar)[i].getName()<<" to "<<pdPREFixedVariables[i]<<" !"<<endl;
+				cout<<"I have fixed the var "<<(*PREvar)[i].getName()<<" to "<<pdPREFixedVariables[i]<<" !"<<endl;
 			iPREnbFix++;
 		}
 	}
@@ -183,7 +183,7 @@ void Preprocessing::PREFixVarToMIP()
 		{
 			PREmip->MIPAddFix(i,pdPREFixedVariables[i]);
 			if(bPREisDebug) 
-				//cout<<"I have fixed the var "<<i<<" to "<<pdPREFixedVariables[i]<<"!"<<endl;
+				cout<<"I have fixed the var "<<i<<" to "<<pdPREFixedVariables[i]<<"!"<<endl;
 			iPREnbFix++;
 		}
 	}
