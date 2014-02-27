@@ -96,7 +96,7 @@ void DisplayData(void)
 	
 	for (iTask=0;iTask<N();iTask++)
 		printf("\t\t Task %d : QtyCPU=%ld, QtyGPU=%ld, QtyRAM=%ld, QtyHDD=%ld, isPreemp=%ld, CostPreemp=%ld.\n",iTask,nc(iTask),ng(iTask),nr(iTask),nh(iTask),R(iTask),rho(iTask));
-
+	
 	_getch();
 
 }
