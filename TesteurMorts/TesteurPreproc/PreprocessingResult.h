@@ -12,11 +12,11 @@ public:
 	{
 		isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
 		value=durationCpuClock=durationPre=nbMachine=-1;
-		statusCode=nbNode=nbBool = nbFixed= lastIFixed = -1;
+		statusCode=nbNode=nbBool = nbFixed= nbXFixed = -1;
 	}
 	PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
 		int nbMach, int nbNod, int status, 
-		double v, double duree, double dureeCPU, int nbbool, int nbfixed, double ub, double lb, int lastI)
+		double v, double duree, double dureeCPU, int nbbool, int nbfixed, double ub, double lb, int nbxfixed)
 	  :isOptiNoPre(isPre)
 	  ,isAllFixed(isInteg)
 	  ,isFeasible(isFea)
@@ -33,7 +33,7 @@ public:
 	  ,nbFixed(nbfixed)
 	  ,UB(ub)
 	  ,LB(lb)
-	  ,lastIFixed(lastI)
+	  ,nbXFixed(nbxfixed)
 	{}
 
 	///@brief export the current result object to file
@@ -43,7 +43,7 @@ public:
 		fprintf(fic,"%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n%d\n%lf\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%d\n",
 			isOptiNoPre,isAllFixed,isFeasible, isOptimal,
 			value, durationPre, nbMachine, nbNode,durationCpuClock, 
-			statusCode, isTimeLimit, isMemLimit,nbBool,nbFixed, UB, LB, lastIFixed);
+			statusCode, isTimeLimit, isMemLimit,nbBool,nbFixed, UB, LB, nbXFixed);
 		fclose(fic);
 	}
 
@@ -67,7 +67,7 @@ public:
 		fscanf(fichier,"%d\n",&nbFixed);
 		fscanf(fichier,"%lf\n",&UB);
 		fscanf(fichier,"%lf\n",&LB);
-		fscanf(fichier,"%d\n",&lastIFixed);
+		fscanf(fichier,"%d\n",&nbXFixed);
 	    fclose(fichier);
 	}
 
@@ -88,7 +88,7 @@ public:
 	int nbFixed;
 	double UB;
 	double LB;
-	int lastIFixed;
+	int nbXFixed;
 };
 
 #endif PREPROCESSINGRESULT_H
