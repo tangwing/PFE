@@ -49,6 +49,17 @@ public:
 		fclose(fic);
 	}
 
+	void Test()
+	{
+		ImportFromFile("PreProc.txt");
+		printf("%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
+			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
+			
+		printf("%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n%d\n%d\n%d\n",
+			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock, nbConCut1,nbConCut2,nbConCut3);
+		
+	}
+
 	///@brief import from file
 	void ImportFromFile(const char* filename)
 	{

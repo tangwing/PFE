@@ -12,7 +12,7 @@
 #include "CplexResult.h"
 #include "PreprocessingResult.h"
 
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -568,7 +568,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 
  if(ADDCUTS_C1)
  {
-	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either with j needing more ressources.
+	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either, with j needing more ressources.
 	 printf("[Info] Declaration of Cut1: about ressources CPU/GPU/HDD/RAM \n");
 	 res.nbConCut1 = 0;
 	 for (iLoop=0;iLoop<T();iLoop++)
@@ -581,7 +581,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 				 {
 					res.nbConCut1 += 4;
 					//CPU
-					IloExpr VI1_CPU(env);
+/*			*/		IloExpr VI1_CPU(env);
 					for (iLoop5=0;iLoop5<N();iLoop5++)
 						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
 							VI1_CPU += (var[indX(iLoop,iLoop5,iLoop3)] * nc(iLoop5));
@@ -599,8 +599,8 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						VI1_GPU += ng(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 					else VI1_GPU += ng(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 					con.add(VI1_GPU <= mg(iLoop3));
-					
-					//HDD
+						
+		/*			//HDD
 					IloExpr VI1_HDD(env);
 					for (iLoop5=0;iLoop5<N();iLoop5++)
 						if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
@@ -630,7 +630,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 					if (nr(iLoop4) >= nr(iLoop2))
 						VI1_RAM += nr(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 					else VI1_RAM += nr(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-					con.add(VI1_RAM <= mr(iLoop3));
+					con.add(VI1_RAM <= mr(iLoop3));*/
 				 }
 			 }
  }
@@ -659,13 +659,15 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 }
 
 
-#define ENABLE_CMD_PARAM true
+#define ENABLE_CMD_PARAM false
 //
 /* Programme Principal */
 //
 int main(int argc, char* argvs[])
 {
 	int UB = 99999999;
+	UB = 515201;
+	UB = 465172;
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 3->addCut1&2. Mind the order.\n"<<endl; abort();}
@@ -682,8 +684,8 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees3_17.dat");
-
+		GetData("Donnees/donnees1_12.dat");
+	ADDCUTS_C1=true;
 	clock_t ticks0;
 	SolveMode sm = PRE_PRE;
 	if (DEBUG) DisplayData();
@@ -808,6 +810,7 @@ int main(int argc, char* argvs[])
 	res.statusCode = cplex.getCplexStatus();
 	res.value = dOptValue;
 	res.ExportToFile("Preproc.txt");
+	res.Test();
 	if (DEBUG)
 		_getch();
 	return 0;
