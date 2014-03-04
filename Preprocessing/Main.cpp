@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 #include <stdio.h>
 #include <math.h>
 #include <ctime>
@@ -46,6 +48,12 @@ IloFloatVar lp_RE(env,0,9999999);
 int indX( int t, int i, int j){return t*N()*M()+i*M()+j;}
 int indY( int t, int i1, int i2, int j1, int j2){return T()*N()*M() + t*N()*N()*M()*M()+ i1*N()*M()*M() + i2*M()*M()+ j1*M() +j2 ;}
 int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
+
+// Functions to access sorted tasks. Used by 1-cut
+unsigned int ncSortedInd(unsigned int i);
+unsigned int ngSortedInd(unsigned int i);
+unsigned int nrSortedInd(unsigned int i);
+unsigned int nhSortedInd(unsigned int i);
 
 //Mode de r¨¦solution
 enum SolveMode{PRE_MIP_ONLY, PRE_LP_ONLY, PRE_PRE};
@@ -312,6 +320,7 @@ void InitializeLPModel()
 		for (iLoop2=0;iLoop2<N();iLoop2++) 
 			A+=nc(iLoop2)*var[ indX(iLoop,iLoop2,iLoop3)];
 		con.add(A<=mc(iLoop3));
+
 	 }
  if (DEBUG_MOD) printf("[DEBUG] Declaration of constraints B\n");
  for (iLoop=0;iLoop<T();iLoop++)
@@ -638,6 +647,71 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 				 }
 				printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
  }
+
+ 
+if(ADDCUTS_C2)
+{
+	 printf("[Info] Declaration of Cut2: 1-Cut \n");
+	 res.nbConCut2=0 ;
+	 for (iLoop=0;iLoop<T();iLoop++)
+		 for (iLoop3=0;iLoop3<M();iLoop3++)
+		 {
+			 //A
+			 {
+				unsigned int s = nc(ncSortedInd(0));
+				unsigned int i=0, j=1, l;
+				int k=1;
+				while(j<N()-1)
+				{
+					s+= nc(ncSortedInd(j));
+					l=j+1;
+					if(s>mc(iLoop3))
+					{
+						while( l<N() && (s- nc(ncSortedInd(i)) + nc(ncSortedInd(l)))>mc(iLoop3) )
+						{
+							s = s- nc(ncSortedInd(i)) + nc(ncSortedInd(l));
+							i++; l++;
+						}
+						IloExpr C2(env);
+						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
+							C2 += var[ indX(iLoop, ncSortedInd(iLoopCon), iLoop3)];
+						con.add(C2 <= k);
+						res.nbConCut2++;
+						j=l;
+					}else j++;
+					k++;
+				}
+			 }
+			//B
+			{
+				unsigned int s = ng(ncSortedInd(0));
+				unsigned int i=0, j=1, l;
+				int k=1;
+				while(j<N()-1)
+				{
+					s+= ng(ngSortedInd(j));
+					l=j+1;
+					if(s>mg(iLoop3))
+					{
+						while( l<N() && (s- ng(ngSortedInd(i)) + ng(ngSortedInd(l)))>mg(iLoop3) )
+						{
+							s = s- ng(ngSortedInd(i)) + ng(ngSortedInd(l));
+							i++; l++;
+						}
+						IloExpr C2(env);
+						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
+							C2 += var[ indX(iLoop, ngSortedInd(iLoopCon), iLoop3)];
+						con.add(C2 <= k);
+						res.nbConCut2++;
+						j=l;
+					}else j++;
+					k++;
+				}
+			}
+			
+		 }
+		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
+}
  // Definition of criterion RE
  if (DEBUG_MOD) printf("[DEBUG] Declaration of RE\n");
  IloExpr ExprRE(env);
@@ -662,6 +736,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  }
 }
 
+void SomeTest();
 
 #define ENABLE_CMD_PARAM false
 //
@@ -690,12 +765,13 @@ int main(int argc, char* argvs[])
 	else	
 		GetData("Donnees/donnees1_2.dat");
 
-	printf("M1h:%d; M2h:%d\n", mh(0), mh(1));
-	ADDCUTS_C1=true;
+	//ADDCUTS_C1=true;
+	//ADDCUTS_C2=true;
+
 	clock_t ticks0;
 	SolveMode sm = PRE_PRE;
 	if (DEBUG) DisplayData();
-
+	//SomeTest();
 	ticks0 = clock();
 	
 	IloCplex cplex;
@@ -787,6 +863,7 @@ int main(int argc, char* argvs[])
 	}
 	catch (...)
 	{
+		throw;
 		cerr << "Unknown exception caught"  << endl;
 		dOptValue=9999999.0;
 		isOptimal=0;
@@ -820,4 +897,56 @@ int main(int argc, char* argvs[])
 	if (DEBUG)
 		_getch();
 	return 0;
+}
+
+
+//Sort coefficiants and return index for use in 1-Cut
+unsigned int ncSortedInd(unsigned int i)
+{
+	static vector<int> ind;
+	if(ind.size()>0)return ind[i];
+	
+	//init and sort for the first time
+	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
+	struct{bool operator()(int a, int b) { return nc(a)>nc(b); }} op;
+	sort(ind.begin(), ind.end(), op);
+	return ind[i];
+}
+unsigned int ngSortedInd(unsigned int i)
+{
+	static vector<int> ind;
+	if(ind.size()>0)return ind[i];
+	
+	//init and sort for the first time
+	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
+	struct{bool operator()(int a, int b) { return ng(a)>ng(b); }} op;
+	sort(ind.begin(), ind.end(), op);
+	return ind[i];
+}
+unsigned int nrSortedInd(unsigned int i)
+{
+	static vector<int> ind;
+	if(ind.size()>0)return ind[i];
+	
+	//init and sort for the first time
+	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
+	struct{bool operator()(int a, int b) { return nr(a)>nr(b); }} op;
+	sort(ind.begin(), ind.end(), op);
+	return ind[i];
+}
+unsigned int nhSortedInd(unsigned int i)
+{
+	static vector<int> ind;
+	if(ind.size()>0)return ind[i];
+	
+	//init and sort for the first time
+	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
+	struct{bool operator()(int a, int b) { return nh(a)>nh(b); }} op;
+	sort(ind.begin(), ind.end(), op);
+	return ind[i];
+}
+void SomeTest()
+{
+	cout<<"[Temporary test:]"<<endl;
+	for(int i=0; i<N(); i++)cout<<ncSortedInd(i)<<endl;
 }
