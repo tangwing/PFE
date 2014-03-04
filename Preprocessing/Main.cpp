@@ -13,7 +13,7 @@
 #include "PreprocessingResult.h"
 
 #define DEBUG true
-#define DEBUG_MOD false
+#define DEBUG_MOD true
 #define CONFIG true
 
 #define MemLimit 1024.0
@@ -164,6 +164,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		// If no exception occurs, the instance is feasible
 		//isFeasible = 1;
 		
+		//getchar();
 		// Step 3: preprocess by using the LP relaxation
 		prepro->PREPreprocessing();
 
@@ -603,13 +604,13 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						//HDD
 						IloExpr VI1_HDD(env);
 						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4 && q(iLoop5, iLoop3)==1)
 							{
-								if(u(iLoop5, iLoop)==1 && q(iLoop5, iLoop3)==1)
+								if(u(iLoop5, iLoop)==1)
 									VI1_HDD += (var[indX(iLoop,iLoop5,iLoop3)] * nh(iLoop5));
 								//HDD used by migration
 								for (iLoop6=0;iLoop6<M();iLoop6++)
-									if(iLoop6 != iLoop3)
+									if(iLoop6 != iLoop3 && q(iLoop5, iLoop6)==1)
 										VI1_HDD += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nh(iLoop5));
 							}
 						if (nh(iLoop4) >= nh(iLoop2))
@@ -620,13 +621,13 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						//RAM
 						IloExpr VI1_RAM(env);
 						for (iLoop5=0;iLoop5<N();iLoop5++)
-							if(iLoop5!=iLoop2 && iLoop5!=iLoop4)
+							if(iLoop5!=iLoop2 && iLoop5!=iLoop4 && q(iLoop5, iLoop3)==1)
 							{
-								if(u(iLoop5, iLoop)==1 && q(iLoop5, iLoop3)==1)
+								if(u(iLoop5, iLoop)==1)
 									VI1_RAM += (var[indX(iLoop,iLoop5,iLoop3)] * nr(iLoop5));
 								//RAM used by migration
 								for (iLoop6=0;iLoop6<M();iLoop6++)
-									if(iLoop6 != iLoop3)
+									if(iLoop6 != iLoop3 && q(iLoop5, iLoop6)==1)
 										VI1_RAM += (var[indY(iLoop,iLoop5,iLoop5,iLoop6,iLoop3)] * nr(iLoop5));
 							}
 						if (nr(iLoop4) >= nr(iLoop2))
@@ -635,7 +636,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						con.add(VI1_RAM <= mr(iLoop3));
 					 }
 				 }
-	printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
+				printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
  }
  // Definition of criterion RE
  if (DEBUG_MOD) printf("[DEBUG] Declaration of RE\n");
