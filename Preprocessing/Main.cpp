@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <utility>
 #include <algorithm>
 #include <stdio.h>
 #include <math.h>
@@ -58,12 +59,8 @@ int indX( int t, int i, int j){return t*N()*M()+i*M()+j;}
 int indY( int t, int i1, int i2, int j1, int j2){return T()*N()*M() + t*N()*N()*M()*M()+ i1*N()*M()*M() + i2*M()*M()+ j1*M() +j2 ;}
 int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
 
-// Functions to access sorted tasks. Used by 1-cut
-unsigned int ncSortedInd(unsigned int i);
-unsigned int ngSortedInd(unsigned int i);
-unsigned int nrSortedInd(unsigned int i);
-unsigned int nhSortedInd(unsigned int i);
-
+typedef pair<short int, IloNumVar> Term;
+int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int right);
 void ConstructCut1();
 void ConstructCut2();
 void ConstructCut3();
@@ -703,70 +700,39 @@ void ConstructCut1()
 
 void ConstructCut2()
 {
-	 printf("[Info] Declaration of Cut2\n");
-	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8; 
-if(ADDCUTS_C2)
-{
-	 res.nbConCut2=0 ;
-	 for (iLoop=0;iLoop<T();iLoop++)
+		printf("[Info] Declaration of Cut2\n");
+		int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
+		 res.nbConCut2=0 ;
+		 //1-cuts for constraint A/BC/D
+		for (iLoop=0;iLoop<T();iLoop++)
 		 for (iLoop3=0;iLoop3<M();iLoop3++)
-		 {
-			 //A
-			 {
-				unsigned int s = nc(ncSortedInd(0));
-				unsigned int i=0, j=1, l;
-				int k=1;
-				while(j<N()-1)
-				{
-					s+= nc(ncSortedInd(j));
-					l=j+1;
-					if(s>mc(iLoop3))
-					{
-						while( l<N() && (s- nc(ncSortedInd(i)) + nc(ncSortedInd(l)))>mc(iLoop3) )
-						{
-							s = s- nc(ncSortedInd(i)) + nc(ncSortedInd(l));
-							i++; l++;
-						}
-						IloExpr C2(env);
-						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
-							C2 += var[ indX(iLoop, ncSortedInd(iLoopCon), iLoop3)];
-						con_cuts2.add(C2 <= k);
-						res.nbConCut2++;
-						j=l;
-					}else j++;
-					k++;
-				}
-			 }
-			//B
+		 {//Loop for constructing each equation from which we will make 1-cuts
+			 vector<Term> vEquationA, vEquationB, vEquationC, vEquationD;
+			 vEquationA.reserve(N()+1);
+			 vEquationB.reserve(N()+1);
+			 vEquationC.reserve(N()*(M()+1));
+			 vEquationD.reserve(N()*(M()+1));
+			for (iLoop2=0;iLoop2<N();iLoop2++)
 			{
-				unsigned int s = ng(ncSortedInd(0));
-				unsigned int i=0, j=1, l;
-				int k=1;
-				while(j<N()-1)
-				{
-					s+= ng(ngSortedInd(j));
-					l=j+1;
-					if(s>mg(iLoop3))
+				vEquationA.push_back(make_pair(nc(iLoop2), var[ indX(iLoop, iLoop2, iLoop3)]));
+				if(ng(iLoop2) > 0)vEquationB.push_back(make_pair(ng(iLoop2), var[ indX(iLoop, iLoop2, iLoop3)]));
+				vEquationC.push_back(make_pair(nh(iLoop2), var[ indX(iLoop, iLoop2, iLoop3)]));
+				vEquationD.push_back(make_pair(nr(iLoop2), var[ indX(iLoop, iLoop2, iLoop3)]));
+				for (iLoop4=0;iLoop4<M();iLoop4++)
+					if (iLoop4!=iLoop3)
 					{
-						while( l<N() && (s- ng(ngSortedInd(i)) + ng(ngSortedInd(l)))>mg(iLoop3) )
-						{
-							s = s- ng(ngSortedInd(i)) + ng(ngSortedInd(l));
-							i++; l++;
-						}
-						IloExpr C2(env);
-						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
-							C2 += var[ indX(iLoop, ngSortedInd(iLoopCon), iLoop3)];
-						con_cuts2.add(C2 <= k);
-						res.nbConCut2++;
-						j=l;
-					}else j++;
-					k++;
-				}
+						vEquationC.push_back(make_pair(nh(iLoop2),  var[indY(iLoop,iLoop2,iLoop2,iLoop4,iLoop3)]));
+						vEquationD.push_back(make_pair(nr(iLoop2),  var[indY(iLoop,iLoop2,iLoop2,iLoop4,iLoop3)]));
+					}
 			}
-			
+			//Now we have 4 equations, begin to make 1-cuts
+			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationA, mc(iLoop3));
+			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationB, mg(iLoop3));
+			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationC, mh(iLoop3));
+			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationD, mr(iLoop3));
 		 }
+
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
-}
 }
 
 void ConstructCut3(){}
@@ -797,10 +763,10 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees6_20.dat");
+		GetData("Donnees/donnees1_2.dat");
 
 	//ADDCUTS_C1=true;
-	//ADDCUTS_C2=true;
+	ADDCUTS_C2=true;
 	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
@@ -935,55 +901,43 @@ int main(int argc, char* argvs[])
 
 ////////////////////// Utility functions /////////////////
 #pragma region UTILITY
-//Sort coefficiants and return task index for use in 1-Cut
-unsigned int ncSortedInd(unsigned int i)
+int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 {
-	static vector<int> ind;
-	if(ind.size()>0)return ind[i];
-	
-	//init and sort for the first time
-	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
-	struct{bool operator()(int a, int b) { return nc(a)>nc(b); }} op;
-	sort(ind.begin(), ind.end(), op);
-	return ind[i];
-}
-unsigned int ngSortedInd(unsigned int i)
-{
-	static vector<int> ind;
-	if(ind.size()>0)return ind[i];
-	
-	//init and sort for the first time
-	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
-	struct{bool operator()(int a, int b) { return ng(a)>ng(b); }} op;
-	sort(ind.begin(), ind.end(), op);
-	return ind[i];
-}
-unsigned int nrSortedInd(unsigned int i)
-{
-	static vector<int> ind;
-	if(ind.size()>0)return ind[i];
-	
-	//init and sort for the first time
-	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
-	struct{bool operator()(int a, int b) { return nr(a)>nr(b); }} op;
-	sort(ind.begin(), ind.end(), op);
-	return ind[i];
-}
-unsigned int nhSortedInd(unsigned int i)
-{
-	static vector<int> ind;
-	if(ind.size()>0)return ind[i];
-	
-	//init and sort for the first time
-	for(int iFor=0; iFor<N(); iFor++)ind.push_back(iFor);
-	struct{bool operator()(int a, int b) { return nh(a)>nh(b); }} op;
-	sort(ind.begin(), ind.end(), op);
-	return ind[i];
+	// Sort terms
+	struct{bool operator()(Term a, Term b) { return a.first > b.first; }} op;
+	sort(Left.begin(), Left.end(), op);
+	//for_each(Left.begin(), Left.end(), [](const Term & t){ cout<<t.first<<endl;});
+
+	int nbCuts = 0;
+	unsigned int s = Left[0].first;
+	unsigned int i=0, j=1, l;
+	int k=1;
+	while(j+1<Left.size())
+	{
+		s+= Left[j].first;
+		l=j+1;
+		if(s > Right)
+		{
+			while( l<Left.size() && (s- Left[i].first + Left[l].first)> Right )
+			{
+				s = s- Left[i].first + Left[l].first;
+				i++; l++;
+			}
+			IloExpr C2(env);
+			for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
+				C2 += Left[iLoopCon].first;
+			con_cuts2.add(C2 <= k);
+			nbCuts ++;
+			j=l;
+		}else j++;
+		k++;
+	}
+	return nbCuts;
 }
 void SomeTest()
 {
 	cout<<"[Temporary test:]"<<endl;
-	for(int i=0; i<N(); i++)cout<<ncSortedInd(i)<<endl;
+	//for(int i=0; i<N(); i++)cout<<ncSortedInd(i)<<endl;
 }
 
 double CountPMsTurnedOn(IloCplex *pcplex)
