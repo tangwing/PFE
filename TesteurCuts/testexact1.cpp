@@ -37,7 +37,10 @@ int nbBoolX = 0, nbFixX = 0;
 
 double Round(double,int);
 double Round(double);
-void LogPreprocessingResults(int iSce, int iIter, PreprocessingResult r);
+void LogPreprocessingResults(char* , int iSce, int iIter, PreprocessingResult r);
+void LogPreprocessingResults1(char* , int iSce, int iIter, PreprocessingResult r);
+void LogPreprocessingResults2(char* , int iSce, int iIter, PreprocessingResult r);
+void LogPreprocessingResults3(char* , int iSce, int iIter, PreprocessingResult r);
 void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter);
 
 //Variables used to compute statistics
@@ -70,17 +73,31 @@ void main(void)
 	    //***********************************************
 		sprintf(tmp, "%d",int(pdUBs[i][j]));
 
-		printf("The Preprocessing program is running for all bools...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "1", NULL); //Enable cut 1
+		printf("The Preprocessing program is running without cuts...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "0", NULL); 
 		PreprocessingResult pre;
         pre.ImportFromFile("Preproc.txt");
-		//Log all and let Excel do stats!
-		LogPreprocessingResults(i,j,pre);
+		LogPreprocessingResults("pre_nocut.csv" ,i,j,pre);
+
+		printf("The Preprocessing program is running with cut1...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "1", NULL); //Enable cut 1
+        pre.ImportFromFile("Preproc.txt");
+		LogPreprocessingResults1("pre_cut1.csv" ,i,j,pre);
+
+		printf("The Preprocessing program is running without cuts...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "2", NULL); //Enable cut 1
+        pre.ImportFromFile("Preproc.txt");
+		LogPreprocessingResults2("pre_cut2.csv" ,i,j,pre);
+
+		printf("The Preprocessing program is running with  cuts 1 & 2...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "3", NULL); //Enable cut 1
+        pre.ImportFromFile("Preproc.txt");
+		LogPreprocessingResults3("pre_cut12.csv" ,i,j,pre);
 	  }
   }
 }
 
-void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
+void LogPreprocessingResults(char* filename, int iSce, int jIter, PreprocessingResult r)
 {
 	static bool printHeader = true;
 	static int lastI=0, lastJ=-1;
@@ -88,11 +105,11 @@ void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
 	if(printHeader)
 	{
 		printHeader = false;
-		fRes = fopen("LogPreprocessing.csv","wt");
+		fRes = fopen(filename,"wt");
 		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
 	}else
 	{
-		fRes = fopen("LogPreprocessing.csv","at");
+		fRes = fopen(filename,"at");
 	}
 
 	//Blank lines
@@ -133,7 +150,162 @@ void LogPreprocessingResults(int iSce, int jIter, PreprocessingResult r)
 	fclose(fRes);
 }
 
+void LogPreprocessingResults1(char* filename, int iSce, int jIter, PreprocessingResult r)
+{
+	static bool printHeader = true;
+	static int lastI=0, lastJ=-1;
+	FILE* fRes;
+	if(printHeader)
+	{
+		printHeader = false;
+		fRes = fopen(filename,"wt");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
+	}else
+	{
+		fRes = fopen(filename,"at");
+	}
 
+	//Blank lines
+	for(int i=lastI, j=lastJ+1; i<=iSce; i++, j=0)
+		for(; j<20; j++)
+		{
+			if(i==iSce && j==jIter)break;
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+		}
+	lastI = iSce;
+	lastJ = jIter;
+	//Log the current result
+	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
+		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		r.errCodeLP,
+		r.isOptiNoPre,
+		r.isAllFixed,
+		r.nbBool,
+		r.nbBoolExtractable,
+		r.nbFixed,
+		r.UB,
+		r.LB,
+		r.durationPre,
+		r.isMIPExecuted,
+		r.isFeasible,
+		r.isOptimal,
+		r.isTimeLimit,
+		r.isMemLimit,
+		r.nbMachine,
+		r.nbNode,
+		r.statusCode,
+		r.value,
+		r.durationCpuClock,
+		r.nbConCut1,
+		r.nbConCut2,
+		r.nbConCut3
+		);
+	fclose(fRes);
+}
+
+void LogPreprocessingResults2(char* filename, int iSce, int jIter, PreprocessingResult r)
+{
+	static bool printHeader = true;
+	static int lastI=0, lastJ=-1;
+	FILE* fRes;
+	if(printHeader)
+	{
+		printHeader = false;
+		fRes = fopen(filename,"wt");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
+	}else
+	{
+		fRes = fopen(filename,"at");
+	}
+
+	//Blank lines
+	for(int i=lastI, j=lastJ+1; i<=iSce; i++, j=0)
+		for(; j<20; j++)
+		{
+			if(i==iSce && j==jIter)break;
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+		}
+	lastI = iSce;
+	lastJ = jIter;
+	//Log the current result
+	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
+		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		r.errCodeLP,
+		r.isOptiNoPre,
+		r.isAllFixed,
+		r.nbBool,
+		r.nbBoolExtractable,
+		r.nbFixed,
+		r.UB,
+		r.LB,
+		r.durationPre,
+		r.isMIPExecuted,
+		r.isFeasible,
+		r.isOptimal,
+		r.isTimeLimit,
+		r.isMemLimit,
+		r.nbMachine,
+		r.nbNode,
+		r.statusCode,
+		r.value,
+		r.durationCpuClock,
+		r.nbConCut1,
+		r.nbConCut2,
+		r.nbConCut3
+		);
+	fclose(fRes);
+}void LogPreprocessingResults3(char* filename, int iSce, int jIter, PreprocessingResult r)
+{
+	static bool printHeader = true;
+	static int lastI=0, lastJ=-1;
+	FILE* fRes;
+	if(printHeader)
+	{
+		printHeader = false;
+		fRes = fopen(filename,"wt");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
+	}else
+	{
+		fRes = fopen(filename,"at");
+	}
+
+	//Blank lines
+	for(int i=lastI, j=lastJ+1; i<=iSce; i++, j=0)
+		for(; j<20; j++)
+		{
+			if(i==iSce && j==jIter)break;
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+		}
+	lastI = iSce;
+	lastJ = jIter;
+	//Log the current result
+	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
+		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		r.errCodeLP,
+		r.isOptiNoPre,
+		r.isAllFixed,
+		r.nbBool,
+		r.nbBoolExtractable,
+		r.nbFixed,
+		r.UB,
+		r.LB,
+		r.durationPre,
+		r.isMIPExecuted,
+		r.isFeasible,
+		r.isOptimal,
+		r.isTimeLimit,
+		r.isMemLimit,
+		r.nbMachine,
+		r.nbNode,
+		r.statusCode,
+		r.value,
+		r.durationCpuClock,
+		r.nbConCut1,
+		r.nbConCut2,
+		r.nbConCut3
+		);
+	fclose(fRes);
+}
 
 //Add a new line in the statistics table of Preprocessing
 void MakeStatPreproc(int IdSce, int NbTache, int NbMach, int NbIter)

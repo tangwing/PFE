@@ -177,6 +177,9 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			res.errCodeLP = err;
 			return;
 		}
+		///!TODO
+		res.value = pcplex->getObjValue(); //Log first LP value
+
 		// If no exception occurs, the instance is feasible
 		//isFeasible = 1;
 		
@@ -224,7 +227,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			}
 			res.isFeasible = 1;
 			res.isOptimal = 1;
-			res.value = dOptValue;
+			///! for not disturbe LP test. res.value = dOptValue;
 		}
 		dUB = prepro->PREGetUB();
 		dLB = prepro->PREGetLB();
@@ -899,7 +902,7 @@ int main(int argc, char* argvs[])
 	}
 	res.durationCpuClock = dOptTime;
 	res.statusCode = cplex.getCplexStatus();
-	res.value = dOptValue;
+	//res.value = dOptValue;
 	res.ExportToFile("Preproc.txt");
 	res.Test();
 	if (DEBUG)
