@@ -93,7 +93,7 @@ void LinearProgram::LPSolveByCplex()
    }
   
   dLPOptimalValue = LPcplex->getObjValue();
-  //cout<<endl<<"optLP="<<dLPOptimalValue<<endl;
+  cout<<endl<<"optLP="<<dLPOptimalValue<<endl;
   bLPisSolved=true;
 }
 

@@ -1,3 +1,4 @@
+#pragma region INCLUDE
 #include <time.h>
 #include <iostream>
 #include <fstream>
@@ -13,9 +14,14 @@
 #include "Data.h"
 #include "CplexResult.h"
 #include "PreprocessingResult.h"
+using namespace std;
+#include <ilcplex/ilocplex.h>
+#pragma endregion
 
-#define DEBUG true
-#define DEBUG_MOD true
+////////////////////////////////// Marcos and switchs /////
+#pragma region MARCOS
+#define DEBUG false
+#define DEBUG_MOD false
 #define CONFIG true
 
 #define MemLimit 1024.0
@@ -24,10 +30,10 @@
 bool ADDCUTS_C1 = false;
 bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
-using namespace std;
+#pragma endregion
 
-#include <ilcplex/ilocplex.h>
-
+///////////////////////////////// Declarations ///////////
+#pragma  region DECLARATION_CPLEX
 ILOSTLBEGIN
 typedef IloFloatVarArray IloFloatVarArray1D; // 1-dimension array of float variables
 typedef IloArray <IloFloatVarArray> IloFloatVarArray2D; // 2-dimension array of float variables
@@ -36,6 +42,9 @@ typedef IloArray <IloFloatVarArray> IloFloatVarArray2D; // 2-dimension array of 
 IloEnv env;
 IloModel model(env);
 IloRangeArray con(env);
+IloRangeArray con_cuts1(env);
+IloRangeArray con_cuts2(env);
+IloRangeArray con_cuts3(env);
 
 // Data structures for the LP and preprocessing
 IloNumVarArray var(env);	//It contains bool variables (x,y,z) ?be preprocessed afterwards
@@ -55,30 +64,24 @@ unsigned int ngSortedInd(unsigned int i);
 unsigned int nrSortedInd(unsigned int i);
 unsigned int nhSortedInd(unsigned int i);
 
-//Mode de r¨¦solution
-enum SolveMode{PRE_MIP_ONLY, PRE_LP_ONLY, PRE_PRE};
+void ConstructCut1();
+void ConstructCut2();
+void ConstructCut3();
+#pragma endregion
+
+#pragma region DECLARATION_GLOBAL
+enum SolveMode{PRE_MIP_ONLY, PRE_LP_ONLY, PRE_PRE};//Mode de r¨¦solution
 double dOptValue = -1, dOptTime = -1, dPreProcessingTime = -1, dNbMach = -1, dUB = -1, dLB = -1;
 int isOptimal = -1, isFeasible = -1,iNbNodesIP = -1, isOptiNoPre = -1, isAllFixed = -1;
 int isTimeLimit=-1, isMemLimit=-1;
 int iNbFixed = -1, nbBool=-1;
-
 PreprocessingResult res; //The final result which will be exported to file
-
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
+#pragma endregion 
 
-// This function counts the number of machines which are turned on, on the average, at any time t
-double CountPMsTurnedOn(IloCplex *pcplex)
-{
- int iLoop;
- double dCount=0;
-
- for (iLoop=0;iLoop<T();iLoop++)
-	 dCount+=pcplex->getValue(lp_Z[iLoop]);
- return (dCount/=(double)T());
-}
-
-
-//Preprocess and solve
+///
+/// Preprocess and solve
+///
 void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloCplex *pcplex, IloModel *pmodel, IloNumVarArray *pvar,IloRangeArray *pcon)
 {
 	double objValue=-1, temps_cpu=0, temps_cpu_pre=0;
@@ -172,9 +175,22 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		// If no exception occurs, the instance is feasible
 		//isFeasible = 1;
 		
-		//getchar();
 		// Step 3: preprocess by using the LP relaxation
 		prepro->PREPreprocessing();
+		nbFix = prepro->PREGetNbFix();
+		cout<<".................... First fix "<<nbFix<<" .......................... "<<endl;
+		// Step3.5: add cuts if needed
+		if(ADDCUTS_C1) prepro->PREAddLPCuts(&con_cuts1);
+		if(ADDCUTS_C2) prepro->PREAddLPCuts(&con_cuts2);
+		if(ADDCUTS_C3) prepro->PREAddLPCuts(&con_cuts3);
+		if(ADDCUTS_C1 || ADDCUTS_C2 || ADDCUTS_C3) 
+		{
+			cout<<"\nRepreprocessing after adding cuts...\n";
+			prepro->PREAddCutsToLP();
+			prepro->PREPreprocessing(); //Redo preprocessing after adding cuts
+			nbFix += prepro->PREGetNbFix();
+			cout<<"................. Total fix "<<nbFix<<" .......................... "<<endl;
+		}
 
 		// Step 4: analyse the situation after preprocessing
 		tempPre2  = clock();
@@ -182,7 +198,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		isOptiNoPre = 0;
 		isAllFixed = 0;
 		int nbBoolExtractable = prepro->PREGetTreatedVarCount();
-		nbFix = prepro->PREGetNbFix();
+		
 		if(prepro->PREIsOptiNoPRE() || nbFix == nbBoolExtractable) // If no preprocessing (i.e. LB=UB before prepro)
 		{
 			if(prepro->PREIsOptiNoPRE())
@@ -233,11 +249,12 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 }
 
 
-//***********************************************************************************
-// This function initializes the LP model
-//***********************************************************************************
+///
+/// This function initializes the LP model
+///
 void InitializeLPModel()
 {
+#pragma region NOT_CUTS
  int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
  int gap[MaxTasks][MaxTimeHorizon];
 
@@ -283,6 +300,7 @@ void InitializeLPModel()
  /***************************/
  // We create the objectif function TC
  /***************************/
+
  if (DEBUG_MOD) printf("[DEBUG] Declaration of the objective function TC\n");
  IloExpr ObjTC(env);
  for (iLoop=0;iLoop<T();iLoop++)  // Cost for using the resources
@@ -308,6 +326,7 @@ void InitializeLPModel()
  model.add(IloMinimize(env,ObjTC));
 
  if (DEBUG_MOD) printf("[DEBUG] Creating constraints\n");
+
   /***************************/
  // We create the constraints
  /***************************/
@@ -575,7 +594,40 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 					 O+= lp_d[iLoop2][iLoop]-mt(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)]+var[indX(iLoop+1,iLoop2,iLoop5)]);
 					 con.add(O>=-1*mt(iLoop2));
 					}
+#pragma endregion
 
+ if(ADDCUTS_C1) ConstructCut1();
+ if(ADDCUTS_C2) ConstructCut2();
+ if(ADDCUTS_C3) ConstructCut3();
+ 
+ // Definition of criterion RE
+ if (DEBUG_MOD) printf("[DEBUG] Declaration of RE\n");
+ IloExpr ExprRE(env);
+ for (iLoop=0;iLoop<T();iLoop++)
+	 for (iLoop2=0;iLoop2<N();iLoop2++)
+		 ExprRE+= lp_d[iLoop2][iLoop];
+ ExprRE-= lp_RE;
+ //con.add(ExprRE==0);
+ // e-constraint on RE
+ //con.add(RE<=50000);
+
+ //IloExpr Fix(env);
+ //Fix = var[9];
+ //con.add(Fix<=0);
+
+ if (DEBUG_MOD) printf("[DEBUG] All constraints are created and are now added to the model\n");
+ model.add(con);
+ if (DEBUG_MOD) 
+ {
+	 printf("[DEBUG] The model is created\n");
+	 getch();
+ }
+}
+
+/////////////////////// Cuts construction ////////////////////////
+void ConstructCut1()
+{
+	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6; 
  if(ADDCUTS_C1)
  {
 	 // Valid inequality Cut1: if there are not enough ressources for i to be executed, not for j either, with j needing more ressources.
@@ -598,7 +650,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						if (nc(iLoop4) >= nc(iLoop2))
 							 VI1_CPU += nc(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 						else VI1_CPU += nc(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_CPU <= mc(iLoop3));
+						con_cuts1.add(VI1_CPU <= mc(iLoop3));
 
 						//GPU
 						IloExpr VI1_GPU(env);
@@ -608,7 +660,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						if (ng(iLoop4) >= ng(iLoop2))	
 							VI1_GPU += ng(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 						else VI1_GPU += ng(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_GPU <= mg(iLoop3));
+						con_cuts1.add(VI1_GPU <= mg(iLoop3));
 						
 						//HDD
 						IloExpr VI1_HDD(env);
@@ -625,7 +677,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						if (nh(iLoop4) >= nh(iLoop2))
 							VI1_HDD += nh(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 						else	VI1_HDD += nh(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_HDD <= mh(iLoop3));
+						con_cuts1.add(VI1_HDD <= mh(iLoop3));
 
 						//RAM
 						IloExpr VI1_RAM(env);
@@ -642,16 +694,19 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
 						if (nr(iLoop4) >= nr(iLoop2))
 							VI1_RAM += nr(iLoop2)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
 						else VI1_RAM += nr(iLoop4)*(var[indX(iLoop,iLoop2,iLoop3)] + var[indX(iLoop,iLoop4,iLoop3)]);
-						con.add(VI1_RAM <= mr(iLoop3));
+						con_cuts1.add(VI1_RAM <= mr(iLoop3));
 					 }
 				 }
 				printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
  }
+}
 
- 
+void ConstructCut2()
+{
+	 printf("[Info] Declaration of Cut2\n");
+	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8; 
 if(ADDCUTS_C2)
 {
-	 printf("[Info] Declaration of Cut2: 1-Cut \n");
 	 res.nbConCut2=0 ;
 	 for (iLoop=0;iLoop<T();iLoop++)
 		 for (iLoop3=0;iLoop3<M();iLoop3++)
@@ -675,7 +730,7 @@ if(ADDCUTS_C2)
 						IloExpr C2(env);
 						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
 							C2 += var[ indX(iLoop, ncSortedInd(iLoopCon), iLoop3)];
-						con.add(C2 <= k);
+						con_cuts2.add(C2 <= k);
 						res.nbConCut2++;
 						j=l;
 					}else j++;
@@ -701,7 +756,7 @@ if(ADDCUTS_C2)
 						IloExpr C2(env);
 						for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
 							C2 += var[ indX(iLoop, ngSortedInd(iLoopCon), iLoop3)];
-						con.add(C2 <= k);
+						con_cuts2.add(C2 <= k);
 						res.nbConCut2++;
 						j=l;
 					}else j++;
@@ -712,44 +767,23 @@ if(ADDCUTS_C2)
 		 }
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
- // Definition of criterion RE
- if (DEBUG_MOD) printf("[DEBUG] Declaration of RE\n");
- IloExpr ExprRE(env);
- for (iLoop=0;iLoop<T();iLoop++)
-	 for (iLoop2=0;iLoop2<N();iLoop2++)
-		 ExprRE+= lp_d[iLoop2][iLoop];
- ExprRE-= lp_RE;
- //con.add(ExprRE==0);
- // e-constraint on RE
- //con.add(RE<=50000);
-
- //IloExpr Fix(env);
- //Fix = var[9];
- //con.add(Fix<=0);
-
- if (DEBUG_MOD) printf("[DEBUG] All constraints are created and are now added to the model\n");
- model.add(con);
- if (DEBUG_MOD) 
- {
-	 printf("[DEBUG] The model is created\n");
-	 getch();
- }
 }
 
-void SomeTest();
+void ConstructCut3(){}
 
+/////////////////////// Programme Principal /////////////////////////
+void SomeTest();
+double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
 #define ENABLE_CMD_PARAM false
-//
-/* Programme Principal */
-//
+
 int main(int argc, char* argvs[])
 {
 	int UB = 99999999;
-	UB = 515201;
+	UB = 1458148;
 	//UB = 465172;
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 3->addCut1&2. Mind the order.\n"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
@@ -763,17 +797,15 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees1_2.dat");
+		GetData("Donnees/donnees6_20.dat");
 
 	//ADDCUTS_C1=true;
 	//ADDCUTS_C2=true;
-
+	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
-	SolveMode sm = PRE_PRE;
 	if (DEBUG) DisplayData();
 	//SomeTest();
 	ticks0 = clock();
-	
 	IloCplex cplex;
 	try
     {
@@ -812,6 +844,7 @@ int main(int argc, char* argvs[])
 			//}
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
+
 			if( res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
 				res.isMIPExecuted = 0; // MIP not executed
 			else
@@ -900,7 +933,9 @@ int main(int argc, char* argvs[])
 }
 
 
-//Sort coefficiants and return index for use in 1-Cut
+////////////////////// Utility functions /////////////////
+#pragma region UTILITY
+//Sort coefficiants and return task index for use in 1-Cut
 unsigned int ncSortedInd(unsigned int i)
 {
 	static vector<int> ind;
@@ -950,3 +985,15 @@ void SomeTest()
 	cout<<"[Temporary test:]"<<endl;
 	for(int i=0; i<N(); i++)cout<<ncSortedInd(i)<<endl;
 }
+
+double CountPMsTurnedOn(IloCplex *pcplex)
+{
+ int iLoop;
+ double dCount=0;
+
+ for (iLoop=0;iLoop<T();iLoop++)
+	 dCount+=pcplex->getValue(lp_Z[iLoop]);
+ return (dCount/=(double)T());
+}
+
+#pragma endregion

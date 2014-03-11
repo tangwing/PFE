@@ -456,8 +456,8 @@ void Preprocessing::PREFixVar()
 			  //int tmp=iPREnbFix;
 			  if(PREvarInfo[i].VARGetBasisStatus()==0)	// Off-base variable
 			  {
-			    if(bPREisDebug)
-					logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() <<"; var="<<PREvarInfo[i].VARGetValue()<< endl;
+			    //if(bPREisDebug)
+					//logs  << "RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() <<"; var="<<PREvarInfo[i].VARGetValue()<< endl;
 				if(PREvarInfo[i].VARGetRedCost()>0 //If r_ij>UB-LB, it will fix the variable i to 0
 					&& PREvarInfo[i].VARGetRedCost()>dPREUB-dPRELB+EPSILON)	
 				{
@@ -466,8 +466,7 @@ void Preprocessing::PREFixVar()
 					pdPREFixedVariables[i] = 0;
 					(*PREvar)[i].setUB(0.0);
 					iPREnbFix++;
-				}
-				if(PREvarInfo[i].VARGetRedCost()<0 
+				}else	if(PREvarInfo[i].VARGetRedCost()<0 
 					&& PREvarInfo[i].VARGetRedCost()<dPRELB-dPREUB-EPSILON && (*PREvar)[i].getLB() != 1)	//If r_ij>UB-LB, it will fix the variable i to 1
 				{
 					if(bPREisDebug)
@@ -476,12 +475,12 @@ void Preprocessing::PREFixVar()
 					pdPREFixedVariables[i] = 1;
 					(*PREvar)[i].setLB(1.0);
 					iPREnbFix++;
-				}
+				}else logs  << "NotFix: RedCost[" <<i<<"]: " << PREvarInfo[i].VARGetRedCost() <<"; var="<<PREvarInfo[i].VARGetValue()<< endl;
 			  }
 			  else if(PREvarInfo[i].VARGetBasisStatus()==1)	// In-base variables
 			  {
-				  if(bPREisDebug)
-					logs  << "var["<<i<<"]="<<PREvarInfo[i].VARGetValue()<< endl;
+				  //if(bPREisDebug)
+					//logs  << "var["<<i<<"]="<<PREvarInfo[i].VARGetValue()<< endl;
 				  if (PREvarInfo[i].VARGetUj()<99999999.0 // I try to fix variables to 0
 					  && (1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()>dPREUB-dPRELB+EPSILON)   
 					{ 
@@ -493,8 +492,7 @@ void Preprocessing::PREFixVar()
 							logs << "Uj["<<i<<"]: " << PREvarInfo[i].VARGetUj() << " " <<(1.0-PREvarInfo[i].VARGetValue())*PREvarInfo[i].VARGetUj()<< " > " << dPREUB-dPRELB+EPSILON<< " LB: " << dPRELB << " UB: " << dPREUB << endl;
 							//cout<<"Fix "<< (*PREvar)[i].getName()<<" to 0 by pseudo-cost"<<endl;
 						}
-					}
-					if (PREvarInfo[i].VARGetLj()<99999999.0 // I try to fix variables to 1
+					}else if (PREvarInfo[i].VARGetLj()<99999999.0 // I try to fix variables to 1
 						&& PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()>dPREUB-dPRELB+EPSILON)   
 					{ 
 						pdPREFixedVariables[i] = 1;
@@ -502,10 +500,10 @@ void Preprocessing::PREFixVar()
 						iPREnbFix++;
 						
 						if(bPREisDebug) {
-							logs << "Lj["<<i<<"]: " << PREvarInfo[i].VARGetUj() <<" "<<PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()<<">"<<dPREUB-dPRELB+EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
+							logs << "Lj["<<i<<"]: " << PREvarInfo[i].VARGetLj() <<" "<<PREvarInfo[i].VARGetValue()*PREvarInfo[i].VARGetLj()<<">"<<dPREUB-dPRELB+EPSILON << " LB: " << dPRELB << " UB: " << dPREUB << endl;
 							//cout<<"Fix "<<(*PREvar)[i].getName()<<" to 1 by pseudo-cost"<<endl;
 						}
-					}
+					}else logs  << "NoFix: Uj[" <<i<<"]: " << PREvarInfo[i].VARGetUj() <<"; Lj[" <<i<<"]: " << PREvarInfo[i].VARGetLj() <<"; var="<<PREvarInfo[i].VARGetValue()<< endl;
 				}	
 			}
 		}

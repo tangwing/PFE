@@ -20,6 +20,7 @@ int M() // Returns the number of machines
 // For tasks
 short int nc(unsigned int i) // Returns the required CPU load of task i
 { return Data.ListOfTasks[i].QtyCPU ;}
+
 short int ng(unsigned int i) // Returns the required GPU load of task i
 { return Data.ListOfTasks[i].QtyGPU ;}
 short int nr(unsigned int i) // Returns the required RAM of task i

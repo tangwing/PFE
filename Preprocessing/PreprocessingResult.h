@@ -52,10 +52,10 @@ public:
 	void Test()
 	{
 		ImportFromFile("PreProc.txt");
-		printf("%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
+		printf("errCodeLP, %d\nsOptiNoPre,%d\nisAllFixed,%d\nnbBool, %d\nnbBoolExtractable,%d\nnbFixed,%d\nUB,%lf\n LB,%lf\ndurationPre,%lf\n",
 			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
 			
-		printf("%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n%d\n%d\n%d\n",
+		printf("isMIPExecuted,%d\nisFeasible,%d\nisOptimal,%d\nisTimeLimit,%d\nisMemLimit,%d\nnbMachine,%lf\nnbNode,%d\nstatusCode,%d\nvalue, %lf\ndurationCpuClock,%lf\nnbConCut1,%d\nnbConCut2,%d\nnbConCut3,%d\n",
 			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock, nbConCut1,nbConCut2,nbConCut3);
 		
 	}
