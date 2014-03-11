@@ -136,6 +136,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 	} // END CASE 1
 	else if(sm==PRE_LP_ONLY)
 	{
+		delete prepro;
 		if (!(pcplex->solve()))							// The LP problem can't solve by cplex
 		{
 			if (pcplex->getCplexStatus()!=IloCplex::InfeasibleOrUnbounded	// The LP problem isn't infeasible or unbounded
@@ -143,13 +144,20 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 				&& pcplex->getCplexStatus()!=IloCplex::InfOrUnbd)			// The LP problem is bounded
 			{
 				cout<<"Failed to optimise model" <<endl;
-				throw(7);
+				res.errCodeLP = 7;
+				//throw(7);
 			} else 
 			{
 				cout<<"Failed to optimise model: it is either infeasible or unbounded" <<endl;
-				throw(8);
+				res.errCodeLP = 8;
+				//throw(8);
 			}
+			
 		}
+
+		res.statusCode = pcplex->getCplexStatus();
+		res.value = pcplex->getObjValue();
+		res.ExportToFile("Pre_LPOnly.txt");
 		cout<<"SolOptLP = "<<pcplex->getObjValue()<<endl;
 		exit(0);
 	}
@@ -740,7 +748,7 @@ void ConstructCut3(){}
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM false
+#define ENABLE_CMD_PARAM true
 
 int main(int argc, char* argvs[])
 {
@@ -766,7 +774,7 @@ int main(int argc, char* argvs[])
 		GetData("Donnees/donnees1_2.dat");
 
 	//ADDCUTS_C1=true;
-	ADDCUTS_C2=true;
+	//ADDCUTS_C2=true;
 	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
@@ -811,7 +819,8 @@ int main(int argc, char* argvs[])
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
 
-			if( res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
+			//TODO MIP omitted
+			if( true || res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
 				res.isMIPExecuted = 0; // MIP not executed
 			else
 			{
