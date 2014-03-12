@@ -754,6 +754,7 @@ double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which a
 
 int main(int argc, char* argvs[])
 {
+	//SomeTest();return 1;
 	int UB = 99999999;
 	UB = 1458148;
 	//UB = 465172;
@@ -775,7 +776,7 @@ int main(int argc, char* argvs[])
 	else	
 		GetData("Donnees/donnees1_20.dat");
 
-	ADDCUTS_C1=true;
+	//ADDCUTS_C1=true;
 	//ADDCUTS_C2=true;
 	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
@@ -912,6 +913,7 @@ int main(int argc, char* argvs[])
 
 ////////////////////// Utility functions /////////////////
 #pragma region UTILITY
+/// This function can generate 1-cuts from the inequality provied. The coefficients of the inequality should > 0;
 int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 {
 	// Sort terms
@@ -923,7 +925,7 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 	unsigned int s = Left[0].first;
 	unsigned int i=0, j=1, l;
 	int k=1;
-	while(j+1<Left.size())
+	while(j+2<Left.size())
 	{
 		s+= Left[j].first;
 		l=j+1;
@@ -935,9 +937,12 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 				i++; l++;
 			}
 			IloExpr C2(env);
-			for(int iLoopCon=0; iLoopCon<l-1; iLoopCon++)
-				C2 += Left[iLoopCon].first;
-			con_cuts2.add(C2 <= k);
+			for(int iLoopCon=0; iLoopCon<l; iLoopCon++)
+			{
+				C2 += Left[iLoopCon].second;
+				cout<<Left[iLoopCon].first<<"+";
+			}
+			con_cuts2.add(C2 <= k);cout<<"<="<<k<<endl;
 			nbCuts ++;
 			j=l;
 		}else j++;
@@ -949,6 +954,16 @@ void SomeTest()
 {
 	cout<<"[Temporary test:]"<<endl;
 	//for(int i=0; i<N(); i++)cout<<ncSortedInd(i)<<endl;
+	//Test 1-cuts:
+	IloNumVar x1(env), x2(env), x3(env), x4(env), x5(env);
+	vector<Term> v;
+	v.push_back(make_pair(3, x1));
+	v.push_back(make_pair(4, x2));
+	v.push_back(make_pair(2, x3));
+	v.push_back(make_pair(3, x4));
+	v.push_back(make_pair(1, x5));
+	Make1Cuts(con_cuts2, v, 6);
+	exit(0);
 }
 
 double CountPMsTurnedOn(IloCplex *pcplex)
