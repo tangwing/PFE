@@ -307,7 +307,8 @@ bool Preprocessing::PREPreprocessing()
 			{
 				if(dPRELB-dPREUB>-0.0001) {
 					bLbisUb=true;
-					iPREnbFix=iPREnbBool;
+					///! iPREnbFix=iPREnbBool;
+					iPREnbFix = PREGetTreatedVarCount();
 				}
 				else {
 					dOpt=PREArSup(dPRElpOpt);		// Rounding up the optimal solution of the LP
@@ -381,7 +382,8 @@ bool Preprocessing::PREPreprocessing()
 	if (bisIntegral)
 	{
 		dPRELB=dPREUB=dPRElpOpt;
-		iPREnbFix=iPREnbBool;
+		///! iPREnbFix=iPREnbBool;
+		iPREnbFix = PREGetTreatedVarCount();
 		cout<<"IS INTEGRAL!"<<endl;
 	}
 
