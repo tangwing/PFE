@@ -55,9 +55,9 @@ void main(void)
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
-	   if(pbIsSolOpt[i][j] == false)
+	   if(pbIsInstanceFeasible[i][j] == false)
 	   {
-		   printf("Optimal sol doesn't exist, skip this instance.\n");
+		   printf("Instance not feasible, skip...\n");
 		   continue;
 	   }
 
@@ -69,30 +69,16 @@ void main(void)
 	   }
 
 		//***********************************************
-	    // Launch Pre+MIP with cut 1
+	    // Launch Pre+MIP with cut 2
 	    //***********************************************
 		sprintf(tmp, "%d",int(pdUBs[i][j]));
 
-		printf("The Preprocessing program is running without cuts...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "0", NULL); 
+		printf("The Preprocessing program is running without cuts2...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "2", NULL); 
 		PreprocessingResult pre;
-        pre.ImportFromFile("Preproc.txt");
-		LogPreprocessingResults("pre_nocut.csv" ,i,j,pre);
-
-		printf("The Preprocessing program is running with cut1...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "1", NULL); //Enable cut 1
-        pre.ImportFromFile("Preproc.txt");
-		LogPreprocessingResults1("pre_cut1.csv" ,i,j,pre);
-
-		printf("The Preprocessing program is running without cuts...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "2", NULL); //Enable cut 1
         pre.ImportFromFile("Preproc.txt");
 		LogPreprocessingResults2("pre_cut2.csv" ,i,j,pre);
 
-		printf("The Preprocessing program is running with  cuts 1 & 2...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "3", NULL); //Enable cut 1
-        pre.ImportFromFile("Preproc.txt");
-		LogPreprocessingResults3("pre_cut12.csv" ,i,j,pre);
 	  }
   }
 }

@@ -181,8 +181,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			res.errCodeLP = err;
 			return;
 		}
-		///!TODO
-		res.value = pcplex->getObjValue(); //Log first LP value
+		//res.value = pcplex->getObjValue(); //Log first LP value
 
 		// If no exception occurs, the instance is feasible
 		//isFeasible = 1;
@@ -204,9 +203,9 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 				cout<<"\nRepreprocessing after adding cuts...\n";
 				prepro->PREAddCutsToLP();
 				prepro->PREPreprocessing(); //Redo preprocessing after adding cuts
-				if(prepro->PREGetNbFix() == nbBool)//if all fixed, the total number should be nbbool.
-					nbFix=0;
-				nbFix += prepro->PREGetNbFix();
+				if(prepro->PREGetNbFix() >= nbBoolExtractable)//if all fixed.
+					nbFix=nbBoolExtractable;
+				else nbFix += prepro->PREGetNbFix();
 				cout<<"................. Total fix "<<nbFix<<" .......................... "<<endl;
 			}
 		}
@@ -237,7 +236,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			}
 			res.isFeasible = 1;
 			res.isOptimal = 1;
-			///! for not disturbe LP test. res.value = dOptValue;
+			res.value = dOptValue;
 		}
 		dUB = prepro->PREGetUB();
 		dLB = prepro->PREGetLB();
@@ -833,8 +832,8 @@ int main(int argc, char* argvs[])
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
 
-			//TODO MIP omitted
-			if( true || res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
+		
+			if(  res.errCodeLP!=-1 || res.isOptimal==1)///!TODO. we don't solve MIP if the preprocessing didn't work!
 				res.isMIPExecuted = 0; // MIP not executed
 			else
 			{
@@ -913,7 +912,7 @@ int main(int argc, char* argvs[])
 	}
 	res.durationCpuClock = dOptTime;
 	res.statusCode = cplex.getCplexStatus();
-	//res.value = dOptValue;
+	res.value = dOptValue;
 	res.ExportToFile("Preproc.txt");
 	res.Test();
 	if (DEBUG)
