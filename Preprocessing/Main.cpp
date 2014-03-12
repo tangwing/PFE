@@ -21,7 +21,7 @@ using namespace std;
 
 ////////////////////////////////// Marcos and switchs /////
 #pragma region MARCOS
-#define DEBUG true
+#define DEBUG false
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -93,6 +93,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 	//pcplex->exportModel("model.lp");
 
 	// CASE 1: No preprocessing is required before solving the IP model
+#pragma region MIP_ONLY
 	if(sm==PRE_MIP_ONLY)//Only for testing the correctness of LP model
 	{
 		temp1 = clock();
@@ -134,6 +135,8 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		outFile.close();
 		exit(0);
 	} // END CASE 1
+#pragma endregion
+#pragma region LP_ONLY
 	else if(sm==PRE_LP_ONLY)
 	{
 		delete prepro;
@@ -161,7 +164,8 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		cout<<"SolOptLP = "<<pcplex->getObjValue()<<endl;
 		exit(0);
 	}
-	else	// CASE 3: Preprocessing is requested before MIP is solved
+#pragma endregion
+	else // CASE 3: Preprocessing is requested before MIP is solved
 	{ 
 		if(DEBUG)
 			pcplex->exportModel("model.lp");	
@@ -187,17 +191,24 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		prepro->PREPreprocessing();
 		nbFix = prepro->PREGetNbFix();
 		cout<<".................... First fix "<<nbFix<<" .......................... "<<endl;
+
+		int nbBoolExtractable = prepro->PREGetTreatedVarCount();
 		// Step3.5: add cuts if needed
-		if(ADDCUTS_C1) prepro->PREAddLPCuts(&con_cuts1);
-		if(ADDCUTS_C2) prepro->PREAddLPCuts(&con_cuts2);
-		if(ADDCUTS_C3) prepro->PREAddLPCuts(&con_cuts3);
-		if(ADDCUTS_C1 || ADDCUTS_C2 || ADDCUTS_C3) 
+		if(!prepro->PREIsOptiNoPRE() && nbFix != nbBoolExtractable)
 		{
-			cout<<"\nRepreprocessing after adding cuts...\n";
-			prepro->PREAddCutsToLP();
-			prepro->PREPreprocessing(); //Redo preprocessing after adding cuts
-			nbFix += prepro->PREGetNbFix();
-			cout<<"................. Total fix "<<nbFix<<" .......................... "<<endl;
+			if(ADDCUTS_C1) prepro->PREAddLPCuts(&con_cuts1);
+			if(ADDCUTS_C2) prepro->PREAddLPCuts(&con_cuts2);
+			if(ADDCUTS_C3) prepro->PREAddLPCuts(&con_cuts3);
+			if(ADDCUTS_C1 || ADDCUTS_C2 || ADDCUTS_C3) 
+			{
+				cout<<"\nRepreprocessing after adding cuts...\n";
+				prepro->PREAddCutsToLP();
+				prepro->PREPreprocessing(); //Redo preprocessing after adding cuts
+				if(prepro->PREGetNbFix() == nbBool)//if all fixed, the total number should be nbbool.
+					nbFix=0;
+				nbFix += prepro->PREGetNbFix();
+				cout<<"................. Total fix "<<nbFix<<" .......................... "<<endl;
+			}
 		}
 
 		// Step 4: analyse the situation after preprocessing
@@ -205,7 +216,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		temps_cpu_pre = GetTimeByClockTicks(tempPre1,tempPre2);
 		isOptiNoPre = 0;
 		isAllFixed = 0;
-		int nbBoolExtractable = prepro->PREGetTreatedVarCount();
+		nbBoolExtractable = prepro->PREGetTreatedVarCount();
 		
 		if(prepro->PREIsOptiNoPRE() || nbFix == nbBoolExtractable) // If no preprocessing (i.e. LB=UB before prepro)
 		{
@@ -750,13 +761,13 @@ void ConstructCut3(){}
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM false
+#define ENABLE_CMD_PARAM true
 
 int main(int argc, char* argvs[])
 {
 	//SomeTest();return 1;
 	int UB = 99999999;
-	UB = 1458148;
+	UB = 515201;
 	//UB = 465172;
 	if(ENABLE_CMD_PARAM)
 	{
@@ -774,7 +785,7 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees1_20.dat");
+		GetData("Donnees/donnees1_2.dat");
 
 	//ADDCUTS_C1=true;
 	//ADDCUTS_C2=true;
@@ -940,9 +951,9 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 			for(int iLoopCon=0; iLoopCon<l; iLoopCon++)
 			{
 				C2 += Left[iLoopCon].second;
-				cout<<Left[iLoopCon].first<<"+";
+				//cout<<Left[iLoopCon].first<<"+";
 			}
-			con_cuts2.add(C2 <= k);cout<<"<="<<k<<endl;
+			con_cuts2.add(C2 <= k);//cout<<"<="<<k<<endl;
 			nbCuts ++;
 			j=l;
 		}else j++;
