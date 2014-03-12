@@ -21,7 +21,7 @@ using namespace std;
 
 ////////////////////////////////// Marcos and switchs /////
 #pragma region MARCOS
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_MOD false
 #define CONFIG true
 
@@ -213,7 +213,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			{
 				cout << "UB=LB!" << " " << UB << " " << prepro->PREGetLpOpt() << endl;
 				isOptiNoPre = 1;
-				iNbFixed = 0;
+				nbFix = 0;
 				dOptValue = UB;
 				dOptTime = dPreProcessingTime = temps_cpu_pre;
 			}
@@ -221,7 +221,6 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 			{
 				cout << "IS INTEGRAL!"<<endl;
 				isAllFixed = 1;
-				iNbFixed = nbFix;
 				dOptTime = dPreProcessingTime = temps_cpu_pre;
 				dOptValue = prepro->PREGetLpOpt();
 			}
@@ -751,7 +750,7 @@ void ConstructCut3(){}
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM true
+#define ENABLE_CMD_PARAM false
 
 int main(int argc, char* argvs[])
 {
@@ -774,9 +773,9 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees1_2.dat");
+		GetData("Donnees/donnees1_20.dat");
 
-	//ADDCUTS_C1=true;
+	ADDCUTS_C1=true;
 	//ADDCUTS_C2=true;
 	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
