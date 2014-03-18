@@ -19,12 +19,12 @@
 #define AFFICHER_AFFINITE false
 #define AFFICHER_RT false
 #define AFFICHER_UIT false
-#define AFFICHER_MACHINE false
-#define AFFICHER_ARC_DISPO false
+#define AFFICHER_MACHINE true
+#define AFFICHER_ARC_DISPO true
 #define AFFICHER_INTERVALLE false
 #define AFFICHER_SERVEUR_BIS false
 #define AFFICHER_LISTS_TACHES false
-#define AFFICHER_ORDO true
+#define AFFICHER_ORDO false
 
  
 //HANDLE consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);

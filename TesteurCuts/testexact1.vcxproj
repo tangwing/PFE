@@ -135,7 +135,6 @@
     <ClInclude Include="CplexResult.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="DataBis.h" />
-    <ClInclude Include="H1Result.h" />
     <ClInclude Include="PreprocessingResult.h" />
     <ClInclude Include="RandGeneration.h" />
   </ItemGroup>

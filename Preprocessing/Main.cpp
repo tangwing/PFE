@@ -31,6 +31,8 @@ using namespace std;
 bool ADDCUTS_C1 = false;
 bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
+//#define LEVEL_1CUT -1
+int LEVEL_1CUT = -1;
 #pragma endregion
 
 ///////////////////////////////// Declarations ///////////
@@ -755,19 +757,30 @@ void ConstructCut2()
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
 
-void ConstructCut3(){}
+void ConstructCut3()
+{
+	printf("[Info] Declaration of Cut3\n");
+	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
+	res.nbConCut3=0 ;
+	//1-cuts for constraint A/BC/D
+	for (iLoop=0;iLoop<T();iLoop++)
+		for (iLoop3=0;iLoop3<M();iLoop3++)
+		{
+		}
+}
 
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM true
+#define ENABLE_CMD_PARAM false
 
 int main(int argc, char* argvs[])
 {
 	//SomeTest();return 1;
 	int UB = 99999999;
-	UB = 515201;
+	//UB = 515201;
 	//UB = 465172;
+	UB=594336; //4_10
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
@@ -780,14 +793,20 @@ int main(int argc, char* argvs[])
 			ADDCUTS_C1 = flag % 2;
 			ADDCUTS_C2 = (flag >> 1)%2;
 			ADDCUTS_C3 = (flag >> 2)%2;
+
+			///!Tmp
+			//LEVEL_1CUT = flag;
+			//ADDCUTS_C1=ADDCUTS_C3=ADDCUTS_C2=0;
 		}
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees1_2.dat");
+		GetData("Donnees/donnees4_10.dat");
+
+
 
 	//ADDCUTS_C1=true;
-	//ADDCUTS_C2=true;
+	ADDCUTS_C2=true;
 	SolveMode sm = PRE_PRE; //Solve mode
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
@@ -956,10 +975,25 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 			nbCuts ++;
 			j=l;
 		}else j++;
+		
+		if(k == LEVEL_1CUT)break;	//1-Cut level control
 		k++;
 	}
 	return nbCuts;
 }
+
+void TestIdenticalMach()
+{ 
+	//char filename[]="Donnees/donnees8_20.dat ";
+	//for(int i=1; i<=8; i++)
+	//	for(int j=1; j<=20; j++)
+	//	{
+	//		sprintf(filename, "Donnees/donnees%d_%d.dat", i,j);
+	//		GetDate(filename);
+
+	//	}
+}
+
 void SomeTest()
 {
 	cout<<"[Temporary test:]"<<endl;

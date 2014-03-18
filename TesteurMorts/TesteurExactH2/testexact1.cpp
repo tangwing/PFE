@@ -124,7 +124,7 @@ void MakeComparationMatrix(int IdSce, int NbTache, int NbMach, int NbIter)
 		if(ScRes[1][i][3]<TMinH) TMinH = ScRes[1][i][3];
 		if(ScRes[1][i][3]>TMaxH) TMaxH = ScRes[1][i][3];
 
-		///We calculate the deviation only if they have both found a solution. DONC il faut penser à ça quand je calcule DevAvg! Bête.
+		///We calculate the deviation only if they have both found a solution. DONC il faut penser ?ça quand je calcule DevAvg! Bête.
 		if(ScRes[0][i][0] && ScRes[1][i][0])
 		{
 			NbInstanceDev ++;

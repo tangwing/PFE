@@ -77,7 +77,7 @@ typedef struct{
 				CaractServeur ListOfServeurbis[MaxTimeHorizon][MaxMachines]; ///Les ressources restantes. Liste non triée! Différente que ListOfServer
 				int EdgeBdeDispo[MaxTimeHorizon][MaxEdges]; ///should be inited by maxB
 				int EdgeBdeDispoBackUp[MaxTimeHorizon][MaxEdges];
-				///Cette structure nous permet d'obtenir l'ensemble des arcs à partir d'un couple de machines
+				///Cette structure nous permet d'obtenir l'ensemble des arcs ?partir d'un couple de machines
 				std::map<std::pair<int,int>, std::set<int>> CoupleEdgeMap;
 				NbServeurOn ListOfNbServeurOn[MaxTimeHorizon];
 				Interval ListOfIntervalles[MaxTimeHorizon];
@@ -100,8 +100,8 @@ typedef struct{
 				RAMHDD ListOfTasks2CPUMachinej[MaxTasks];
 				Ordo  ListOfOrdo[MaxTimeHorizon][MaxTasks];
 				int NbPr;
-				int NbNoPrAffected; ///nb des tâches non-pré déjà affectées
-				int NbPrAffected; ///nb des tâches pré déjà affectées
+				int NbNoPrAffected; ///nb des tâches non-pr?déj?affectées
+				int NbPrAffected; ///nb des tâches pr?déj?affectées
 				int NbHDDRAMGPU;
 				int NbHDDRAMGPUPr;
 				int NbHDDRAMCPU;

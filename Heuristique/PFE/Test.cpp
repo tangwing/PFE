@@ -10,6 +10,7 @@ void AfficherIntervalle()
 		char title[50];
 		sprintf(title, "Intervalles");
 		ConsoleTable ct (title, Traitement.NbInterval, 1);
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(10);
 		for(int i=0;i< Traitement.NbInterval;i++){
 			sprintf(title, " [%d,%d] ",Traitement.ListOfIntervalles[i].BorneInf,Traitement.ListOfIntervalles[i].BorneSup);
@@ -23,6 +24,7 @@ void AfficherCaracMachine()
 	if(!CACHER_TOUT && AFFICHER_MACHINE)
 	{
 		ConsoleTable ct(" Machines  ", M(), 4);
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColHeader(0, "QtyCPU(cost)")
 			.SetColHeader(1, "QtyGPU(cost)")
 			.SetColHeader(2, "QtyRAM(cost)")
@@ -52,6 +54,7 @@ void AfficherListeServeurBis()
 	if(!CACHER_TOUT && AFFICHER_SERVEUR_BIS)
 	{
 		ConsoleTable ct("Liste Serveur Bis  (CPU/GPU/HDD/RAM)", T(), M());
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(15);
 		ostringstream EleBuilder;
 		for(int i=0; i< T(); i++)
@@ -75,6 +78,7 @@ void AfficherRt()
 	if(!CACHER_TOUT && AFFICHER_RT)
 	{
 		ConsoleTable ct("Resuming time(N*M)", N(), M());
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(3);
 		for(int i=0; i< N(); i++)
 			for(int j=0; j<M(); j++)
@@ -87,6 +91,7 @@ void AfficherAffinite()
 	if(!CACHER_TOUT && AFFICHER_AFFINITE)
 	{
 		ConsoleTable ct("Affinity (N*N)", N(), N());
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(3);
 		for(int i=0; i< N(); i++)
 			for(int j=0; j<N(); j++)
@@ -99,6 +104,7 @@ void AfficherUit()
 	if(!CACHER_TOUT && AFFICHER_UIT)
 	{
 		ConsoleTable ct("U(i,t) (N*T)", N(), T());
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(3);
 		for(int i=0; i< N(); i++)
 			for(int j=0; j<T(); j++)
@@ -112,6 +118,7 @@ void AfficherEdgeDispo()
 	if(!CACHER_TOUT && AFFICHER_ARC_DISPO)
 	{
 		ConsoleTable ct("Arc dispo (T*NbEdge)", T(), Data.Network.NbEdges);
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(8); 
 		for(int i=0; i< T(); i++)
 			for(int j=0; j< Data.Network.NbEdges; j++)
@@ -124,6 +131,7 @@ void AfficherOrdo()
 	if(!CACHER_TOUT && AFFICHER_ORDO)
 	{
 		ConsoleTable ct("Ordonnancement (T*N)", T(), N());
+		ct.EnableExtendedAsciiChar(false);
 		ct.SetColWidth(4);
 		for(int i=0; i< T(); i++)
 		{
@@ -163,7 +171,7 @@ void AfficherListesTache(int indice)
 		for (int i=0; i<Traitement.NbRAMHDDCPU; i++){
 			printf("%d \t",Traitement.ListOfTasks2CPU[i].IndiceVM);
 		}
-		///Listes pré
+		///Listes pr?
 		printf("\n ** Liste HDDRAMGPUPr: ");
 		for (int i=0; i<Traitement.NbHDDRAMGPUPr; i++){
 			printf("%d \t",Traitement.ListOfTasks1GPUPr[i].IndiceVM);

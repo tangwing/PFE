@@ -7,6 +7,7 @@
 #include <cmath>
 #include <sstream>
 #include "RandGeneration.h"
+#include "CplexResult.h"
 #include "PreprocessingResult.h"
 #include "DataBis.h"
 
@@ -55,7 +56,7 @@ void main(void)
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
-	   if(pbIsInstanceFeasible[i][j] == false)
+	   if(pbIsInstanceFeasible[i][j] == false || pdUBs[i][j]<0)
 	   {
 		   printf("Instance not feasible, skip...\n");
 		   continue;
@@ -67,6 +68,24 @@ void main(void)
 		   printf("[DEBUG] The instance is generated: press a key to continue\n");
 		   _getch();
 	   }
+
+	   /// Get UB wit H2
+	 //  printf("The H2 program is running for finding UB...\n");fflush(stdout);
+		//spawnl(P_WAIT,"H2.exe","H2.exe", NULL); 
+		//CplexResult h2;
+  //      h2.ImportFromFile("H2.txt");
+		//pdUBs[i][j]=h2.value;
+
+		//static bool firstTime = true;
+		//FILE *logH2;
+		//if(firstTime)
+		//{ 
+		//	firstTime=false;
+		//	logH2 = fopen("H2res.csv","wt");
+		//	fprintf(logH2,"sc_itr, sol; time; isTimLim; isMemLim\n" );
+		//}else logH2 = fopen("H2res.csv","at");
+		//fprintf(logH2,"Sc%d-%d; %3.2lf; %3.2lf; %d; %d\n", i+1, j+1, h2.value, h2.durationCpuClock, h2.isTimeLimit, h2.isMemLimit);
+		//fclose(logH2);
 
 		//***********************************************
 	    // Launch Pre+MIP with cut 2
@@ -156,13 +175,13 @@ void LogPreprocessingResults1(char* filename, int iSce, int jIter, Preprocessing
 		for(; j<20; j++)
 		{
 			if(i==iSce && j==jIter)break;
-			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i+1, j+1, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
 		}
 	lastI = iSce;
 	lastJ = jIter;
 	//Log the current result
 	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
-		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		iSce+1, jIter+1, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
 		r.errCodeLP,
 		r.isOptiNoPre,
 		r.isAllFixed,
@@ -215,7 +234,7 @@ void LogPreprocessingResults2(char* filename, int iSce, int jIter, Preprocessing
 	lastJ = jIter;
 	//Log the current result
 	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
-		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		iSce+1, jIter+1, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
 		r.errCodeLP,
 		r.isOptiNoPre,
 		r.isAllFixed,
@@ -266,7 +285,7 @@ void LogPreprocessingResults2(char* filename, int iSce, int jIter, Preprocessing
 	lastJ = jIter;
 	//Log the current result
 	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
-		iSce, jIter, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		iSce+1, jIter+1, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
 		r.errCodeLP,
 		r.isOptiNoPre,
 		r.isAllFixed,

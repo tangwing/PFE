@@ -75,7 +75,7 @@ void CalculInterval(){
 	Traitement.ListOfIntervalles[0].BorneSup = 0;
 	for(int instant=0;instant<T()-1;instant++){
 		for(int tacheI=0;tacheI<N();tacheI++){
-			if(( u(tacheI,instant)!=u(tacheI,instant+1))){///intervalle trouvé
+			if(( u(tacheI,instant)!=u(tacheI,instant+1))){///intervalle trouv?
 					Traitement.NbInterval++;
 					Traitement.ListOfIntervalles[Traitement.NbInterval-1].BorneSup = instant;
 					Traitement.ListOfIntervalles[Traitement.NbInterval].BorneInf = instant + 1;
@@ -108,7 +108,7 @@ void CreerListeMachineTriee(){
 }
 
 ///
-///@brief Calcule le cout total de l'ordonnancement trouvé
+///@brief Calcule le cout total de l'ordonnancement trouv?
 ///
 int TotalCost(){
 	int TotalCost = 0;
@@ -208,7 +208,7 @@ bool CalculFesabiliteResau(
 			if( Traitement.EdgeBdeDispo[intervalInf][*itEdge]<b(tachei, tachej) )
 				return false;
 			else
-			{	///! Il faut mettre à jour la valeur pour tout l'intervalle
+			{	///! Il faut mettre ?jour la valeur pour tout l'intervalle
 				for(int i=intervalInf; i<= intervalSup; i++)
 					Traitement.EdgeBdeDispo[i][*itEdge] -= b(tachei, tachej);
 			}
@@ -235,7 +235,7 @@ void ConstructionListesTache(unsigned int indice){
 		for (int i=0; i<N();i++){
 			//Construction des listes tâches non préemtable avec des besoins en GPU et CPU 
 			if((u(i,temps)==1)){
-				if(R(i) == 0) ///Pour les tâches non-pré
+				if(R(i) == 0) ///Pour les tâches non-pr?
 				{
 					if(Data.ListOfTasks[i].QtyGPU>0)
 					{
@@ -253,9 +253,9 @@ void ConstructionListesTache(unsigned int indice){
 							Traitement.ListOfTasks2CPU[Traitement.NbRAMHDDCPU++].IndiceVM = i;
 					}
 				}///fin if R=0
-				else ///Pour les tâches pré
+				else ///Pour les tâches pr?
 				{
-					///La liste de toutes les tâches pré
+					///La liste de toutes les tâches pr?
 					Traitement.ListofTasksPr[Traitement.NbPr++].IndiceVM = i;
 					
 					///Les 4 listes selon besoins
@@ -274,7 +274,7 @@ void ConstructionListesTache(unsigned int indice){
 						else
 							Traitement.ListOfTasks2CPUPr[Traitement.NbRAMHDDCPUPr++].IndiceVM = i;
 					}
-				}/// fin tâches pré
+				}/// fin tâches pr?
 			}///fin if u=1
 		}
 		AfficherListesTache(indice);
@@ -290,9 +290,9 @@ void Ordonnancement(int indice){
 	int iboucleS = 0;
 	int indiceTab = 0;
 
-	///! Maintenant on a déjà les listes de tâches, alors pour chaque machine, 
+	///! Maintenant on a déj?les listes de tâches, alors pour chaque machine, 
 	///on essaie de la remplir par des tâches.
-	///Tâches non pré d'abord
+	///Tâches non pr?d'abord
 	for(iboucleS=0;iboucleS<M();iboucleS++){
 		int indiceS = Traitement.ListOfServer[iboucleS].IndiceServeur;
 		Traitement.ListOfServer[iboucleS].ON = false;	///Pour calculer le NbServeurOn il faut d'abord éteindre la machine	
@@ -326,7 +326,7 @@ void Ordonnancement(int indice){
 
 	///
 	///Pour les tâches restantes préemptables
-	int indiceAllume = -1;	///!!C'est l'indice pour ListeServeurTrié
+	int indiceAllume = -1;	///!!C'est l'indice pour ListeServeurTri?
 	int debutIndiceMachine = 0;
 	while(Traitement.NbPrAffected < Traitement.NbPr){
 		///Rallumer les machines si besoin
@@ -378,11 +378,11 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 				continue;
 			}
 
-			///Si cette tâche était affectée sur cette machine à l'intervalle précédent, alors elle a plus de prio
+			///Si cette tâche était affectée sur cette machine ?l'intervalle précédent, alors elle a plus de prio
 			if( duree!=0 && lastIndiceInterval == indice-1 && lastIndiceServeur == indiceServeur){IB = M();}
 
 			///Pour WG. 
-			if(duree==0) ///Si la tâche n'a jamais été exécutée
+			if(duree==0) ///Si la tâche n'a jamais ét?exécutée
 			{
 				for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
 					if(q(indiceVM, iboucle2)==1){
@@ -392,7 +392,7 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 				///Moins de récepteur, plus de prio
 				WG = M() -  MachineRecevoir;
 			}
-			///Si elle a été executée sur cette machine et suspendue
+			///Si elle a ét?executée sur cette machine et suspendue
 			else if( lastIndiceServeur == indiceServeur && lastIndiceInterval < indice-1)
 			{
 				int inf = Traitement.ListOfIntervalles[indice].BorneInf;
@@ -407,7 +407,7 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 				///Migration pas possible
 				if(duree < mt(indiceVM))
 					WG = -2*M(); ///On ne va pas affecter les tâches qui a une prio négative
-				else ///Migration possible mais à vérifier nh et nr et bii à l'affectation
+				else ///Migration possible mais ?vérifier nh et nr et bii ?l'affectation
 				{
 					for(int iboucle2 = 0; iboucle2<M(); iboucle2++){
 						if(q(indiceVM, iboucle2)==1){
@@ -423,14 +423,14 @@ void CalculPrioEtTrier(Tache* listeTache, int nbTache, int indice,int indiceServ
 			//printf("priorite de la tache %d : %d \n",indiceVM,listeTache[iboucle].prio);	
 		}
 	}
-	///Trier les tâches en priorité décroissant
+	///Trier les tâches en priorit?décroissant
 	SortListByPrio(listeTache, nbTache);
 }
 
 ///
-///@brief Ordonnacement d'une liste de tâches. Meme principle pour pré et non-pré.
+///@brief Ordonnacement d'une liste de tâches. Meme principle pour pr?et non-pr?
 ///@detail On peut choisir si on a le droit d'allumer la machine en question.
-///Prendre en compte la gestion réseau et aussi la mise à jour des serveurs et du réseau
+///Prendre en compte la gestion réseau et aussi la mise ?jour des serveurs et du réseau
 ///
 void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabServeur, int & compteurAffect)
 {
@@ -445,7 +445,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 			bool needMigration = false;
 			int bandMigration = 0;
 			
-			//affectation des tâches appartenant à la liste des tâches
+			//affectation des tâches appartenant ?la liste des tâches
 			for(iboucle1=0;iboucle1<nbTache;iboucle1++){ ///Pour chaque tâche
 				indiceVM = listeTache[iboucle1].IndiceVM;///Pour simplifier la vie
 				needMigration = false;
@@ -487,9 +487,9 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 									///Backup network state
 									memcpy(Traitement.EdgeBdeDispoBackUp, Traitement.EdgeBdeDispo, MaxTimeHorizon* MaxEdges* sizeof(int));
 
-									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinité)
+									///Si la contrainte réseau le permet (Gestion réseau pour deux VMs qui possèdent une affinit?
 									for(indiceVM2 = 0; indiceVM2<N(); indiceVM2++){
-										///Si on trouve une VM qui a une affinité de celle qu'on est en train de traiter
+										///Si on trouve une VM qui a une affinit?de celle qu'on est en train de traiter
 										if(a(indiceVM,indiceVM2)==1)
 										{
 											///Si l'autre VM est affectée pour cet intervalle et pas sur une autre machine
@@ -504,7 +504,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 													Traitement.ListOfOrdo[intervalInf][indiceVM].affecter = false;
 													///Rollback
 													memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof( int));
-													indiceVM2 = -1; ///On va casser ce passage de boucle, continuer sur la tâche suivante à affecter.
+													indiceVM2 = -1; ///On va casser ce passage de boucle, continuer sur la tâche suivante ?affecter.
 													break;
 												}
 											}
@@ -520,7 +520,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 											///RollBack
 											memcpy(Traitement.EdgeBdeDispo, Traitement.EdgeBdeDispoBackUp, MaxTimeHorizon* MaxEdges* sizeof( int));
 											continue;
-										}else ///C'est feasable. Alors mise à jour ressouces par rapport à la migration
+										}else ///C'est feasable. Alors mise ?jour ressouces par rapport ?la migration
 										{
 											///Pour calculer le cout total
 											Traitement.ListOfOrdo[intervalInf][indiceVM].isMigrated = true;
@@ -542,7 +542,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 										Traitement.ListOfNbServeurOn[indice].NbServeurOn++;
 									}
 
-									///Mettre à jour les attributs pour chaque intant de temps de l'intervalle
+									///Mettre ?jour les attributs pour chaque intant de temps de l'intervalle
 									for(i=intervalInf;i<=intervalSup;i++){
 										if(i == intervalInf)///Pour le premier instant, traitement spécial
 										{
@@ -556,7 +556,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 										Traitement.ListOfOrdo[i][indiceVM].IndiceMachine = indiceServeur;
 										Traitement.ListOfOrdo[i][indiceVM].affecter = true;
 										
-										///Mettre à jour les ressources de la machine
+										///Mettre ?jour les ressources de la machine
 										Traitement.ListOfServeurbis[i][indiceServeur].GPU -=  ng(indiceVM);
 										Traitement.ListOfServeurbis[i][indiceServeur].CPU -=  nc(indiceVM);
 										Traitement.ListOfServeurbis[i][indiceServeur].HDD -=  nh(indiceVM);
@@ -567,7 +567,7 @@ void OrdoListeTache(Tache* listeTache, int nbTache, int indice, int indiceTabSer
 							}//else printf("Pas possible d'ajouter cette machine, pas assez de HDD \n");								
 						}//else printf("Pas possible d'ajouter cette machine, pas assez de CPU \n");
 					}//else printf("Pas possible d'ajouter cette machine, pas assez de GPU \n");*/
-				}//else cette tâche est déjà affectée
+				}//else cette tâche est déj?affectée
 			}			
 }
 
@@ -601,7 +601,7 @@ void LastExecution(unsigned int indice, unsigned int indiceVM, int & lastIndiceI
 
 ///@brief Allumer une machine et faire l'affectation au dessus.
 ///@param indice indice de l'intervalle
-///!Attention L'indice retourné est l'indice de la liste triée.
+///!Attention L'indice retourn?est l'indice de la liste triée.
 int AllumageMachine(unsigned indice, int debutIndiceServeur){
 	int indiceVM = -1;
 	int indiceServeur = -1;
@@ -651,7 +651,7 @@ int AllumageMachine(unsigned indice, int debutIndiceServeur){
 }
 
 ///(Obsolete)
-///@brief Vérifier qu'à l'intervalle donné, est-ce que l'ordonnancement effectué assure bien les affinités entre les tâches
+///@brief Vérifier qu'?l'intervalle donn? est-ce que l'ordonnancement effectu?assure bien les affinités entre les tâches
 ///
 bool VerifierAffinite(int indiceInterval)
 {
@@ -675,7 +675,7 @@ bool VerifierAffinite(int indiceInterval)
 
 //------------------------ Des fonctions utilitaires ------------------------
 
-///@brief Prétraitement des données. Pour le moment, le comportement est de garantir la compatibilité entre a() et u().
+///@brief Prétraitement des données. Pour le moment, le comportement est de garantir la compatibilit?entre a() et u().
 ///@obselete
 void Pretraiter()
 {

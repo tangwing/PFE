@@ -927,6 +927,7 @@ int main(int argc)
     printf("TimeLimit : %d\n", iTimeLimit);
 
 	GetData();
+//	GetData("Donnees/donnees8_2.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();

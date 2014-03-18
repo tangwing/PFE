@@ -28,7 +28,8 @@ int main()
 	FILE *fic;
     GetData();
 	//DisplayData();
-	AfficherCaracMachine();
+	AfficherEdgeDispo();
+	AfficherCaracMachine();//getchar();exit(0);
 	AfficherAffinite();
 	Init();
 	ticks0 = clock();
@@ -45,7 +46,7 @@ int main()
 		Ordonnancement(i);
 	}
 
-	///Tester si les taches non-pré sont toutes affectées. Sinon alors on a pas trouvé la solution.
+	///Tester si les taches non-pr?sont toutes affectées. Sinon alors on a pas trouv?la solution.
 	///Afficher la matrice d'ordo
 	for(int i=0;i<Traitement.NbInterval;i++)
 	{
