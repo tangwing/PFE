@@ -1,0 +1,66 @@
+% Maquette du cahier de spécification pour les PFE
+% version 02 du 21/10/2009
+% auteur :  Nicolas Ragot (nicolas.ragot@univ-tours.fr)
+% Document établi sur la base du standard IEEE std 830 
+%		et des documents de cours de Génie Logiciel de Polytech'Tours (Vincent T'Kindt)
+
+\documentclass[twoside,CDS]{EPURapport}% on reprend ici le style EPU rapport étendu au CDS (version du 21/10/2009)
+\input{include.tex}
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+\thedocument{Cahier de spécification système \& plan de développement}{Résolution d'un problème off-line de consolidation de serveurs}{Maquette CDS}
+
+\grade{Département Informatique}
+
+%Liste des versions avec la date et les principales modifications
+\modifications{
+	\version{00} \dateModif{12/2013} \description{Version initiale: squellette}
+	\version{01} \dateModif{1/2014} \description{Version 1.0}
+}
+
+\authors{%non utilisé dans le CDS (remplacé par l'émetteur ci-dessous)
+	\category{Étudiants}{%
+		\name{Lei SHANG} \mail{lei.shang@etu.univ-tours.fr}
+	}
+	\details{DI5 2013 - 2014}
+}
+
+%l'émetteur remplace ici l'auteur du rapport de PFE
+\emetteur{Lei SHANG}{EPU-DI}
+
+\supervisors{% non utilisés ici (remplacés par les validateurs ci-dessous)
+	\category{Encadrants}{%
+		\name{Vincent T'Kindt} \mail{vincent.tkindt@univ-tours.fr}
+	}
+	\details{Université François-Rabelais, Tours}
+}
+\nosupervisors
+
+%Personnes ayant relu le cahier de spécif, avec la date, l'effectivité de la validation et d'éventuels commentaires
+\validators{%
+		\name{Vincent T'Kindt} \dateValide{04/01/2014} \valide{O} \comment{Ok}
+}
+
+
+\abstracts{Ce rapport a été rédigé pour un projet de fin d'études à l'école d'ingénieurs Polytech'Tours, département informatique. Le sujet qui est plutôt de nature de recherche scientifique, consiste à résoudre un problème d'ordonnancement NP-complet rencontré par les fournisseurs d'infrastructure comme Amazon Cloud. On cherche à ordonnancer des machines virtuelles (tâches des clients) sur des machines physiques de façon optimale pour minimiser le coût d'utilisation. Ce rapport porte la modélisation du problème, la réalisation des approches heuristique et exacte ainsi que l'analyse des résultats obtenus.}
+{Consolidation de serveurs, Recherches opérationnelles, Heuristique de liste, Méthode exacte}
+{This report is created for a graduation project at Engineering School Polytech'Tours, Computer Science department. The subject of the project which is a scientific research, consists of the resolution of a scheduling problem encountered by infrastructure service providers like Amazon Cloud. We try to find the best scheduling of virtual machines (clients' tasks) on physical machines in purpose of minimising the total cost. This report involves the modeling of the problem, the heuristic and exact approachs and analysis of their results.}
+{Server consolidation, Operational research, Heuristic method, Exact method}
+
+\nolistoffigures
+\nolistoftables
+\renewcommand{\theequation}{\Alph{equation}}	
+\begin{document}
+
+%\part*{Cahier de spécification système}
+%\addcontentsline{toc}{part}{Cahier de spécification système} 
+%\setcounter{chapter}{1} %on n'utilise pas ici de chapitre explicite car un chapitre est sur une page à part (partie=chapitre)
+% en revanche on utilise la numérotation quand même
+\input{ch1_intro.tex}
+\input{ch2_contexte.tex}
+\input{ch3_modele.tex}
+\input{ch6_planning.tex}
+
+\end{document}
+

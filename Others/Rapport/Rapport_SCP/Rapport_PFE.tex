@@ -1,0 +1,198 @@
+\documentclass[twoside,fleqn]{EPURapport}
+\input{include.tex}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+
+\nolistoftables
+\thedocument{Rapport PFE}{Résolution d'un problème off-line de consolidation de serveurs}{}
+
+\grade{Département Informatique\\ 5\ieme{} année\\ 2013 - 2014}
+\authors{%
+	\category{Étudiants}{%
+		\name{Lei SHANG} \mail{lei.shang@etu.univ-tours.fr}
+	}
+	\details{DI5 2013 - 2014}
+}
+
+\supervisors{%
+	\category{Encadrants}{%
+		\name{Vincent T'Kindt} \mail{vincent.tkindt@univ-tours.fr}
+	}
+	\details{Université François-Rabelais, Tours}
+}
+
+\abstracts{Ce rapport a été rédigé pour un projet de fin d'études à l'école d'ingénieurs Polytech'Tours, département informatique. Le sujet qui est plutôt de nature de recherche scientifique, consiste à résoudre un problème d'ordonnancement NP-complet rencontré par les fournisseurs d'infrastructure comme Amazon Cloud. On cherche à ordonnancer des machines virtuelles (tâches des clients) sur des machines physiques de façon optimale pour minimiser le coût d'utilisation. Ce rapport porte la modélisation du problème, la réalisation des approches heuristique et exacte ainsi que l'analyse des résultats obtenus.}
+{Consolidation de serveurs, Recherches opérationnelles, Heuristique de liste, Méthode exacte}
+{This report is created for a graduation project at Engineering School Polytech'Tours, Computer Science department. The subject of the project which is a scientific research, consists of the resolution of a scheduling problem encountered by infrastructure service providers like Amazon Cloud. We try to find the best scheduling of virtual machines (clients' tasks) on physical machines in purpose of minimising the total cost. This report involves the modeling of the problem, the heuristic and exact approachs and analysis of their results.}
+{Server consolidation, Operational research, Heuristic method, Exact method}
+
+%\renewcommand{\labelitemii}{$\star$}
+\renewcommand{\theequation}{\Alph{equation}}	
+\begin{document}
+%\input{ch1_intro.tex}
+%\input{ch2_contexte.tex}
+%\input{ch3_modele.tex}
+%\input{ch6_planning.tex}
+%\input{preprocessing.tex}
+
+
+
+
+
+\chapter{Test et analyse}
+Pour tester le fonctionnement des différentes méthodes de résolution dans ce projet, plusieurs tests ont été faits sur un ensemble d'instance du problème. Cet ensemble contient 6 scénarios dont chacun est composé par 20 instances du problème. Toutes ces données de test sont généré par le programme Testeur.
+
+\section{Résultat du solveur Cplex}
+Dans un premier temps, le test du solveur Cplex est effectué car les solutions trouvées par le solveur peut nous servir pour évaluer la performance des autres méthodes de résolution.
+
+ 
+Le tableau \ref{tab_cplex} représente les statiqtiques effectuées sur le résultat de test du solveur Cplex. Les significations des colonnes sont:
+\begin{enumerate}
+	\item Sc(N/M): numéro de scénario et le nombre de VM et de serveur physique.
+	\item \#Infeas: le nombre des instances qui sont prouvées comme ''Infaisable'' par le solveur.
+	\item \#SolvedOpt: le nombre des instances qui sont résolues avec la solution optimale trouvée.
+	\item \#Mem: le nombre des instances pour lesquelles le solveur n'a pas pu trouvé la solution optimale à cause de la limite de l'espace mémoire.
+	\item \#Tim: le nombre des instances pour lesquelles le solveur n'a pas pu trouvé la solution optimale à cause de la limite du temps.
+	\item $T_{min}$, $T_{avg}$, $T_{max}$: le temps (minimum, moyenne et maximum) de résolution en seconde.
+\end{enumerate}
+\bigskip
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#SolvedOpt	& \#Mem & \#Tim & $T_{min}$ & $T_{avg}$	& $T_{max}$ \\ \hline
+		Sc1(8/2) & 2 & 18 & 0 & 0 &  0.02 &  0.07 &  0.15 \\ \hline
+		Sc2(11/3) & 9 & 11 & 0 & 0 &  0.08 &  0.34 &  1.08 \\ \hline
+		Sc3(15/4) & 1 & 19 & 0 & 0 &  0.59 &  4.33 &  54.57 \\ \hline
+		Sc4(18/5) & 0 & 19 & 0 & 1 &  1.88 &  239.53 &  1800.37 \\ \hline
+		Sc5(21/5) & 3 & 6 & 1 & 10 &  1.68 &  1196.57 &  1800.74 \\ \hline
+		Sc6(24/6) & 2 & 5 & 0 & 13 &  2.06 &  1316.75 &  1820.14 \\	\hline
+    \end{tabular}
+    \label{tab_cplex}
+    \caption{Résultat de test du solveur Cplex}
+\end{table}
+
+
+\section{Résultat de la méthode heuristique de liste}
+Le tableau \ref{tab_h1} montre le résultat de test de la méthode heuristique de liste (on l'appelle H1 pour raison de simplicité). Dans ce tableau, les colonnes $D_{min}$, $D_{avg}$ et $D_{max}$ signifient la déviation entre la solution trouvée par H1 et la solution trouvée par le solveur Cplex. A noter que pour les 3 premiers scénarios le solveur a trouvé la solution optimale pour toutes les instances donc cette déviation peut montrer la qualité de notre méthode H1 par rapport à la solution optimale. A partir du scénario 4 on commence à avoir des instances pour lesquelles le solveur a trouvé une solution faisable mais pas optimale à cause de la limite du temps ou de l'espace mémoire, alors dans ce cas la déviation est aussi affectée.
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#Solved	& $T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+		Sc1(8/2)  & 2 & 18 & 0.00 & 0.00 & 0.00 &0\% &19\% &67\% \\ \hline
+Sc2(11/3) & 9 & 11 & 0.00 & 0.00 & 0.00 &0\% &17\% &46\% \\ \hline
+Sc3(15/4) & 7 & 13 & 0.00 & 0.00 & 0.00 &5\% &24\% &58\% \\ \hline
+Sc4(18/5) & 11 & 9 & 0.00 & 0.00 & 0.00 &10\%& 27\%& 37\% \\ \hline
+Sc5(21/5) & 16 & 4 & 0.00 & 0.00 & 0.01 &30\%& 36\%& 43\% \\ \hline
+Sc6(24/6) & 20 & 0 & 0.00 & 0.01 & 0.02 & * & * & * \\ \hline
+    \end{tabular}
+    \label{tab_h1}
+    \caption{Résultat de test de la méthode heuristique de liste (H1)}
+\end{table}
+\bigskip
+
+On trouve souvent 0.00 seconde dans les colonnes de temps, ce qui signifie que le temps de résolution de H1 est très court.
+
+
+Par rapport à la déviation, la performance de H1 n'est pas très stable: pour certaines instance de problème, H1 a trouvé la solution optimale ($D_{min}=0\%$) mais on a aussi dans le Sc1 $D_{max}=67\%$ qui n'est pas très optimiste. Pour le scénario 6, H1 n'a résolu aucune instance donc la déviation n'est pas calcuée.
+
+
+\section{Résultat de la méthode heuristique de Cplex}
+Le tableau \ref{tab_h2} montre le résulat de test sur la méthode heuristique basé sur le solveur Cplex (H2).
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#Solved	& $T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+		Sc1(8/2)  &2 & 18 &  0.02 &  0.07   &0.15     &0\%  &0\%  &1\% \\ \hline
+Sc2(11/3) &9 & 11 &  0.08 &  0.29   &0.97     &0\%  &0\%  &1\% \\ \hline
+Sc3(15/4) &1 & 19 &  0.64 &  1.37   &5.21     &0\%  &0\%  &2\% \\ \hline
+Sc4(18/5) &0 & 20 &  1.53 &  80.33  & 400.32  &0\%  &0\%  &2\% \\ \hline
+Sc5(21/5) &3 & 17 &  1.68 &  240.31 &  400.41 & 0\% & 2\% & 4\% \\ \hline
+Sc6(24/6) &2 & 18 &  2.08 &  286.79 &  410.43 & -1\%&  1\%&  7\% \\ \hline
+    \end{tabular}
+    \label{tab_h2}
+    \caption{Résultat de test de la méthode heuristique de Cplex (H2)}
+\end{table}
+\bigskip
+
+
+Puisque la méthode H2 est basée sur le solveur Cplex, pour les petites instances de problème elle a trouvé des solutions qui sont très proches des solutions optimales. Pour les grandes instances (à partir du scénario 4),les solutions qu'elle a trouvées sont aussi très intéressantes avec la déviation maximum égale à 7\% qui reste acceptable. Le temps maximum de résolution est vers 400 secondes qui provient de l'implémentation de H2.
+
+\section{Résultat du Preprocessing}
+Avec les solutions données par H1 et H2, un autre test a été fait pour évaluer la performence de l'approche Preprocessing.
+
+
+On rappelle ici l'idée du Preprocessing est de fixer autant que possible de variables dans le modèle pour réduire la taille du problème. Pour le faire, il faut avoir une borne supérieure (UB) et une borne inférieure (LB) qui sont très proche de la solution optimale.
+
+
+Les colonnes s'interprête comme suivant:
+\begin{enumerate}
+	\item $DevLB_{min}$, $DevLB_{avg}$, $DevLB_{max}$: la déviation (minimum, moyenne et maximum) entre la solution optimale et LB.
+	\item $DevUB_{min}$, $DevUB_{avg}$, $DevUB_{max}$: la déviation (minimum, moyenne et maximum) entre UB et la solution optimale.
+	\item $\%Fixed_{min}$, $\%Fixed_{avg}$, $\%Fixed_{max}$: la proportion du nombre de variables fixées par rapport au nombre de toutes les variables ayant passé le preprocessing.
+\end{enumerate}
+
+\subsection{Preprocessing sur toutes les variables booléennes}
+Le premier test concerne le Preprocessing sur toutes les variables booléennes.
+
+
+Dans le tableau \ref{tab_pre} on peut trouver des statistiques sur la qualité des LB et des UB ainsi que la proportion de variables fixées pendant le Preprocessing.
+\bigskip
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& $LB_{min}$ & $LB_{avg}$ & $LB_{max}$ & $UB_{min}$ & $UB_{avg}$ & $UB_{max}$ & $\%Fix_{min}$ & $\%Fix_{avg}$ & $\%Fix_{max}$\\ \hline
+		Sc1(8/2) & 0.00\%  &4.83\%  &17.07\%  &0.00\% & 0.04\%  &0.65\%  &0.00\%  &6.88\%  &100.00\% \\ \hline
+Sc2(11/3)&  0.04\% & 7.21\% & 17.13\% & 0.00\%&  0.01\% & 0.15\% & 0.00\% & 1.65\% & 7.11\%\\ \hline
+Sc3(15/4)&  1.10\% & 4.01\% & 10.12\% & 0.00\%&  0.36\% & 1.80\% & 0.00\% & 0.09\% & 1.07\%\\ \hline
+Sc4(18/5)&  0.05\% & 5.28\% & 12.56\% & 0.00\%&  0.53\% & 1.81\% & 0.00\% & 0.25\% & 4.85\%\\ \hline
+Sc5(21/5)&  1.82\% & 5.03\% & 8.94\%  &0.56\% & 1.94\%  &7.62\%  &0.00\%  &0.00\%  &0.00\%\\ \hline
+Sc6(24/6)&  3.94\% & 5.91\% & 8.72\%  &0.30\% & 1.75\%  &5.40\%  &0.00\%  &0.01\%  &0.04\%\\ \hline
+    \end{tabular}
+    \label{tab_pre}
+    \caption{Résultat de test du Preprocessing sur toute les variables booléannes}
+\end{table}
+\bigskip
+
+\subsection{Preprocessing sur les variables booléennes de décision $X^t_{i,j}$}
+Le tableau \ref{tab_pre_x} est le résultat d'un autre test sur Preprocessing. Dans ce test, au lieu de passer toutes les variables au preprocessing, on passe seulement les variables de décision $X^t_{i,j}$, qui représente l'ordonnacement trouvé, au préprocessing car on pense que ces variables sont les plus influentes. Par rapport au premier test, ce test ne change que les 3 dernières colonnes sur la proportion des variables fixées, le résultat sur la qualité de LB et UB reste le même.
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	&  $\%Fix_{min}$ & $\%Fix_{avg}$ & $\%Fix_{max}$\\ \hline
+    	Sc1(8/2) &0.00\% & 13.84\% & 100.00\%\\ \hline
+Sc2(11/3)&0.00\% & 10.15\% & 42.42\%\\ \hline
+Sc3(15/4)&0.00\% & 0.56\%  &7.36\%\\ \hline
+Sc4(18/5)&0.00\% & 3.07\%  &59.07\%\\ \hline
+Sc5(21/5)&0.00\% & 0.00\%  &0.00\%\\ \hline
+Sc6(24/6)&0.00\% & 3.45\%  &59.07\%\\ \hline
+    \end{tabular}
+    \label{tab_pre_x}
+    \caption{Résultat de test du Preprocessing sur les variables de décision $X^t_{i,j}$}
+\end{table}
+\bigskip
+
+
+\subsection{Conclusion sur le Preprocessing}
+En analysant les résultats de test, on peut faire les conclusions suivantes.
+
+
+Sur la proportion moyenne des variables fixées, on trouve que le Preprocessing ne fonctionne pas bien pour l'instant. Souvent, ce problème survient quand le UB ou LB est pas assez bonne. En comparant la qualité de LB et de UB, on peut trouver que relativement les UB sont assez proches que la solution optimale, en revanche les LB ne sont pas très bonnes. Le travail futur est d'améliorer la LB, c'est-à-dire d'ajouter des contraintes supplémentaires (Cuts) au modèle LP du problème, pour enfin améliorer le fonctionnement du Preprocessing.
+
+
+En comparant le résultat détaillé des deux tests effectués, on a constaté que la plus part des variables fixées sont les variables de décision $X^t_{i,j}$. Cependant, pour certaines instances, si on passe seulement les $X^t_{i,j}$ au Preprocessing aucunne variable peut être fixée mais si on passe toutes variables booléennes au Preprocessing il y aura des variables fixées. Ca veut dire il y a quand même des variables booléennes qui ne sont pas $X^t_{i,j}$ mais qui ont des effet sur le Preprocessing. En conclusion on pense que c'est mieux de faire le Preprocessin pour toutes les variables booléennes.
+\end{document}
+

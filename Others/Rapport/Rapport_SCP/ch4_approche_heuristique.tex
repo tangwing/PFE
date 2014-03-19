@@ -1,0 +1,182 @@
+\chapter{Réalisation}
+\section{Choix de logiciel de visualisation - Tulip}
+Après avoir discuté avec notre encadrant, nous décitons de choisir le logiciel de visualisation entre Gephi et Tulip.
+
+
+D'abord nous avons essayé d'utiliser Gephi. Nous avons étudié les formats de données qu'il supporte. Mais malheureusement nous trouvons qu'on ne peut pas importer les fichiers de données de format CSV avec Gephi. Puisque notre données d'entrée sont de ce format et c'est aussi plus facile à générer telles données, donc nous avons enfin choisi Tulip comme le logiciel de visualisation.
+
+
+\subsection{Introduction de Tulip}
+Selon le site officiel de TULIP\footnote{\url{http://tulip.labri.fr/TulipDrupal/}}:
+	
+	\begin{quote}
+	Tulip is an information visualization framework dedicated to the analysis and visualization of relational data. Tulip aims to provide the developer with a complete library, supporting the design of interactive information visualization applications for relational data that can be tailored to the problems he or she is addressing.
+ 
+	Written in C++ the framework enables the development of algorithms, visual encodings, interaction techniques, data models, and domain-specific visualizations. One of the goal of Tulip is to facilitates the reuse of components and allows the developers to focus on programming their application. This development pipeline makes the framework efficient for research prototyping as well as the development of end-user applications.
+	\end{quote}
+	
+Tulip(Fig\ref{fig:tulip}) est développé avec la plateforme Qt. Le panneau principal est divisé en 3 parties	:
+\bigskip
+\begin{itemize}
+	\item Milieu: La zone de visualisation, ici on voit le graphe généré par tulip.
+	\item Gauche: Les algorithmes qu'on peut appliquer sur le graphe. Il y a aussi des algorithmes pour manipuler le layout du graphe.
+	\item Droite: Les attributes des sommes et des arcs du graphe.
+\end{itemize}
+\bigskip
+
+\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.6]{pics/tulip.png}
+	\caption{Tulip: un logiciel de visualisation des données}
+	\label{fig:tulip}
+\end{figure}
+\bigskip
+
+Dans ce projet, nous n'avons pas besoin de toucher les fonctionnalités avancées du Tulip. Chaque fois après le traitement des données initiales est fini, nous utilisons Tulip suivant les étapes au-dessous:
+\bigskip
+\begin{enumerate}
+	\item Importer les données à Tulip. Tulip peut importer les fichiers CSV directement.
+	\item Appliquer l'algorithme de layout FM\^3 pour ranger le graphe généré.
+	\item Manipuler éventuellement les attributes pour faire l'analyse qu'on veut.
+\end{enumerate}
+\bigskip
+
+Il y a plusieurs algorithmes de layout qu'on peut choisir. Mais selon le conseil de Monsieur Venturini, nous avons choisi FM\^3 qui prend le moins de temps pendant l'exécution.
+
+
+\subsection{Format de données de Tulip}
+Tulip peut importer plusieurs types de fichier comme entrée, mais ce qui nous intéresse est le format CSV. Pour représenter un graphe valide, le fichier CSV doit comprendre au moins 2 colonnes: le sommet de source et le sommet de destination. Tulip va créer éventuellement ces 2 noeuds et créer un arc entre eux.
+
+
+Il peut y avoir plus de 2 colonnes. Les colonnes en plus peuvent être utilisées comme les paramètres du graphe comme longueur de l'arc, taille des noeuds, etc.
+
+
+\section{Choix de l'approche de l'extraction des données}
+Comme nous l'avons indiqué, le travail principal de ce projet est l'extraction des données. C'est-à-dire prendre les données originales en entrée, et puis, en sortie on veut des données de propres formats qui peuvent être visualisées par Tulip.
+
+
+Le volume de données est assez grand, pour manipuler telles données, nous tenons compte au premier temps d'utiliser une base de données. Alors l'idée devient très claire, nous allons:
+\bigskip
+\begin{enumerate}
+	\item Importer les fichiers CSV dans la base de données en créant une table adaptée.
+	\item Extraire les données selon besoins en créant des procédures sql dans la base de données.
+	\item Exporter les données générées en fichiers CSV qui est reconnus par Tulip.
+	\item Importer et visualiser les données avec Tulip.
+\end{enumerate}
+\bigskip
+
+Nous avons choisi MySql comme la base de données, qui est très utilisée et qui nous semble suffisant pour traiter notre problème.
+
+
+\section{Visualisation globale des données}
+Etant la première étape, nous voulons simplement générer un graphe global à partir des données, sans contraintes supplémentaires. Pour faire ça, il suffit d'écrire une requête sql pour enlever toutes les colonnes sauf \texttt{calling\_number} et \texttt{dialled\_number}. Comme ça Tulip va après créer un arc pour chaque appel.
+
+
+Nous avons créé une procédure pour lancer la requête et exporter les données en fichier CSV. Nous l'avons ensuit visualisé avec Tulip(Fig:\ref{fig:graph-20130115}). Il y a au total 88604 noeuds et 426235 arcs.
+\bigskip
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.8]{pics/graphe-global-20130115.png}
+	\caption{Le graphe généré à partir du fichier \texttt{mno\_20130115.csv}}
+	\label{fig:graph-20130115}
+\end{figure}
+\bigskip
+
+Il y a trop de données, donc on ne peut pas bien voir le détail de l'image. En fait chaque point rouge sur le graphe est un sous-graphe. L'image suivante est la vue partielle(Fig:\ref{fig:partielle-20130115}).
+\bigskip
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.6]{pics/partielle.png}
+	\caption{La vue partielle du graphe (fichier \texttt{mno\_20130115.csv})}
+	\label{fig:partielle-20130115}
+\end{figure}
+\bigskip
+
+On peut constater dans cette image, il y a plusieurs sous-graphes dont chacun est un réseau de relations. La communauté en bas est la plus grande du graphe qui possède 16000 noeuds et 38000 arcs.
+
+
+\section{Extraction du réseau de relation d'une personne}
+
+Avec la visualisation avant, nous constatons que le graphe entier contient beaucoup de sous-graphe de relations humaine. Alors maintenant, nous voudrions extraire le graphe de relation d'une personne à partir de son identifiant donné.
+
+Nous avons créé une procédure dans MySql pour faire ça. L'algorithme est similaire au parcours en largeur des arbres.
+
+On suppose que l'identifiant de la personne donnée est \texttt{id\_caller}, le tableau qui contient toutes les données s'appelle \texttt{donnée}, alors le principe de l'algorithme:
+\bigskip
+\begin{enumerate}
+	\item Créer un tableau \texttt{résultat} qui contient tous les enregistrements dont le \texttt{calling\_number} égale à \texttt{caller}.
+	\item Créer un tableau \texttt{à-explorer} qui contient les identifiants des personnes à explorer. Ce sont toutes les valeurs qui sont dans la colonne \texttt{dialled\_number} du tableau \texttt{résultat} et qui ne sont pas contenues dans la colonne \texttt{calling\_number}.
+	\item Pour chaque enregistrement du tableau \texttt{à-explorer}, sélectionner dans le tableau \texttt{donnée} les enregistrements dont \texttt{calling\_number} égale à ce premier et ajouter le résultat dans le tableau \texttt{résultat}.
+	\item Supprimer le tableau \texttt{à-explorer} et aller à l'étape 2 et répéter ces démarches jusqu'au tableau \texttt{résultat} n'évolue plus.
+	\item Le tableau \texttt{résultat} contient donc les résultats finaux.
+\end{enumerate}
+\bigskip
+
+Nous avons choisi un petit graphe de relations pour tester cette procédure. La figure \ref{fig:net-76eb2e1d4c5a35a97066e23b9e63c075} est le petit graphe que nous avons choisi. L'un des sommets de ce graphe est identifié par \texttt{76eb2e1d4c5a35a97066e23b9e63c075}, alors nous allons prendre cet identifiant comme entrée de la procédure.
+\bigskip
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.7]{pics/net-76eb2e1d4c5a35a97066e23b9e63c075.png}
+	\caption{Le graphe choisi qui contient le noeud 76eb2e1d4c5a35a97066e23b9e63c075}
+	\label{fig:net-76eb2e1d4c5a35a97066e23b9e63c075}
+	\end{figure}
+\bigskip
+
+Et ceci\ref{fig:net-generated-76eb2e1d4c5a35a97066e23b9e63c075} est le graphe généré par notre procédure:
+\bigskip
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.7]{pics/net-generated-76eb2e1d4c5a35a97066e23b9e63c075.png}
+	\caption{Le graphe généré à partir du noeud 76eb2e1d4c5a35a97066e23b9e63c075}
+	\label{fig:net-generated-76eb2e1d4c5a35a97066e23b9e63c075}
+	\end{figure}
+\bigskip
+	
+On peut constater que ces 2 graphes sont quasiment pareils sauf qu'il manque quelques noeuds dans le graphe généré. C'est normal car selon notre algorithme, si une personne B appelle A, mais B n'a jamais reçu un appel d'A, alors B ne va pas apparaître dans le réseau de relations d'A. Nous pensons que c'est très logique.
+
+
+\subsection{Prendre en compte la profondeur}
+La procédure marche bien quand le graphe à générer est petit. Mais une fois le graph devient grand, le temps d'exécution augmente énormément. Nous avons testé avec le plus grand sous-graphe \ref{fig:partielle-20130115} que nous avons montré, l'exécution a duré 7 heures sans succès.
+
+
+Alors c'est nécessaire de mettre en place le contrôle de profondeur du graphe à générer. Quand on arrive à une profondeur prédéfinie l'itération doit s'arrêter. Des petites modifications sont apportées sur l'algorithme avant.
+
+Les images suivantes utilisent la même entrée. Mais les profondeurs sont différentes, de 1 à 8. Pour bien afficher les images, nous choisissons le numéro ''b239fa5bc93ee753116a7bca291eee21'' qui est dans le plus grand sous-graphe de l'image partielle\ref{fig:partielle-20130115} qu'on a vu.
+\bigskip
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.7]{pics/profondeur1234.png}
+	\caption{Les images avec profondeur 1-4}
+	\label{fig:profondeur1234}
+	\end{figure}
+\bigskip	
+	
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.7]{pics/profondeur5678.png}
+	\caption{Les images avec profondeur 5-8}
+	\label{fig:profondeur5678}
+	\end{figure}
+\bigskip
+
+On peut constater que la taille de graphe croît exponentiellement quand la profondeur augmente.
+\clearpage
+
+\section{Statistiques}
+En dehors de la visualisation des données sous forme de graphe, nous avons aussi fait des statistiques sur ces données.
+
+\subsection{L'histogramme de nombre d'appels sur la durée}
+
+Maintenant, on utilise un histogramme pour représenter la distribution du nombre d'appels selon la durée d'appels.
+\bigskip	
+	\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.5]{pics/histogramme.png}
+	\caption{L'histogramme de nombre d'appels sur la durée}
+	\label{fig:histogramme}
+	\end{figure}
+\bigskip
+
+Selon le histogramme, on constate que la plupart d'appel (>80\%) dure moins d'une minute. Ceci n'est pas un fait intuitif, donc c'est une information qui peut être de valeur.
+
+Nous avons réalisé ce calcul en créant une autre procédure sql. Dans cette procédure, la durée de moins d'une minute et la durée de plus de 30 minutes sont obligatoires. Parce que selon le histogramme, il y a beaucoup d'appels qui sont moins d'une minute et il n'y a aucun appel qui est plus de 30 minutes. Pour la durée entre une minute et 30 minutes, on peut la personnaliser par le paramètre de la procédure-\texttt{le nombre d'intervalle}. Si ce nombre est 10, chaque intervalle est environ 3 minutes.
