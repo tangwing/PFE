@@ -77,6 +77,7 @@ int isTimeLimit=-1, isMemLimit=-1;
 int iNbFixed = -1, nbBool=-1;
 PreprocessingResult res; //The final result which will be exported to file
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
+void SetVector( IloCplex& cplex, char* filename);
 #pragma endregion 
 
 ///
@@ -105,6 +106,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		// Step 2: convert the LP model into an IP model (real valued variables are turned into integer valued variables) 
 		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
 		// Step 3: solve the IP formulation
+		SetVector( *pcplex, "SolVector.out");
 		prepro->PRESolveMIP();
 
 		objValue = prepro->PREGetMipOpt();
@@ -778,15 +780,11 @@ void ConstructCut3()
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-void SetVector( IloCplex& cplex, char* filename);
 #define ENABLE_CMD_PARAM false
 
 int main(int argc, char* argvs[])
 {
-	float f=1;double d=1; int i=1;
-	printf("%f,%lf,%d",f,d,i);
-
-
+	SolveMode sm = PRE_MIP_ONLY; //Solve mode
 	//SomeTest();return 1;
 	int UB = 99999999;
 	//UB = 515201;
@@ -813,13 +811,13 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_16.dat");
+		GetData("Donnees/donnees4_4.dat");
 
 
 
 	//ADDCUTS_C1=true;
-	ADDCUTS_C2=true;
-	SolveMode sm = PRE_PRE; //Solve mode
+	//ADDCUTS_C2=true;
+	
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
 	//SomeTest();
@@ -871,7 +869,7 @@ int main(int argc, char* argvs[])
 				res.isMIPExecuted = 1;
 				dNbMach=-1.0;
 				///Set Vectors
-				SetVector( cplex, "SolVector.out");
+				//SetVector( cplex, "SolVector.out");
 
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem

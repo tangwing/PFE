@@ -585,6 +585,7 @@ double CountPMsTurnedOn(IloCplex *pcplex)
  return (dCount/=(double)T());
 }
 
+//void SetVector( IloCplex& cplex, char* filename);
 /* Programme Principal */
 int main(int argc, char* argvs[])
 {
@@ -592,7 +593,7 @@ int main(int argc, char* argvs[])
 	double dNbMach;
 
 	if(argc > 1)GetData(argvs[1]);
-	else GetData();
+	else GetData("Donnees/donnees4_16.dat");
 	if (DEBUG) DisplayData();
 	ticks0 = clock();
 	IloCplex cplex;
@@ -617,6 +618,8 @@ int main(int argc, char* argvs[])
 			//cplex.setParam(IloCplex::Threads,3);
 		}
 		
+		///Set Vectors
+		//SetVector( cplex, "SolVector.out");
 
 		//direct MIP without preprocessing
 		dNbMach=-1.0;
@@ -699,3 +702,5 @@ int main(int argc, char* argvs[])
 		_getch();
 	return 0;
 }
+
+
