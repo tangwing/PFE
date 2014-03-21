@@ -916,6 +916,9 @@ double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1)
 	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;
 }
 
+
+void ExportVarVector(IloCplex & cplex ,char*);
+int* ReadVarVector( char* filename);
 /* Programme Principal */
 int main(int argc)
 {
@@ -926,8 +929,8 @@ int main(int argc)
 	int iTimeLimit = CalculateTimeLimit();
     printf("TimeLimit : %d\n", iTimeLimit);
 
-	GetData();
-//	GetData("Donnees/donnees8_2.dat");
+//	GetData();
+	GetData("Donnees/donnees4_16.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -964,6 +967,11 @@ int main(int argc)
 				isFeasible=1;
 				dOptValue=cplex.getObjValue();
 				dNbMach=CountPMsTurnedOn(&cplex);
+
+				ExportVarVector(cplex, "SolVector.out");
+				//int *vals = ReadVarVector( "SolVector.out");
+				//delete []vals;
+				
 			} else if (cplex.getCplexStatus()==IloCplex::Infeasible || cplex.getCplexStatus()==IloCplex::InfeasibleOrUnbounded || cplex.getCplexStatus()==IloCplex::InfOrUnbd)
 			{
 				isOptimal=0;
@@ -1023,3 +1031,56 @@ int main(int argc)
 	if (DEBUG)
 		getch();
 }
+
+
+
+// Functions for identifying vars in the vector
+int indX( int t, int i, int j){return t*N()*M()+i*M()+j;}
+int indY( int t, int i1, int i2, int j1, int j2){return T()*N()*M() + t*N()*N()*M()*M()+ i1*N()*M()*M() + i2*M()*M()+ j1*M() +j2 ;}
+int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
+void ExportVarVector(IloCplex & cplex ,char* filename=NULL)
+{
+	if(filename == NULL)filename = "SolVector.out";
+	FILE* f = fopen(filename, "wt");
+	int counter = 0;
+	int iTask,iMach,iTask2,iMach2, iTime;
+	for (iTask=0;iTask<N();iTask++)
+		for (iMach=0;iMach<M();iMach++)
+			for (iTime=0;iTime<T();iTime++)
+				if (cplex.isExtracted(x[iTask][iMach][iTime]) )//&& cplex.getValue(x[iTask][iMach][iTime])>0.999)
+			   {fprintf(f, "%d,%f\n", indX(iTime, iTask, iMach),cplex.getValue(x[iTask][iMach][iTime])); counter++;} //we export only vars whose value is 1
+
+	for (iTask=0;iTask<N();iTask++)
+	for (iTask2=0;iTask<N();iTask++)
+		for (iMach=0;iMach<M();iMach++)
+		for (iMach2=0;iMach<M();iMach++)
+			for (iTime=0;iTime<T();iTime++)
+			   if (cplex.isExtracted(y[iTask][iTask2][iMach][iMach2][iTime]) )//&& cplex.getValue(y[iTask][iTask2][iMach][iMach2][iTime])>0.999)
+				    {fprintf(f, "%d,%f\n", indY(iTime, iTask,iTask2, iMach, iMach2),cplex.getValue(y[iTask][iTask2][iMach][iMach2][iTime])); counter++;} //we export only vars whose value is 1
+		for (iMach=0;iMach<M();iMach++)
+			for (iTime=0;iTime<T();iTime++)
+			   if (cplex.isExtracted(z[iMach][iTime])) //&& cplex.getValue(z[iMach][iTime])>0.999)
+				    {fprintf(f, "%d,%f\n", indZ(iTime, iMach),cplex.getValue(z[iMach][iTime])); counter++;} //we export only vars whose value is 1
+	printf("Export: counter=%d\n", counter);
+	fclose(f);
+}
+
+//int * ReadVarVector(char* filename)
+//{
+//	
+//	int size = T()*N()*M() + T()*N()*N()*M()*M() + T()*M();
+//	int *vals = new int[size]();//init avec 0
+//	for(int i=0; i<size; i++){if (vals[i]!=0)abort();}
+//	FILE* f = fopen(filename, "rt");
+//	int indVar;
+//	int counter=0;
+//	int tmp=0;
+//	while( (tmp=fscanf(f,"%d\n", &indVar))!=EOF )
+//	{
+//		counter++;
+//		vals[indVar]=1;
+//	}
+//	fclose(f);
+//	printf("Read: counter=%d",counter);
+//	return vals;
+//}

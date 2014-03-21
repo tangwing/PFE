@@ -4,6 +4,7 @@
 #include <vector>
 #include <Windows.h>
 #include <intrin.h>
+#include "Data.h"
 using namespace std;
 
 ///@brief return the cpu info string
@@ -69,5 +70,4 @@ int CalculateTimeLimit()
 	if (iTimeLimit<200) iTimeLimit=200;
 	return iTimeLimit;
 }
-
 

@@ -33,6 +33,7 @@ bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
 int LEVEL_1CUT = -1;
+int NB_1CUT_SEUIL = 99999999;
 #pragma endregion
 
 ///////////////////////////////// Declarations ///////////
@@ -723,7 +724,8 @@ void ConstructCut1()
 void ConstructCut2()
 {
 		printf("[Info] Declaration of Cut2\n");
-		int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
+		NB_1CUT_SEUIL = 0.17*N()*N()*M()*M(); //The max number of cuts 
+		int iLoop,iLoop2,iLoop3,iLoop4;
 		 res.nbConCut2=0 ;
 		 //1-cuts for constraint A/BC/D
 		for (iLoop=0;iLoop<T();iLoop++)
@@ -749,38 +751,48 @@ void ConstructCut2()
 			}
 			//Now we have 4 equations, begin to make 1-cuts
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationA, mc(iLoop3));
+			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationB, mg(iLoop3));
+			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationC, mh(iLoop3));
+			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationD, mr(iLoop3));
+			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 		 }
-
+Label:  
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
 
 void ConstructCut3()
 {
-	printf("[Info] Declaration of Cut3\n");
-	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
-	res.nbConCut3=0 ;
-	//1-cuts for constraint A/BC/D
-	for (iLoop=0;iLoop<T();iLoop++)
-		for (iLoop3=0;iLoop3<M();iLoop3++)
-		{
-		}
+	//printf("[Info] Declaration of Cut3\n");
+	//int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
+	//res.nbConCut3=0 ;
+	////1-cuts for constraint A/BC/D
+	//for (iLoop=0;iLoop<T();iLoop++)
+	//	for (iLoop3=0;iLoop3<M();iLoop3++)
+	//	{
+	//	}
 }
 
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
+void SetVector( IloCplex& cplex, char* filename);
 #define ENABLE_CMD_PARAM false
 
 int main(int argc, char* argvs[])
 {
+	float f=1;double d=1; int i=1;
+	printf("%f,%lf,%d",f,d,i);
+
+
 	//SomeTest();return 1;
 	int UB = 99999999;
 	//UB = 515201;
 	//UB = 465172;
-	UB=594336; //4_10
+	//UB=594336; //4_10
+	UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
@@ -795,13 +807,13 @@ int main(int argc, char* argvs[])
 			ADDCUTS_C3 = (flag >> 2)%2;
 
 			///!Tmp
-			//LEVEL_1CUT = flag;
+			//LEVEL_1CUT = fla g;
 			//ADDCUTS_C1=ADDCUTS_C3=ADDCUTS_C2=0;
 		}
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_10.dat");
+		GetData("Donnees/donnees4_16.dat");
 
 
 
@@ -858,6 +870,9 @@ int main(int argc, char* argvs[])
 			{
 				res.isMIPExecuted = 1;
 				dNbMach=-1.0;
+				///Set Vectors
+				SetVector( cplex, "SolVector.out");
+
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
 					dOptValue=-1;
@@ -1020,4 +1035,33 @@ double CountPMsTurnedOn(IloCplex *pcplex)
  return (dCount/=(double)T());
 }
 
+//Read var vector from file. The file contains the indices of vars in var[], whose value=1 according to the solution of H2
+void SetVector( IloCplex& cplex, char* filename)
+{
+	
+	int size = T()*N()*M() + T()*N()*N()*M()*M() + T()*M();
+	//IloNumArray *pvals=new IloNumArray(env, size);
+	IloNumArray vals(env);//,size);
+	IloNumVarArray vars(env);
+	//double *vals = new double[size];
+	//for(int i=0; i<size; i++){vals[i]=0;}
+	FILE* f = fopen(filename, "rt");
+	int indVar;
+	int counter=0;
+	float tmp=0;
+	while( fscanf(f,"%d,%f\n", &indVar, &tmp)!=EOF )
+	{
+		counter++;
+		//printf("%d,%f\n",indVar, vals[indVar]);
+		//vals[indVar]=tmp;
+		vars.add(var[indVar]);
+		vals.add(tmp);
+		//printf("%f\n",vals[indVar]);
+		//var[indVar].setBounds(1,1);
+	}
+	fclose(f);
+	printf("Read: counter=%d, valsSize=%d,size=%d",counter, size,size);
+	//for(int i=0; i<size; i++){printf("%d\n",vals[i]);}
+	cplex.setVectors(vals, 0,vars,0,0,0);
+}
 #pragma endregion
