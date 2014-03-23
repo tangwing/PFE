@@ -33,7 +33,8 @@ bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
 int LEVEL_1CUT = -1;
-int NB_1CUT_SEUIL = 99999999;
+int NB_1CUT_SEUIL = 99999999;//Upper bound
+int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
 ///////////////////////////////// Declarations ///////////
@@ -106,7 +107,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		// Step 2: convert the LP model into an IP model (real valued variables are turned into integer valued variables) 
 		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
 		// Step 3: solve the IP formulation
-		SetVector( *pcplex, "SolVector.out");
+		//SetVector( *pcplex, "SolVector.out");
 		prepro->PRESolveMIP();
 
 		objValue = prepro->PREGetMipOpt();
@@ -726,9 +727,9 @@ void ConstructCut1()
 void ConstructCut2()
 {
 		printf("[Info] Declaration of Cut2\n");
-		NB_1CUT_SEUIL = 0.17*N()*N()*M()*M(); //The max number of cuts 
+		NB_1CUT_SEUIL = int(0.17*N()*N()*M()*M()); //The max number of cuts 
 		int iLoop,iLoop2,iLoop3,iLoop4;
-		 res.nbConCut2=0 ;
+		res.nbConCut2=0 ;
 		 //1-cuts for constraint A/BC/D
 		for (iLoop=0;iLoop<T();iLoop++)
 		 for (iLoop3=0;iLoop3<M();iLoop3++)
@@ -753,13 +754,13 @@ void ConstructCut2()
 			}
 			//Now we have 4 equations, begin to make 1-cuts
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationA, mc(iLoop3));
-			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
+			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationB, mg(iLoop3));
-			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
+			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationC, mh(iLoop3));
-			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
+			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 			res.nbConCut2 += Make1Cuts( con_cuts2, vEquationD, mr(iLoop3));
-			if(res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
+			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL){goto Label;}
 		 }
 Label:  
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
@@ -780,29 +781,29 @@ void ConstructCut3()
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM false
+#define ENABLE_CMD_PARAM true
 
 int main(int argc, char* argvs[])
 {
-	SolveMode sm = PRE_MIP_ONLY; //Solve mode
+	SolveMode sm = PRE_PRE; //Solve mode
 	//SomeTest();return 1;
 	int UB = 99999999;
 	//UB = 515201;
 	//UB = 465172;
 	//UB=594336; //4_10
-	UB=831337;//4_4
+	//UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB [CutsToAdd]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB CutsToAdd [FilenameForSetVector]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
-		if(argc==3) //Add Cuts
+		if(argc>=3) //Add Cuts
 		{
 			int flag = atoi(argvs[2]);
-			ADDCUTS_C1 = flag % 2;
-			ADDCUTS_C2 = (flag >> 1)%2;
-			ADDCUTS_C3 = (flag >> 2)%2;
+			ADDCUTS_C1 = bool(flag % 2);
+			ADDCUTS_C2 = bool((flag >> 1)%2);
+			ADDCUTS_C3 = bool((flag >> 2)%2);
 
 			///!Tmp
 			//LEVEL_1CUT = fla g;
@@ -811,7 +812,7 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_4.dat");
+		GetData("Donnees/donnees1_4.dat");
 
 
 
@@ -869,7 +870,8 @@ int main(int argc, char* argvs[])
 				res.isMIPExecuted = 1;
 				dNbMach=-1.0;
 				///Set Vectors
-				//SetVector( cplex, "SolVector.out");
+				if(argc==4)
+					SetVector( cplex, argvs[3]);//"SolVector.out"
 
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
@@ -964,8 +966,8 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 	//for_each(Left.begin(), Left.end(), [](const Term & t){ cout<<t.first<<endl;});
 
 	int nbCuts = 0;
-	unsigned int s = Left[0].first;
-	unsigned int i=0, j=1, l;
+	int s = Left[0].first;
+	int i=0, j=1, l;
 	int k=1;
 	while(j+2<Left.size())
 	{
@@ -1058,7 +1060,7 @@ void SetVector( IloCplex& cplex, char* filename)
 		//var[indVar].setBounds(1,1);
 	}
 	fclose(f);
-	printf("Read: counter=%d, valsSize=%d,size=%d",counter, size,size);
+	printf("Read: counter=%d, size=%d\n",counter, size);
 	//for(int i=0; i<size; i++){printf("%d\n",vals[i]);}
 	cplex.setVectors(vals, 0,vars,0,0,0);
 }

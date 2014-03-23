@@ -33,7 +33,7 @@ unsigned int iterations=20;
 //Dim4(Preprocessing for X only)
 double ScRes[4][20][8];
 char tmp[20];//For sprintf
-//char *tmp2="xonly";//For sprintf
+char vecFile[20];//For sprintf
 int nbBoolX = 0, nbFixX = 0;
 
 double Round(double,int);
@@ -70,33 +70,34 @@ void main(void)
 	   }
 
 	   /// Get UB wit H2
-	 //  printf("The H2 program is running for finding UB...\n");fflush(stdout);
-		//spawnl(P_WAIT,"H2.exe","H2.exe", NULL); 
-		//CplexResult h2;
-  //      h2.ImportFromFile("H2.txt");
-		//pdUBs[i][j]=h2.value;
+	   printf("The H2 program is running for finding UB...\n");fflush(stdout);
+	   sprintf(vecFile, "Vector%d_%d.out",i+1, j+1);
+		spawnl(P_WAIT,"H2.exe","H2.exe", vecFile, NULL); 
+		CplexResult h2;
+        h2.ImportFromFile("H2.txt");
+		pdUBs[i][j]=h2.value;
 
-		//static bool firstTime = true;
-		//FILE *logH2;
-		//if(firstTime)
-		//{ 
-		//	firstTime=false;
-		//	logH2 = fopen("H2res.csv","wt");
-		//	fprintf(logH2,"sc_itr, sol; time; isTimLim; isMemLim\n" );
-		//}else logH2 = fopen("H2res.csv","at");
-		//fprintf(logH2,"Sc%d-%d; %3.2lf; %3.2lf; %d; %d\n", i+1, j+1, h2.value, h2.durationCpuClock, h2.isTimeLimit, h2.isMemLimit);
-		//fclose(logH2);
+		/*static bool firstTime = true;
+		FILE *logH2;
+		if(firstTime)
+		{ 
+			firstTime=false;
+			logH2 = fopen("H2res.csv","wt");
+			fprintf(logH2,"sc_itr, sol; time; isTimLim; isMemLim\n" );
+		}else logH2 = fopen("H2res.csv","at");
+		fprintf(logH2,"Sc%d-%d; %3.2lf; %3.2lf; %d; %d\n", i+1, j+1, h2.value, h2.durationCpuClock, h2.isTimeLimit, h2.isMemLimit);
+		fclose(logH2);*/
 
 		//***********************************************
 	    // Launch Pre+MIP with cut 2
 	    //***********************************************
 		sprintf(tmp, "%d",int(pdUBs[i][j]));
 
-		printf("The Preprocessing program is running without cuts2...\n");fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "2", NULL); 
+		printf("The Preprocessing program is running...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "2", vecFile,NULL); 
 		PreprocessingResult pre;
         pre.ImportFromFile("Preproc.txt");
-		LogPreprocessingResults2("pre_cut2.csv" ,i,j,pre);
+		LogPreprocessingResults2("pre_cut2Limited_h2start.csv" ,i,j,pre);
 
 	  }
   }
@@ -228,7 +229,7 @@ void LogPreprocessingResults2(char* filename, int iSce, int jIter, Preprocessing
 		for(; j<20; j++)
 		{
 			if(i==iSce && j==jIter)break;
-			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i, j, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i+1, j+1, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
 		}
 	lastI = iSce;
 	lastJ = jIter;

@@ -920,7 +920,7 @@ double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1)
 void ExportVarVector(IloCplex & cplex ,char*);
 int* ReadVarVector( char* filename);
 /* Programme Principal */
-int main(int argc)
+int main(int argc, char*argvs[])
 {
 	time_t temp1,temp2,tempPre1,tempPre2;
 	clock_t ticks0;
@@ -929,8 +929,8 @@ int main(int argc)
 	int iTimeLimit = CalculateTimeLimit();
     printf("TimeLimit : %d\n", iTimeLimit);
 
-//	GetData();
-	GetData("Donnees/donnees4_4.dat");
+	GetData();
+//	GetData("Donnees/donnees4_4.dat");
 	if (DEBUG) DisplayData();
 
 	ticks0 = clock();
@@ -967,8 +967,6 @@ int main(int argc)
 				isFeasible=1;
 				dOptValue=cplex.getObjValue();
 				dNbMach=CountPMsTurnedOn(&cplex);
-
-				ExportVarVector(cplex, "SolVector.out");
 				//int *vals = ReadVarVector( "SolVector.out");
 				//delete []vals;
 				
@@ -1025,6 +1023,12 @@ int main(int argc)
 		,-1
 		,dOptTime);
 	res.ExportToFile("H2.txt");
+
+	if(res.isFeasible == 1)
+	{
+		if(argc>1)ExportVarVector(cplex, argvs[1]);
+		else ExportVarVector(cplex, "SolVector.out"); //Export solution
+	}
 
 	if (DEBUG && dOptValue!=9999999.0)
 			SolutionToFile(cplex);

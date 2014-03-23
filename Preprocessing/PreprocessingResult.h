@@ -11,8 +11,8 @@ public:
 	PreprocessingResult()
 	{
 		isMIPExecuted = isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
-		UB = LB = value=durationCpuClock=durationPre=-1;
-		nbConCut1=nbConCut2=nbConCut3=statusCode=nbNode=nbMachine=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
+		nbMachine=UB = LB = value=durationCpuClock=durationPre=-1;
+		nbConCut1=nbConCut2=nbConCut3=statusCode=nbNode=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
 	}
 	//PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
 	//	int nbMach, int nbNod, int status, 
