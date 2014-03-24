@@ -766,22 +766,51 @@ Label:
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
 
+bool IsIdentical(int j1, int j2);
 void ConstructCut3()
 {
-	//printf("[Info] Declaration of Cut3\n");
-	//int iLoop,iLoop2,iLoop3,iLoop4,iLoop5,iLoop6,iLoop7,iLoop8;
-	//res.nbConCut3=0 ;
-	////1-cuts for constraint A/BC/D
-	//for (iLoop=0;iLoop<T();iLoop++)
-	//	for (iLoop3=0;iLoop3<M();iLoop3++)
-	//	{
-	//	}
+	printf("[Info] Declaration of Cut3: identical servers\n");
+	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5;
+	res.nbConCut3=0 ;
+	//Find equivalent machines
+	bool *IsExplored = new bool[M()]();//inited to 0
+	for (iLoop3=0;iLoop3<M();iLoop3++)
+	{
+		if(IsExplored[iLoop3] == 1)continue;
+		else IsExplored[iLoop3] = 1;
+		int j=iLoop3;//cf formulation
+		for (iLoop4=iLoop3+1;iLoop4<M();iLoop4++)
+		{
+			if(IsExplored[iLoop4] == 1)continue;
+			if(IsIdentical(iLoop3, iLoop4))
+			{//Generate cuts for (j, illop4) //consecutive identical servers
+				IsExplored[iLoop4] = 1;
+
+				for (iLoop=0;iLoop<T();iLoop++)
+				{
+					IloExpr C3(env); //1 cut for each t1€(0,t-1)
+					for (iLoop5=0;iLoop5<iLoop;iLoop5++)
+						for (iLoop2=0;iLoop2<N();iLoop2++)
+							C3 += var[indX(iLoop5, iLoop2, j)] + var[indX(iLoop5, iLoop2, iLoop4)];
+					//Cpu usage difference for current t
+					for (iLoop2=0;iLoop2<N();iLoop2++)
+							C3 += nc(iLoop2)* (var[indX(iLoop, iLoop2, j)] - var[indX(iLoop, iLoop2, iLoop4)]);
+
+					con_cuts3.add(C3 >= 0);
+					res.nbConCut3++;
+				}
+				j=iLoop4;
+			}
+
+		}
+	}
+	cout<<"[CUT3]: nbCut = "<<res.nbConCut3<<endl;
 }
 
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM true
+#define ENABLE_CMD_PARAM false
 
 int main(int argc, char* argvs[])
 {
@@ -791,7 +820,7 @@ int main(int argc, char* argvs[])
 	//UB = 515201;
 	//UB = 465172;
 	//UB=594336; //4_10
-	//UB=831337;//4_4
+	UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB CutsToAdd [FilenameForSetVector]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
@@ -812,12 +841,13 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees1_4.dat");
+		GetData("Donnees/donnees4_4.dat");
 
 
 
 	//ADDCUTS_C1=true;
 	//ADDCUTS_C2=true;
+	ADDCUTS_C3=true;
 	
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
@@ -1063,5 +1093,22 @@ void SetVector( IloCplex& cplex, char* filename)
 	printf("Read: counter=%d, size=%d\n",counter, size);
 	//for(int i=0; i<size; i++){printf("%d\n",vals[i]);}
 	cplex.setVectors(vals, 0,vars,0,0,0);
+}
+
+//Return true if two server have the same q(i,j) for all i
+bool IsIdentical(int j1, int j2)
+{
+	if( mc(j1)!=mc(j2) 
+		||mg(j1)!=mg(j2) 
+		||mr(j1)!=mr(j2) 
+		||mh(j1)!=mh(j2) 
+		)return false;
+
+	for(int i=0; i<N(); i++)
+	{
+		if(q(i,j1)!=q(i,j2))return false;
+	}
+	cout<<"[IdenticalPM]: "<<j1<<" = "<<j2<<endl;
+	return true;
 }
 #pragma endregion
