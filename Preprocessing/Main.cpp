@@ -785,7 +785,7 @@ void ConstructCut3()
 			if(IsIdentical(iLoop3, iLoop4))
 			{//Generate cuts for (j, illop4) //consecutive identical servers
 				IsExplored[iLoop4] = 1;
-
+				cout<<"[Equal]:"<<iLoop3<<" et "<<iLoop4<<endl;
 				for (iLoop=0;iLoop<T();iLoop++)
 				{
 					IloExpr C3(env); //1 cut for each t1€(0,t-1)
@@ -820,7 +820,7 @@ int main(int argc, char* argvs[])
 	//UB = 515201;
 	//UB = 465172;
 	//UB=594336; //4_10
-	UB=831337;//4_4
+	//UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB CutsToAdd [FilenameForSetVector]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
@@ -841,7 +841,7 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_4.dat");
+		GetData("Donnees/donnees5_1.dat");
 
 
 
