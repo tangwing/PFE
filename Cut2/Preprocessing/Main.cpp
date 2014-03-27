@@ -35,7 +35,7 @@ bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
 int LEVEL_1CUT = -1;
 int NB_1CUT_SEUIL = 99999999;//Upper bound
-int NB_1CUT_MIN = 1000; //Lower bound
+//int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
 ///////////////////////////////// Declarations ///////////
@@ -784,7 +784,7 @@ void ConstructCut2()
 		for(auto it = vEquations.begin(); it != vEquations.end(); it++)
 		{
 			res.nbConCut2 += Make1Cuts( con_cuts2, *((it->first).get()), it->second);
-			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL)break;
+			if( res.nbConCut2>NB_1CUT_SEUIL)break;
 		}
 
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
@@ -833,7 +833,7 @@ void ConstructCut3()
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM false
+#define ENABLE_CMD_PARAM true
 
 int main(int argc, char* argvs[])
 {
@@ -846,21 +846,11 @@ int main(int argc, char* argvs[])
 	//UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB CutsToAdd [FilenameForSetVector]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForSetVector]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
-		if(argc>=3) //Add Cuts
-		{
-			int flag = atoi(argvs[2]);
-			ADDCUTS_C1 = bool(flag % 2);
-			ADDCUTS_C2 = bool((flag >> 1)%2);
-			ADDCUTS_C3 = bool((flag >> 2)%2);
-
-			///!Tmp
-			//LEVEL_1CUT = fla g;
-			//ADDCUTS_C1=ADDCUTS_C3=ADDCUTS_C2=0;
-		}
+		NB_1CUT_SEUIL = atoi(argvs[2]);
 		GetData();
 	}
 	else	
@@ -869,7 +859,7 @@ int main(int argc, char* argvs[])
 
 
 	//ADDCUTS_C1=true;
-	//ADDCUTS_C2=true;
+	ADDCUTS_C2=true;
 	//ADDCUTS_C3=true;
 	
 	clock_t ticks0;
@@ -1048,18 +1038,6 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 		k++;
 	}
 	return nbCuts;
-}
-
-void TestIdenticalMach()
-{ 
-	//char filename[]="Donnees/donnees8_20.dat ";
-	//for(int i=1; i<=8; i++)
-	//	for(int j=1; j<=20; j++)
-	//	{
-	//		sprintf(filename, "Donnees/donnees%d_%d.dat", i,j);
-	//		GetDate(filename);
-
-	//	}
 }
 
 void SomeTest()
