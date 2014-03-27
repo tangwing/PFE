@@ -87,11 +87,11 @@ void main(void)
 		printf("The Preprocessing program is running with cuts2 seuil 200...\n");fflush(stdout);
 		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
         pre.ImportFromFile("Preproc.txt");
-		nbCut2 = pre.nbConCut2;
+		//nbCut2 = pre.nbConCut2;
 		LogCut2Level("pre_cut2_seuil.csv" ,i,j, cut2Level, pre);
 		while(true)
 		{
-			if(nbCut2 < cut2Level)break;
+			if(pre.nbConCut2 < cut2Level)break;
 			cut2Level += 200;
 			sprintf(tmp2, "%d", cut2Level);
 			printf("The Preprocessing program is running with cuts2 seuil %d...\n", cut2Level);fflush(stdout);
