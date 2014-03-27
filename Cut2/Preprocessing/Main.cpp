@@ -80,7 +80,7 @@ int isTimeLimit=-1, isMemLimit=-1;
 int iNbFixed = -1, nbBool=-1;
 PreprocessingResult res; //The final result which will be exported to file
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
-void SetVector( IloCplex& cplex, char* filename);
+void AddMIPStart( IloCplex& cplex, char* filename);
 #pragma endregion 
 
 ///
@@ -274,9 +274,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 }
 
 
-///
 /// This function initializes the LP model
-///
 void InitializeLPModel()
 {
 #pragma region NOT_CUTS
@@ -649,6 +647,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  }
 }
 
+
 /////////////////////// Cuts construction ////////////////////////
 void ConstructCut1()
 {
@@ -725,7 +724,6 @@ void ConstructCut1()
 				printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
  }
 }
-
 void ConstructCut2()
 {
 		//NB_1CUT_SEUIL = int(0.17*N()*N()*M()*M()); //The max number of cuts 
@@ -789,7 +787,6 @@ void ConstructCut2()
 
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
-
 bool IsIdentical(int j1, int j2);
 void ConstructCut3()
 {
@@ -830,15 +827,23 @@ void ConstructCut3()
 	cout<<"[CUT3]: nbCut = "<<res.nbConCut3<<endl;
 }
 
+
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM true
+#define 
 
 int main(int argc, char* argvs[])
 {
+	///Some switchs---------------------
 	SolveMode sm = PRE_PRE; //Solve mode
+    bool ENABLE_CMD_PARAM true
+	//ADDCUTS_C1=true;
+	ADDCUTS_C2=true;
+	//ADDCUTS_C3=true;
 	//SomeTest();return 1;
+	
+	///Main part -----------------------
 	int UB = 99999999;
 	//UB = 515201;
 	//UB = 465172;
@@ -846,7 +851,7 @@ int main(int argc, char* argvs[])
 	//UB=831337;//4_4
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForSetVector]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForAddMipStart]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
@@ -856,11 +861,6 @@ int main(int argc, char* argvs[])
 	else	
 		GetData("Donnees/donnees4_1.dat");
 
-
-
-	//ADDCUTS_C1=true;
-	ADDCUTS_C2=true;
-	//ADDCUTS_C3=true;
 	
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
@@ -914,7 +914,7 @@ int main(int argc, char* argvs[])
 				dNbMach=-1.0;
 				///Set Vectors
 				if(argc==4)
-					SetVector( cplex, argvs[3]);//"SolVector.out"
+					AddMIPStart( cplex, argvs[3]);//"SolVector.out"
 
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
@@ -1067,7 +1067,8 @@ double CountPMsTurnedOn(IloCplex *pcplex)
 }
 
 //Read var vector from file. The file contains the indices of vars in var[], whose value=1 according to the solution of H2
-void SetVector( IloCplex& cplex, char* filename)
+//void SetVector( IloCplex& cplex, char* filename)
+void AddMIPStart( IloCplex& cplex, char* filename)
 {
 	
 	int size = T()*N()*M() + T()*N()*N()*M()*M() + T()*M();
@@ -1093,7 +1094,10 @@ void SetVector( IloCplex& cplex, char* filename)
 	fclose(f);
 	printf("Read: counter=%d, size=%d\n",counter, size);
 	//for(int i=0; i<size; i++){printf("%d\n",vals[i]);}
-	cplex.setVectors(vals, 0,vars,0,0,0);
+	//cplex.setVectors(vals, 0,vars,0,0,0);
+	cplex.addMIPStart(vars, vals);
+	vals.end();
+	vars.end();
 }
 
 //Return true if two server have the same q(i,j) for all i
