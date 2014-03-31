@@ -34,7 +34,7 @@ bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
 int LEVEL_1CUT = -1;
-int NB_1CUT_SEUIL = 0;//Upper bound
+int NB_1CUT_SEUIL = 99999999;//Upper bound
 //int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
@@ -764,37 +764,25 @@ void ConstructCut2()
 			vEquations.push_back( make_pair( vEquationC, mh(iLoop3)));
 			vEquations.push_back( make_pair( vEquationD, mr(iLoop3)));
 		}
-
 		 if(DEBUG)
 		 {
 			 cout<<"[vEquation]: Before sort ------------"<<endl;
 			 cout<<vEquations.size()<<endl;
-			 for_each( vEquations.begin(), vEquations.end(), [](const Equation & e){cout<<e.second<<endl;});
+			 for_each( vEquations.begin(), vEquations.end(), [](Equation e){cout<<e.second<<endl;});
 		 }
-		 //Sort vEquations by RHS increasing
-		 //sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) { return e1.second<e2.second);}
-
-
-		//Sort vEquations by Sum(LHS)/RHS decreasing
-		 sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) ->bool
-		 {
-			 double sumLhs1 = 0, sumLhs2=0;
-			 for_each( (e1.first)->begin(), (e1.first)->end(), [&sumLhs1](const Term& t){ sumLhs1+=t.first;});
-			 for_each( (e2.first)->begin(), (e2.first)->end(), [&sumLhs2](const Term& t){ sumLhs2+=t.first;});
-			 //cout<<sumLhs1/e1.second<<" "<<sumLhs2/e2.second<<endl;
-			 return (sumLhs1/e1.second) > (sumLhs2/e2.second); 
-		 });
+		//Sort vEquations by RHS increasing
+		 sort(vEquations.begin(), vEquations.end(), [](Equation e1, Equation e2){ return e1.second < e2.second; });
 		 if(DEBUG)
 		 {
 			cout<<"[vEquation]: After sort -------------"<<endl;
-			for_each( vEquations.begin(), vEquations.end(), [](const Equation & e){cout<<e.second<<endl;});
+			for_each( vEquations.begin(), vEquations.end(), [](Equation e){cout<<e.second<<endl;});
 		 }
 
 		//Begin to make 1-cuts
 		for(auto it = vEquations.begin(); it != vEquations.end(); it++)
 		{
 			res.nbConCut2 += Make1Cuts( con_cuts2, *((it->first).get()), it->second);
-			if( NB_1CUT_SEUIL>0 && res.nbConCut2>NB_1CUT_SEUIL)break;
+			if( res.nbConCut2>NB_1CUT_SEUIL)break;
 		}
 
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
@@ -843,13 +831,14 @@ void ConstructCut3()
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
+
 int main(int argc, char* argvs[])
 {
 	///Some switchs---------------------
 	SolveMode sm = PRE_PRE; //Solve mode
-    bool ENABLE_CMD_PARAM =true;
+    bool ENABLE_CMD_PARAM = false;
 	//ADDCUTS_C1=true;
-	ADDCUTS_C2=true;
+	//ADDCUTS_C2=true;
 	//ADDCUTS_C3=true;
 	//SomeTest();return 1;
 	
@@ -859,6 +848,9 @@ int main(int argc, char* argvs[])
 	//UB = 465172;
 	//UB=594336; //4_10
 	//UB=831337;//4_4
+	UB= 784991.00; //4_1
+	UB= 614073.00; //3_17
+	UB= 980050.00; //4 3
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForAddMipStart]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
@@ -869,7 +861,7 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees3_7.dat");
+		GetData("Donnees/donnees4_3.dat");
 
 	
 	clock_t ticks0;

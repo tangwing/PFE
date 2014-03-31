@@ -53,9 +53,26 @@ void main(void)
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
-	   if(!pbIsInstanceFeasible[i][j] || pdSol[i][j]<0)
+	   if(!(i==3 && j==0)
+		   && !(i==3 && j==1)
+		   && !(i==3 && j==2)
+		   && !(i==3 && j==9)
+		   && !(i==3 && j==16)
+
+		   && !(i==4 && j==3)
+		   && !(i==4 && j==4)
+		   && !(i==4 && j==12)
+		   && !(i==4 && j==15)
+		   && !(i==4 && j==17)
+
+		   && !(i==5 && j==5)
+		   && !(i==5 && j==10)
+		   && !(i==5 && j==11)
+		   && !(i==5 && j==17)
+		   && !(i==5 && j==19)
+		   )
 	   {
-		   printf("Instance not feasible, skip...\n");
+		   printf("Instance not needed, skip...\n");
 		   continue;
 	   }
 
@@ -73,18 +90,24 @@ void main(void)
 		sprintf(tmp, "%d",int(pdUBs[i][j]));
 		PreprocessingResult pre;
 		int nbCut2 = 0;
-		int cut2Level = 0; //NB_Seuil not levels
-		int N = ScNM[i][0] + ScNM[i][1] + ScNM[i][2] + ScNM[i][3] + ScNM[i][4];
-		int M = ScNM[i][5] + ScNM[i][6] + ScNM[i][7] + ScNM[i][8];
-		//Apply the threshold fonction when M > 4
-		if(M>4) cut2Level = int(-66.66666667*N + 1400*M - 5200);
+		int cut2Level = 200; //NB_Seuil not levels
 
 		sprintf(tmp2, "%d", cut2Level);
-		printf("The Preprocessing program is running with cuts2 seuil %d...\n",cut2Level);fflush(stdout);
+		printf("The Preprocessing program is running with cuts2 seuil 200...\n");fflush(stdout);
 		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
         pre.ImportFromFile("Preproc.txt");
-
-		LogCut2Level("pre_cut2_seuil_func.csv" ,i,j, cut2Level, pre);
+		//nbCut2 = pre.nbConCut2;
+		LogCut2Level("pre_cut2_seuil.csv" ,i,j, cut2Level, pre);
+		while(true)
+		{
+			if(pre.nbConCut2 < cut2Level)break;
+			cut2Level += 200;
+			sprintf(tmp2, "%d", cut2Level);
+			printf("The Preprocessing program is running with cuts2 seuil %d...\n", cut2Level);fflush(stdout);
+			spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
+			pre.ImportFromFile("Preproc.txt");
+			LogCut2Level("pre_cut2_seuil.csv" ,i,j, cut2Level,pre);
+		}
 	  }
   }
 }
@@ -97,22 +120,17 @@ void LogCut2Level(char* filename, int iSce, int jIter, int level, PreprocessingR
 	{
 		printHeader = false;
 		fRes = fopen(filename,"wt");
-		fprintf(fRes,"Sc(N/M); 1-cutSeuil; sol_nopre; UB; LB; isOptNoPre; isAllFixed; isMipExecuted; sol_pre; statusCode; nbVar; nbFixed; nbNode; tempsTotal; nbConCut2\n");
+		fprintf(fRes,"Sc(N/M); 1-cutSeuil; UB; LB; statusCode; nbVar; nbFixed; nbNode; tempsTotal; nbConCut2\n");
 	}else
 	{
 		fRes = fopen(filename,"at");
 	}
 	//Log the current result
-	fprintf(fRes,"Sc%d-%d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %3.2lf; %d; %d; %d; %d; %3.2lf; %d\n",
+	fprintf(fRes,"Sc%d-%d; %d; %3.2lf; %3.2lf; %d; %d; %d; %d; %3.2lf; %d\n",
 		iSce+1, jIter+1, 
 		level,
-		pdSol[iSce][jIter],
 		r.UB,
 		r.LB,
-		r.isOptiNoPre,
-		r.isAllFixed,
-		r.isMIPExecuted,
-		r.value,
 		r.statusCode,
 		r.nbBoolExtractable,
 		r.nbFixed,

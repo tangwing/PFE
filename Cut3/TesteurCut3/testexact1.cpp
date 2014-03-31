@@ -33,13 +33,12 @@ unsigned int iterations=20;
 //Dim4(Preprocessing for X only)
 double ScRes[4][20][8];
 char tmp[20];//For sprintf
-char tmp2[20];//For sprintf
-//char *tmp2="xonly";//For sprintf
+char vecFile[20];//For sprintf
 int nbBoolX = 0, nbFixX = 0;
 
 double Round(double,int);
 double Round(double);
-void LogCut2Level(char* , int iSce, int iIter, int level, PreprocessingResult r);
+void LogPreprocessingResults(char* , int iSce, int iIter, PreprocessingResult r);
 
 //Variables used to compute statistics
 void main(void)
@@ -53,7 +52,7 @@ void main(void)
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
-	   if(!pbIsInstanceFeasible[i][j] || pdSol[i][j]<0)
+	   if(pbIsInstanceFeasible[i][j] == false || pdUBs[i][j]<0)
 	   {
 		   printf("Instance not feasible, skip...\n");
 		   continue;
@@ -66,64 +65,92 @@ void main(void)
 		   _getch();
 	   }
 
-	   
+	   /// Get UB wit H2
+	  /* printf("The H2 program is running for finding UB...\n");fflush(stdout);
+	   sprintf(vecFile, "Vector%d_%d.out",i+1, j+1);
+		spawnl(P_WAIT,"H2.exe","H2.exe", vecFile, NULL); 
+		CplexResult h2;
+        h2.ImportFromFile("H2.txt");
+		pdUBs[i][j]=h2.value;*/
+
+		/*static bool firstTime = true;
+		FILE *logH2;
+		if(firstTime)
+		{ 
+			firstTime=false;
+			logH2 = fopen("H2res.csv","wt");
+			fprintf(logH2,"sc_itr, sol; time; isTimLim; isMemLim\n" );
+		}else logH2 = fopen("H2res.csv","at");
+		fprintf(logH2,"Sc%d-%d; %3.2lf; %3.2lf; %d; %d\n", i+1, j+1, h2.value, h2.durationCpuClock, h2.isTimeLimit, h2.isMemLimit);
+		fclose(logH2);*/
+
 		//***********************************************
 	    // Launch Pre+MIP with cut 2
 	    //***********************************************
 		sprintf(tmp, "%d",int(pdUBs[i][j]));
+
+		printf("The Preprocessing program is running...\n");fflush(stdout);
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, "4",NULL); 
 		PreprocessingResult pre;
-		int nbCut2 = 0;
-		int cut2Level = 0; //NB_Seuil not levels
-		int N = ScNM[i][0] + ScNM[i][1] + ScNM[i][2] + ScNM[i][3] + ScNM[i][4];
-		int M = ScNM[i][5] + ScNM[i][6] + ScNM[i][7] + ScNM[i][8];
-		//Apply the threshold fonction when M > 4
-		if(M>4) cut2Level = int(-66.66666667*N + 1400*M - 5200);
-
-		sprintf(tmp2, "%d", cut2Level);
-		printf("The Preprocessing program is running with cuts2 seuil %d...\n",cut2Level);fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
         pre.ImportFromFile("Preproc.txt");
+		LogPreprocessingResults("pre_cut3.csv" ,i,j,pre);
 
-		LogCut2Level("pre_cut2_seuil_func.csv" ,i,j, cut2Level, pre);
 	  }
   }
 }
 
-void LogCut2Level(char* filename, int iSce, int jIter, int level, PreprocessingResult r)
+void LogPreprocessingResults(char* filename, int iSce, int jIter, PreprocessingResult r)
 {
 	static bool printHeader = true;
+	static int lastI=0, lastJ=-1;
 	FILE* fRes;
 	if(printHeader)
 	{
 		printHeader = false;
 		fRes = fopen(filename,"wt");
-		fprintf(fRes,"Sc(N/M); 1-cutSeuil; sol_nopre; UB; LB; isOptNoPre; isAllFixed; isMipExecuted; sol_pre; statusCode; nbVar; nbFixed; nbNode; tempsTotal; nbConCut2\n");
+		fprintf(fRes,"Sc(N/M); isFea(E); isOpt(E); sol(E); errCodeLP; isOptNoPre; isAllFixed; nbVar; nbVarValid; nbFixed; UB; LB; dureePre; isMIP; isFea; isOpt; TimLim; MemLim; nbMach; nbNode;  statusCode; sol; tempsTotal; nbConCut1; nbConCut2; nbConCut3\n");
 	}else
 	{
 		fRes = fopen(filename,"at");
 	}
+
+	//Blank lines
+	for(int i=lastI, j=lastJ+1; i<=iSce; i++, j=0)
+		for(; j<20; j++)
+		{
+			if(i==iSce && j==jIter)break;
+			fprintf(fRes,"Sc%d-%d; %d; %d; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *; *\n", i+1, j+1, pbIsInstanceFeasible[i][j], pbIsSolOpt[i][j]);
+		}
+	lastI = iSce;
+	lastJ = jIter;
 	//Log the current result
-	fprintf(fRes,"Sc%d-%d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %3.2lf; %d; %d; %d; %d; %3.2lf; %d\n",
-		iSce+1, jIter+1, 
-		level,
-		pdSol[iSce][jIter],
-		r.UB,
-		r.LB,
+	fprintf(fRes,"Sc%d-%d; %d; %d; %3.2lf; %d; %d; %d; %d; %d; %d; %3.2lf; %3.2lf; %3.2lf; %d; %d; %d; %d; %d; %3.2lf; %d; %d; %3.2lf; %3.2lf; %d; %d; %d\n",
+		iSce+1, jIter+1, pbIsInstanceFeasible[iSce][jIter], pbIsSolOpt[iSce][jIter], pdSol[iSce][jIter],
+		r.errCodeLP,
 		r.isOptiNoPre,
 		r.isAllFixed,
-		r.isMIPExecuted,
-		r.value,
-		r.statusCode,
+		r.nbBool,
 		r.nbBoolExtractable,
 		r.nbFixed,
+		r.UB,
+		r.LB,
+		r.durationPre,
+		r.isMIPExecuted,
+		r.isFeasible,
+		r.isOptimal,
+		r.isTimeLimit,
+		r.isMemLimit,
+		r.nbMachine,
 		r.nbNode,
+		r.statusCode,
+		r.value,
 		r.durationCpuClock,
-		r.nbConCut2
+		r.nbConCut1,
+		r.nbConCut2,
+		r.nbConCut3
 		);
 	fclose(fRes);
 }
-
-
 
 
 //Round a double to int
