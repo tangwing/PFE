@@ -34,6 +34,7 @@ unsigned int iterations=20;
 double ScRes[4][20][8];
 char tmp[20];//For sprintf
 char tmp2[20];//For sprintf
+char vecFile[30];//For sprintf. vector file for addMipStart
 //char *tmp2="xonly";//For sprintf
 int nbBoolX = 0, nbFixX = 0;
 
@@ -80,11 +81,12 @@ void main(void)
 		if(M>4) cut2Level = int(-66.66666667*N + 1400*M - 5200);
 
 		sprintf(tmp2, "%d", cut2Level);
+		sprintf(vecFile, "Vectors/Vector%d_%d.out",i+1, j+1);
 		printf("The Preprocessing program is running with cuts2 seuil %d...\n",cut2Level);fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
+		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, vecFile, NULL); 
         pre.ImportFromFile("Preproc.txt");
 
-		LogCut2Level("pre_cut2_seuil_func.csv" ,i,j, cut2Level, pre);
+		LogCut2Level("pre_cut2_seuil_func_mipstart.csv" ,i,j, cut2Level, pre);
 	  }
   }
 }
