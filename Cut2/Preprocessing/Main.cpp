@@ -33,6 +33,7 @@ bool ADDCUTS_C1 = false;
 bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
+bool REMOVE_LPCUTS = true; //Remove cuts when converting LP to MIP
 int LEVEL_1CUT = -1;
 int NB_1CUT_SEUIL = 0;//Upper bound
 int CUT2_ORDER = 2; //order of 1cut generation. 1 -> RHS increasing; 2-> LHS/RHS decreasing; default: no sort
@@ -261,6 +262,8 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		res.durationPre = temps_cpu_pre;
 		
 		//Init the reduced IP formulation
+		if( REMOVE_LPCUTS && (ADDCUTS_C1 || ADDCUTS_C2 || ADDCUTS_C3) ) prepro->PRERemoveCutsFromLP();
+		
 		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
 		pcplex->extract(*pmodel);
 	}
@@ -932,8 +935,11 @@ int main(int argc, char* argvs[])
 				dNbMach=-1.0;
 				///Set Vectors
 				if(argc==4)
-					AddMIPStart( cplex, argvs[3]);//"SolVector.out"
+					cplex.readMIPStart(argvs[3]);
+					//AddMIPStart( cplex, argvs[3]);//"SolVector.out"
 
+				//cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
+				//cplex.setParam(IloCplex::TiLim, 1800.0);
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
 					dOptValue=-1;
@@ -949,6 +955,8 @@ int main(int argc, char* argvs[])
 						isFeasible=1;
 						dOptValue=cplex.getObjValue();
 						dNbMach=CountPMsTurnedOn(&cplex);
+
+						//cplex.writeMIPStart("mipstart.out");
 					} else if (cplex.getCplexStatus()==IloCplex::Infeasible || cplex.getCplexStatus()==IloCplex::InfeasibleOrUnbounded || cplex.getCplexStatus()==IloCplex::InfOrUnbd)
 					{
 						isOptimal=0;
