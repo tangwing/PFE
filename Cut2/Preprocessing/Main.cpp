@@ -35,6 +35,7 @@ bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
 int LEVEL_1CUT = -1;
 int NB_1CUT_SEUIL = 0;//Upper bound
+int CUT2_ORDER = 2; //order of 1cut generation. 1 -> RHS increasing; 2-> LHS/RHS decreasing; default: no sort
 //int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
@@ -772,18 +773,25 @@ void ConstructCut2()
 			 for_each( vEquations.begin(), vEquations.end(), [](const Equation & e){cout<<e.second<<endl;});
 		 }
 		 //Sort vEquations by RHS increasing
-		 //sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) { return e1.second<e2.second);}
-
-
-		//Sort vEquations by Sum(LHS)/RHS decreasing
-		 sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) ->bool
+		 if(CUT2_ORDER == 1)
 		 {
-			 double sumLhs1 = 0, sumLhs2=0;
-			 for_each( (e1.first)->begin(), (e1.first)->end(), [&sumLhs1](const Term& t){ sumLhs1+=t.first;});
-			 for_each( (e2.first)->begin(), (e2.first)->end(), [&sumLhs2](const Term& t){ sumLhs2+=t.first;});
-			 //cout<<sumLhs1/e1.second<<" "<<sumLhs2/e2.second<<endl;
-			 return (sumLhs1/e1.second) > (sumLhs2/e2.second); 
-		 });
+			cout<<"Sort vEquations by increasing order of RHS"<<endl;
+			sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) { return e1.second<e2.second;});
+		 }
+		 else if( CUT2_ORDER == 2)
+		 {//Sort vEquations by Sum(LHS)/RHS decreasing
+			 cout<<"Sort vEquations by decreasing order of Sum(LHS)/RHS"<<endl;
+			 sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) ->bool
+			 {
+				 double sumLhs1 = 0, sumLhs2=0;
+				 for_each( (e1.first)->begin(), (e1.first)->end(), [&sumLhs1](const Term& t){ sumLhs1+=t.first;});
+				 for_each( (e2.first)->begin(), (e2.first)->end(), [&sumLhs2](const Term& t){ sumLhs2+=t.first;});
+				 //cout<<sumLhs1/e1.second<<" "<<sumLhs2/e2.second<<endl;
+				 return (sumLhs1/e1.second) > (sumLhs2/e2.second); 
+			 });
+		 }
+
+		
 		 if(DEBUG)
 		 {
 			cout<<"[vEquation]: After sort -------------"<<endl;

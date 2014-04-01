@@ -12,6 +12,8 @@
 #include "DataBis.h"
 
 #define DEBUG false
+int CUT2_ORDER = 2;//1->RHS; 2->LHS/RHS
+bool MIP_START = false;
 
 unsigned int iterations=20;
 //Matrix used to stock all result info of one scenario
@@ -78,15 +80,23 @@ void main(void)
 		int N = ScNM[i][0] + ScNM[i][1] + ScNM[i][2] + ScNM[i][3] + ScNM[i][4];
 		int M = ScNM[i][5] + ScNM[i][6] + ScNM[i][7] + ScNM[i][8];
 		//Apply the threshold fonction when M > 4
-		if(M>4) cut2Level = int(-66.66666667*N + 1400*M - 5200);
+		if(M>4)
+		{
+			if(CUT2_ORDER == 1)	cut2Level = int(-66.66666667*N + 1400*M - 5200);
+			else if(CUT2_ORDER == 2) cut2Level = int(-200*N + 2000*M - 4600);
+		}
 
 		sprintf(tmp2, "%d", cut2Level);
-		sprintf(vecFile, "Vectors/Vector%d_%d.out",i+1, j+1);
 		printf("The Preprocessing program is running with cuts2 seuil %d...\n",cut2Level);fflush(stdout);
-		spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, vecFile, NULL); 
+		if(MIP_START)
+		{
+			sprintf(vecFile, "Vectors/Vector%d_%d.out",i+1, j+1);
+			spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, vecFile, NULL); 
+		}
+		else spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
         pre.ImportFromFile("Preproc.txt");
 
-		LogCut2Level("pre_cut2_seuil_func_mipstart.csv" ,i,j, cut2Level, pre);
+		LogCut2Level("pre_cut2_seuil_func.csv" ,i,j, cut2Level, pre);
 	  }
   }
 }
