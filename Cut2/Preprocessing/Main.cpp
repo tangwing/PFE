@@ -33,10 +33,10 @@ bool ADDCUTS_C1 = false;
 bool ADDCUTS_C2 = false;
 bool ADDCUTS_C3 = false;
 //#define LEVEL_1CUT -1
-bool REMOVE_LPCUTS = true; //Remove cuts when converting LP to MIP
+bool REMOVE_LPCUTS = false; //Remove cuts when converting LP to MIP
 int LEVEL_1CUT = -1;
 int NB_1CUT_SEUIL = 0;//Upper bound
-int CUT2_ORDER = 2; //order of 1cut generation. 1 -> RHS increasing; 2-> LHS/RHS decreasing; default: no sort
+int CUT2_ORDER = 1; //order of 1cut generation. 1 -> RHS increasing; 2-> LHS/RHS decreasing; default: no sort
 //int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
@@ -935,8 +935,8 @@ int main(int argc, char* argvs[])
 				dNbMach=-1.0;
 				///Set Vectors
 				if(argc==4)
-					cplex.readMIPStart(argvs[3]);
-					//AddMIPStart( cplex, argvs[3]);//"SolVector.out"
+					//cplex.readMIPStart(argvs[3]);
+					AddMIPStart( cplex, argvs[3]);//"SolVector.out"
 
 				//cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
 				//cplex.setParam(IloCplex::TiLim, 1800.0);

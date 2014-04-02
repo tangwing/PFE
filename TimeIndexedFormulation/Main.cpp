@@ -593,7 +593,7 @@ int main(int argc, char* argvs[])
 	double dNbMach;
 
 	if(argc > 1)GetData(argvs[1]);
-	else GetData("Donnees/donnees4_16.dat");
+	else GetData("Donnees/donnees8_2.dat");
 	if (DEBUG) DisplayData();
 	ticks0 = clock();
 	IloCplex cplex;

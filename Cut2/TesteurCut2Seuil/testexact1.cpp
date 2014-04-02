@@ -12,8 +12,8 @@
 #include "DataBis.h"
 
 #define DEBUG false
-int CUT2_ORDER = 2;//1->RHS; 2->LHS/RHS
-bool MIP_START = false;
+int CUT2_ORDER = 1;//1->RHS; 2->LHS/RHS
+bool MIP_START = true;
 
 unsigned int iterations=20;
 //Matrix used to stock all result info of one scenario
@@ -56,7 +56,7 @@ void main(void)
 	   printf("\n--------------- Sc %d: Data set %d -------------\n", i+1, j+1);fflush(stdout);
 	   GenerateRandomInstance(ScNM[i][0],ScNM[i][1],ScNM[i][2],ScNM[i][3],ScNM[i][4],ScNM[i][5],ScNM[i][6],ScNM[i][7],ScNM[i][8], 60, 5);
 	   //We skip no opt instances thanks to Preprocessing
-	   if(!pbIsInstanceFeasible[i][j] || pdSol[i][j]<0)
+	   if(!pbIsInstanceFeasible[i][j] || pdUBs[i][j]<0)
 	   {
 		   printf("Instance not feasible, skip...\n");
 		   continue;
@@ -96,7 +96,7 @@ void main(void)
 		else spawnl(P_WAIT,"Preprocessing.exe","Preprocessing.exe", tmp, tmp2, NULL); 
         pre.ImportFromFile("Preproc.txt");
 
-		LogCut2Level("pre_cut2_seuil_func.csv" ,i,j, cut2Level, pre);
+		LogCut2Level("pre_cut2_seuil_func_mipstart.csv" ,i,j, cut2Level, pre);
 	  }
   }
 }
