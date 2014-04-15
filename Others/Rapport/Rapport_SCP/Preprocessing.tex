@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{ulem}
 \usepackage[utf8]{inputenc}
+%\usepackage{todonotes}
 
 \nolistoftables
 %\thedocument{Rapport PFE}{Résolution d'un problème off-line de consolidation de serveurs}{}
@@ -408,6 +409,9 @@ Ensuite sur le temps total de la résolution (Preprocessing + MIP), voici (table
     	\hline
   &\multicolumn{3}{c}{Seuil1}	&\multicolumn{3}{|c|}{Seuil2}\\ \hline
  Sc  & 	DevMin	& DevAvg	& DevMax& 	DevMin	& DevAvg	&DevMax  \\ \hline
+1&	-40,00\%&	-6,93\%&	12,50\%&	-40,00\%&	-6,09\%&	0,00 \%    \\ \hline
+2&	-8,64 \%&	2,41 \%&	15,52\%&	-4,69 \%&	3,12 \%&	19,75\%     \\ \hline
+3&	-14,03\%&	-2,16\%&	12,84\%&	-13,59\%&	1,46 \%&	36,63\%  \\ \hline
 4 & -42,53\%	&	-6,54	\% &39,40\% &	-42,75	\% &-4,16	\% &23,02\%    \\ \hline
 5 & -56,47\%	&	-13,39	\% &22,21\% &	-34,76	\% &-12,49	\% &23,78\%     \\ \hline
 6  & -50,45\%	&	-22,79	\%& 51,32\%& 	-66,12	\%& -23,16	\%& 13,95\%  \\ \hline
@@ -427,9 +431,12 @@ De plus, nous voulons maintenant faire un autre tableau de déviation mais cette
     	\hline
   &\multicolumn{3}{c}{Seuil1}	&\multicolumn{3}{|c|}{Seuil2}\\ \hline
  Sc  & 	DevMin	& DevAvg	& DevMax& 	DevMin	& DevAvg	&DevMax  \\ \hline
-4&	-80,99\%&	-48,03\%&	-24,47\%&	-86,55\%&	-45,36\%&	-4,72 \%    \\ \hline
-5&	-83,51\%&	-70,60\%&	-48,45\%&	-81,44\%&	-66,01\%&	-44,20\%     \\ \hline
-6&	-84,23\%&	-57,64\%&	-21,46\%&	-77,68\%&	-63,40\%&	-51,68\%  \\ \hline
+1&	-50,00\%&	110,65\%&	350,00\%&	-50,00\%&	108,80\%&	300,00\%    \\ \hline
+2&	-9,09 \%&	68,03 \%&	160,00\%&	-9,09 \%&	69,02 \%&	150,00\%     \\ \hline
+3&	-13,43\%&	64,99 \%&	156,41\%&	-12,40\%&	69,33 \%&	143,59\%  \\ \hline
+4&	-59,14\%&	14,56 \%&	75,40 \%&	-71,09\%&	20,22 \%&	91,65 \%    \\ \hline
+5&	-43,79\%&	5,06	\%&74,50 \%&    -33,12\%&	9,00	\%&88,87  \%     \\ \hline
+6&	-62,88\%&	-5,71 \%&	79,70 \%&	-57,16\%&	-8,30 \%&	35,32 \%  \\ \hline
     \end{tabular}
     \caption{Déviation de temps avec les 2 fonctions de seuil par rapport au MIP sans Preprocessing}
     \label{tab_cut2_seuil_tim_cmp2}
@@ -446,9 +453,12 @@ Les trois tableaux ci-après sont toujours pour comparer les trois tests (NoSeui
     	\hline
     	\multicolumn{13}{|c|}{NoSeuil}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
-4 &	18	&5	&20	    &20	    &0	    & 0	        &1,40	&    112,68	&1100,71	&0,00	    \%&0,00   	\%&0,00   \% \\ \hline
-5 &	21	&5	&17	    &10	    &6	    & 1	        &60,48	&1084,11	&1811,32	&0,00	\%&0,56	\%&4,02\% \\ \hline
-6 &	24	&6	&18	    &6	    &6	    & 6	        &162,41	&1149,89	&1813,04	&0,00	\%&0,50	\%&1,71\% \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,07&	0,11	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,20&	0,40&	0,81	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,75&	2,97&	27,94	&0,00\%&	0,00\%&	0,00\%  \\ \hline
+4 &	18	&5	&20	    &20	    &0	    & 0	        &1,40	&    112,68	&1100,71	&0,00\%&0,00\%&0,00\% \\ \hline
+5 &	21	&5	&17	    &10	    &6	    & 1	        &60,48	&1084,11	&1811,32	&0,00\%&0,56\%&4,02\% \\ \hline
+6 &	24	&6	&18	    &6	    &6	    & 6	        &162,41	&1149,89	&1813,04	&0,00\%&0,50\%&1,71\% \\ \hline
     \end{tabular}
     %\caption{Preprocessing de la coupe 2 sans seuil}
     \label{tab_cut2_tab2}
@@ -457,9 +467,12 @@ Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{m
     	\hline
     	\multicolumn{13}{|c|}{Seuil1}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
-4&	18&	5&	20&	20&	0&	0&	1,42	&106,37	&1102,95	&0,00 \% &  0,00\%  &  0,00\%     \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,06&	0,09	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,20&	0,40&	0,74	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,73&	2,83&	26,05	&0,00\%&	0,00\%&	0,00\%  \\ \hline
+4&	18&	5&	20&	20&	0&	0&	1,42	&106,37	&1102,95	&0,00\% &  0,00\%  &  0,00\%     \\ \hline
 5&	21&	5&	17&	10&	7&	0&	40,31	&1032,84&	1803,47	&0,00\%	&0,21\%	&1,23\%     \\ \hline
-6&	24&	6&	18&	6 &	8&	4&	155,72	&1138,01&	1813,67	&0,00\%	&0,45\%	&3,39  \%     \\ \hline
+6&	24&	6&	18&	6 &	8&	4&	155,72	&1138,01&	1813,67	&0,00\%	&0,45\%	&3,39\%     \\ \hline
     \end{tabular}
     %\caption{Preprocessing de la coupe 2 avec seuil 1}
     \label{tab_cut2_s1_tab2}
@@ -468,6 +481,9 @@ Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{m
     	\hline
     	\multicolumn{13}{|c|}{Seuil2}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,06&	0,09	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,20&	0,41&	0,97	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,75&	2,92&	26,36	&0,00\%&	0,00\%&	0,00\%  \\ \hline
 4&	18&	5&	20&	20&	0&	0&	1,39	&106,86	&1066,17	&0,00\%&	0,00\%&	0,00\%     \\ \hline
 5&	21&	5&	17&	9 &	6&	2&	43,63	&1041,35&	1808,87	&0,00\%&	0,67\%&	3,98\%     \\ \hline
 6&	24&	6&	18&	6 &	8&	4&	92,53	&1188,52&	1816,31	&0,00\%&	1,01\%&	5,39\%     \\ \hline
@@ -495,17 +511,23 @@ La déviation du temps et du nombre de nodes quand on fait AddMIPStart sur une f
     	\hline
 &\multicolumn{3}{c|}{\#Nodes} &\multicolumn{3}{c|}{Duration}	\\ \hline
 sc&min	    &avg	    & max	  &min	    &avg	   & max \\ \hline
+1&	0,00\%&0,00\%&0,00\%&	-40,00\%&	22,73\%&111,11\%    \\ \hline
+2&	0,00\%&0,00\%&0,00\%&	-13,43\%&	5,25\%&	15,00\%     \\ \hline
+3&	-100,00\%&-35,98\%&8,97\%&	-23,63\%&	1,85\%&	25,79\%  \\ \hline
 4 &-100,00\% &-7,79\% &120,89\% &-45,79\% &1,75\% &46,62\%  \\ \hline
 5&-33,62	\%&27,18	\%&135,76 \%&	-37,11	\%&14,80	\%&123,79\%     \\ \hline
 6&-50,28	\%&27,58	\%&76,42	\%&-40,81	\%&12,48	\%&57,68 \%     \\ \hline
     \end{tabular}
-    \caption{(a).Déviation du Seuil1+AddMIPStart par rapport au Seuil1 }
+    \caption{(a).Déviation du Seuil1+AddMIPStart par rapport au Seuil1 } 
     \label{tab_cut2_ams1_tab1}
     
     \begin{tabular}{|r|r|r|r|r|r|r|}
     	\hline
 &\multicolumn{3}{c|}{\#Nodes} &\multicolumn{3}{c|}{Duration}	\\ \hline
 sc&min	    &avg	    & max	  &min	    &avg	   & max \\ \hline
+1&	   0,00\%&	  0,00\%&	 0,00\%&	-40,00\%&	137,35\%&	1120,00\%    \\ \hline
+2&	 -42,20\%&	 -9,99\%&	22,22\%&	-17,74\%&	  2,12\%&	  15,00\%     \\ \hline
+3&	-100,00\%&	-19,27\%&	45,79\%&	-30,12\%&	 -0,22\%&	  28,30\%  \\ \hline
 4&-68,49	\%&38,52	\%&294,06	\%&-52,93	\%&11,12	\%&94,88\%     \\ \hline
 5&-22,45	\%&21,39	\%&159,75	\%&-40,80	\%&3,53	    \%&47,60\%     \\ \hline
 6&-40,97	\%&5,63	    \%&58,17	\%&-34,07	\%&-6,12	\%&24,97\%     \\ \hline
@@ -522,17 +544,21 @@ Dans les tableaux ci-après, $Deviation = (Sol-V)/V$ dont $V =Min(Sol_{Seuil+Add
     	\hline
     	\multicolumn{13}{|c|}{Seuil1}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,06&	0,09	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,20&	0,40&	0,74	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,73&	2,83&	26,05	&0,00\%&	0,00\%&	0,00\%  \\ \hline
 4 &	18	&5	&20	    &20	&0	&0	&1,42	&106,37	&1102,95	&0,00	\%&0,00\%&	0,00\% \\ \hline
 5 &	21	&5	&17	    &10	&7	&0	&40,31	&1032,84&	1803,47	&0,00	\%&0,29\%&	3,15\% \\ \hline
 6 &	24	&6	&18	    &6	&8	&4	&155,72	&1138,01&	1813,67	&0,00	\%&0,43\%&	2,81\% \\ \hline
     \end{tabular}
-    %\caption{Preprocessing de la coupe 2 sans seuil}
-    \label{tab_cut2_ams1_tab2}
 \vspace{2em}
     \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
     	\hline
     	\multicolumn{13}{|c|}{Seuil1+AddMIPStart}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,08&	0,19	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,22&	0,41&	0,83	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,83&	2,87&	26,74	&0,00\%&	0,00\%&	0,00\%  \\ \hline
 4 &	18	&5	&20	  &20	&0	&0	&1,59	&104,40	&852,77	    &0,00\%&	0,00\%&	0,00\% \\ \hline
 5 &	21	&5	&17	  &9	&5	&3	&25,57	&989,14	&1803,49	&0,00\%&	0,44\%&	5,61\% \\ \hline
 6 &	24	&6	&18	  &6	&6	&6	&101,76	&1180,56&	1809,59	&0,00\%&	0,25\%&	1,31\% \\ \hline
@@ -550,22 +576,26 @@ Comme ce que dont nous nous sommes inquiétés, AddMIPStart a bien changer la st
     	\hline
     	\multicolumn{13}{|c|}{Seuil2}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,06&	0,09	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,20&	0,41&	0,97	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,75&	2,92&	26,36	&0,00\%&	0,00\%&	0,00\%  \\ \hline
 4 &	18	&5	&20	&20	&0	&0	&1,39	&106,86	    &1066,17	&0,00\%&	0,00\%&	0,00\% \\ \hline
 5 &	21	&5	&17	&9	&6	&2	&43,63	&1041,35	&1808,87	&0,00\%&	0,76\%&	8,62\% \\ \hline
 6 &	24	&6	&18	&6	&8	&4	&92,53	&1188,52	&1816,31	&0,00\%&	1,01\%&	9,03\% \\ \hline
     \end{tabular}
-    %\caption{Preprocessing de la coupe 2 sans seuil}
-    \label{tab_cut2_ams1_tab2}
 \vspace{2em}
     \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
     	\hline
     	\multicolumn{13}{|c|}{Seuil2+AddMIPStart}\\ \hline
 Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	18&	18&	0&	0&	0,01&	0,15&	0,66	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	11&	11&	0&	0&	0,22&	0,40&	0,81	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	19&	19&	0&	0&	0,81&	2,80&	24,85	&0,00\%&	0,00\%&	0,00\%  \\ \hline
 4 &	18	&5	&20	&20	&0	&0	&1,59	&105,66	   & 996,1	&   0,00\%&	0,00	\%&0,00\% \\ \hline
 5 &	21	&5	&17	&8	&6	&3	&25,83	&969,67	   & 1809,21&	0,00\%&	0,42	\%&2,92\% \\ \hline
 6 &	24	&6	&18	&6	&6	&6	&89,18	&1106,45	&1814,34&	0,00\%&	0,26	\%&1,16\% \\ \hline
 
-    \end{tabular}
+    \end{tabular} 
     \caption{Seuil2 vs Seuil2+AddMIPStart}
     \label{tab_cut2_ams2_tab2}
 \end{table}
@@ -575,7 +605,101 @@ Cette fois avec AddMIPStart sur Seuil2, nous avons une meilleure déviation moye
 
 En conclusion, pour bien optimiser la résolution exacte de ce problème, il vaut mieux de faire d'abord le Preprocessing avec la coupe 2 et le seuil 2, puis donner une solution de départ avec le lancement de MIP. La solution de départ corresponds à la UB du Preprocessing.
 
+\subsubsection{Tableaux supplémentaires}
 
+Tableau\ref{tab_mip_s1_ams2_opt} compare entre MIP seul, Seuil1 et Seuil2+AddMIPStart, le temps et le pourcentage de variables fixées sont calculés sur les instances pour lesquelles ces 3 méthodes ont toutes trouvé la solution optimale. 
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} 
+    	\hline
+    	\multicolumn{10}{|c|}{MIP sans Preprocessing}\\ \hline
+Sc &	n	&m & \#Infeas & \#Opt	& \#Mem & \#Tim & $T_{min}$ & $T_{avg}$	& $T_{max}$ \\ \hline
+1 &    8    &2 & 2 & 18 & 0 & 0 &  0.02 &  0.03 &  0.04 \\ \hline
+2 &    11   &3 & 9 & 11 & 0 & 0 &  0.10 &  0.28 & 0.59  \\ \hline
+3 &    15   &4 & 1 & 19 & 0 & 0 &  0.31 &  2.55 &  30.09 \\ \hline
+4 &	   18	&5 & 0 & 19 & 0 & 1 &  1.12 &   99.69&  783.99 \\ \hline
+5 &	   21	&5 & 3 & 6 & 1 & 10 &  23.1 &  341.23 &  769.13 \\ \hline
+6 &	   24	&6 & 2 & 5 & 0 & 13 &  124.91 &  485.94 &  1788.43 \\	\hline
+    \end{tabular}
+\vspace{1em}
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil1}\\ \hline
+Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $\%Fix_{min}$ & $\%Fix_{avg}$	& $\%Fix_{max}$ \\ \hline
+1&  	8	& 2	& 18	& 18	& 0	& 0	 & 0,01	    	&0,06	&0,09		&0,00	\%&43,92\%&	100,00 \%    \\ \hline
+2& 	    11	& 3	& 11	& 11	& 0	& 0	 & 0,20	    	&0,40	&0,74		&0,00	\%&15,80\%&	66,67  \%     \\ \hline
+3&  	15	& 4	& 19	& 19	& 0	& 0	 & 0,73	        &2,83	&26,05	&0,00	\%&2,21	\%&15,77   \%  \\ \hline
+4&		18	&5	&	20	&	20	&0	&	0&		1,42	&106,37	&1102,95&0,00	\%&2,86	\%&55,64   \%    \\ \hline
+5&		21	&5	&	17	&	10	&7	&	0&		40,31	&305,70	&919,01	&0,00	\%&0,00	\%&0,00    \%     \\ \hline
+6&		24	&6	&	18	&	6	&8	&	4&		155,72	&269,89	&663,83	&0,00	\%&0,09	\%&0,56    \%  \\ \hline
+    \end{tabular} 
+\vspace{1em}
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil2+AddMIPStart}\\ \hline
+    	Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $\%Fix_{min}$ & $\%Fix_{avg}$	& $\%Fix_{max}$ \\ \hline
+1&	8	&2	&18	&18	&0	&0	&0,01	&0,15	    &0,66	 	&0,00	\%&43,92\%&	100,00\%    \\ \hline
+2&	11	&3	&11	&11	&0	&0	&0,22	&0,40	    &0,81		&0,00	\%&15,80\%&	66,67 \%     \\ \hline
+3&	15	&4	&19	&19	&0	&0	&0,81	&2,80	    &24,85	&0,00	\%&2,22	\%&16,03 \%  \\ \hline
+4&	18	&5	&20	&20	&0	&0	&1,59	&105,66	&996,10	&0,00	\%&2,91	\%&55,64 \%    \\ \hline
+5&	21	&5	&17	&8	&6	&3	&25,83	&364,30	&1022,32	&0,00	\%&0,00	\%&0,00  \%     \\ \hline
+6&	24	&6	&18	&6	&6	&6	&89,18	&263,25	&658,59	&0,00	\%&0,09	\%&0,56  \%  \\ \hline
+    \end{tabular}
+
+    \caption{Tableau de synthèse sur MIP seul, Seuil1 et Seuil2+AddMIPStart}
+    \label{tab_mip_s1_ams2_opt}
+\end{table}
+\bigskip
+
+Tableau\ref{tab_mip_s1_ams2} compare entre les même méthodes, mais cette fois sur les instances pour lesquelles au moins une des méthodes a trouvé la solution optimale.
+En fait ça rajoute seulement 3 instances dans le scénario 5, donc pas beaucoup de changement.
+
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} 
+    	\hline
+    	\multicolumn{10}{|c|}{MIP sans Preprocessing}\\ \hline
+Sc &	n	&m & \#Infeas & \#Opt	& \#Mem & \#Tim & $T_{min}$ & $T_{avg}$	& $T_{max}$ \\ \hline
+1 &    8    &2 & 2 & 18 & 0 & 0 &  0.02 &  0.03 &  0.04 \\ \hline
+2 &    11   &3 & 9 & 11 & 0 & 0 &  0.10 &  0.28 & 0.59  \\ \hline
+3 &    15   &4 & 1 & 19 & 0 & 0 &  0.31 &  2.55 &  30.09 \\ \hline
+4 &	   18	&5 & 0 & 19 & 0 & 1 &  1.12 &   99.69&  783.99 \\ \hline
+5 &	   21	&5 & 3 & 6 & 1 & 10 &  23.1 &  \textbf{710.13} &  \textbf{1800.29} \\ \hline
+6 &	   24	&6 & 2 & 5 & 0 & 13 &  124.91 &  485.94 &  1788.43 \\	\hline
+    \end{tabular}
+\vspace{1em}
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil1}\\ \hline
+Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $\%Fix_{min}$ & $\%Fix_{avg}$	& $\%Fix_{max}$ \\ \hline
+1&  	8	& 2	& 18	& 18	& 0	& 0	 & 0,01	    	&0,06	&0,09		&0,00	\%&43,92\%&	100,00 \%    \\ \hline
+2& 	    11	& 3	& 11	& 11	& 0	& 0	 & 0,20	    	&0,40	&0,74		&0,00	\%&15,80\%&	66,67  \%     \\ \hline
+3&  	15	& 4	& 19	& 19	& 0	& 0	 & 0,73	        &2,83	&26,05	&0,00	\%&2,21	\%&15,77   \%  \\ \hline
+4&		18	&5	&	20	&	20	&0	&	0&		1,42	&106,37	&1102,95&0,00	\%&2,86	\%&55,64   \%    \\ \hline
+5&		21	&5	&	17	&	10	&7	&	0&		40,31	&\textbf{613,17}	&\textbf{1681,54}	&0,00	\%&0,00	\%&0,00    \%     \\ \hline
+6&		24	&6	&	18	&	6	&8	&	4&		155,72	&269,89	&663,83	&0,00	\%&0,09	\%&0,56    \%  \\ \hline
+    \end{tabular} 
+\vspace{1em}
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil2+AddMIPStart}\\ \hline
+    	Sc &	n	&m	&\#Fea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $\%Fix_{min}$ & $\%Fix_{avg}$	& $\%Fix_{max}$ \\ \hline
+1&	8	&2	&18	&18	&0	&0	&0,01	&0,15	    &0,66	 	&0,00	\%&43,92\%&	100,00\%    \\ \hline
+2&	11	&3	&11	&11	&0	&0	&0,22	&0,40	    &0,81		&0,00	\%&15,80\%&	66,67 \%     \\ \hline
+3&	15	&4	&19	&19	&0	&0	&0,81	&2,80	    &24,85	&0,00	\%&2,22	\%&16,03 \%  \\ \hline
+4&	18	&5	&20	&20	&0	&0	&1,59	&105,66	&996,10	&0,00	\%&2,91	\%&55,64 \%    \\ \hline
+5&	21	&5	&17	&8	&6	&3	&25,83	&\textbf{591,03}	&\textbf{1802,69}	&0,00	\%&0,00	\%&0,00  \%     \\ \hline
+6&	24	&6	&18	&6	&6	&6	&89,18	&263,25	&658,59	&0,00	\%&0,09	\%&0,56  \%  \\ \hline
+    \end{tabular}
+
+    \caption{Tableau de synthèse sur MIP seul, Seuil1 et Seuil2+AddMIPStart}
+    \label{tab_mip_s1_ams2}
+\end{table}
+\bigskip
 \bibliographystyle{plain}
 \bibliography{bib}
 \end{document}

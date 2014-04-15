@@ -13,7 +13,7 @@
 
 #define DEBUG false
 int CUT2_ORDER = 2;//1->RHS; 2->LHS/RHS
-bool MIP_START = false;
+bool MIP_START = true;
 
 unsigned int iterations=20;
 //Matrix used to stock all result info of one scenario
