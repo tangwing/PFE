@@ -36,7 +36,7 @@ bool ADDCUTS_C3 = false;
 bool REMOVE_LPCUTS = false; //Remove cuts when converting LP to MIP
 int LEVEL_1CUT = -1;
 int NB_1CUT_SEUIL = 0;//Upper bound
-int CUT2_ORDER = 1; //order of 1cut generation. 1 -> RHS increasing; 2-> LHS/RHS decreasing; default: no sort
+int CUT2_ORDER = 2; //order of 1cut generation. 1 -> RHS increasing(Seuil1); 2-> LHS/RHS decreasing(seuil2); default: no sort
 //int NB_1CUT_MIN = 1000; //Lower bound
 #pragma endregion
 
@@ -80,6 +80,7 @@ double dOptValue = -1, dOptTime = -1, dPreProcessingTime = -1, dNbMach = -1, dUB
 int isOptimal = -1, isFeasible = -1,iNbNodesIP = -1, isOptiNoPre = -1, isAllFixed = -1;
 int isTimeLimit=-1, isMemLimit=-1;
 int iNbFixed = -1, nbBool=-1;
+int NB_VAR_X = 0;
 PreprocessingResult res; //The final result which will be exported to file
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
 void AddMIPStart( IloCplex& cplex, char* filename);
@@ -251,7 +252,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		dUB = prepro->PREGetUB();
 		dLB = prepro->PREGetLB();
 		
-		//Recode preprocessing results
+		//Recorde preprocessing results
 		res.isOptiNoPre = isOptiNoPre;
 		res.isAllFixed = isAllFixed;
 		res.UB = dUB;
@@ -259,6 +260,8 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		res.nbBool = nbBool;
 		res.nbBoolExtractable = nbBoolExtractable;
 		res.nbFixed = nbFix;
+		res.nbXExtractable = prepro->PREGetTreatedVarCount(NB_VAR_X);
+		res.nbXFixed = prepro->PREGetNbFix(NB_VAR_X);
 		res.durationPre = temps_cpu_pre;
 		
 		//Init the reduced IP formulation
@@ -870,6 +873,7 @@ int main(int argc, char* argvs[])
 	//UB = 465172;
 	//UB=594336; //4_10
 	//UB=831337;//4_4
+	//UB=524059; //4_9
 	if(ENABLE_CMD_PARAM)
 	{
 		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForAddMipStart]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
@@ -880,9 +884,10 @@ int main(int argc, char* argvs[])
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees3_7.dat");
+		GetData("Donnees/donnees4_9.dat");
 
-	
+	NB_VAR_X = T()*N()*M();
+
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
 	//SomeTest();

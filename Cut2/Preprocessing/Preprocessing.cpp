@@ -734,14 +734,20 @@ Name: PREGetTreatedVarCount
 ***************************************************************************************************************************************************
 Description: Get the number of bool vars treated, that means, the vars in the Head and can be extracted by Cplex
 ***************************************************************************************************************************************************
-Input: Nothing
+Input: The number of vars considerred. By using this we can, for exemple, get the treated number of variables X, where upperRange is the number of X vars.
 Necessitates: The Preprocessing precedure is finished.
 Output: The number of bool vars treated
 leads to: Nothing
 **************************************************************************************************************************************************/
-int Preprocessing::PREGetTreatedVarCount()
+int Preprocessing::PREGetTreatedVarCount(int upperRanger)
 {
 	int count = 0;
-	for(int i=0; i<PREvar->getSize(); i++) if(pdPREFixedVariables[i] != IloInfinity) count++;
+	if(upperRanger == -1)upperRanger = PREvar->getSize();
+	for(int i=0; i<PREvar->getSize(); i++) 
+		if(pdPREFixedVariables[i] != IloInfinity) 
+		{
+			if(i+1 > upperRanger)break;
+			else count++;
+		}
 	return count;
 }
