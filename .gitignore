@@ -6,7 +6,8 @@
 #*.user
 *.sln.docstates
 CodeBlocks/
-
+Archive/cplex_studio126.win-x86-32.exe
+Others/
 
 # Build results
 [Dd]ebug/

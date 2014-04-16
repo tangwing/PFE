@@ -1,0 +1,90 @@
+Ordonnancer
+Entrée
+	indiceInter: L'intervalle à traiter.
+Sortie
+	ListeOrdo: Une variable globale qui représente le résultat de l'ordonnancement.
+Variables
+	indiceAllume: L'indice de la machine qui sera allumée
+Debut
+	//Affecter d'abord les tâches non préemptables
+	Pour indiceServeur de 0 à NbServeur Faire
+		Si (toute les tâches non-préemptables sont affectées) Alors
+			break;
+		Fin Si
+		
+		//Ordonnancer les tâches non-préemptables sur le serveur indiceServeur
+		TrierTâches(ListeGPU1, indiceServeur);
+		TrierTâches(ListeGPU2, indiceServeur);
+		TrierTâches(ListeCPU1, indiceServeur);
+		TrierTâches(ListeCPU2, indiceServeur);
+		OrdoListeTache(ListeGPU1, indiceInter, indiceServeur, true);
+		OrdoListeTache(ListeGPU2, indiceInter, indiceServeur, true);
+		OrdoListeTache(ListeCPU1, indiceInter, indiceServeur, true);
+		OrdoListeTache(ListeCPU2, indiceInter, indiceServeur, true);
+		
+		//Ordonnancer les tâches préemptables sur le serveur indiceServeur
+		TrierTâches(ListePrGPU1);
+		TrierTâches(ListePrGPU2);
+		TrierTâches(ListePrCPU1);
+		TrierTâches(ListePrCPU2);
+		OrdoListeTache(ListePrGPU1, indiceInter, indiceServeur, false);
+		OrdoListeTache(ListePrGPU2, indiceInter, indiceServeur, false);
+		OrdoListeTache(ListePrCPU1, indiceInter, indiceServeur, false);
+		OrdoListeTache(ListePrCPU2, indiceInter, indiceServeur, false);
+	Fin Pour
+	
+	//Pour le reste des tâches prémptable, on regarde si on a besoin de rallumer des machines
+	Tant que (Il y a encore des tâches préemptables non affectées) Faire
+		indiceAllume = AllumageMachine(indiceInter);
+		Si (indiceAllume==-1) Alors
+			//Aucune machine ne peut être allumée, arrêter.
+			Retourner;
+		Sinon
+			TrierTâches(ListePrGPU1);
+			TrierTâches(ListePrGPU2);
+			TrierTâches(ListePrCPU1);
+			TrierTâches(ListePrCPU2);
+			OrdoListeTache(ListePrGPU1, indiceInter, indiceServeur, true);
+			OrdoListeTache(ListePrGPU2, indiceInter, indiceServeur, true);
+			OrdoListeTache(ListePrCPU1, indiceInter, indiceServeur, true);
+			OrdoListeTache(ListePrCPU2, indiceInter, indiceServeur, true);
+		Fin Si
+	Fin Tant que
+Fin
+
+
+OrdoListeTache
+Entrée
+	ListeTâche: La liste des tâches préemptables à ordonnancer.
+	indiceI: L'indice d'intervalle.
+	indiceS: L'indice du serveur.
+	canTurnOn: un booléan pour indique quand le serveur n'est pas allumé est-ce qu'on a le droit de l'allumer et affecter au-dessus.
+Sortie
+	ListeOrdo: L'affectation des tâches est enregistrée dans cette liste qui est aussi la sortie du programme.
+Variables
+	Entier interInf, interSup, indiceVM, indiceVM2;
+	Entier dureeExeActuelle;
+Debut
+	interInf = ListeIntervalle[indiceI].BorneInf;
+	interSup = ListeIntervalle[indiceI].BorneSup;
+	
+	Pour chaque tâche t dans ListTâche Faire
+		Si(t n'est pas encore affectée sur cet intervalle) Alors
+			Si(Le serveur indiceS possède assez de ressource pour t) Alors
+				Pour chaque tâche t2 qui a une affinité avec t et qui a été affectée sur un autre serveur indiceS2 Faire
+					Si( false == CalculFesabiliteReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI) ) Alors
+						Cette tâche t ne peut pas affectée sur ce serveur, car le réseau ne le permet pas.
+						Continuer voir la tâche suivante dans ListTâche.
+					Fin Si
+				Fin Pour
+				
+				//Maintenant on est sûr que la tâche peut être affectée, alors on l'affecte...
+				MaJReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI);
+				Pour chaque instant de temps i Faire
+					Mettre à jour ListeOrdo[i][t.indiceVM];
+					Mettre à jour les caractéristiques de ce serveur(indiceS);
+				Fin Pour
+			Fin Si
+		Fin Si
+	Fin Pour
+Fin

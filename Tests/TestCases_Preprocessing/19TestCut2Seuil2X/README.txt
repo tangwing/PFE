@@ -1,0 +1,1 @@
+This test is added to test the percentage of X fixed in the test of Seuil2.

@@ -1,0 +1,20 @@
+\chapter{Possibilités d'amélioration}
+A la fin du projet, en considérant les problèmes rencontrés pendant le déroulement, nous pensons que nous pouvons peut-être faire mieux si nous avons essayé d'autres approches.
+
+\section{Logiciel de visualisation}
+Il existe d'autres choix sur le logiciel de visualisation (par exemple Gephi). Nous avons essayé Gephi dans un premier temps, mais il ne permet pas d'importer les données à partir d'un fichier CSV. Puisque les données originals sont de format CSV et ce format est aussi compatible avec la base de données (on peut importer ou exporter les données sous ce format), donc nous n'avons pas continu l'utilisation de Gephi.
+
+En fait si Gephi a des caractéristiques plus intéressantes que Tulip sur d'autres aspects, par exemple la stabilité, il peut être un bon choix.
+
+\subsection{Choix de la base de données}
+Après avoir décidé d'utiliser une base de données pour traiter les données, nous avons choisi tout de suite MySql. D'abord c'est parce qu'elle est la base de données que nous utilisons le plus souvent, la plupart de temps elle est très suffisante. D'ailleurs c'est parce que nous n'avons pas une idée claire sur le volume de données que nous devons traiter.
+
+De ce fait, ça peut être mieux de choir une notre base de données plus robust comme Oracle. Elle est peut-être meilleure sur le traitement des données volumineuses avec des optimisations.
+ 
+\subsection{Traiter directement les données sans utiliser une base de données}
+Au tout début du projet, quand nous savions que ça concerne le traitement des données volumineuses, nous avons décidé dans un premier temps d'utiliser une base de données. C'est très intuitif car nous pensons que la base de données est un outil très adapté pour manipuler les données et les traitements doivent être déjà optimisés.
+
+Mais après, nous percevons c'est vrai que la base de données est bien conçue pour la recherche, la manipulation des données, mais c'est au niveau général non pas pour un problème spécifique. Dans notre cas, nous avons des données avec un format fix, nous n'avons pas beaucoup de colonnes qui nous intéressent, alors nous avons pu peut-être traiter directement les fichiers de données au lieu de mettre en place une base de données.
+
+Si nous pouvons concevoir un algorithme adapté à notre problème spécifique et accéder directement aux données à traiter, ce n'est pas sûr que nous fassions pire que MySql. En gros, puisque nous avons un problème spécifique, nous pouvons alors faire des optimisations particulières que MySql ne sait pas faire.
+

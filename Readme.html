@@ -1,0 +1,39 @@
+<h1 id="quick-start">Quick start</h1>
+
+<p>SHANG Lei - <a href="mailto:shang.france@gmail.com">shang.france@gmail.com</a></p>
+
+<p>Ce document est créé pour expliquer ce qui a été fait par SHANG Lei dans son PFE: Problème de consolidation de serveurs (hors ligne). On va vous expliquer que sont les éléments existants dans le dossier et comment faire pour continuer le travail.</p>
+
+<h2 id="context">Context</h2>
+
+<p>Cf le rapport du projet qui est dans le dossier <strong><em>doc</em></strong>.  <br>
+Notez qu’il y a une partie de travail qui a été réalisé par mon encadrant M. Vincent T’Kindt et un ancien étudiant Cyrille PICARD dans son PFE en 2012-2013.</p>
+
+<h2 id="structure-du-dossier">Structure du dossier</h2>
+
+<ul>
+<li><strong><em>Archive</em></strong>: Les éléments en entrée de mon PFE, tels que le rapport et les programmes réalisés par Cyrille PICARD et M. Vincent T’Kindt, le papier sur la modélisation du problème, le logiciel Cplex et une librairie C++ pour faire le <em>Preprocessing</em>.</li>
+<li><strong><em>Doc</em></strong>: Les documents que j’ai créé pendant ce projet, notamment le rapport du projet avec le source LaTeX, ainsi que les transparents des présentations.</li>
+<li><strong><em>Programmes</em></strong>: Les programmes (projets Visual Studio 2010) principals du projet, y compris: <br>
+<ul><li><strong><em>TimeIndexedFormulation</em></strong>: Le programme qui résout le problème de façon exacte: en utilisant le solveur Cplex.</li>
+<li><strong><em>H1</em></strong>: La première méthode heuristique créée par Cyrille PICARD puis corrigée et complétée par SHANG Lei.</li>
+<li><strong><em>H2</em></strong>: La deuxième méthode heuristique qui est basée sur le solveur Cplex avec des paramètres heuristiques mis en place.</li>
+<li><strong><em>Preprocessing</em></strong>: Le programme qui ajoute le Preprocessing du modèle à la base de <strong><em>TimeIndexedFormulation</em></strong>.</li>
+<li><strong><em>Testeurs</em></strong>: Dossier qui contient tous les programmes de tests. Pleins de Testeurs ont été créés pendant le projet mais les 2 plus importants sont:  <br>
+<ul><li><strong><em>TesteurExactH1H2</em></strong>: qui est comme son nom indique, pour comparer la méthode exacte et les 2 méthodes heuristiques.</li>
+<li><strong><em>TestCut2</em></strong>: qui est le testeur pour tester la performance des coupes dans le Preprocessing, surtout pour la coupe 2 (1-cuts). Le code sur les autres coupes sont aussi compris.</li></ul></li></ul></li>
+<li><strong><em>Tests</em></strong>: contient un fichier hyper impportant: <strong><em><a href="./Tests/Readme.html">Readme.html</a></em></strong> qui va vous expliquer à quoi sert ce dossier… :P</li>
+</ul>
+
+<h2 id="environnement-du-développement">Environnement du développement</h2>
+
+<ol>
+<li>Windows 7, 64bit.</li>
+<li>Visual Studio 2010. Les programmes sont créés sous VS2010 donc il faut l’installer avec le support du développement C++.</li>
+<li>Cplex 12.6. Certaines programmes ont utilisé la librairie du solveur Cplex pour résoudre le problème. Le paquet d’installation se trouve dans le dossier <strong><em>Archive</em></strong>, il faut l’installer dans le répertoire par défaut. Autrement dit, il faut qu’on trouve un fichier nommé <strong><em>README.html</em></strong> dans le répertoire <strong><em>“C:\Program Files (x86)\IBM\ILOG\CPLEX_Studio126”</em></strong>.</li>
+</ol>
+
+<h2 id="environnement-de-tests">Environnement de tests</h2>
+
+<p>Les tests ont été lancés sur 2 machines qui possèdent les mêmes caractéristiques dans la salle OC. Ce sont la machine <strong><em>OC-6296</em></strong> et la <strong><em>OC-6295</em></strong>. Pour info: <br>
+<img src="infosys.png" alt="enter image description here" title=""></p>

@@ -1,0 +1,25 @@
+<h1 id="tests">Tests</h1>
+
+<p>Ce dossier contient tout ce qui concerne les tests: les données générées, les exécutables testeurs, les scripts, les résultats et les fichiers d’analyses réalisée après le test. </p>
+
+<ul>
+<li><strong><em>Donnees</em></strong>: les instances de problème générés, du scénario 1 au 8. Ces données seront normalement générées à chaque test par le testeur. Je les stocke ici pour besoins de tester des instances particulières.</li>
+<li><strong><em>TestCase1-6</em></strong>: Ce sont les tests réalisés pour la première partie de travail, sans Preprocessing. Ils ont été lancés sur mon portable au lieu de sur les machines OC. Normalement vous n’auriez pas besoin de regarder ces tests.</li>
+<li><strong><em>TestCase7_OC</em></strong>: A partir du TestCase7, les tests se font dans la salle OC. Ce test est le seul qui contient les résultat de H1, H2 et Cplex sans Preprocessing.</li>
+<li><strong><em>TestCases_Preprocessing</em></strong>: Les tests pour le Preprocessing. Les importants sont: <br>
+<ul><li><strong><em>Test:5,13,15,17,18</em></strong>: Ce sont les tests pour Cut2 (1-cuts).</li>
+<li><strong><em>Vectors</em></strong>: Ce sont les fichiers exportés qui contiennent une solution faisable trouvée par H2. Ils sont utilisés par AddMIPStart. Cf test 17, 18.</li>
+<li><strong><em>*.xlsx</em></strong>: Ce sont les fichiers d’analyse d’où viennent les tableaux dans le rapport. Mais c’est pas trop lisible car il y a trop de données à traiter…</li></ul></li>
+<li><strong><em>Dlls</em></strong>: Pour lancer un <strong><em>TestCase</em></strong>, il faut rajouter les fichiers de ce dossier dans le dossier de test. Ce sont des dll requis. Je les extrais pour gagner de la place…</li>
+</ul>
+
+<p>Dans le dossier de chaque <strong><em>TestCase</em></strong>, vous pouvez trouver normalement:</p>
+
+<ul>
+<li><strong><em>*.exe</em></strong>: le testeur généré à partir des programmes.</li>
+<li><strong><em>Run.bat</em></strong>: le script pour lancer le test, rediriger la sortie et éteindre la machine quand c’est fini.</li>
+<li><strong><em>Readme.txt</em></strong>: explique ce qu’on fait dans le test.</li>
+<li><strong><em>*.csv</em></strong>: le fichier de résultat.</li>
+<li><strong><em>*.xslx</em></strong>: le fichier de l’analyse, parfois intermédiaire.</li>
+<li><strong><em>test.log</em></strong>: fichier très utile. Il contient toutes les informations pendant l’exécution. Avec ceci, quand vous doutez sur le résultat d’un test, vous n’avez pas besoin de refaire le test pour savoir qu’est-ce qui s’est passé. Vous pensez peut-être générer ce log va gêner la mesure de temps dans le test? C’est pas un problème puisque chaque test dure un ou deux jours et Cplex va quand même afficher tout ça à l’écran si on ne fait pas cette redirection de sortie. Je pense qu’il faut continuer générer ce fichier pour garder la cohérence entre les résultats des tests… </li>
+</ul>

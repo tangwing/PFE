@@ -1,0 +1,70 @@
+//Les algorithmes peuvent être écrits naturellement mais en respectant les règles! Et après on va pouvoir les transformer en LaTeX code.
+
+Algo0 Algorithme Général
+Entrée/Sortie
+	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
+	IsFeasible: booléan qui indique si on a bien ordonnancé toutes les tâches non-préemptables.
+	coûtTotal: le coûtTotal selon l'ordonnancement effectué.
+Debut
+	IsFeasible = true;
+	CalculerIntervalle();
+	CréerListeServeurTriée();
+	Pour chaque intervalle i Faire
+		CréerListesTâche(i);
+		Ordonnancer(ListeOrdo, i);
+	Fin Pour
+	
+	//Maintenant on a fini l'ordonnancement des tâches et on peut déjà calculer le coût total.
+	coûtTotal = CalculerCoûtTotal();
+	
+	//Voir si la solution est feasable
+	Pour chaque intervalle i Faire
+		Pour chaque tâche t Faire
+			Si (t n'est pas préemptable ET ListeOrdo[i][t] == -1) Alors
+				IsFeasible = false;
+				retourne;
+			Fin Si
+		Fin Pour
+	Fin Pour
+Fin
+
+
+Algo1 CaculerIntervalle()
+//L'idée est de déterminer les intervalles pour que chaque instant du même intervalle a le même Ui (état stable).
+Sortie
+	ListeIntervalle: le tableau des intervalles trouvés
+Variables
+	Entier nbIntervalle=0;
+Debut
+	ListeIntervalle[0].BorneInf = 0;
+	ListeIntervalle[0].BorneSup = 0;
+	Pour t allant de 0 à T-2 Faire
+		Pour iTache allant de 0 à N-1 Faire
+			Si( u(iTache,t)!=u(iTache,t+1)) Alors //Intervalle trouvé
+				nbIntervalle = nbIntervalle+1;
+				ListeIntervalle[nbIntervalle-1].BorneSup = t;
+				ListeIntervalle[nbIntervalle].BorneInf = t+1; //Intervalle suivant
+				break;
+			Fin Si
+		Fin Pour
+	Fin Pour
+	nbIntervalle=nbIntervalle+1;
+	ListeIntervalle[nbIntervalle-1].BorneSup = T-1;
+Fin
+
+
+Algo2 CréerListeServeurTriée
+Sortie
+	ListeServeur: le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
+Variables
+	Réel CoutTotal, SommeCaract;
+Debut
+	Pour i allant de 0 à M-1 Faire
+		ListeServeur[i].IndiceServeur=i;
+		CoutTotal=mc(i)*alphac(i) +mg(i)*alphag(i) + mr(i)*alphar(i)+ mh(i)*alphah(i);
+		SommeCaract = mc(i)+mg(i)+mr(i)+mh(i);
+		ListeServeur[i].CoutNorm = CoutTotal / SommeCaract ;
+	Fin Pour
+	TrierParCoutNorm(ListeServeur);
+Fin
+
