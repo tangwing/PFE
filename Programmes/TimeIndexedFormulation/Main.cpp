@@ -593,7 +593,8 @@ int main(int argc, char* argvs[])
 	double dNbMach;
 
 	if(argc > 1)GetData(argvs[1]);
-	else GetData("Donnees/donnees8_2.dat");
+	else GetData(); //You can put the data file name (ex: Donnees/donnees1_1.dat) as argument for test purpose. By default it's "donnees.dat".
+
 	if (DEBUG) DisplayData();
 	ticks0 = clock();
 	IloCplex cplex;

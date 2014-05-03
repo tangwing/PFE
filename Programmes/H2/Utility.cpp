@@ -67,7 +67,10 @@ int CalculateTimeLimit()
 		//The default value 400s is for 2cores * 1.6GHz
 		iTimeLimit = 400 * 3.2 / (iNumCPU * iFre);
 	}
-	if (iTimeLimit<200) iTimeLimit=200;
+
+	
+	if (iTimeLimit<200) 
+		iTimeLimit=200;
 	return iTimeLimit;
 }
 

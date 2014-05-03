@@ -109,14 +109,29 @@ public:
 		{if (bPREisSolved) return dPREUB; else throw(3);}
 	double PREGetLB()				// Get the best known LB after the preprocessing
 		{if (bPREisSolved) return dPRELB; else throw(3);}
-	int PREGetNbFix()				// Get the number of variables fixed by the preprocessing
-		{if (bPREisSolved) return iPREnbFix; else throw(3);}		
+	int PREGetNbFix(int upperRange=-1)				// Get the number of variables fixed by the preprocessing
+		{
+			if (!bPREisSolved) throw(3);
+			else if(upperRange==-1)
+				return iPREnbFix; 
+			else 
+			{
+				int count = 0;
+				for(int i=0; i<PREvar->getSize(); i++) 
+					if(pdPREFixedVariables[i] == 0 || pdPREFixedVariables[i] == 1) 
+					{
+						if(i+1 > upperRange)break;
+						else count++;
+					}
+				return count;
+			}
+		}
 	Variable* PREGetVarInfo()		// Get the variable array containing all the variable informations
 		{if(PRElp->LPisSolved()) return PREvarInfo; else throw(1);}
 	void PREFixVarToMIP();			// Fix the variables deduced by the preprocessing in the MIP model
 									// Necessitate: the LP and the MIP model have the same variables declared in the same order
-	int PREGetTreatedVarCount();   // Get the number of bool vars treated, that means, the vars in the Head and can be extracted by Cplex
-
+	int PREGetTreatedVarCount(int upperRange=-1);   // Get the number of bool vars treated, that means, the vars in the Head and can be extracted by Cplex
+	
 private:
 	// Methods to manipulate the Mathematical models in the preprocessing phase (UNUSABLE BY THE USERS)
 	double PREArSup(double value);	// It rounds up a real value (Used by the preprocessing algorithm)

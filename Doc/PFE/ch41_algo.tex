@@ -1,0 +1,397 @@
+\subsection{Algorithmes}%%%%%%%%%%%%%%%%%%%%%%%%%%
+Nous listons dans cette section les algorithmes critiques de la méthode H1. Nous avons fait des efforts pour rendre la présentation assez synthétique et compréhensible.
+
+Avant d'entrer dans les algorithmes, nous déclarons ici des structrues de données globales qui peuvent être utilisées sans déclaration dans n'importe quel algorithme.
+
+\begin{enumerate}
+	\item ListeGPU1: la liste des tâches non-préemptable ayant des besoins en GPU et CPU et tel que besoins HDD > besoins RAM.
+	\item ListeGPU2: la liste des tâches non-préemptable ayant des besoins en GPU et CPU et tel que besoins HDD < besoins RAM.
+	\item ListeCPU1: la liste des tâches non-préemptable ayant des besoins uniquement en CPU et tel que besoins HDD > besoins RAM.
+	\item ListeCPU2: la liste des tâches non-préemptable ayant des besoins uniquement en CPU et tel que besoins HDD < besoins RAM.
+	\item ListeTachesPr: la liste de toutes les tâches préemptable.
+	\item ListePrGPU1: la liste des tâches préemptable ayant des besoins en GPU et CPU et tel que besoins HDD > besoins RAM.
+	\item ListePrGPU2: la liste des tâches préemptable ayant des besoins en GPU et CPU et tel que besoins HDD < besoins RAM.
+	\item ListePrCPU1: la liste des tâches préemptable ayant des besoins uniquement en CPU et tel que besoins HDD > besoins RAM.
+	\item ListePrCPU2: la liste des tâches préemptable ayant des besoins uniquement en CPU et tel que besoins HDD < besoins RAM.
+	\item ListeOrdo: la liste de l'ordonnancement en sortie.
+\end{enumerate}
+\bigskip
+
+Le premier algorithme\ref{algo0} est l'algorithme général qui est le plus synthétique. L'idée de l'algorithme\ref{algo1} est de déterminer les intervalles \textit{stable}, c'est-à-dire toutes les tâches du même intervalle ontle même Ui (prévue à être exécutée).
+L'algorithme CréerListeServeurTriée\ref{algo2} trie la liste des serveurs selon le coût normalisé croissant.
+L'algorithme TrierTâches\ref{algo4} trie la liste de tâches selon leur priorités pour un intervalle et une machines donnée.
+L'algorithme Ordonnancer\ref{algo5} effectue l'ordonnancement. L'algorithme AllumageMachine\ref{algo7} détermine est-ce qu'on peut rallumer une machine pour mettre la tâche, si oui c'est la quelle.
+
+\begin{algorithm}[H]
+\caption{Algorithme Général}
+\label{algo0}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+\STATE ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
+\STATE IsFeasible: booléan qui indique si on a bien ordonnancé toutes les tâches non-préemptables.
+\STATE coûtTotal: le coûtTotal selon l'ordonnancement effectué.
+}
+\ENSURE {
+\STATE ListOrdo, IsFeasible, coûtTotal
+}
+\LOOP
+\STATE IsFeasible = true;
+\STATE CalculerIntervalle();
+\STATE CréerListeServeurTriée();
+	\FOR{chaque intervalle i}
+		\STATE CréerListesTâche(i);
+		\STATE Ordonnancer(ListeOrdo, i);
+	\ENDFOR
+\STATE	
+\COMMENT {Maintenant on a fini l'ordonnancement des tâches et on peut déjà calculer le coût total.}
+\STATE coûtTotal = CalculerCoûtTotal();
+\STATE
+\COMMENT {Voir si la solution est feasable}
+	\FOR{ chaque intervalle i }
+		\FOR{ chaque tâche t }
+			\IF{(t n'est pas préemptable ET ListeOrdo[i][t] == -1) }
+			\STATE IsFeasible = false;
+			\RETURN;
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
+
+%%%%%%%%%%%%%%%%%%%%%% Algo 1 %%%%%%%%%%%%%%%%%%%
+
+\begin{algorithm}[H]
+\caption{CaculerIntervalle}
+\label{algo1}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\ENSURE {
+\STATE	ListeIntervalle: le tableau des intervalles trouvés
+}\\
+%\BEGIN
+\LOOP
+\STATE Entier nbIntervalle=0;
+\STATE ListeIntervalle[0].BorneInf = 0;
+\STATE ListeIntervalle[0].BorneSup = 0;
+	\FOR{ t allant de 0 à T-2 }
+		\FOR{ iTache allant de 0 à N-1 }
+			%\COMMENT{Intervalle trouvé}
+			\IF{ u(iTache,t)!=u(iTache,t+1) }  
+				\STATE nbIntervalle = nbIntervalle+1;
+				\STATE ListeIntervalle[nbIntervalle-1].BorneSup = t;
+				%\COMMENT{Intervalle suivant}
+				\STATE ListeIntervalle[nbIntervalle].BorneInf = t+1; 
+				\STATE break;
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+	\STATE nbIntervalle=nbIntervalle+1;
+	\STATE ListeIntervalle[nbIntervalle-1].BorneSup = T-1;
+\ENDLOOP
+%\END
+\end{algorithmic}
+\end{algorithm} 
+
+%%%%%%%%%%%%%%%%%%%%%% Algo 2 %%%%%%%%%%%%%%%%%%%
+
+\begin{algorithm}[H]
+\caption{CréerListeServeurTriée}
+\label{algo2}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\ENSURE {
+\STATE	ListeServeur: le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
+}\\
+\LOOP
+	\STATE Réel CoutTotal, SommeCaract;
+	\FOR {i allant de 0 à M-1 }
+		\STATE ListeServeur[i].IndiceServeur=i;
+		\STATE CoutTotal=mc(i)*alphac(i) +mg(i)*alphag(i) + mr(i)*alphar(i)+ mh(i)*alphah(i);
+		\STATE SommeCaract = mc(i)+mg(i)+mr(i)+mh(i);
+		\STATE ListeServeur[i].CoutNorm = CoutTotal / SommeCaract ;
+	\ENDFOR
+	\STATE TrierParCoutNorm(ListeServeur);
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 3 (567) %%%%%%%%%%%%%%%%%%%%%%
+
+\begin{algorithm}[H]
+\caption{CréerListesTâches}
+\label{algo3}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indice: l'indice de l'intervalle sur lequel on travaille
+}
+\ENSURE {
+	\STATE ListeTachesPr: la liste des tâches préemptable.
+	\STATE \COMMENT{Les tâches sont réparties dans ces 8 listes selon leurs besoins en GPU, CPU, HDD, RAM et si la tâche est préemptable.}
+	\STATE ListeGPU1, ListeCPU1, ListePrGPU1, ListePrCPU1 //Tâches non-préenptables
+	\STATE ListeGPU2, ListeCPU2, ListePrGPU2, ListePrCPU2 //Tâches préenptables
+}
+\LOOP
+	\FOR{ tâche de 0 à N()-1 }
+		\IF{(u(tâche, temps)=1) } 
+			\STATE \COMMENT{Cette tâche peut être exécutée en ce moment}
+			\IF{ (R(tâche==0))	}
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListeGPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListeGPU2;
+					\ENDIF
+				\ELSE	
+					\STATE \COMMENT{ng(tâche)=0}
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListeCPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListeCPU2;
+					\ENDIF
+				\ENDIF
+			\ELSE	
+				\STATE \COMMENT{Cette tâche est préemptable}
+				\STATE Répartir cette tâche à ListeTâchesPr;
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListePrGPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListePrGPU2;
+					\ENDIF
+				\ELSE	
+					\STATE \COMMENT{ng(tâche)=0}
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListePrCPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListePrCPU2;
+					\ENDIF
+				\ENDIF
+			\ENDIF
+		\ENDIF
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 4 (8) %%%%%%%%%%%%%%%%%%%%%%
+
+\begin{algorithm}[H]
+\caption{TrierTâches}
+\label{algo4}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indice: indice de l'intervalle
+	\STATE indiceServeur: indice de la machine
+	\STATE list: une liste de tâches à trier
+	\STATE taille: la taille de la liste
+}
+\ENSURE {
+	\STATE list: liste de tâches triée par prio décroissant
+}
+\LOOP
+	\STATE Entier IB;
+	\STATE Entier WG;
+	\STATE Entier MachineRecevoir;
+	\COMMENT{La durée d'exécution actuelle de la tâche}
+	\STATE Entier duree;	
+	
+	\FOR{ iboucle de 0 à taille }
+		\STATE list[iboucle].prio = 0;
+		\STATE IB = 0;
+		\STATE WG = 0;
+		\STATE MachineRecevoir = 0;
+
+		\STATE duree = GetDureeExeActuelle(indice, list[iboucle].IndiceVM);
+		\IF{ (la tâche n'est pas encore affectée) }
+			\IF{ (cette tâche était affectée sur cette machine à l'intervalle précédent) }
+				\STATE \COMMENT{La tâche a plus de priorité }
+				\STATE IB = M();	
+			\ENDIF
+			\STATE \COMMENT{Si migration pas possible}
+			\IF{ (duree!=0 et duree<mt(list[iboucle].IndiceVM)) }		
+				\STATE Chercher indiceInterval qui est le dernier intervalle où la tâche était exécutée.
+				\IF{ (indiceInterval est trouvé et la machine correspondante est la même) }
+					\STATE WG = indiceServeur;
+				\ELSE
+					\STATE \COMMENT{ça veut dire pas possible}
+					\STATE WG = -M(); 	
+				\ENDIF
+			\ELSE
+				\FOR{ iboucle2 de 0 à <M() }
+					\IF{ (ListeMachine[iboucle2] peut recevoir la tâche) }
+						\STATE MachineRecevoir++;
+					\ENDIF
+				\ENDFOR
+					\STATE WG = M() -  MachineRecevoir;
+			\ENDIF
+			\STATE list[iboucle].prio = IB + WG;
+		\ENDIF
+		\STATE \COMMENT{Trier les tâches en priorité décroissante}
+		\STATE SortListByPrio(list);
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 5 %%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{Ordonnancer}
+\label{algo5}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indiceInter: L'intervalle à traiter.
+}
+\ENSURE {
+	\STATE ListeOrdo: Une variable globale qui représente le résultat de l'ordonnancement.
+}
+\LOOP
+		\STATE indiceAllume: L'indice de la machine qui sera allumée
+	\STATE \COMMENT{Affecter d'abord les tâches non préemptables}
+	\FOR{ indiceServeur de 0 à NbServeur }
+		\IF{ (toute les tâches non-préemptables sont affectées) }
+			\STATE break;
+		\ENDIF
+		
+		\STATE \COMMENT{Ordonnancer les tâches non-préemptables sur le serveur indiceServeur}
+		\STATE TrierTâches(ListeGPU1, indiceServeur);
+		\STATE TrierTâches(ListeGPU2, indiceServeur);
+		\STATE TrierTâches(ListeCPU1, indiceServeur);
+		\STATE TrierTâches(ListeCPU2, indiceServeur);
+		\STATE OrdoListeTache(ListeGPU1, indiceInter, indiceServeur, true);
+		\STATE OrdoListeTache(ListeGPU2, indiceInter, indiceServeur, true);
+		\STATE OrdoListeTache(ListeCPU1, indiceInter, indiceServeur, true);
+		\STATE OrdoListeTache(ListeCPU2, indiceInter, indiceServeur, true);
+		\STATE
+		\STATE \COMMENT{Ordonnancer les tâches préemptables sur le serveur indiceServeur}
+		\STATE TrierTâches(ListePrGPU1);
+		\STATE TrierTâches(ListePrGPU2);
+		\STATE TrierTâches(ListePrCPU1);
+		\STATE TrierTâches(ListePrCPU2);
+		\STATE OrdoListeTache(ListePrGPU1, indiceInter, indiceServeur, false);
+		\STATE OrdoListeTache(ListePrGPU2, indiceInter, indiceServeur, false);
+		\STATE OrdoListeTache(ListePrCPU1, indiceInter, indiceServeur, false);
+		\STATE OrdoListeTache(ListePrCPU2, indiceInter, indiceServeur, false);
+	\ENDFOR
+	
+	\STATE
+	\STATE \COMMENT{Pour le reste des tâches prémptable, on regarde si on a besoin de rallumer des machines}
+	\WHILE{ (Il y a encore des tâches préemptables non affectées) }
+		\STATE indiceAllume = AllumageMachine(indiceInter);
+		\IF{ (indiceAllume==-1) }
+			\STATE \COMMENT{Aucune machine ne peut être allumée, arrêter.}
+			\RETURN;
+		\ELSE
+			\STATE TrierTâches(ListePrGPU1);
+			\STATE TrierTâches(ListePrGPU2);
+			\STATE TrierTâches(ListePrCPU1);
+			\STATE TrierTâches(ListePrCPU2);
+			\STATE OrdoListeTache(ListePrGPU1, indiceInter, indiceServeur, true);
+			\STATE OrdoListeTache(ListePrGPU2, indiceInter, indiceServeur, true);
+			\STATE OrdoListeTache(ListePrCPU1, indiceInter, indiceServeur, true);
+			\STATE OrdoListeTache(ListePrCPU2, indiceInter, indiceServeur, true);
+		\ENDIF
+	\ENDWHILE
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 6 %%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{OrdoListeTache}
+\label{algo6}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE ListeTâche: La liste des tâches.
+	\STATE indiceI: L'indice d'intervalle.
+	\STATE indiceS: L'indice du serveur.
+	\STATE canTurnOn: un booléan pour indique quand le serveur n'est pas allumé est-ce qu'on a le droit de l'allumer et affecter au-dessus.
+}   
+\ENSURE {
+	\STATE ListeOrdo: L'affectation des tâches est enregistrée dans cette liste qui est aussi la sortie du programme.
+}
+\LOOP
+	\STATE Entier interInf, interSup, indiceVM, indiceVM2;
+	\STATE Entier dureeExeActuelle;
+	\STATE interInf = ListeIntervalle[indiceI].BorneInf;
+	\STATE interSup = ListeIntervalle[indiceI].BorneSup;
+	\STATE 
+	\FOR{ chaque tâche t dans ListTâche }
+		\IF{(t n'est pas encore affectée sur cet intervalle) }
+			\IF{(Le serveur indiceS possède assez de ressource pour t) }
+				\FOR{ chaque tâche t2 qui a une affinité avec t et qui a été affectée sur un autre serveur indiceS2 }
+					\IF{( false == CalculFesabiliteReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI) ) }
+						\STATE Cette tâche t ne peut pas affectée sur ce serveur, car le réseau ne le permet pas.
+						\STATE Continuer voir la tâche suivante dans ListTâche.
+					\ENDIF
+				\ENDFOR
+				\STATE 
+				\STATE \COMMENT{Maintenant on est sûr que la tâche peut être affectée, alors on l'affecte...}
+				\STATE MaJReseau(t1.indiceVM, t2.indiceVM, indiceS, indiceS2, indiceI);
+				\FOR{ chaque instant de temps i }
+					\STATE Mettre à jour ListeOrdo[i][t.indiceVM];
+					\STATE Mettre à jour les caractéristiques de ce serveur(indiceS);
+				\ENDFOR
+			\ENDIF
+		\ENDIF
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 7 %%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{AllumageMachine}
+\label{algo7}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indiceInter: L'intervalle à traiter.
+}   
+\ENSURE {
+	\STATE indiceAllume: indice de la machine à allumer. -1 s'il y en a pas.
+}
+\LOOP
+	\STATE inf: instant inférieur de l'intervalle
+	\STATE sup: instant supérieur de l'intervalle
+	\STATE critère: la différence entre le coût de rallumer la machine et le coût de ne pas la rallumer. Plus c'est moins, mieux c'est.
+	\STATE critèreMin: le minimum du critère.
+	\STATE
+	\STATE inf = ListeIntervalles[indiceInter].BorneInf;
+	\STATE sup = ListeIntervalles[indiceInter].BorneSup;
+	\STATE critèreMin = 0;
+	\FOR{  chaque machine m }
+		\IF{ (m n'est pas allumée) }
+			\STATE critère = (sup - inf + 1) * beta(m); //Le coût d'être ON
+			\FOR{  (chaque tâche t préemptable qui n'est pas encore affectée) }
+				\IF{ (m peut recevoir t) }
+					\STATE critère = critère + (sup - inf + 1 ) * CalculCoutAffectation(t,m) - rho(t);
+				\ENDIF
+			\ENDFOR
+			\IF{ (critère < critèreMin) }
+				\STATE critèreMin  = critère;
+				\STATE indiceAllume = m.indiceServeur;
+			\ENDIF
+		\ENDIF
+	\ENDFOR
+	
+	\IF{(critèreMin < 0) }
+		\RETURN indiceAllume;
+	\ELSE
+		\RETURN -1;
+	\ENDIF
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 

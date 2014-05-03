@@ -8,7 +8,7 @@
 #include "Data.h"
 #include "Traitement.h"
 #include "ConsoleTable.h"
-#include "Test.h"
+#include "Test.h"	//This hearder file contains PrettyPrint functions for debug purpose. 
 #include "H1Result.h"
 
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1)
@@ -31,6 +31,7 @@ int main()
 	AfficherEdgeDispo();
 	AfficherCaracMachine();//getchar();exit(0);
 	AfficherAffinite();
+
 	Init();
 	ticks0 = clock();
 	CalculInterval();

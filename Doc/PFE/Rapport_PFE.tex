@@ -1,0 +1,52 @@
+\documentclass[twoside,fleqn]{EPURapport}
+
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\input{include.tex}
+
+%\nolistoftables
+\thedocument{Rapport PFE}{Le problème de Consolidation de Serveurs (hors-ligne)}{}
+
+\grade{Département Informatique\\ 5\ieme{} année\\ 2013 - 2014}
+\authors{%
+	\category{Étudiants}{%
+		\name{Lei SHANG} \mail{lei.shang@etu.univ-tours.fr}
+	}
+	\details{DI5 2013 - 2014}
+}
+
+\supervisors{%
+	\category{Encadrants}{%
+		\name{Vincent T'Kindt} \mail{vincent.tkindt@univ-tours.fr}
+	}
+	\details{Université François-Rabelais, Tours}
+}
+
+\abstracts{Ce rapport a été rédigé pour un projet de fin d'études à l'école d'ingénieurs Polytech'Tours, département informatique. Le sujet qui est plutôt de nature de recherche scientifique, consiste à résoudre un problème d'ordonnancement NP-complet rencontré par les fournisseurs d'infrastructure comme Amazon Cloud. On cherche à ordonnancer des machines virtuelles (tâches des clients) sur des machines physiques de façon optimale pour minimiser le coût d'utilisation. Ce projet consiste à la réalisation des méthodes de résolution ainsi que la recherche sur la technique de \textit{Preprocessing}. Beaucoup de tests et analyses ont aussi été réalisés.}
+{Consolidation de serveurs, Méthode de résolution, Heuristique, Preprocessing, Solveur Cplex}
+{This report is created for a graduation project at Engineering School Polytech'Tours, Computer Science department. The subject of the project which is a scientific research, consists of the resolution of a scheduling problem encountered by infrastructure service providers like Amazon Cloud. We try to find the best scheduling of virtual machines (clients' tasks) on physical machines in purpose of minimising the total cost. This report involves the modeling of the problem, the heuristic and exact approachs, the \textit{Preprocessing} technic and a lot of tests and analysises.}
+{Server consolidation, Resolution method, Heuristic, Preprocessing, Cplex solver}
+
+%\renewcommand{\labelitemii}{$\star$}
+\renewcommand{\theequation}{\Alph{equation}}	
+
+%\newcommand{\listofalgorithmes}{\tocfile{\listalgorithmcfname}{loa}}
+\begin{document}
+\listofalgorithms
+\input{ch1_intro.tex}
+\input{ch2_contexte.tex}
+\input{ch3_modele.tex}
+\input{ch4_travaux.tex}
+\input{ch5_test.tex}
+\input{ch51_gestion.tex}
+\input{ch6_diff.tex}
+\input{ch_conclu.tex}
+\input{ch_merci.tex}
+
+\bibliographystyle{plain}
+\bibliography{bib}
+\end{document}
+

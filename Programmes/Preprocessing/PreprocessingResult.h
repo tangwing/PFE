@@ -12,7 +12,7 @@ public:
 	{
 		isMIPExecuted = isOptiNoPre = isAllFixed = isFeasible=isOptimal=isTimeLimit=isMemLimit=-1; 
 		nbMachine=UB = LB = value=durationCpuClock=durationPre=-1;
-		nbConCut1=nbConCut2=nbConCut3=statusCode=nbNode=nbBool = nbBoolExtractable =nbFixed= errCodeLP = -1;
+		nbConCut1=nbConCut2=nbConCut3=statusCode=nbNode=nbBool = nbXExtractable =nbXFixed = nbBoolExtractable =nbFixed= errCodeLP = -1;
 	}
 	//PreprocessingResult(int isPre,int isInteg, int isFea, int isOpt, int isTimLim, int isMemLim,
 	//	int nbMach, int nbNod, int status, 
@@ -41,8 +41,8 @@ public:
 	void ExportToFile(const char* filename)
 	{
 		FILE * fic=fopen(filename,"wt");
-		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
-			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
+		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%lf\n%lf\n%lf\n",
+			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, nbXExtractable,nbXFixed, UB, LB,durationPre);
 			
 		fprintf(fic,"%d\n%d\n%d\n%d\n%d\n%lf\n%d\n%d\n%lf\n%lf\n%d\n%d\n%d\n",
 			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock, nbConCut1,nbConCut2,nbConCut3);
@@ -52,8 +52,8 @@ public:
 	void Test()
 	{
 		ImportFromFile("PreProc.txt");
-		printf("errCodeLP, %d\nsOptiNoPre,%d\nisAllFixed,%d\nnbBool, %d\nnbBoolExtractable,%d\nnbFixed,%d\nUB,%lf\n LB,%lf\ndurationPre,%lf\n",
-			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, UB, LB,durationPre);
+		printf("errCodeLP, %d\nsOptiNoPre,%d\nisAllFixed,%d\nnbBool, %d\nnbBoolExtractable,%d\nnbFixed,%d\nnbXExtractable,%d\nnbXFixed,%d\nUB,%lf\n LB,%lf\ndurationPre,%lf\n",
+			errCodeLP, isOptiNoPre,isAllFixed,nbBool, nbBoolExtractable,nbFixed, nbXExtractable,nbXFixed, UB, LB,durationPre);
 			
 		printf("isMIPExecuted,%d\nisFeasible,%d\nisOptimal,%d\nisTimeLimit,%d\nisMemLimit,%d\nnbMachine,%lf\nnbNode,%d\nstatusCode,%d\nvalue, %lf\ndurationCpuClock,%lf\nnbConCut1,%d\nnbConCut2,%d\nnbConCut3,%d\n",
 			isMIPExecuted, isFeasible, isOptimal, isTimeLimit, isMemLimit, nbMachine, nbNode, statusCode,value, durationCpuClock, nbConCut1,nbConCut2,nbConCut3);
@@ -70,6 +70,8 @@ public:
 		fscanf(fichier,"%d\n",&nbBool);
 		fscanf(fichier,"%d\n",&nbBoolExtractable);
 		fscanf(fichier,"%d\n",&nbFixed);
+		fscanf(fichier,"%d\n",&nbXExtractable);
+		fscanf(fichier,"%d\n",&nbXFixed);
 		fscanf(fichier,"%lf\n",&UB);
 		fscanf(fichier,"%lf\n",&LB);
 	    fscanf(fichier,"%lf\n",&durationPre);
@@ -98,6 +100,8 @@ public:
 	int nbBool;
 	int nbBoolExtractable;
 	int nbFixed;
+	int nbXExtractable;
+	int nbXFixed;
 	double UB;
 	double LB;
 	double durationPre;

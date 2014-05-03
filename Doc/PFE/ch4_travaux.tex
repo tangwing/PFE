@@ -1,0 +1,122 @@
+\chapter{Travaux réalisés}
+Cette partie présente les travaux réalisé dans ce projet.  Puisqu'il y a une grosse partie de travail qui concerne les nombreux tests et les analyses donc un autre chapitre indépendent est créé pour la présenter.
+
+\section{Finition de la méthode heuristique de liste (H1)}%%%%%%%%%%%%%%%%%%%%%%%%
+Les algorithmes et le programme de H1 ont été principalement réalisés par Cyrille PICARD avant ce projet. Cependant, ce travail n'a pas été vraiment fini et il existe des problèmes dans les algorithmes ainsi que dans l'implémentation.
+
+Les travaux réalisés concernent donc la correction des algorithmes ainsi que ses implémentations. Cette partie a duré plus longtemps que ce que nous avions prévu. Finalement la partie principale du programme est quasiment réécrit. La plus part de travail se porte sur la programmation C++ qui n'est pas très pertinent d'être présentée dans ce rapport. Par contre, nous listons ici les algorithmes (pseudo-code) principals que nous avons créés ou modifiés.
+
+\input{ch41_algo.tex}
+
+
+\section{Réalisation de la méthode heuristique basée sur Cplex (H2)}%%%%%%%%%%%%%%%
+La deuxième méthode heuristique est basée sur la méthode exacte du solveur Cplex. Il s'agit de chercher de bonnes valeurs de certains paramètres pour rendre la méthode en heuristique, qui peut nous donner une solution faisable (donc pas forcément optimale) dans un temps limité.
+
+Les deux paramètres Cplex qui nous intéressent sont:
+\begin{itemize}
+	\item TimeLimit: durée maximum de résolution. Cplex s'arrête au bout de ce temps même s'il n'a pas encore trouver la solution optimale.
+	\item EpGap: tolérance d’écart entre la solution trouvée et la borne inférieure. Si Cplex trouve une solution faisable qui n'est pas optimal mais qui est tolérée par cet écart alors il va aussi s'arrêter en retourner cette solution convenable.
+\end{itemize}
+
+
+\subsection{Détermination des paramètres}
+Pour trouver de bonnes valeurs pour ces deux paramètres, nous avons réalisé une analyse sur les fichiers log Cplex engendrés pendant la résolution de certaines instances. En fait quand Cplex résoud un problème, il enregistre fréquemment les informations sur la déviation entre la solution actuelle et la LB, avec aussi le temps écoulé. A partir de ces informations, nous pouvons chercher la corrélation entre ces deux facteurs. La figure \ref{epgap} a été ensuite réalisée pour illustrer cette relation.
+
+\begin{figure}[!htbp]
+	\centering
+		\includegraphics[scale=0.5]{pics/epgap.png}
+	\caption{L'évolution de la déviation selon le temps écoulé}
+	\label{fig:epgap}
+\end{figure}
+\bigskip
+En analysant cette figure, nous avons choisi heuristiquement 2\% comme la valeur pour le paramètre \textit{EpGap} et 400s pour \textit{TimeLimit}. D'abord une déviation de 2\% reste très faible donc admissible, ensuite nous pouvons constater aussi après 400s la solution ne peut plus être améliorée facilement.
+
+\section{Mise en oeuvre du Preprocessing}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Principe}
+Le \textit{Preprocessing} est un prétraitement réalisé sur le modèle mathématique du problème avant de passer ce modèle au solveur. L'idée du Preprocessing est de fixer autant que possible de variables dans le modèle pour réduire la taille du problème et donc accélérer la résolution qui suit.
+
+Pour le faire, il faut avoir une borne supérieure (UB) en entrée. Ça peut être fournit par les deux méthodes heuristiques que nous avons parlées. Ensuite il faut faire une relaxation continue sur le modèle pour obtenir un modèle LP dont les variables sont de type réel entre 0 et 1. 
+
+Nous pouvons alors lancer la résolution LP sur ce modèle. La valeur objective obtenue est donc une borne inférieure (LB) du problème initial. Si toutes les variables de la solution valent 0 ou 1, alors le travail est fini ; sinon nous commenceons à fixer les variables qui ne sont pas entier de façons suivante: 
+
+\begin{enumerate}
+	\item Si le fait de fixer une variable à 0 va nous amener une solution qui viole la UB, alors il faut fixer cette variable à 1.
+	\item Équalement, si le fait de fixer une variable à 1 va nous amener une solution qui viole la UB, alors il faut fixer cette variable à 0.
+	\item S'il n'y a aucune variable qui peut être fixée, alors le Preprocessing est fini. Sinon il faut relancer la résolution LP et répéter le Preprocessing.
+\end{enumerate}
+
+Pour expliquer comment peut-on savoir un fixage à 0 ou à 1 peut violer la UB, il faut d'abord introduire les notions \textit{Reduced-cost} et \textit{Pseudo-cost}.
+
+En effet après la résolution LP d'un problème, Cplex va attacher un \textit{Reduced-cost} à chaque variable qui est hors la \textit{Base}. Le \textit{Reduced-cost} signifie tout simplement l'influence d'un ajustement de la variable sur la valeur de la fonction objectif. Par exemple si nous voulons fixer à 1 une variable qui vaut 0.8, alors nous savons que la nouvelle valeur objective sera $sol+(1-0.8)*\textit{Reduced-cost}$ dont $sol$ est la valeur objective avant le fixage.
+
+Le \textit{Pseudo-cost} a un sens similaire, mais c'est pour les variables qui sont dans la \textit{Base}.
+
+Nous avons dejà une librairie C++ \textit{PreLib} qui est une implémentation de la technique du Preprocessing issue d'un autre projet. Pour l'employer dans ce projet, nous avons besoin de faire des adaptations, sinon la parite essentielle du Preprocessing est déjà prête à utiliser.
+
+\subsection{Valide inequalities}
+Selon l'analyse du premier test \ref{test_prep_nocut} du Preprocessing, nous avons constaté que les LBs pendant le Preprocessing ne sont pas assez proches de la solution optimale, ce qui gêne la performence du Preprocessing. Pour améliorer cette situation, nous décitons d'ajouter des \textit{Valide Inequalities} dans le modèle LP du problème.
+
+Les \textit{Valide Inequalities} (ou Cut, Coupe) sont des contraintes supplémentaires qui sont redondantes, mais qui peuvent peut-être accélérer la résolution. Si ces coupes sont bien conçues, le solveur peut alors en profiter dans la procédure \textit{Branch \& Cut} pour éliminer très vite les branches inintéressantes ; mais l'ajout de ces coupes peut aussi amener un modèle grossi, ce qui peut au contraire ralentir la résolution. Donc le choix sur les coupes doit se faire avec modération. La conception, l'implémentation et le choix des coupes font une grande partie dans le travail de ce projet.
+
+Nous distinguons deux types de coupe: la coupe dépendante du problème et la coupe classique qui ne dépend pas le problème. La premère coupe dépend la particularité du problème, elle est souvent sur l'utilisation des ressources. La coupe classique est inventée à partir des contraites existantes d'une façons mathématique. Dans les deux sections qui suivent, nous présentons une coupe dépendante du problème et une coupe classique que nous avons créé.
+
+\subsubsection{Cuts sur les contraintes des ressources}\label{cut1}
+%\subsubsection{Ressources CPU/GPU}
+Nous avons créé une coupe pour chaque utilisation des ressources CPU/GPU/HDD/RAM. L'idée est de dire: si la tâche $i$ ne peut pas être affectée au serveur $j$ à cause de la capacité résiduelle de CPU/GPU du serveur, alors pour toute les tâches qui demandent plus de CPU/GPU que la tâche $i$, cette affectation ne peut pas être effectuée non plus.
+
+
+Cette contrainte peut être exprimée de façon suivante, nous respectons la même règle de notations que dans le modèle mathématique:
+\bigskip
+
+%CPU
+$Si \  n^c_{i\prime}\geq n^c_{i}\ alors\;$
+\begin{align} 
+&x_{i,j,t}+x_{i\prime,j,t}\leq (m^c_j-\sum^N_{k=1; k\neq{i},i\prime;u_{k,t}=q_{k,j}=1}{n^c_kx_{k,j,t}})/n^c_i
+&&\forall t=1,\ldots,T, tq\ u_{i,t}=u_{i\prime,t}=1; \nonumber \\
+ & &&\forall j=1, \ldots, M, tq\ q_{i,j}=q_{i\prime,j}=1
+\end{align} 
+ 
+%GPU
+$Si\ n^g_{i\prime}\geq n^g_{i}\ alors\;$
+\begin{align} 
+&x_{i,j,t}+x_{i\prime,j,t}\leq (m^g_j-\sum^N_{k=1; k\neq{i},i\prime;u_{k,t}=q_{k,j}=1}{n^g_kx_{k,j,t}})/n^g_i 
+&&\forall t=1,\ldots,T, tq\ u_{i,t}=u_{i\prime,t}=1; \nonumber \\
+ & &&\forall j=1, \ldots, M, tq\ q_{i,j}=q_{i\prime,j}=1
+\end{align} 
+
+
+À noter que nous n'avons pas besoin de considérer ici la contraite de préaffectation.
+
+%\subsubsection{Ressources HDD/RAM}
+Les cuts sur les ressources HDD/RAM ont le même principe sauf que ces ressources puissent aussi être occupées par l'opération de la migration. Nous pouvons appliquer les mêmes cuts comme pour CPU/GPU mais la prise en compte de la migration peut rendre le cut plus strict.
+\bigskip
+
+%HDD
+$Si\ n^h_{i\prime}\geq n^h_{i}\ alors\;$
+\begin{align}
+x_{i,j,t}+x_{i\prime,j,t} &\leq (m^h_j-\sum^N_{k=1;k\neq{i},i\prime;u_{k,t}= q_{k,j}=1}{n^h_kx_{k,j,t}} \nonumber \\
+ & - \sum^N_{k=1; k\neq{i},i\prime}{\sum^M_{l=1;l\neq{j}}{n^h_ky^{l,j}_{k,k,t}} }\;)/n^h_i        &&\forall t=1,\ldots,T, tq\ u_{i,t}=u_{i\prime,t}=1;  \nonumber \\
+ & &&\forall j=1, \ldots, M, tq\ q_{i,j}=q_{i\prime,j}=1
+\end{align}
+
+%RAM
+$Si\ n^r_{i\prime}\geq n^r_{i}\ alors\;$
+\begin{align}
+x_{i,j,t}+x_{i\prime,j,t} &\leq (m^r_j-\sum^N_{k=1;k\neq{i},i\prime;u_{k,t}= q_{k,j}=1}{n^r_kx_{k,j,t}} \nonumber \\
+ & - \sum^N_{k=1; k\neq{i},i\prime}{\sum^M_{l=1;l\neq{j}}{n^r_ky^{l,j}_{k,k,t}} }\;)/n^r_i        &&\forall t=1,\ldots,T, tq\ u_{i,t}=u_{i\prime,t}=1;  \nonumber \\
+ & &&\forall j=1, \ldots, M, tq\ q_{i,j}=q_{i\prime,j}=1
+\end{align}
+
+Le résultat du test correspondant peut être trouvé dans le chapitre des tests \ref{test_c1}.
+
+\subsubsection{1-Cuts}\label{cut2}
+1-cuts par Osorio et al.(2002) sont des coupes générées à partir des contraintes de types $d^Tx \leq b$ avec $d_1  \geq d_2 \geq \dots \geq d_n > 0$. Ce sont donc des contraintes redondantes qui peut pourtant plus efficaces. Par exemple pour la contrainte $x_1+2x_2+2x_3\leq 3 \ $dont les variables sont binaires, on peut en déduire un 1-cuts $x_2+x_3 < 1$, car si $x_2 = x_3=1$ la contrainte originale sera violée.
+
+Il existe déjà l'algorithme\cite{t2007enumeration} pour générer automatiquement les 1-cuts, alors nous l'avons réalisé et ensuite appliqué sur les contraintes de ressources dans le Preprocessing. Le résultat du test montre que ces coupes ont bien un effet possitif pour fixer plus de variables surtout pour les permiers 3 scénarios. Cependant, nous avons aussi aperçu que le nombre de coupes générées est considérable pendant cette démarche, ce qui peut potentiellement avoir un effet négatif sur le temps de résolution, parce que quand nous avons de nombreux contraintes ajoutés, Cplex va alors mettre plus de temps pour traiter ces contraintes.
+
+Pour résoudre ce problème, nous nous posons la question: combien de 1-cuts devons-nous générer et quelles sont les contraintes prioritaires. Empiriquement, nous décitons de trier les contraintes par ordre croissante de la partie droite de l'équation (noté $RHS$) car quand le $RHS$ est plus petit, ça génère des coupes plus contraignantes. Après, en considérant la partie gauche de l'équation, nous avons aussi essayé une deuxième approche, c'est de trier les contraintes par ordre décroissante de $LRS/RHS$, dont $LRS$ est la somme des coefficients à gauche de l'équation.
+
+Pour la question sur le nombre de coupes à générer, nous avons fait un test sur des instances choisies avec un nombre différent des coupes pour voir c'est combien le seuil pour chaque scénario. Ensuite avec le résultat des scénarios 4, 5 et 6 comme échantillons, nous avons trouvé une fonction qui peut donner un seuil selon le nombre de tâche et le nombre de machine du problème. La recherche de cette fonction est basé sur la procédure de "Multiple Linear Regression". Un outil en ligne\footnote{\url{http://www.xuru.org/rt/MLR.asp}} a été utilisé pour cette recherche.
+
+Les tests et analyses effectués sont décrits dans la section \ref{test_c2}.
+

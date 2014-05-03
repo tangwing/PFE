@@ -1,5 +1,4 @@
-//Les algorithmes peuvent être écrits naturellement mais en respectant les règles! Et après on va pouvoir les transformer en LaTeX code.
-
+//Les algorithmes peuvent être écrits naturellement mais en respectant les règles! Et après on va pouvoir les transformer en LaTeX code.
 Algo0 Algorithme Général
 Entrée/Sortie
 	ListOrdo: le tableau qui contient la matrice d'affectation des VMs sur les machines phisiques.
@@ -13,7 +12,7 @@ Debut
 		CréerListesTâche(i);
 		Ordonnancer(ListeOrdo, i);
 	Fin Pour
-	
+
 	//Maintenant on a fini l'ordonnancement des tâches et on peut déjà calculer le coût total.
 	coûtTotal = CalculerCoûtTotal();
 	
@@ -26,9 +25,7 @@ Debut
 			Fin Si
 		Fin Pour
 	Fin Pour
-Fin
-
-
+Fin
 Algo1 CaculerIntervalle()
 //L'idée est de déterminer les intervalles pour que chaque instant du même intervalle a le même Ui (état stable).
 Sortie
@@ -50,15 +47,14 @@ Debut
 	Fin Pour
 	nbIntervalle=nbIntervalle+1;
 	ListeIntervalle[nbIntervalle-1].BorneSup = T-1;
-Fin
-
-
+Fin
+
+
 Algo2 CréerListeServeurTriée
 Sortie
 	ListeServeur: le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
 Variables
 	Réel CoutTotal, SommeCaract;
-Debut
 	Pour i allant de 0 à M-1 Faire
 		ListeServeur[i].IndiceServeur=i;
 		CoutTotal=mc(i)*alphac(i) +mg(i)*alphag(i) + mr(i)*alphar(i)+ mh(i)*alphah(i);
@@ -66,5 +62,5 @@ Debut
 		ListeServeur[i].CoutNorm = CoutTotal / SommeCaract ;
 	Fin Pour
 	TrierParCoutNorm(ListeServeur);
-Fin
-
+Fin
+

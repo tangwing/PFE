@@ -22,20 +22,21 @@ using namespace std;
 
 ////////////////////////////////// Marcos and switchs /////
 #pragma region MARCOS
-#define DEBUG false
+#define DEBUG false //Output debug info
 #define DEBUG_MOD false
 #define CONFIG true
 
-#define MemLimit 1024.0
+#define MemLimit 1024.0	
 #define TimeLimit 1800.0
 
 bool ADDCUTS_C1 = false;
 bool ADDCUTS_C2 = false;
-bool ADDCUTS_C3 = false;
-//#define LEVEL_1CUT -1
-int LEVEL_1CUT = -1;
-int NB_1CUT_SEUIL = 99999999;//Upper bound
-int NB_1CUT_MIN = 1000; //Lower bound
+bool ADDCUTS_C3 = false; //Cut3 is incorrect, don't use it.
+
+bool REMOVE_LPCUTS = false; //Remove cuts when converting LP to MIP
+int NB_1CUT_SEUIL = 0;		//Upper bound of cuts count
+int CUT2_ORDER = 2;			//order of 1cut generation. 1 -> RHS increasing(Seuil1); 2-> LHS/RHS decreasing(seuil2); default: no sort
+
 #pragma endregion
 
 ///////////////////////////////// Declarations ///////////
@@ -64,6 +65,7 @@ int indX( int t, int i, int j){return t*N()*M()+i*M()+j;}
 int indY( int t, int i1, int i2, int j1, int j2){return T()*N()*M() + t*N()*N()*M()*M()+ i1*N()*M()*M() + i2*M()*M()+ j1*M() +j2 ;}
 int indZ( int t, int j){return T()*N()*M() + T()*N()*N()*M()*M() + t*M() + j;}
 
+//Cuts construction utilities
 typedef pair<short int, IloNumVar> Term;
 typedef pair< shared_ptr< vector<Term> >, short int> Equation;
 int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int right);
@@ -78,9 +80,10 @@ double dOptValue = -1, dOptTime = -1, dPreProcessingTime = -1, dNbMach = -1, dUB
 int isOptimal = -1, isFeasible = -1,iNbNodesIP = -1, isOptiNoPre = -1, isAllFixed = -1;
 int isTimeLimit=-1, isMemLimit=-1;
 int iNbFixed = -1, nbBool=-1;
+int NB_VAR_X = 0;
 PreprocessingResult res; //The final result which will be exported to file
 double GetTimeByClockTicks(clock_t ticks0, clock_t ticks1){	return double(ticks1 - ticks0)/CLOCKS_PER_SEC;}
-void SetVector( IloCplex& cplex, char* filename);
+void AddMIPStart( IloCplex& cplex, char* filename);
 #pragma endregion 
 
 ///
@@ -249,7 +252,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		dUB = prepro->PREGetUB();
 		dLB = prepro->PREGetLB();
 		
-		//Recode preprocessing results
+		//Recorde preprocessing results
 		res.isOptiNoPre = isOptiNoPre;
 		res.isAllFixed = isAllFixed;
 		res.UB = dUB;
@@ -257,9 +260,13 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 		res.nbBool = nbBool;
 		res.nbBoolExtractable = nbBoolExtractable;
 		res.nbFixed = nbFix;
+		res.nbXExtractable = prepro->PREGetTreatedVarCount(NB_VAR_X);
+		res.nbXFixed = prepro->PREGetNbFix(NB_VAR_X);
 		res.durationPre = temps_cpu_pre;
 		
 		//Init the reduced IP formulation
+		if( REMOVE_LPCUTS && (ADDCUTS_C1 || ADDCUTS_C2 || ADDCUTS_C3) ) prepro->PRERemoveCutsFromLP();
+		
 		prepro->PREInitializeMIPfromLP(penv , pcplex , pmodel , pvar, pcon,head);
 		pcplex->extract(*pmodel);
 	}
@@ -274,9 +281,7 @@ void PreByCalCost(SolveMode sm, int *head, int nbBool,int UB, IloEnv *penv, IloC
 }
 
 
-///
 /// This function initializes the LP model
-///
 void InitializeLPModel()
 {
 #pragma region NOT_CUTS
@@ -649,6 +654,7 @@ for (iLoop2=0;iLoop2<N();iLoop2++)
  }
 }
 
+
 /////////////////////// Cuts construction ////////////////////////
 void ConstructCut1()
 {
@@ -725,7 +731,6 @@ void ConstructCut1()
 				printf("[Info]Num of Cut1 added: %d\n",res.nbConCut1);
  }
 }
-
 void ConstructCut2()
 {
 		//NB_1CUT_SEUIL = int(0.17*N()*N()*M()*M()); //The max number of cuts 
@@ -766,34 +771,57 @@ void ConstructCut2()
 			vEquations.push_back( make_pair( vEquationC, mh(iLoop3)));
 			vEquations.push_back( make_pair( vEquationD, mr(iLoop3)));
 		}
+
 		 if(DEBUG)
 		 {
 			 cout<<"[vEquation]: Before sort ------------"<<endl;
 			 cout<<vEquations.size()<<endl;
-			 for_each( vEquations.begin(), vEquations.end(), [](Equation e){cout<<e.second<<endl;});
+			 for_each( vEquations.begin(), vEquations.end(), [](const Equation & e){cout<<e.second<<endl;});
 		 }
-		//Sort vEquations by RHS increasing
-		 sort(vEquations.begin(), vEquations.end(), [](Equation e1, Equation e2){ return e1.second < e2.second; });
+		 //Sort vEquations by RHS increasing
+		 if(CUT2_ORDER == 1)
+		 {
+			cout<<"Sort vEquations by increasing order of RHS"<<endl;
+			sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) { return e1.second<e2.second;});
+		 }
+		 else if( CUT2_ORDER == 2)
+		 {//Sort vEquations by Sum(LHS)/RHS decreasing
+			 cout<<"Sort vEquations by decreasing order of Sum(LHS)/RHS"<<endl;
+			 sort(vEquations.begin(), vEquations.end(), [](const Equation & e1, const Equation & e2) ->bool
+			 {
+				 double sumLhs1 = 0, sumLhs2=0;
+				 for_each( (e1.first)->begin(), (e1.first)->end(), [&sumLhs1](const Term& t){ sumLhs1+=t.first;});
+				 for_each( (e2.first)->begin(), (e2.first)->end(), [&sumLhs2](const Term& t){ sumLhs2+=t.first;});
+				 //cout<<sumLhs1/e1.second<<" "<<sumLhs2/e2.second<<endl;
+				 return (sumLhs1/e1.second) > (sumLhs2/e2.second); 
+			 });
+		 }
+
+		
 		 if(DEBUG)
 		 {
 			cout<<"[vEquation]: After sort -------------"<<endl;
-			for_each( vEquations.begin(), vEquations.end(), [](Equation e){cout<<e.second<<endl;});
+			for_each( vEquations.begin(), vEquations.end(), [](const Equation & e){cout<<e.second<<endl;});
 		 }
 
 		//Begin to make 1-cuts
 		for(auto it = vEquations.begin(); it != vEquations.end(); it++)
 		{
 			res.nbConCut2 += Make1Cuts( con_cuts2, *((it->first).get()), it->second);
-			if( res.nbConCut2>NB_1CUT_MIN && res.nbConCut2>NB_1CUT_SEUIL)break;
+			if( NB_1CUT_SEUIL>0 && res.nbConCut2>NB_1CUT_SEUIL)break;
 		}
 
 		 cout<<"[CUT2]: nbCut = "<<res.nbConCut2<<endl;
 }
 
+///
+///The cut3 is not correct!
+///
 bool IsIdentical(int j1, int j2);
 void ConstructCut3()
 {
 	printf("[Info] Declaration of Cut3: identical servers\n");
+	abort();
 	int iLoop,iLoop2,iLoop3,iLoop4,iLoop5;
 	res.nbConCut3=0 ;
 	//Find equivalent machines
@@ -830,48 +858,41 @@ void ConstructCut3()
 	cout<<"[CUT3]: nbCut = "<<res.nbConCut3<<endl;
 }
 
+
 /////////////////////// Programme Principal /////////////////////////
 void SomeTest();
 double CountPMsTurnedOn(IloCplex *pcplex);//ounts the number of machines which are turned on, on the average, at any time t
-#define ENABLE_CMD_PARAM false
-
 int main(int argc, char* argvs[])
 {
-	SolveMode sm = PRE_PRE; //Solve mode
+	///Some switchs---------------------
+	SolveMode sm = PRE_PRE;			//Solve mode
+    bool ENABLE_CMD_PARAM =true;	//Turn this to false for testing in VS
+	//ADDCUTS_C1=true;
+	ADDCUTS_C2=true;
+	//ADDCUTS_C3=true;
 	//SomeTest();return 1;
+	
+	///Main part -----------------------
 	int UB = 99999999;
 	//UB = 515201;
 	//UB = 465172;
 	//UB=594336; //4_10
 	//UB=831337;//4_4
+	//UB=524059; //4_9
 	if(ENABLE_CMD_PARAM)
 	{
-		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB CutsToAdd [FilenameForSetVector]\n   Params: CutsToAdd A bitflag int indicating which cuts to add. Ex: 1->addCut1, 6->addCut3&2. Mind the order.\n"<<endl; abort();}
+		if(argc < 2){cerr<<"Syntax: Preprocessing.exe UB Seuil [FilenameForAddMipStart]\n   Params: Seuil Max cuts count for 1-cut.\n"<<endl; abort();}
 		for(int i=0; i<argc; i++)
 			cout<<argvs[i]<<endl;
 		UB = atoi(argvs[1]);
-		if(argc>=3) //Add Cuts
-		{
-			int flag = atoi(argvs[2]);
-			ADDCUTS_C1 = bool(flag % 2);
-			ADDCUTS_C2 = bool((flag >> 1)%2);
-			ADDCUTS_C3 = bool((flag >> 2)%2);
-
-			///!Tmp
-			//LEVEL_1CUT = fla g;
-			//ADDCUTS_C1=ADDCUTS_C3=ADDCUTS_C2=0;
-		}
+		NB_1CUT_SEUIL = atoi(argvs[2]);
 		GetData();
 	}
 	else	
-		GetData("Donnees/donnees4_1.dat");
+		GetData("Donnees/donnees4_9.dat");
 
+	NB_VAR_X = T()*N()*M();		
 
-
-	//ADDCUTS_C1=true;
-	//ADDCUTS_C2=true;
-	//ADDCUTS_C3=true;
-	
 	clock_t ticks0;
 	if (DEBUG) DisplayData();
 	//SomeTest();
@@ -897,21 +918,18 @@ int main(int argc, char* argvs[])
 				head[nbBool]=var[i].getId();
 				nbBool++;
 			}
-			//if(argc != 3) //argc==3 => preprocess X only
-			//{
-				//Add all y into head
-				for(int i=T()*N()*M(); i<T()*N()*M()+T()*N()*N()*M()*M();i++)
-				{
-					head[nbBool]=var[i].getId();
-					nbBool++;
-				}
-				//Add all z into head
-				for(int i=T()*N()*M()+T()*N()*N()*M()*M();i< var.getSize();i++)
-				{
-					head[nbBool]=var[i].getId();
-					nbBool++;
-				}
-			//}
+			//Add all y into head
+			for(int i=T()*N()*M(); i<T()*N()*M()+T()*N()*N()*M()*M();i++)
+			{
+				head[nbBool]=var[i].getId();
+				nbBool++;
+			}
+			//Add all z into head
+			for(int i=T()*N()*M()+T()*N()*N()*M()*M();i< var.getSize();i++)
+			{
+				head[nbBool]=var[i].getId();
+				nbBool++;
+			}
 			PreByCalCost(sm,head,nbBool, UB, &env , &cplex , &model , &var , &con);	// See above
 			delete [] head;
 
@@ -924,8 +942,11 @@ int main(int argc, char* argvs[])
 				dNbMach=-1.0;
 				///Set Vectors
 				if(argc==4)
-					SetVector( cplex, argvs[3]);//"SolVector.out"
+					//cplex.readMIPStart(argvs[3]);
+					AddMIPStart( cplex, argvs[3]);//"SolVector.out"
 
+				//cplex.setParam(IloCplex::EpGap, 0.02);// We limit the  mipgap tolerance
+				//cplex.setParam(IloCplex::TiLim, 1800.0);
 				if (!cplex.solve())
 				{ // cplex fails to solve the problem
 					dOptValue=-1;
@@ -941,6 +962,7 @@ int main(int argc, char* argvs[])
 						isFeasible=1;
 						dOptValue=cplex.getObjValue();
 						dNbMach=CountPMsTurnedOn(&cplex);
+						//cplex.writeMIPStart("mipstart.out");
 					} else if (cplex.getCplexStatus()==IloCplex::Infeasible || cplex.getCplexStatus()==IloCplex::InfeasibleOrUnbounded || cplex.getCplexStatus()==IloCplex::InfOrUnbd)
 					{
 						isOptimal=0;
@@ -1044,22 +1066,10 @@ int Make1Cuts(const IloRangeArray & ConArr, vector<Term> & Left, int Right)
 			j=l;
 		}else j++;
 		
-		if(k == LEVEL_1CUT)break;	//1-Cut level control
+		//if(k == LEVEL_1CUT)break;	//1-Cut level control
 		k++;
 	}
 	return nbCuts;
-}
-
-void TestIdenticalMach()
-{ 
-	//char filename[]="Donnees/donnees8_20.dat ";
-	//for(int i=1; i<=8; i++)
-	//	for(int j=1; j<=20; j++)
-	//	{
-	//		sprintf(filename, "Donnees/donnees%d_%d.dat", i,j);
-	//		GetDate(filename);
-
-	//	}
 }
 
 void SomeTest()
@@ -1089,7 +1099,8 @@ double CountPMsTurnedOn(IloCplex *pcplex)
 }
 
 //Read var vector from file. The file contains the indices of vars in var[], whose value=1 according to the solution of H2
-void SetVector( IloCplex& cplex, char* filename)
+//void SetVector( IloCplex& cplex, char* filename)
+void AddMIPStart( IloCplex& cplex, char* filename)
 {
 	
 	int size = T()*N()*M() + T()*N()*N()*M()*M() + T()*M();
@@ -1115,7 +1126,10 @@ void SetVector( IloCplex& cplex, char* filename)
 	fclose(f);
 	printf("Read: counter=%d, size=%d\n",counter, size);
 	//for(int i=0; i<size; i++){printf("%d\n",vals[i]);}
-	cplex.setVectors(vals, 0,vars,0,0,0);
+	//cplex.setVectors(vals, 0,vars,0,0,0);
+	cplex.addMIPStart(vars, vals);
+	vals.end();
+	vars.end();
 }
 
 //Return true if two server have the same q(i,j) for all i

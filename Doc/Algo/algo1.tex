@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 3 (567) %%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{CréerListesTâches}
+\label{algo3}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indice: l'indice de l'intervalle sur lequel on travaille
+}
+\ENSURE {
+	STATE ListeTachesPr: la liste des tâches préemptable.
+	STATE ListeGPU1,ListeGPU2,ListeCPU1,ListeCPU2,ListePrGPU1,ListePrGPU2,ListePrCPU1,ListePrCPU2: les tâches sont réparties dans ces 8 listes selon leurs besoins en GPU, CPU, HDD, RAM et si la tâche est préemptable.
+}
+\LOOP
+	STATE Entier temps;
+	STATE temps = ListeIntervalle[indice].BorneInf;
+	Pour tâche de 0 à N()-1 Faire
+		\IF{(u(tâche, temps)=1) } //Cette	tâche peut être exécutée en ce moment
+			\IF{(R(tâche==0))	}	//Cette tâche est non-préemptable
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						STATE Répartir cette tâche à ListeGPU1;
+					\ELSE
+						STATE Répartir cette tâche à ListeGPU2;
+					\ENDIF
+				\ELSE	//ng(tâche)=0
+					\IF{(nh(tâche) > nr(tâche)) }
+						STATE Répartir cette tâche à ListeCPU1;
+					\ELSE
+						STATE Répartir cette tâche à ListeCPU2;
+					\ENDIF
+				\ENDIF
+			\ELSE	//Cette tâche est préemptable
+				Répartir cette tâche à ListeTâchesPr;
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						STATE Répartir cette tâche à ListePrGPU1;
+					\ELSE
+						STATE Répartir cette tâche à ListePrGPU2;
+					\ENDIF
+				\ELSE	//ng(tâche)=0
+					\IF{(nh(tâche) > nr(tâche)) }
+						STATE Répartir cette tâche à ListePrCPU1;
+					\ELSE
+						STATE Répartir cette tâche à ListePrCPU2;
+					\ENDIF
+				\ENDIF
+			\ENDIF
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Algo1 CaculerIntervalle()
+%{}
+\begin{algorithm}[H]
+\caption{CaculerIntervalle}
+\label{algo1}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\ENSURE {
+\STATE	ListeIntervalle: le tableau des intervalles trouvés
+}\\
+\LOOP
+\STATE Entier nbIntervalle=0;
+\STATE ListeIntervalle[0].BorneInf = 0;
+\STATE ListeIntervalle[0].BorneSup = 0;
+	\FOR{ t allant de 0 à T-2 }
+		\FOR{ iTache allant de 0 à N-1 }
+			%\COMMENT{Intervalle trouvé}
+			\IF{ u(iTache,t)!=u(iTache,t+1) }  
+				\STATE nbIntervalle = nbIntervalle+1;
+				\STATE ListeIntervalle[nbIntervalle-1].BorneSup = t;
+				%\COMMENT{Intervalle suivant}
+				\STATE ListeIntervalle[nbIntervalle].BorneInf = t+1; 
+				\STATE break;
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+	\STATE nbIntervalle=nbIntervalle+1;
+	\STATE ListeIntervalle[nbIntervalle-1].BorneSup = T-1;
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}
+
+%%%%%%%%%%%2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Algo2 CréerListeServeurTriée
+\begin{algorithm}[H]
+\caption{CréerListeServeurTriée}
+\label{algo2}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\ENSURE {
+\STATE	ListeServeur: le tableau des serveurs triés par ordre croissant en fonction du coût normalisé
+}\\
+\LOOP
+	\STATE Réel CoutTotal, SommeCaract;
+	\FOR {i allant de 0 à M-1 }
+		\STATE ListeServeur[i].IndiceServeur=i;
+		\STATE CoutTotal=mc(i)*alphac(i) +mg(i)*alphag(i) + mr(i)*alphar(i)+ mh(i)*alphah(i);
+		\STATE SommeCaract = mc(i)+mg(i)+mr(i)+mh(i);
+		\STATE ListeServeur[i].CoutNorm = CoutTotal / SommeCaract ;
+	\ENDFOR
+	\STATE TrierParCoutNorm(ListeServeur);
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,59 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Algo 4 (8) %%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\caption{TrierTâches}
+\label{algo3}
+\algsetup{indent=3em}
+\begin{algorithmic}[1]
+\REQUIRE {
+	\STATE indice: indice de l'intervalle
+	\STATE indiceServeur: indice de la machine
+	\STATE list: une liste de tâches à trier
+	\STATE taille: la taille de la liste
+}
+\ENSURE {
+	\STATE ListeTachesPr: la liste des tâches préemptable.
+	\STATE ListeGPU1,ListeGPU2,ListeCPU1,ListeCPU2,ListePrGPU1,ListePrGPU2,ListePrCPU1,ListePrCPU2: les tâches sont réparties dans ces 8 listes selon leurs besoins en GPU, CPU, HDD, RAM et si la tâche est préemptable.
+}
+\LOOP
+	\FOR{ tâche de 0 à N()-1 }
+		\IF{(u(tâche, temps)=1) } 
+			\STATE \COMMENT{Cette tâche peut être exécutée en ce moment}
+			\IF{ (R(tâche==0))	}
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListeGPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListeGPU2;
+					\ENDIF
+				\ELSE	
+					\STATE \COMMENT{ng(tâche)=0}
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListeCPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListeCPU2;
+					\ENDIF
+				\ENDIF
+			\ELSE	
+				\STATE \COMMENT{Cette tâche est préemptable}
+				\STATE Répartir cette tâche à ListeTâchesPr;
+				\IF{(ng(tâche)>0) }
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListePrGPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListePrGPU2;
+					\ENDIF
+				\ELSE	
+					\STATE \COMMENT{ng(tâche)=0}
+					\IF{(nh(tâche) > nr(tâche)) }
+						\STATE Répartir cette tâche à ListePrCPU1;
+					\ELSE
+						\STATE Répartir cette tâche à ListePrCPU2;
+					\ENDIF
+				\ENDIF
+			\ENDIF
+		\ENDIF
+	\ENDFOR
+\ENDLOOP
+\end{algorithmic}
+\end{algorithm} 
