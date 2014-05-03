@@ -1,0 +1,555 @@
+%%%
+%%% Test sans preprocessing
+%%%
+%\chapter{Test des méthodes de résolution sans Preprocessing}
+\chapter{Tests}
+Pour tester le fonctionnement des différentes méthodes de résolution dans ce projet, plusieurs tests ont été effectués sur un ensemble d'instances du problème. Cet ensemble contient 6 scénarios dont chacun est composé par 20 instances du problème. Toutes ces données de test sont générées par le programme Testeur.
+
+Dans la partie suivante, les trois premiers tests sont pour comparer les trois méthodes de résolutions: méthode exacte, H1 et H2. Les sections après sont les tests sur le Preprocessing.
+
+\section{Méthode exacte - solveur Cplex}
+Dans un premier temps, le test du solveur Cplex est effectué car les solutions trouvées par le solveur peuvent nous servir à évaluer la performance des autres méthodes de résolution.
+
+Le tableau \ref{tab_cplex} représente les statistiques effectuées sur le résultat de test du solveur Cplex. Les significations des colonnes sont:
+\begin{enumerate}
+	\item Sc(N/M): numéro de scénario et le nombre de VM et de serveur physique.
+	\item \#Infeas: le nombre des instances qui sont prouvées comme ''Infaisable'' par le solveur.
+	\item \#Opt: le nombre des instances qui sont résolues avec la solution optimale trouvée.
+	\item \#Mem: le nombre des instances pour lesquelles le solveur n'a pas pu trouver la solution optimale à cause de la limite de l'espace mémoire.
+	\item \#Tim: le nombre des instances pour lesquelles le solveur n'a pas pu trouver la solution optimale à cause de la limite du temps.
+	\item $T_{min}$, $T_{avg}$, $T_{max}$: le temps (minimum, moyenne et maximum) de résolution en seconde. Nous ne considérons pas les instances infaisable.
+\end{enumerate}
+\bigskip
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#Opt	& \#Tim & \#Mem & $T_{min}$ & $T_{avg}$	& $T_{max}$ \\ \hline
+Sc1(8/2) &2	&18	&0	&0&	0,02	&0,03	&0,04   \\ \hline
+Sc2(11/3)&9	&11	&0	&0&	0,10	&0,28	&0,59	\\ \hline
+Sc3(15/4)&1	&19	&0	&0&	0,31	&2,55	&30,09  \\ \hline
+Sc4(18/5)&0	&20	&0	&0&	1,12	&99,69	&783,99 \\ \hline
+Sc5(21/5)&3	&10	&6	&1&	23,10	&1048,50&1800,31\\ \hline
+Sc6(24/6)&2	&6	&8	&4&	124,91	&1188,18&1800,49\\ \hline
+    \end{tabular}
+    \caption{Résultat de test du solveur Cplex}
+    \label{tab_cplex}
+\end{table}
+\bigskip
+
+A partir du scénario 4, on commence à avoir des grosses instances pour lesquelles le solveur n'a pas pu trouver la solution optimale ($T_{max}=1800$) à cause de la limite de temps.
+
+\section{Méthode heuristique de liste}
+Le tableau \ref{tab_h1} montre le résultat de test de la méthode heuristique de liste (on l'appelle H1 pour raison de simplicité). Dans ce tableau, les colonnes $D_{min}$, $D_{avg}$ et $D_{max}$ signifient la déviation entre la solution trouvée par H1 et la solution trouvée par le solveur Cplex. A noter que pour les 3 premiers scénarios le solveur a trouvé la solution optimale pour toutes les instances donc cette déviation peut montrer la qualité de notre méthode H1 par rapport à la solution optimale. A partir du scénario 4 on commence à avoir des instances pour lesquelles le solveur a trouvé une solution faisable mais pas optimale à cause de la limite du temps ou de l'espace mémoire, alors dans ce cas la déviation est aussi affectée.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#Solved	& $T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+		Sc1(8/2)  & 2 & 18 & 0.00 & 0.00 & 0.00 &0\% &19\% &67\% \\ \hline
+Sc2(11/3) & 9 & 11 & 0.00 & 0.00 & 0.00 &0\% &17\% &46\% \\ \hline
+Sc3(15/4) & 7 & 13 & 0.00 & 0.00 & 0.00 &5\% &24\% &58\% \\ \hline
+Sc4(18/5) & 11 & 9 & 0.00 & 0.00 & 0.00 &10\%& 27\%& 37\% \\ \hline
+Sc5(21/5) & 16 & 4 & 0.00 & 0.00 & 0.01 &30\%& 36\%& 43\% \\ \hline
+Sc6(24/6) & 20 & 0 & 0.00 & 0.01 & 0.02 & * & * & * \\ \hline
+    \end{tabular}
+    \caption{Résultat de test de la méthode heuristique de liste (H1)}
+    \label{tab_h1}
+\end{table}
+\bigskip
+
+On trouve souvent 0.00 seconde dans les colonnes de temps, ce qui signifie que le temps de résolution de H1 est très court.
+
+
+Par rapport à la déviation, la performance de H1 n'est pas très stable: pour certaines instances du problème, H1 a trouvé la solution optimale ($D_{min}=0\%$) mais on a aussi dans le Sc1 $D_{max}=67\%$ qui n'est pas très optimiste. Pour le scénario 6, H1 n'a résolu aucune instance donc la déviation n'est pas calculée.
+
+
+\section{Méthode heuristique de Cplex}
+Le tableau \ref{tab_h2} montre le résulat de test sur la méthode heuristique basée sur le solveur Cplex (H2).
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	& \#Infeas & \#Solved	& $T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+		Sc1(8/2)  &2 & 18 &  0.02 &  0.07   &0.15     &0\%  &0\%  &1\% \\ \hline
+Sc2(11/3) &9 & 11 &  0.08 &  0.29   &0.97     &0\%  &0\%  &1\% \\ \hline
+Sc3(15/4) &1 & 19 &  0.64 &  1.37   &5.21     &0\%  &0\%  &2\% \\ \hline
+Sc4(18/5) &0 & 20 &  1.53 &  80.33  & 400.32  &0\%  &0\%  &2\% \\ \hline
+Sc5(21/5) &3 & 17 &  1.68 &  240.31 &  400.41 & 0\% & 2\% & 4\% \\ \hline
+Sc6(24/6) &2 & 18 &  2.08 &  286.79 &  410.43 & -1\%&  1\%&  7\% \\ \hline
+    \end{tabular}
+    \caption{Résultat de test de la méthode heuristique de Cplex (H2)}
+    \label{tab_h2}
+\end{table}
+\bigskip
+
+
+Puisque la méthode H2 est basée sur le solveur Cplex, pour les petites instances de problème elle a trouvé des solutions qui sont très proches des solutions optimales. Pour les grandes instances (à partir du scénario 4), les solutions qu'elle a trouvées sont aussi très intéressantes avec la déviation maximale égale à 7\% qui reste acceptable. Le temps maximum de résolution est vers 200 secondes qui provient de l'implémentation de H2.
+
+
+
+%%%
+%%% Preprocessing
+%%%
+%\chapter{Test du Preprocessing} 
+%Un autre ensemble de tests a été réalisé pour évaluer la performance de l'approche Preprocessing avec des coupes différentes.
+
+
+
+\section{Preprocessing sans coupes supplémentaires}\label{test_prep_nocut}
+A partir de cette section, nous présentons les tests réalisés sur le technique de Preprocessing. On rappelle ici l'idée du Preprocessing est de fixer autant que possible de variables dans le modèle pour réduire la taille du modèle. Pour le faire, il faut avoir une borne supérieure (UB) et une borne inférieure (LB) qui sont assez proches de la solution optimale.
+Nous avons lancé d'abord le Preprocessing sur toutes les variables booléennes sans ajoutant des coupes supplémentaires.
+
+Dans le tableau \ref{tab_pre} on peut trouver des statistiques sur la qualité des LB et des UB ainsi que la proportion de variables fixées pendant le Preprocessing. Les colonnes s'interprêtent comme le suivant:
+\begin{enumerate}
+	\item DevLB: la déviation (minimum, moyenne et maximum) entre la solution optimale et LB.
+	\item DevUB: la déviation (minimum, moyenne et maximum) entre UB et la solution optimale.
+	\item Fixed: la proportion du nombre de variables fixées par rapport au nombre de toutes les variables ayant passé le preprocessing.
+\end{enumerate}
+
+\bigskip
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    	\hline 
+    	&\multicolumn{3}{c|}{DevLB}& \multicolumn{3}{c|}{DevUB}& \multicolumn{3}{c|}{Fixed} 	\\ \hline
+    	Sc(N/M)	& min & avg & max & min & avg & max & min & avg & max\\ \hline
+Sc1(8/2) & 0.00\%  &4.83\%  &17.07\%  &0.00\% & 0.04\%  &0.65\%  &0.00\%  &9.25\% &51.83\% \\ \hline
+Sc2(11/3)&  0.04\% & 7.21\% & 17.13\% & 0.00\%&  0.01\% & 0.15\% & 0.00\% &13.90\% & 66.67\%\\ \hline
+Sc3(15/4)&  1.10\% & 4.01\% & 10.12\% & 0.00\%&  0.36\% & 1.80\% & 0.00\% &0.88\% & 10.96\%\\ \hline
+Sc4(18/5)&  0.05\% & 5.28\% & 12.56\% & 0.00\%&  0.53\% & 1.81\% & 0.00\% &2.86\% & 55.64\%\\ \hline
+Sc5(21/5)&  1.82\% & 5.03\% & 8.94\%  &0.56\% & 1.94\%  &7.62\%  &0.00\%  &0.00\% &0.00\%\\ \hline
+Sc6(24/6)&  3.94\% & 5.91\% & 8.72\%  &0.30\% & 1.75\%  &5.40\%  &0.00\%  &0.09\% &0.56\%\\ \hline
+    \end{tabular}
+    \caption{Résultat de test du Preprocessing sur toute les variables booléannes}
+    \label{tab_pre}
+\end{table}
+\bigskip
+Nous constatons que le Preprocessing naïf fonctionne mais pas suffisamment bien. Il ne fixe pas beaucoup de variables donc il n'aide pas la résolution de Cplex. Souvent, ce problème survient quand l'UB ou la LB n'est pas assez bonne. En comparant la qualité de LB et d'UB, on peut trouver que relativement les UB sont assez proches que la solution optimale, en revanche les LB ne sont pas très bonnes.
+
+Pour améliorer les LB, nous avons cherché d'ajouter des contraintes supplémentaires (Cuts) au modèle LP du problème, pour enfin améliorer le fonctionnement du Preprocessing.
+
+\begin{comment}
+\subsubsection{Preprocessing sur les variables booléennes de décision $X^t_{i,j}$}
+Le tableau \ref{tab_pre_x} est le résultat d'un autre test sur Preprocessing. Dans ce test, au lieu de passer toutes les variables au Preprocessing, on passe seulement les variables de décision $X^t_{i,j}$, qui représente l'ordonnancement trouvé, au Preprocessing car on pense que ces variables sont les plus influentes. Par rapport au premier test, ce test ne change que les 3 dernières colonnes sur la proportion des variables fixées, le résultat sur la qualité de LB et UB reste le même.
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    	\hline
+    	Sc(N/M)	&  $Fix_{min}$ & $Fix_{avg}$ & $Fix_{max}$\\ \hline
+    	Sc1(8/2) &0.00\% & 13.84\% & 100.00\%\\ \hline
+Sc2(11/3)&0.00\% & 10.15\% & 42.42\%\\ \hline
+Sc3(15/4)&0.00\% & 0.56\%  &7.36\%\\ \hline
+Sc4(18/5)&0.00\% & 3.07\%  &59.07\%\\ \hline
+Sc5(21/5)&0.00\% & 0.00\%  &0.00\%\\ \hline
+Sc6(24/6)&0.00\% & 3.45\%  &59.07\%\\ \hline
+    \end{tabular}
+    \label{tab_pre_x}
+    \caption{Résultat de test du Preprocessing sur les variables de décision $X^t_{i,j}$}
+\end{table}
+\bigskip
+
+\subsection{Conclusion sur le Preprocessing}
+En comparant le résultat détaillé des deux tests effectués, on a constaté que la plupart des variables fixées sont les variables de décision $X^t_{i,j}$. Cependant, pour certaines instances, si on passe seulement les $X^t_{i,j}$ au Preprocessing aucune variable peut être fixée mais si on passe toutes variables booléennes au Preprocessing il y aura des variables fixées. Ça veut dire il y a quand même des variables booléennes qui ne sont pas $X^t_{i,j}$ mais qui ont des effets sur le Preprocessing. En conclusion on pense que c'est mieux de faire le Preprocessin pour toutes les variables booléennes.
+
+\end{comment}
+
+\section{Preprocessing avec coupe 1}\label{test_c1}
+Nous avons d'abord relancé le test de Preprocessing avec la coupe 1 (cf \ref{cut1}) qui est problème-dépendante concernant les contraintes de ressources. Malheureusement, l'ajout de cette coupe n'a apporté aucun changement au résulat de test (identique que \ref{tab_pre}). Nous pouvons donc dire que la coupe 1 n'est pas utile pour le fixage des variables pendant le Preprocessing, mais c'est très probable qu'elle est efficace dans le MIP. Néanmoins, à cause de la limite de temps du projet, nous n'avons pas pu tester la performance de cette coupe dans le MIP.
+
+
+\section{Preprocessing avec coupe 2}\label{test_c2}
+Cette partie contient le résultat (tableau\ref{tab_pre_2}) de test de Preprocessing avec la coupe 2 (aussi notée 1-Cuts, cf \ref{cut2}).
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    	\hline
+&\multicolumn{3}{c|}{DevLB}& \multicolumn{3}{c|}{DevUB}& \multicolumn{3}{c|}{Fixed} 	\\ \hline
+    	Sc(N/M)	& min & avg & max & min & avg & max & min & avg & max\\ \hline
+Sc1(8/2) & 0.00 \% &	2.87\%  &	17.07	\%  &0.00\% & 0.04\%  &0.65\%  &0.00\%  &43.91	\% &100.00\% \\ \hline
+Sc2(11/3)& 0.04 \% & 	4.54\% & 	11.97	\% & 0.00\%&  0.01\% & 0.15\% & 0.00\%  &15.80	\% &66.67\%\\ \hline
+Sc3(15/4)& 0.44 \% & 	3.47\% & 	9.40	\% & 0.00\%&  0.36\% & 1.80\% & 0.00\%  &2.22	\% &10.96\%\\ \hline
+Sc4(18/5)& 0.05 \% & 	4.94\% & 	11.60	\% & 0.00\%&  0.53\% & 1.81\% & 0.00\%  &2.91	\% &55.64\%\\ \hline
+Sc5(21/5)& 1.82 \% & 	4.72\% & 	8.82	\%  &0.56\% & 1.94\%  &7.62\%  &0.00\%  &0.00	\% &0.00\%\\ \hline
+Sc6(24/6)& 3.64 \% & 	5.65\% & 	8.45	\%  &0.30\% & 1.75\%  &5.40\%  &0.00\%  &0.09	\% &0.56\%\\ \hline 
+    \end{tabular}
+    \caption{Résultat de test du Preprocessing avec la coupe 2}
+    \label{tab_pre_2}
+\end{table}
+\bigskip
+
+
+Dans le résultat, les trois colonnes d'UB restent les mêmes car le Preprocessing n'affecte que sur les LB. Nous pouvons trouver qu'avec la coupe 2, le Preprocessing a pu fixé plus de variables qu'avant, surtout pour les premiers 3 scénarios. En conséquence, les LB ont été aussi améliorées (la déviation entre la solution optimale et la LB devient plus petite).
+
+En résumé, la coupe 2 est utile pour renforcer le Preprocessing mais le résultat n'est pas encore assez bon pour bien accélérer la résolution après. A partir de scénario 4, le Preprocessing n'aide quasiment plus.
+
+%\section{Preprocessing avec coupe 1\&2* (à enlever, peut-être)}
+%Le résultat du test de Preprocessing avec à la fois la coupe 1 et la coupe 2 reste pareil que le Preprocessing avec la coupe 2 seule (\ref{tab_pre_2}). Ce fait a confirmé que la coupe 1 n'est pas utile pour le fixage des variables.
+
+
+\section{Preprocessing avec la coupe 2 renforcée}
+Selon les tests que nous avons fait, la coupe 2 a des effects positifs pour le Preprocessing. Nous avons donc effectué des démarches pour encore renforcer la coupe 2.
+
+Dans la phase de fixage, le Preprocessing peut fixer des variables en générant des contraintes, mais quand le nombre de contraintes devient plus en plus grand, ça peut au contraire ralentir la résolution de Cplex dans la phase suivante. Dans notre cas, puisque la coupe 2 va générer beaucoup de contraintes, nous essayons donc de trouver un seuil supérieur pour le nombre des contraintes générés. Mise en place de ce paramètre doit diminuler autant que possible le temps utilisé pour la résolution MIP, tout en assurant que le nombre de variables fixées ne soit pas affecté.
+
+Pour trouver la relation entre le nombre de contraites générées à partir de la coupe 2 et le temps dépensé pendant la résolution Cplex, nous avons conçu deux tests d'analyse.
+\subsubsection{Premier test de l'analyse du nombre de coupes à générer}
+Les principles du premier test sont:
+\begin{enumerate}
+	\item Pour chacun des scénarios 4, 5 et 6, nous choisissons 5 instances de problème qui peuvent être résolues à l'optimalité dans un temps modéré (pas trop court pour être observable ni trop long pour ne pas dépasser la limite de temps).
+	\item Pour chaque instance, nous faisons un série de tests avec un seuil de nombre de coupes différents. Ce seuil commence à 200 puis s'incrémente d'un pas de 200 jusqu'à le nombre total des coupes qu'on peut générer.
+	\item Après le test, pour chaque scénario, nous cherchons le seuil qui donne un temps moyen d'exécution minimum pour les 5 instances choisies.
+	\item Pour que les coupes générées soient les plus contraignantes, nous avons trié avant la génération de coupe 2, les contraintes en ordre croissante de RHS (cf \ref{cut2}).
+\end{enumerate}
+	
+Le résultat du test (tableau\ref{tab_pre_2_seuil}) nous a donné des échantillons pour étudier la corrélation entre le meilleur seuil et les caractéristiques de scénarios.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    	\hline
+Sc& 	N	& M	& BestSeuil\\ \hline
+4 & 	18	& 5	& 600      \\ \hline
+5 & 	21	& 5	& 400      \\ \hline
+6 & 	24	& 6	& 1600     \\ \hline
+    \end{tabular}
+    \caption{Résultat du premier test d'analyse du seuil de la coupe 2}
+    \label{tab_pre_2_seuil}
+\end{table}
+\bigskip
+
+Ce résultat montre que quand N (le nombre de tâches) augmente, BestSeuil diminue et quand M (le nombre de machines) augmente, BestSeuil augmente. Empiriquement, nous avons fait une "Multiple Linear Regression"\footnote{\url{http://www.xuru.org/mlr}} sur ces données de test pour trouver une fonction qui peut donner le meilleur seuil pour un scénario. La fonction trouvée (notée Seuil1) est:
+\begin{align}
+BestSeuil=-66.67N+1400M-5200
+\end{align}
+
+Elle s'applique pour les scénarios après le 4, car les 3 premiers sont assez facile.
+
+Néanmoins, la corrélation entre le temps écoulé et le nombre de contraintes n'est pas très évidente dans le cas de Cplex. Ça concerne le mécanisme au sein de Cplex que nous ne pouvons pas savoir donc cet approche est avant tout empirique.
+
+% LHS/RHS
+\subsubsection{Deuxième test de l'analyse du nombre de coupes à générer}
+Une deuxième analyse (tableau\ref{tab_pre_2_seuil2}) a été faite pour chercher le meilleur seuil de la coupe 2. Cet analyse est presque pareil que la première sauf que cette fois au lieu de trier les contraintes en ordre croissante de RHS, nous les trions en ordre décroissante de LHS/RHS, dont LHS signifie le somme de tous les coefficients à gauche de l'équation.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    	\hline
+Sc& 	N	& M	& BestSeuil\\ \hline
+4 & 	18	& 5	& 1800      \\ \hline
+5 & 	21	& 5	& 1200      \\ \hline
+6 & 	24	& 6	& 2600     \\ \hline
+    \end{tabular}
+    \caption{Résultat du deuxième test d'analyse du seuil de la coupe 2}
+    \label{tab_pre_2_seuil2}
+\end{table}
+\bigskip
+
+La fonction trouvée (notée Seuil2) cette fois est:
+\begin{align}
+BestSeuil=-200N + 2000M-4600 %&&(seuil\_func 2)
+\end{align}
+
+% Test de cut2 avec seuil.
+\subsubsection{Test de la coupe 2 avec seuil }
+Après mettre en place la fonction de seuil, nous avons relancé encore 2 fois le test de la coupe 2 avec la fonction de seuil différente.
+
+D'abord sur le fixage des variables, avec la mise en oeuvre du seuil, le nombre de variables fixées reste le même pour tous les 6 scénarios, sauf 3 instances (tableau\ref{tab_cut2_seuil_fix_cmp}) qui sont affectées par la première fonction de seuil (Seuil1):
+%\clearpage
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    	\hline
+Sc-id& 	NoSeuil	& Seuil1	& Seuil2\\ \hline
+3-11 & 	485	& 484	& 485      \\ \hline
+3-19 & 	677	& 666	& 677      \\ \hline
+4-8 & 	101	& 0	& 101     		\\ \hline
+    \end{tabular}
+    \caption{Nombre des variables fixées des 3 instances particulières}
+    \label{tab_cut2_seuil_fix_cmp}
+\end{table}
+\bigskip
+
+Ensuite sur le temps total de la résolution (Preprocessing + MIP), voici (tableau\ref{tab_cut2_seuil_tim_cmp}) la déviation des 2 cas avec seuil par rapport au cas sans seuil. Seulement les instances dont les solutions optimales sont trouvées par toutes les trois méthodes (NoSeuil, Seuil1, Seuil2) sont considérées.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    	\hline
+  &\multicolumn{3}{c}{Seuil1}	&\multicolumn{3}{|c|}{Seuil2}\\ \hline
+
+Sc  & 	DevMin	& DevAvg	& DevMax& 	DevMin	& DevAvg	&DevMax  \\ \hline
+1&-40,00\%&	 -6,93\%&	12,50\%&	-40,00\%&	 -6,09\%&	 0,00\%\\ \hline
+2& -8,64\%&	  2,41\%&	15,52\%&	 -4,69\%&	  3,12\%&	19,75\%\\ \hline
+3&-14,03\%&	 -2,16\%&	12,84\%&	-13,59\%&	  1,46\%&	36,63\%\\ \hline
+4&-42,53\%&	 -6,54\%&	39,40\%&	-42,75\%&	 -4,16\%&	23,02\%\\ \hline
+5&-56,47\%&	-13,39\%&	22,21\%&	-34,76\%&	-12,49\%&	23,78\%\\ \hline
+6&-50,45\%&	-22,79\%&	51,32\%&	-66,12\%&	-23,16\%&	13,95\%\\ \hline
+    \end{tabular}
+    \caption{Déviation de temps avec les 2 fonctions de seuil par rapport au cas sans seuil}
+    \label{tab_cut2_seuil_tim_cmp}
+\end{table}
+\bigskip
+
+Nous pouvons trouver qu'avec l'ajout du seuil, par rapport au cas sans seuil, nous pouvons gagner beaucoup de temps en moyenne. Le Seuil1 est meilleur que le seuil2 pour les scenarios 4 et 5 mais pas 6. Donc aucun seuil peut dominer l'autre.
+
+De plus, nous voulons maintenant faire un autre tableau\ref{tab_cut2_seuil_tim_cmp2} de déviation mais cette fois par rapport au MIP naïf (cf \ref{tab_cplex}) sans coups 2 ajouté.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    	\hline
+  &\multicolumn{3}{c}{Seuil1}	&\multicolumn{3}{|c|}{Seuil2}\\ \hline
+ Sc  & 	DevMin	& DevAvg	& DevMax& 	DevMin	& DevAvg	&DevMax   \\ \hline
+ 1&	-50,00\%&	110,65\%&	350,00\%&	-50,00\%&	108,80\%&	300,00\%    \\ \hline
+2&	-9,09 \%&	68,03 \%&	160,00\%&	-9,09 \%&	69,02 \%&	150,00\%     \\ \hline
+3&	-13,43\%&	64,99 \%&	156,41\%&	-12,40\%&	69,33 \%&	143,59\%  \\ \hline
+4&	-59,14\%&	14,56 \%&	75,40 \%&	-71,09\%&	20,22 \%&	91,65 \%    \\ \hline
+5&	-43,79\%&	5,06	\%&74,50 \%&    -33,12\%&	9,00	\%&88,87  \%     \\ \hline
+6&	-62,88\%&	-5,71 \%&	79,70 \%&	-57,16\%&	-8,30 \%&	35,32 \%  \\ \hline
+    \end{tabular}
+    \caption{Déviation de temps avec les 2 fonctions de seuil par rapport au MIP sans Preprocessing}
+    \label{tab_cut2_seuil_tim_cmp2}
+\end{table}
+\bigskip
+
+A partir du tableau\ref{tab_cut2_seuil_tim_cmp2} nous pouvons observer l'amélioration que nous avons apportée jusqu'à présent, c'est-à-dire le Preprocessing plus la coupe 2 avec seuil. Le temps que nous avons gagné est considérable.
+
+Les trois tableaux ci-après\ref{tab_cut2_s2_tab2} sont toujours pour comparer les trois tests (NoSeuil, Seuil1 et Seuil2), mais d'une autre façon. Dans ces tableau la déviation est calculée par $$Dev = (Sol - Min(Sol_{NoSeuil}, Sol_{Seuil1}, Sol_{Seuil2}))/Min(Sol_{NoSeuil}, Sol_{Seuil1}, Sol_{Seuil2})$$C'est-à-dire la déviation entre la solution donnée et la meilleure solution des trois cas. Cette fois toutes les instances faisables sont considérées sauf les instances qui sont invalides à cause de la limite de mémoire.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|l|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{NoSeuil}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	2	        &18	&0	&0	&0,01	&0,07	&0,11	&0,00\%&	0,00\%&	0,00\%    \\ \hline
+2&	11&	3&	9	        &11	&0	&0	&0,20	&0,40	&0,81	&0,00\%&	0,00\%&	0,00\%     \\ \hline
+3&	15&	4&	1	        &19	&0	&0	&0,75	&2,97	&27,94	&0,00\%&	0,00\%&	0,00\%  \\ \hline
+4 &	18	&5&	0	        &20	&0	&0	&1,40	&112,68	&1100,71	&0,00\%&	0,00\%&	0,00\% \\ \hline
+5 &	21	&5	&3	        &7	&8	&2	&60,48	&996,29	&1809,03	&0,00\%&	0,34\%&	4,02\% \\ \hline
+6 &	24	&6&	2	        &6	&6	&6	&162,41	&986,31	&1809,76	&0,00\%&	0,06\%&	0,62\% \\ \hline
+    \end{tabular}
+    %\caption{Preprocessing de la coupe 2 sans seuil}
+    \label{tab_cut2_tab2}
+\medskip \par
+    \begin{tabular}{|l|l|l|l|l|l|l|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil1}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	2	        &18	&0	&0	&0,01	&0,06	&0,09	&0,00\%	&0,00\%	&0,00\%\\ \hline
+2&	11&	3&	9	        &11	&0	&0	&0,20	&0,40	&0,74	&0,00\%	&0,00\%	&0,00\% \\ \hline
+3&	15&	4&	1	        &19	&0	&0	&0,73	&2,83	&26,05	&0,00\%	&0,00\%	&0,00\% \\ \hline
+4 &	18	&5	&0	        &20	&0	&0	&1,42	&106,37	&1102,95	&0,00\%	&0,00\%	&0,00\% \\ \hline
+5 &	21	&5	&3	        &10	&6	&1	&40,31	&963,81	&1803,47	&0,00\%	&0,34\%	&4,02\% \\ \hline
+6 &	24	&6	&2	        &6	&6	&6	&155,72	&884,55	&1809,45	&0,00\%	&0,06\%	&0,62\% \\ \hline
+    \end{tabular}
+    %\caption{Preprocessing de la coupe 2 avec seuil 1}
+    \label{tab_cut2_s1_tab2}
+\medskip \par
+    \begin{tabular}{|l|l|l|l|l|l|l|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil2}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	2	        &18	&0	&0	&0,01	&0,06	&0,09	&0,00\%	&0,00\%	&0,00\%\\ \hline
+2&	11&	3&	9	        &11	&0	&0	&0,20	&0,41	&0,97	&0,00\%	&0,00\%	&0,00\% \\ \hline
+3&	15&	4&	1	        &19	&0	&0	&0,75	&2,92	&26,36	&0,00\%	&0,00\%	&0,00\% \\ \hline
+4 &	18	&5	&0	        &20	&0	&0	&1,39	&106,86	&1066,17&	0,00\%	&0,00\%	&0,00\% \\ \hline
+5 &	21	&5	&3	        &9	&6	&2	&43,63	&892,31	&1808,87&	0,00\%	&0,37\%	&3,98\% \\ \hline
+6 &	24	&6	&2	        &6	&8	&4	&92,53	&917,72	&1811,88&	0,00\%	&0,42\%	&2,06\% \\ \hline
+    \end{tabular}
+    %\caption{Preprocessing de la coupe 2 avec seuil 2}
+    \caption{NoSeuil vs Seuil1 vs Seuil2}
+    \label{tab_cut2_s2_tab2}
+\end{table}
+\bigskip
+A partir de la colonne $D_{avg}$ nous pouvons constater que si nous prenons compte de toutes les instances alors le seuil 1 peut donner en général une solution qui est la meilleure entre les trois cas.
+
+\clearpage
+%Addmipstart
+\subsubsection{Test avec AddMIPStart}
+En plus de la mise en place des seuils, nous avons aussi testé le fonctionnement de AddMIPStart\footnote{\url{http://pic.dhe.ibm.com?topic=\%2Filog.odms.cplex.help\%2FContent\%2FOptimization\%2FDocumentation\%2FOptimization_Studio\%2F_pubskel\%2Fps_usrmancplex1850.html}}. Avec AddMIPStart, nous pouvons fournir une solution comme le point de départ de la résolution MIP. Ça peut donc peut-être gagner du temps pour Cplex. Mais le souci est que l'application de cette fonction va peut-être changer la startégie de branchement du Cplex donc nous ne sommes pas sûr que ça marche toujours.
+
+
+Le tableau\ref{tab_cut2_ams2_tab1} montre la déviation du temps quand on fait AddMIPStart sur une fonction de seuil. $Deviation = (T_{Seuil+AddMIPStart}-T_{Seuil})/T_{Seuil}$. Comme l'habitude, on prend en compte seulement pour les instances qui sont résolues à l'optimalité ou sont prouvées infaisables. On peut trouver que généralement plus le scénario est dur plus l'ajout d'AddMIPStart peut accélérer la résolution. 
+%\clearpage
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{7}{|c|}{Déviation du temps}	\\ \hline
+&\multicolumn{3}{c|}{Seuil1 vs Seuil1+AddMIPStart} &\multicolumn{3}{c|}{Seuil2 vs Seuil2+AddMIPStart}	\\ \hline
+sc&min	    &avg	    & max	  &min	    &avg	   & max \\ \hline
+1&-66,67\%&	12,35	\%&52,63  \%&-66,67	\%&13,61 \%&	91,80\%\\ \hline
+2&-15,52\%&	4,20	\%&13,04  \%&-21,57	\%&1,00	\%&13,04  \%   \\ \hline
+3&-30,94\%&	0,54	\%&20,50  \%&-43,10	\%&-2,69 \%&	22,06\%\\ \hline
+4&-84,47\%&	-3,57	\%&31,80  \%&-112,46	\%&1,78	\%&48,69\% \\ \hline
+5&-59,01\%&	-6,76	\%&55,32  \%&-68,91	\%&-0,19 \%&	32,25\%\\ \hline
+6&-68,94\%&	-8,28	\%&21,71  \%&-51,68	\%&-10,87\%&	6,14\% \\ \hline
+    \end{tabular}
+    \caption{Déviation suivant l'ajout de AddMIPStart sur les fonctions de Seuil}
+    \label{tab_cut2_ams2_tab1}
+\end{table}
+
+Dans les tableaux\ref{tab_cut2_ams1_tab2} et \ref{tab_cut2_ams2_tab2}, $Deviation = (Sol-V)/V$ dont $V =Min(Sol_{Seuil+AddMIPStart},Sol_{Seuil})$.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil1}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	2	&18	&0	&0 &0,01	&0,06	&0,09	&0,00	\%&0,00	\%&0,00\%    \\ \hline
+2&	11&	3&	9	&11	&0	&0 &0,20	&0,40	&0,74	&0,00	\%&0,00	\%&0,00\%     \\ \hline
+3&	15&	4&	1	&19	&0	&0 &0,73	&2,83	&26,05	&0,00	\%&0,00	\%&0,00\%    \\ \hline
+4 &	18	&5&	0	&20	&0	&0 &1,42	&106,37	&1102,95&	0,00\%&	0,00\%&	0,00\%     \\ \hline
+5 &	21	&5&	3	&10	&6	&1 &40,31	&924,69	&1803,47&	0,00\%&	0,31\%&	3,15    \%    \\ \hline
+6 &	24	&6	&2	&6	&8	&4 &155,72	&968,17	&1809,45&	0,00\%&	0,20\%&	2,02\%     \\ \hline
+    \end{tabular}
+\medskip \par
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil1+AddMIPStart}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&	2		&18&	0&	0       & 0,01	&0,08	&0,19	&0,00	\%&0,00	\%&0,00\%    \\ \hline
+2&	11&	3&	9		&11&	0&	0       & 0,22	&0,41	&0,83	&0,00	\%&0,00	\%&0,00\%     \\ \hline
+3&	15&	4&	1		&19&	0&	0       & 0,83	&2,87	&26,74	&0,00	\%&0,00	\%&0,00\%    \\ \hline
+4 &	18	&5&	0		&20&	0&	0       & 1,59	&104,40	&852,77	&0,00	\%&0,00	\%&0,00\%     \\ \hline
+5 &	21	&5&	3		&9		&5	&3& 25,57	&931,82	&1803,49	&0,00	\%&0,00	\%&0,00   \%    \\ \hline
+6 &	24	&6	&2		&6		&6	&6& 101,76	&978,29	&1809,59	&0,00\%&	0,22\%&	1,31\%     \\ \hline
+    \end{tabular}
+    \caption{Seuil1 vs Seuil1+AddMIPStart}
+    \label{tab_cut2_ams1_tab2}
+\end{table}
+
+
+Comme ce que dont nous nous sommes inquiétés, AddMIPStart a bien changer la stratégie de branchement du Cplex. Le nombre des instances qui ont atteint la limite du temps et de la mémoire devient différent que sans AddMIPStart. Selon $D_{avg}$, nous pouvons quand même dire que l'AddMIPStart a des effects positifs sur la qualité de solutions.
+%\clearpage
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil2}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&2	&18	&0	&0     &0,01	&0,06	&0,09	    &0,00\%	&0,00\%	&0,00\%    \\ \hline
+2&	11&	3&9	&11	&0	&0     &0,20	&0,41	&0,97	    &0,00\%	&0,00\%	&0,00\%     \\ \hline
+3&	15&	4&1	&19	&0	&0     &0,75	&2,92	&26,36	    &0,00\%	&0,00\%	&0,00\%    \\ \hline
+4 &	18&	5&0	&20	&0	&0     &1,39	&106,86	&1066,17	&0,00\%	&0,00\%	&0,00\%    \\ \hline
+5 &	21&	5&3	&9	&6	&2     &43,63	&892,07	&1808,87	&0,00\%	&0,66\%	&8,62\%     \\ \hline
+6 &	24&	6&2	&6	&8	&4     &92,53	&998,04	&1811,88	&0,00\%	&0,18\%	&1,76\%    \\ \hline
+    \end{tabular}
+\medskip \par
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    	\multicolumn{13}{|c|}{Seuil2+AddMIPStart}\\ \hline
+Sc &n	&m	&\#InFea	&\#Opt	&\#Tim &\#Mem	&$T_{min}$ & $T_{avg}$	& $T_{max}$ & $D_{min}$ & $D_{avg}$	& $D_{max}$ \\ \hline
+1&	8 &	2&2	&18	&0	&0     &0,01	&0,15	&0,66	    &0,00\%	&0,00\%	&0,00\%    \\ \hline
+2&	11&	3&9	&11	&0	&0     &0,22	&0,40	&0,81	    &0,00\%	&0,00\%	&0,00\%     \\ \hline
+3&	15&	4&1	&19	&0	&0     &0,81	&2,80	&24,85	    &0,00\%	&0,00\%	&0,00\%    \\ \hline
+4 &	18&	5&0	&20	&0	&0     &1,59	&105,66	&996,10 &   0,00 \%	&0,00\%	&0,00\%    \\ \hline
+5 &	21&	5&3	&8	&6	&3     &25,83	&918,98	&1809,21	&0,00\%	&0,38\%	&2,92\%     \\ \hline
+6 &	24&	6&2	&6	&6	&6     &89,18	&965,00	&1811,99	&0,00\%	&0,12\%	&0,79\%    \\ \hline
+    \end{tabular} 
+    \caption{Seuil2 vs Seuil2+AddMIPStart}
+    \label{tab_cut2_ams2_tab2}
+\end{table}
+\bigskip
+
+Cette fois avec AddMIPStart sur Seuil2, nous avons une meilleure déviation moyenne des solutions avec AddMIPStart. Comme le cas du Seuil1, le \textit{\#Opt}, \textit{\#Tim}, \textit{\#Mem} sont tous affectés. 
+
+En conclusion, pour bien optimiser la résolution exacte de ce problème, il vaut mieux de faire d'abord le Preprocessing avec la coupe 2 et le seuil 2, puis donner une solution de départ avec le lancement de MIP. La solution de départ corresponds à la UB du Preprocessing.
+
+\clearpage
+\subsubsection{Tableaux supplémentaires}
+%Tableau\ref{tab_mip_s1_ams2_opt} compare entre MIP seul, Seuil1 et Seuil2+AddMIPStart, le temps et le pourcentage de variables fixées sont calculés sur les instances pour lesquelles ces 3 méthodes ont toutes trouvé la solution optimale. 
+Les tableaux suivants concernent des comparaisons entre MIP seul, Seuil1 et Seuil2+AddMIPStart.
+
+%Le comptage
+Tableau \ref{tab_mip_s1_ams2_stats} contient des statistiques sur les résultats de résolution pour les 3 méthodes. Il s'agit des nombres d'instances dans chaque état de résolution: optimalité, limite de temps, limite de mémoire. 
+\begin{table}[h]
+    \centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|} 
+\hline
+&&&&\multicolumn{3}{c|}{MIP} &\multicolumn{3}{c|}{Seuil1}&\multicolumn{3}{c|}{Seuil2+AddMIPStart}  \\ \hline
+Sc&n&m & Infea & Opt	& Tim & Mem  & Opt	& Tim & Mem   & Opt	& Tim & Mem \\ \hline
+1&  	8	&2	& 2 & 18 & 0 & 0 & 18	& 0	& 0&18	&0	&0\\ \hline
+2& 	    11	&3	& 9 & 11 & 0 & 0 & 11	& 0	& 0&11	&0	&0\\ \hline
+3&  	15	&4	& 1 & 19 & 0 & 0 & 19	& 0	& 0&19	&0	&0\\ \hline
+4&		18	&5	& 0 & 19 & 1 & 0 & 20	&0	&0&	20	&0	&0\\ \hline
+5&		21	&5	& 3 & 6 &  10 & 1 &10	&7	&0&	8	&6	&3\\ \hline
+6&		24	&6	& 2 & 5 &  13 & 0 &6	&8	&4&	6	&6	&6\\ \hline  
+\end{tabular}
+\caption{Statsistiques sur les résultats de résolution}
+    \label{tab_mip_s1_ams2_stats}
+\end{table}
+\bigskip
+
+%Sur le temps
+Tableau \ref{tab_mip_s1_ams2_temps} compare les temps d'exécution pour les 3 méthodes. L'analyse est faite sur les instances pour lesquelles toutes les 3 méthodes ont trvoué la solution optimale ou ont prouvé qu'elles sont infaisables.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    &	\multicolumn{3}{c|}{MIP} &\multicolumn{3}{c|}{Seuil1} & \multicolumn{3}{c|}{Seuil2+AddMIPStart}	\\ \hline
+Sc & $T_{min}$ & $T_{avg}$	& $T_{max}$ & $T_{min}$ & $T_{avg}$	& $T_{max}$ & $T_{min}$ & $T_{avg}$	& $T_{max}$  \\ \hline
+1&	0,01	&0,03	&0,04	    &0,01	&0,07	&0,20	&0,01	&0,15	&0,66        \\ \hline
+2&	0,04	&0,17	&0,59	    &0,03	&0,24	&0,74	&0,03	&0,24	&0,81        \\ \hline
+3&	0,31	&2,45	&30,09	    &0,22	&2,70	&26,05	&0,22	&2,68	&24,85      	\\ \hline
+4&	1,12	&99,69	&783,99	    &1,42	&106,37	&1102,95	&1,59	&105,66	&996,10      	\\ \hline
+5&	0,95	&248,50	&769,13	    &0,67	&222,59	&919,01	&0,66	&265,22	&1022,32        \\ \hline
+6&	1,19	&365,32	&1788,43	&2,26	&205,93	&663,83	&2,26	&200,79	&658,59      	\\ \hline
+    \end{tabular}
+    \caption{Temps de résolution pour les instances résolues}
+    \label{tab_mip_s1_ams2_temps}
+\end{table}
+\bigskip
+
+%La déviation entre les solutions
+Tableau \ref{tab_mip_s1_ams2_soldev} peut montrer la qualité des solutions trouvées par les 3 méthodes. Dans le tableau, $Dev = (Sol-V)/V$ dont $V =Min(Sol_{MIP},Sol_{Seuil1},Sol_{Seuil2+AddMIPStart})$. Cet analyse est faite sur les instances pour lesquelles:
+\begin{itemize}
+ \item Aucunne méthode a atteint la limite de mémoire
+ \item Toutes les méthodes ont trouvé une solution faisable
+\end{itemize}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+    &	\multicolumn{3}{c|}{MIP} &\multicolumn{3}{c|}{Seuil1} & \multicolumn{3}{c|}{Seuil2+AddMIPStart}	\\ \hline
+Sc & $Dev_{min}$ & $Dev_{avg}$	& $Dev_{max}$ & $Dev_{min}$ & $Dev_{avg}$	& $Dev_{max}$ & $Dev_{min}$ & $Dev_{avg}$	& $Dev_{max}$  \\ \hline
+1&	0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%  \\ \hline
+2&	0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%  \\ \hline
+3&	0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\% 	\\ \hline
+4&	0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%	&0,00\%  \\ \hline
+5&	0,00\%	&0,49\%	&5,38\%	&0,00\%	&0,42\%	&5,44\%	&0,00\%	&0,26\%	&1,68\%  \\ \hline
+6&	0,00\%	&0,07\%	&0,36\%	&0,00\%	&0,21\%	&1,87\%	&0,00\%	&0,43\%	&3,91\%  \\ \hline
+    \end{tabular}
+    \caption{Déviation de solutions}
+    \label{tab_mip_s1_ams2_soldev}
+\end{table}
+\bigskip
+
+
+%Pourcentage des vars fixées (s1 vs ams2)
+Tableau \ref{tab_s1_ams2_fix} compare le pourcentage des variables fixées pour Seuil1 et Seuil2+AddMIPStart. Il n'y a pas beaucoup de différence puisque comme nous avons expliqué, il n'y a que 3 instances pour lesquelles le nombre des variables fixées est différent pour ces 2 méthodes.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}
+    	\hline
+   	&\multicolumn{3}{c|}{Seuil1} & \multicolumn{3}{c|}{Seuil2+AddMIPStart}	\\ \hline
+Sc 	& $Fix_{min}$ & $Fix_{avg}$	& $Fix_{max}$   & $Fix_{min}$ & $Fix_{avg}$	& $Fix_{max}$             \\ \hline
+1&  	0,00\%&	43,92\%&	100,00\%&  0,00\%&	43,92\%&	100,00\%\\ \hline
+2& 	    0,00\%&	15,80\%&	66,67\%&  0,00\%&	15,80\%&	66,67\%   \\ \hline
+3&  	0,00\%&	\textbf{2,21\%}&	\textbf{15,77\%}&  0,00\%&	\textbf{2,22\%}&	\textbf{16,03\%}    \\ \hline
+4&		0,00\%&	\textbf{2,86\%}&	55,64\%&  0,00\%&	\textbf{2,91\%}&	55,64\% \\ \hline
+5&		0,00\%&	0,00\%&	0,00\%&  0,00\%&	0,00\%&	0,00\%   \\ \hline
+6&		0,00\%&	0,09\%&	0,56\%&  0,00\%&	0,09\%&	0,56\%    \\ \hline
+    \end{tabular}
+    \caption{Pourcentage des variables fixées}
+    \label{tab_s1_ams2_fix}
+\end{table}

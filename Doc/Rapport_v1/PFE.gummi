@@ -1,0 +1,7 @@
+version=0.6.0
+typesetter=pdflatex
+steps=texpdf
+root=/home/antoine/Desktop/PFE/Rapport_PFE.tex
+
+file=/home/antoine/Desktop/PFE/include.tex
+file=/home/antoine/Desktop/PFE/ch1_intro.tex
